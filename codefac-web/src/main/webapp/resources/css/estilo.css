@@ -28,12 +28,13 @@ body
 {
     background-color: darkblue;
     color: white;
-    height: 20px;
+    height: 50px;
+    text-align: center;
 }
 
 #contenido
 {
-    background-color: chartreuse;
+    background-color: #ffffff;
     color: black;
     height: 300px;
     
@@ -42,11 +43,25 @@ body
 #piepagina
 {
     background-color: #3f5da2;
-    height: 100px;
+    height: 25px;
+    color: white;
+    text-align: center;
 }
 
 .imagenCabecera
 {
     background-color: activeborder;
     width: 600px;
+}
+
+.menuPF
+{
+    width: 100%;    
+    text-align: center;
+   
+}
+
+.menuItem
+{
+    text-align: center;
 }
