@@ -46,6 +46,7 @@
             <artifactId>codefac-ejb</artifactId>
             <version>1</version>
             <type>ejb</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ec.com.codesoft</groupId>
