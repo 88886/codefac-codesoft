@@ -7,6 +7,7 @@ package ec.com.codesoft.modelo.servicios;
 
 import ec.com.codesoft.modelo.Distribuidor;
 import ec.com.codesoft.modelo.facade.DistribuidorFacade;
+import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 /**
@@ -29,5 +30,10 @@ public class DistribuidorServicio {
     
     public void eliminar(Distribuidor distribuidor){
         distribuidorFacade.remove(distribuidor);
+    }
+    
+    public List<Distribuidor> obtenerTodos(){
+        
+        return distribuidorFacade.findAll();
     }
 }

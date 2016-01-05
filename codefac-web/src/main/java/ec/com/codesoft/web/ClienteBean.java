@@ -8,10 +8,11 @@ package ec.com.codesoft.web;
 import ec.com.codesoft.modelo.Cliente;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import java.io.Serializable;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -22,9 +23,17 @@ import javax.faces.bean.ViewScoped;
 public class ClienteBean implements Serializable{
     
     private Cliente cliente;
+    private Cliente clienteSeleccionado;
+    private List<Cliente> clientes;
     @EJB
     private ClienteServicio clienteServicio;
     
+    
+    @PostConstruct
+    public void postCOnstruct(){
+        System.out.println("hola");
+        clientes=clienteServicio.obtenerTodos();
+    }
     
     public String crearCliente()
     {
@@ -38,5 +47,19 @@ public class ClienteBean implements Serializable{
         System.out.println("Guardado");
         return "welcomePrimefaces";
     }
+
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public Cliente getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(Cliente clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+    
+    
     
 }

@@ -8,6 +8,7 @@ package ec.com.codesoft.modelo.servicios;
 
 import ec.com.codesoft.modelo.Cliente;
 import ec.com.codesoft.modelo.facade.ClienteFacade;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -33,5 +34,10 @@ public class ClienteServicio {
     
     public void eliminar(Cliente cliente){
         clienteFacade.remove(cliente);
+    }
+    
+    public List<Cliente> obtenerTodos(){
+        
+        return clienteFacade.findAll();
     }
 }

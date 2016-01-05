@@ -53,7 +53,7 @@ public class Cliente implements Serializable {
     @Column(name = "CELULAR")
     private String celular;
     @Column(name = "FECHA_INGRESO")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaIngreso;
     @Column(name = "ESTADO")
     private Character estado;
