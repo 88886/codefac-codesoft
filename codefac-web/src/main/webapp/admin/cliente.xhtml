@@ -10,35 +10,76 @@ and open the template in the editor.
       xmlns:f="http://java.sun.com/jsf/core" 
       xmlns:ui="http://java.sun.com/jsf/facelets" 
       xmlns:p="http://primefaces.org/ui">
-    <head>
+    <h:head>
         <title>Administrar Cliente</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
+    </h:head>
+    <h:body>
         <h:form>
-        <p:panel header="Administrar Clientes">
 
-            <p:dataTable var="cliente" value="#{clienteBean.clientes}" scrollable="true" scrollHeight="150" style="width: 700px;margin-left:5%"
-                         selectionMode="single" selection="#{clienteBean.clienteSeleccionado}" rowKey="#{cliente.cedulaRuc}">
-                <p:column headerText="Cedula" >
-                    <h:outputText value="#{cliente.cedulaRuc}" />
-                </p:column>
-                <p:column headerText="Nombre" >
-                    <h:outputText value="#{cliente.nombre}" />
-                </p:column>
-                <p:column headerText="Apellido" >
-                    <h:outputText value="#{cliente.apellidos}" />
-                </p:column>
-                <p:column headerText="Telefono" >
-                    <h:outputText value="#{cliente.telefono}" />
-                </p:column>
-                <p:column headerText="Correo" >
-                    <h:outputText value="#{cliente.correo}" />
-                </p:column>
-            </p:dataTable>
-            
-        </p:panel> 
-            
+            <p:panel header="Administrar Clientes">
+                <h:panelGrid columns="4" style="width: 350px;margin-left:27%">
+                    <p:commandButton value="Nuevo" actionListener="#{clienteBean.nuevaCliente()}" update="@form"/>
+                    <p:commandButton value="Modificar" update="@form"/>
+                    <p:commandButton value="Detalles"  update="@form"/>
+                    <p:commandButton value="Eliminar"  update="@form"/>
+                </h:panelGrid>
+
+                <p:panel header="#{clienteBean.tituloFormulario}" style="width: 500px;margin-left:25%" rendered="#{clienteBean.enNueva || clienteBean.enModificar || clienteBean.enDetalles}">
+                    <p:panelGrid columns="3" style="width: 100%">
+                        <p:outputLabel for="cedula" value="Cédula/Ruc" />
+                        <p:inputText id="cedula" value="#{clienteBean.cliente.cedulaRuc}" style="width: 250px;" required="true" readonly="#{clienteBean.enModificar || clienteBean.enDetalles}"/>
+                        <p:message for="cedula" />
+                        <p:outputLabel for="nombre" value="Nombre" />
+                        <p:inputText id="nombre" value="#{clienteBean.cliente.nombre}" style="width: 250px;" required="true" readonly="#{clienteBean.enDetalles}"/>
+                        <p:message for="nombre" />
+                        <p:outputLabel for="ciudad" value="Ciudad" />
+                        <p:inputText id="ciudad" value="#{clienteBean.cliente.ciudad}" style="width: 250px;" readonly="#{clienteBean.enDetalles}"/>
+                        <p:message for="ciudad" />
+                        <p:outputLabel for="direccion" value="Dirección" />
+                        <p:inputText id="direccion" value="#{clienteBean.cliente.direccion}" style="width: 250px;" readonly="#{clienteBean.enDetalles}"/>
+                        <p:message for="direccion" />
+                        <p:outputLabel for="telefono" value="Teléfono" />
+                        <p:inputText id="telefono" value="#{clienteBean.cliente.telefono}" style="width: 250px;" readonly="#{clienteBean.enDetalles}"/>
+                        <p:message for="telefono" />
+                        <p:outputLabel for="notas" value="Notas" />
+                        <p:inputTextarea id="notas" value="#{clienteBean.cliente.notas}" style="width: 250px;" readonly="#{clienteBean.enDetalles}"/>
+                        <p:message for="notas" />
+                        
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="Guardar" actionListener="#{clienteBean.guardarCliente()}" update="@form"/>
+                    <p:commandButton value="Cancelar" actionListener="#{clienteBean.cancelar()}" immediate="true" update="@form"/>
+                </p:panel>
+
+
+                <p:dataTable var="cliente" value="#{clienteBean.clientes}" 
+                             scrollable="true" scrollHeight="150" style="width: 1000px;margin-left:7%"
+                             selectionMode="single" 
+                             selection="#{clienteBean.clienteSeleccionado}" 
+                             rowKey="#{cliente.cedulaRuc}">
+                    <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >
+                        <h:outputText value="#{cliente.cedulaRuc}" />
+                    </p:column>
+                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}" filterMatchMode="contains" style="width:350px" >
+                        <h:outputText value="#{cliente.nombre}"   />
+                    </p:column>
+                    <p:column headerText="Apellido" >
+                        <h:outputText value="#{cliente.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Telefono" >
+                        <h:outputText value="#{cliente.telefono}" />
+                    </p:column>
+                    <p:column headerText="Correo" >
+                        <h:outputText value="#{cliente.correo}" />
+                    </p:column>
+                </p:dataTable>
+                
+
+            </p:panel> 
+            <br/>
+            <br/>
+
         </h:form>
-    </body>
+    </h:body>
 </html>
