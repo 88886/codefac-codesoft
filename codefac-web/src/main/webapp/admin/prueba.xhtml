@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Administrar Cliente</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" />
+            <p:panel header="Administrar Clientes">
+                <h:panelGrid columns="4" style="width: 350px;margin-left:27%">
+                    <p:commandButton value="Nuevo" onclick="PF('dlgCliente').show();">
+                        <p:ajax event="action" update=":form" listener="#{pruebaBean.nuevaCliente()}" /> 
+                    </p:commandButton>
+                                     
+                    <p:commandButton value="Modificar" update="@form"/>
+                    <p:commandButton value="Detalles" onclick="PF('dlgCliente').show();"/>
+                    <p:commandButton value="Inhabilitar" update="@form"/>
+                </h:panelGrid>
+
+                <p:dataTable var="cliente" value="#{pruebaBean.listaClientes}" 
+                             scrollable="true" scrollHeight="150" style="width: 1000px;margin-left:7%"
+                             selectionMode="single" 
+                             selection="#{pruebaBean.clienteSeleccionado}" 
+                             rowKey="#{cliente.cedulaRuc}">
+
+                    <p:ajax event="rowSelect" listener="#{pruebaBean.onRowSelect}" update=":form:msgs"/>
+                    <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >
+                        <h:outputText value="#{cliente.cedulaRuc}" />
+                    </p:column>
+                    <p:column headerText="Nombres" filterBy="#{cliente.nombre}" filterMatchMode="contains" style="width:350px" >
+                        <h:outputText value="#{cliente.nombre}"   />
+                    </p:column>
+                    <p:column headerText="Telefono" >
+                        <h:outputText value="#{cliente.telefono}" />
+                    </p:column>
+                    <p:column headerText="Correo" >
+                        <h:outputText value="#{cliente.correo}" />
+                    </p:column>
+                    <p:column headerText="Estado" >
+                        <h:outputText value="#{cliente.estado}" />
+                    </p:column>
+                    <p:column headerText="Dirección" >
+                        <h:outputText value="#{cliente.notas}" />
+                    </p:column>
+                </p:dataTable>
+                
+                <p:dialog header="#{pruebaBean.tituloFormulario}" widgetVar="dlgCliente" showEffect="explode" hideEffect="explode" height="380">
+                    <p:panelGrid columns="3" style="width: 100%">
+                        <p:outputLabel for="cedula" value="Cédula/Ruc" />
+                        <p:inputText id="cedula" value="#{pruebaBean.cliente.cedulaRuc}" style="width: 250px;" required="true" readonly="#{pruebaBean.enModificar || pruebaBean.enDetalles}"/>
+                        <p:message for="cedula" />
+                        <p:outputLabel for="nombre" value="Nombre" />
+                        <p:inputText id="nombre" value="#{pruebaBean.cliente.nombre}" style="width: 250px;" required="true" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="nombre" />
+                        <p:outputLabel for="ciudad" value="Ciudad" />
+                        <p:inputText id="ciudad" value="#{pruebaBean.cliente.ciudad}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="ciudad" />
+                        <p:outputLabel for="direccion" value="Dirección" />
+                        <p:inputText id="direccion" value="#{pruebaBean.cliente.direccion}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="direccion" />
+                        <p:outputLabel for="telefono" value="Teléfono" />
+                        <p:inputText id="telefono" value="#{pruebaBean.cliente.telefono}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="telefono" />
+                        <p:outputLabel for="notas" value="Notas" />
+                        <p:inputTextarea id="notas" value="#{pruebaBean.cliente.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="notas" />
+
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="Prueba" actionListener="#{pruebaBean.prueba()}" update="@form"/>
+                    <p:commandButton value="Guardar" actionListener="#{pruebaBean.guardarCliente()}" icon="ui-icon-disk" update="@form"/>
+                    <p:commandButton value="Cancelar" actionListener="#{pruebaBean.cancelar()}" icon="ui-icon-cancel" immediate="true" onclick="PF('dlgCliente').hide();" update="@form"/>
+                </p:dialog>
+                
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>
