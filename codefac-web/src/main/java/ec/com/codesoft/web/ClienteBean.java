@@ -16,6 +16,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -36,24 +37,28 @@ public class ClienteBean implements Serializable {
     private ClienteServicio clienteServicio;
 
     @PostConstruct
-    public void postCOnstruct() {
+    public void postConstruct() {
         //System.out.println("hola");
         clientes = clienteServicio.obtenerTodos();
     }
 
     public void nuevaCliente() {
         this.cliente = new Cliente();
-        this.enNueva =true;
+        System.out.println("nuevoFuncion");
+        this.enNueva = true;
         this.tituloFormulario = "Creación del Cliente";
     }
+
     public void modificarCliente() {
-        if (this.clienteSeleccionado!=null) {
+        if (this.clienteSeleccionado != null) {
             this.tituloFormulario = "Modificación de Cliente";
+            copiarClienteSeleccionado();
             this.enModificar = true;
         }
     }
+
     public void guardarCliente() {
-          System.out.println("insertando");
+        System.out.println("insertando");
         if (this.enNueva) {
             try {
                 System.out.println("insertando");
@@ -63,7 +68,7 @@ public class ClienteBean implements Serializable {
                 this.clienteServicio.insertar(this.cliente);
                 this.enNueva = false;
                 this.clientes = this.clienteServicio.obtenerTodos();
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente Creado.", "Se ha creado el Cliente con cedula "+ this.cliente.getCedulaRuc());
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente Creado.", "Se ha creado el Cliente con cedula " + this.cliente.getCedulaRuc());
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear cliente.", e.getMessage());
@@ -71,10 +76,10 @@ public class ClienteBean implements Serializable {
             }
         } else {
             try {
-                //this.clienteService.editarCliente(this.cliente);
+                this.clienteServicio.actualizar(this.cliente);
                 this.enModificar = false;
-                //this.clientes = this.clienteService.obtenerClientes();
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente Actualizado.", "Se ha actualizado el "+this.cliente);
+                this.clientes = this.clienteServicio.obtenerTodos();
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente Actualizado.", "Se ha actualizado el " + this.cliente.getCedulaRuc());
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar cliente.", e.getMessage());
@@ -82,15 +87,17 @@ public class ClienteBean implements Serializable {
             }
         }
     }
-    
+
     public void eliminarCliente() {
+        
         if (this.clienteSeleccionado != null) {
             try {
-                //this.copiarClienteSeleccionada();
-                //this.clienteService.eliminarCliente(this.cliente.getCedula());
-               // this.clientes = this.clienteService.obtenerClientes();
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente Eliminada.", "Se ha eliminado la Cliente " + this.cliente);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+                this.copiarClienteSeleccionado();
+                this.cliente.setEstado('I');
+                this.clienteServicio.actualizar(this.cliente);
+                this.clientes = this.clienteServicio.obtenerTodos();
+                //FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente Eliminado.", "Se ha eliminado la Cliente " + this.cliente);
+                //FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al eliminar Cliente. ", e.getMessage());
                 FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -98,10 +105,35 @@ public class ClienteBean implements Serializable {
 
         }
     }
-     public void cancelar() {
-        this.enNueva=false;
+
+    public void copiarClienteSeleccionado() {
+
+        this.cliente = new Cliente();
+        cliente = clienteSeleccionado;
+    }
+
+    public void cancelar() {
+        this.enNueva = false;
         this.enModificar = false;
         this.enDetalles = false;
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Cliente Seleccionado", ((Cliente) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    public void detallesCliente() {
+        
+        if (this.clienteSeleccionado != null) {
+            System.err.println("Prueba");
+            this.tituloFormulario = "Detalles de Cliente";
+            this.copiarClienteSeleccionado();
+            this.enDetalles = true;
+        }
+    }
+
+    public void prueba() {
+        System.err.println("Prueba");
     }
 
     public List<Cliente> getClientes() {
@@ -155,6 +187,5 @@ public class ClienteBean implements Serializable {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-    
 
 }
