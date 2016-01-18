@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Admistrador</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="estilo.css"/>
+    </h:head>
+    <h:body>
+        <h:form>
+        <div id="cabecera">
+            <p:graphicImage library="img" name="bannerCodefac.jpg"  styleClass="imagenCabecera" />
+        </div>
+        <div id="menu">
+             <p:layoutUnit position="center"> 
+            <p:tabMenu activeIndex="#{param.i}" style="width: 620px; margin-left:auto; margin-right:auto;">
+                <p:menuitem   value="Inicio" icon="ui-icon-star">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Clientes"  icon="ui-icon-document">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+                <p:menuitem value="Nosotros"  icon="ui-icon-search">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Contactanos"  icon="ui-icon-search">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Ayuda"  icon="ui-icon-person">
+                    <f:param name="i" value="4" />
+                </p:menuitem>
+            </p:tabMenu>
+             </p:layoutUnit>
+        </div>
+            <div id="contenido">
+                <ui:insert name="contenido"/>
+            </div>
+        <div id="piepagina">
+            <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
+        </div>
+        </h:form>
+    </h:body>
+</html>
