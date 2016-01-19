@@ -13,40 +13,72 @@ and open the template in the editor.
     <h:head>
         <title>Admistrador</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <h:outputStylesheet library="css" name="estilo.css"/>
+        <h:outputStylesheet library="css" name="estiloUsuario.css"/>
     </h:head>
     <h:body>
         <h:form>
-        <div id="cabecera">
-            <p:graphicImage library="img" name="bannerCodefac.jpg"  styleClass="imagenCabecera" />
-        </div>
-        <div id="menu">
-             <p:layoutUnit position="center"> 
-            <p:tabMenu activeIndex="#{param.i}" style="width: 620px; margin-left:auto; margin-right:auto;">
-                <p:menuitem   value="Inicio" icon="ui-icon-star">
-                    <f:param name="i" value="0" />
-                </p:menuitem>
-                <p:menuitem value="Clientes"  icon="ui-icon-document">
-                    <f:param name="i" value="2" />
-                </p:menuitem>
-                <p:menuitem value="Nosotros"  icon="ui-icon-search">
-                    <f:param name="i" value="1" />
-                </p:menuitem>
-                <p:menuitem value="Contactanos"  icon="ui-icon-search">
-                    <f:param name="i" value="1" />
-                </p:menuitem>
-                <p:menuitem value="Ayuda"  icon="ui-icon-person">
-                    <f:param name="i" value="4" />
-                </p:menuitem>
-            </p:tabMenu>
-             </p:layoutUnit>
-        </div>
+            <div id="cabecera">
+                <p:graphicImage library="img" name="bannerCodefacPeque.jpg"  styleClass="imagenCabecera" />
+            </div >
+            <div id="divSesionUsuario">
+                <span>
+                    Sesión iniciada por:
+                    <p:outputLabel  value="#{sessionMB.nick==null ? 'Anonimo' : sessionMB.nick}"/>
+                </span>
+                
+            </div>
+
+            <div id="menu">
+                <p:growl id="messages"/>
+                <p:menubar>
+                    <p:submenu label="File" icon="ui-icon-document">
+                        <p:submenu label="New" icon="ui-icon-contact">
+                            <p:menuitem value="Project" url="#" />
+                            <p:menuitem value="Other" url="#" />
+                        </p:submenu>
+                        <p:menuitem value="Open" url="#" />
+                        <p:separator />
+                        <p:menuitem value="Quit" url="#" />
+                    </p:submenu>
+
+                    <p:submenu label="Edit" icon="ui-icon-pencil">
+                        <p:menuitem value="Undo" url="#" icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Redo" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                    </p:submenu>
+                    <p:submenu label="Help" icon="ui-icon-help">
+                        <p:menuitem value="Contents" url="#" />
+                        <p:submenu label="Search" icon="ui-icon-search">
+                            <p:submenu label="Text">
+                                <p:menuitem value="Workspace" url="#" />
+                            </p:submenu>
+                            <p:menuitem value="File" url="#" />
+                        </p:submenu>
+                    </p:submenu>
+
+                    <p:submenu label="Actions" icon="ui-icon-gear">
+                        <p:submenu label="Ajax" icon="ui-icon-refresh">
+                            <p:menuitem value="Save" actionListener="#{menuView.save}" icon="ui-icon-disk" update="messages"/>
+                            <p:menuitem value="Update" actionListener="#{menuView.update}" icon="ui-icon-arrowrefresh-1-w" update="messages"/>
+                        </p:submenu>
+                        <p:submenu label="Non-Ajax" icon="ui-icon-newwin">
+                            <p:menuitem value="Delete" actionListener="#{menuView.delete}" icon="ui-icon-close" update="messages" ajax="false"/>
+                        </p:submenu>
+                    </p:submenu>
+
+                    <p:menuitem value="Quit" url="http://www.primefaces.org" icon="ui-icon-close" />
+
+                    <f:facet name="options">
+                        <p:inputText style="margin-right:10px" placeholder="Search"/>
+                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Logout" icon="ui-icon-extlink" />
+                    </f:facet>
+                </p:menubar>
+            </div>
             <div id="contenido">
                 <ui:insert name="contenido"/>
             </div>
-        <div id="piepagina">
-            <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
-        </div>
+            <div id="piepagina">
+                <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
+            </div>
         </h:form>
     </h:body>
 </html>
