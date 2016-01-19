@@ -27,6 +27,7 @@ import javax.validation.constraints.Size;
 @Table(name = "cliente")
 
 public class Cliente implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -56,7 +57,7 @@ public class Cliente implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaIngreso;
     @Column(name = "ESTADO")
-    private Character estado;
+    private Character estado; //A; activo, I:inactivo, B:bloqueado 
     @Size(max = 15)
     @Column(name = "TIPO")
     private String tipo;
@@ -148,6 +149,22 @@ public class Cliente implements Serializable {
         return estado;
     }
 
+    public String devolverEstado() {
+
+        switch (estado) {
+
+            case 'A':
+                return "Activo";
+            case 'I':
+                return "Inactivo";
+            case 'B':
+                return "Bloqueado";
+            default:
+                return "";
+
+        }
+    }
+
     public void setEstado(Character estado) {
         this.estado = estado;
     }
@@ -216,5 +233,5 @@ public class Cliente implements Serializable {
     public String toString() {
         return "ec.edu.espe.codesoft.modelo.Cliente[ cedulaRuc=" + cedulaRuc + " ]";
     }
-    
+
 }

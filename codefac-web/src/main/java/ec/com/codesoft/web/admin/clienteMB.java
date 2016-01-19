@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.web;
+
+package ec.com.codesoft.web.admin;
 
 import ec.com.codesoft.modelo.Cliente;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import java.awt.Event;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -25,9 +25,8 @@ import org.primefaces.event.SelectEvent;
  */
 @ManagedBean
 @RequestScoped
-public class ClienteBean implements Serializable {
-
-  //Gestor WebService
+public class clienteMB implements Serializable{
+ 
     //Clientes
     private List<Cliente> clientes;
     private Cliente clienteSeleccionado;
@@ -35,29 +34,43 @@ public class ClienteBean implements Serializable {
     //Banderas auxliares
     private Boolean flagBoton1;
     private Boolean enModificar;
+    
+    @EJB
     private ClienteServicio clienteServicio;
 
     @PostConstruct
     public void inicializar() {
         
-        clientes = clienteServicio.obtenerTodos();
+        clientes=clienteServicio.obtenerTodos();
         cliente = new Cliente();
         flagBoton1 = true;
         enModificar = false;
     }
 
-    public void onRowSelect(Event e) {
+//    public void onRowSelect(SelectEvent event) {
+//        flagBoton1 = false;
+//        cliente = clienteSeleccionado;
+//        System.out.println(clienteSeleccionado.getNombres());
+//    }
+    
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Cliente Seleccionado", ((Cliente) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
         flagBoton1 = false;
+        System.out.println(clienteSeleccionado.getNombre());
         cliente = clienteSeleccionado;
+        
     }
 
-    public void onRowUnSelect(Event e) {
+    public void onRowUnSelect(SelectEvent event) {
         flagBoton1 = true;
         clienteSeleccionado = new Cliente();
+        System.out.println("Deseleccionado");
         cliente = new Cliente();
     }
 
     public void enModificar() {
+        System.out.println(clienteSeleccionado.getNombres());
         enModificar = true;
         cliente = clienteSeleccionado;
     }
@@ -73,6 +86,7 @@ public class ClienteBean implements Serializable {
             clientes = clienteServicio.obtenerTodos();
             flagBoton1 = true;
         } else {
+            cliente.setEstado('A');// A: cliente Activo
             clienteServicio.insertar(cliente);
             cliente = new Cliente();
             clientes = clienteServicio.obtenerTodos();
@@ -114,5 +128,5 @@ public class ClienteBean implements Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
+    }  
 }
