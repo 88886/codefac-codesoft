@@ -1,0 +1,103 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28-dic-2015, 17:53:19
+    Author     : Carlos
+*/
+
+body
+{
+    background-color: white;
+    width: 100%;
+    border: 25px;
+    padding: 0px;  
+    margin: 0px;
+    font-family:  Helvetica;
+}
+
+h1
+{
+    color: #485798;
+    
+    
+}
+
+#cabecera
+{
+    height: 75px;
+    background-color: #485798;
+    text-align: left;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+
+#menu
+{
+    background-color: darkblue;
+    color: white;
+    height: 50px;
+    text-align: center;
+    top: 75px;
+    position: fixed;
+    width: 100%;
+
+}
+
+#contenido
+{
+    background-color: white;
+    color: black;
+    margin: 0 auto;
+    padding-top: 125px;
+    padding-bottom: 25px;
+}
+
+#piepagina
+{
+    background-color: #485798;
+    height: 25px;
+    color: white;
+    text-align: center;
+    font-size: 13px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    padding-top: 5px;
+}
+
+.imagenCabecera
+{
+    background-color: activeborder;
+    width: 300px;
+    height: 75px;
+    
+}
+
+.menuPF
+{
+    width: 100%;    
+    text-align: center;
+   
+}
+
+.menuItem
+{
+    text-align: center;
+}
+
+#divSesionUsuario
+{
+    text-align: center;
+    padding-top: 5px;
+    position: fixed;
+    right: 60px;
+    top: 20px;
+    color: white;
+    font-size: 13px;
+}

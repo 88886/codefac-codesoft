@@ -9,20 +9,22 @@
 
     <ui:define name="contenido">
         <h:form>
+            <p:growl id="growl" showDetail="true" sticky="true" /> 
             <p:panel id="basic" header="Ingreso Al Sistema"  style="margin-bottom:20px;text-align: center">
                 <img width="12%" height="12%" src="#{facesContext.externalContext.requestContextPath}/resources/img/generic/login_icon.png" align="top"/>
                 <p:panelGrid columns="2" style=" margin: 0 auto;">
                     <p:outputLabel for="usuario" value="Usuario:"/>
-                    <p:inputText id="usuario" required="true" value="#{login.nick}" />
+                    <p:inputText id="usuario" required="true" value="#{sessionMB.nick}" />
                     <p:outputLabel for="clave" value="Clave:"/>
-                    <p:password id="clave" required="true" value="#{login.clave}"   />
+                    <p:password id="clave" required="true" value="#{sessionMB.clave}"   />
                 </p:panelGrid>
                 <p:spacer height="10px"/>
 
                 <div style="margin: 0 auto;">
-                    <p:commandButton value="Ingresar" action="#{login.login()}" ajax="false" />
+                    <p:commandButton value="Ingresar" action="#{sessionMB.iniciarSesion()}" update="growl" ajax="false" />
                 </div>
-
+                
+                <h:link outcome="/operador/index.xhtml" value="Primefaces welcome page" />
             </p:panel>
         </h:form>
 

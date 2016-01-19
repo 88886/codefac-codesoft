@@ -14,15 +14,17 @@ body
     width: 100%;
     border: 0px;
     padding: 0px;
+    margin: 0px;
     
 }
 
 #cabecera
 {
     height: 150px;
-    background-color: #415ea2;
+    background-color: #485798;
     text-align: center;
 }
+
 
 #menu
 {

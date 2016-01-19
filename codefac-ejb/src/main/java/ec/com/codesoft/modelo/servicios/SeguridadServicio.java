@@ -23,7 +23,7 @@ public class SeguridadServicio {
     @EJB
     private UsuarioFacade usuarioFacade;
 
-    private Usuario loguear(String nick, String clave)
+    public Usuario loguear(String nick, String clave)
     {
         return usuarioFacade.login(nick, clave);
 
