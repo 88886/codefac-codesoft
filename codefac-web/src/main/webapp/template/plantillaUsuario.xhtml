@@ -17,19 +17,21 @@ and open the template in the editor.
     </h:head>
     <h:body>
 
-            <div id="cabecera">
-                <p:graphicImage library="img" name="bannerCodefacPeque.jpg"  styleClass="imagenCabecera" />
-            </div >
+        <div id="cabecera">
+            <p:graphicImage library="img" name="bannerCodefacPeque.jpg"  styleClass="imagenCabecera" />
+        </div >
 
-            <div id="divSesionUsuario">
-                <span>
-                    Sesión iniciada por:
-                    <p:outputLabel  value="#{sessionMB.nick==null ? 'Anonimo' : sessionMB.nick}"/>
-                </span>
-                
-            </div>
+        <div id="divSesionUsuario">
+            <span>
+                Sesión iniciada por:
+                <p:outputLabel  value="#{sessionMB.nick==null ? 'Anonimo' : sessionMB.nick}"/>
+            </span>
 
-            <div id="menu">
+        </div>
+
+        <div id="menu">
+
+            <h:form id="menu" >
                 <p:growl id="messages"/>
                 <p:menubar>
                     <p:submenu label="File" icon="ui-icon-document">
@@ -73,13 +75,14 @@ and open the template in the editor.
                         <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Logout" icon="ui-icon-extlink" />
                     </f:facet>
                 </p:menubar>
-            </div>
-            <div id="contenido">
-                <ui:insert name="contenido"/>
-            </div>
-            <div id="piepagina">
-                <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
-            </div>
+            </h:form>
+        </div>
+        <div id="contenido">
+            <ui:insert name="contenido"/>
+        </div>
+        <div id="piepagina">
+            <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
+        </div>
 
     </h:body>
 </html>
