@@ -57,8 +57,8 @@ public class clienteMB implements Serializable{
         FacesMessage msg = new FacesMessage("Cliente Seleccionado", ((Cliente) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         flagBoton1 = false;
-        System.out.println(clienteSeleccionado.getNombre());
         cliente = clienteSeleccionado;
+        System.out.println(cliente.getNombre());
         
     }
 

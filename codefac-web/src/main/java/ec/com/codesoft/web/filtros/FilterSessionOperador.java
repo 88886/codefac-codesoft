@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author carlo
  */
-@WebFilter(urlPatterns = { "/operador/*"})
+//@WebFilter(urlPatterns = { "/operador/*"})
 public class FilterSessionOperador implements Filter {
 
     private FilterConfig filterConfig;
