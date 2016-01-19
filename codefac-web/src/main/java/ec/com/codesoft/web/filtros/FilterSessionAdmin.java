@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author carlo
  */
-//@WebFilter(urlPatterns = { "/admin/*"})
+@WebFilter(urlPatterns = { "/admin/*"})
 public class FilterSessionAdmin implements Filter{
     
     private FilterConfig filterConfig;

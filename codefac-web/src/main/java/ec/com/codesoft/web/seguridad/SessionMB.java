@@ -47,7 +47,7 @@ public class SessionMB implements Serializable {
 
     public SessionMB() {
         HttpSession miSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        miSession.setMaxInactiveInterval(5000);
+        miSession.setMaxInactiveInterval(7200);
     }
 
     @PostConstruct

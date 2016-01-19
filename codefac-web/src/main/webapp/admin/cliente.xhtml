@@ -21,13 +21,13 @@ and open the template in the editor.
                     var="cliente" 
                     value="#{clienteMB.clientes}"
                     scrollable="true" 
-                    scrollHeight="200"  
+                    scrollHeight="365"  
                     selectionMode="single" 
                     rowKey="#{cliente.cedulaRuc}"
                     selection="#{clienteMB.clienteSeleccionado}">
                     
                     <p:ajax event="rowSelect" listener="#{clienteMB.onRowSelect}" update=":form:msgs,btnEditarCliente"/>
-                    <p:ajax event="rowUnselect" listener="#{administracionClientesBean.onRowUnSelect(e)}"/>
+                    <p:ajax event="rowUnselect" listener="#{clienteMB.onRowUnSelect}"/>
                     
 
 
@@ -72,11 +72,11 @@ and open the template in the editor.
                         <p:message for="cliTelefono" />                
 
                         <p:outputLabel for="cliDireccion" value="Direccion:" />
-                        <p:inputText id="cliDireccion" value="#{clienteMB.cliente.direccion}" required="true" requiredMessage="Direccon necesario"/>
+                        <p:inputText id="cliDireccion" value="#{clienteMB.cliente.direccion}" />
                         <p:message for="cliDireccion" />    
 
                         <p:outputLabel for="cliCorreo" value="Correo:" />
-                        <p:inputText id="cliCorreo" value="#{clienteMB.cliente.correo}" required="true" requiredMessage="Direccon necesario"/>
+                        <p:inputText id="cliCorreo" value="#{clienteMB.cliente.correo}" />
                         <p:message for="cliCorreo" />  
 
                         <p:outputLabel for="notas" value="Notas" />
