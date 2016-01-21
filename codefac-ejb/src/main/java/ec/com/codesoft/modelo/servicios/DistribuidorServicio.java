@@ -5,35 +5,43 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
-import ec.com.codesoft.modelo.Distribuidor;
+import ec.com.codesoft.model.Distribuidor;
 import ec.com.codesoft.modelo.facade.DistribuidorFacade;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+
 /**
  *
  * @author Suco
  */
-@LocalBean 
-@Stateless  
+@LocalBean
+@Stateless
 public class DistribuidorServicio {
-    
+
+    @EJB
     DistribuidorFacade distribuidorFacade;
-    
-    public void insertar(Distribuidor distribuidor){
+
+    public void insertar(Distribuidor distribuidor) {
         this.distribuidorFacade.create(distribuidor);
     }
-    
-    public void actualizar(Distribuidor distribuidor){
+
+    public void actualizar(Distribuidor distribuidor) {
         distribuidorFacade.edit(distribuidor);
-    } 
-    
-    public void eliminar(Distribuidor distribuidor){
+    }
+
+    public void eliminar(Distribuidor distribuidor) {
         distribuidorFacade.remove(distribuidor);
     }
-    
-    public List<Distribuidor> obtenerTodos(){
-        
+
+    public List<Distribuidor> obtenerTodos() {
+
         return distribuidorFacade.findAll();
+    }
+
+    public Distribuidor buscarDistribuidor(String codigo) {
+       return distribuidorFacade.findDistribuidor(codigo);
+//        
     }
 }

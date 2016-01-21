@@ -6,7 +6,7 @@
 package ec.com.codesoft.modelo.servicios;
 
 
-import ec.com.codesoft.modelo.Cliente;
+import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.modelo.facade.ClienteFacade;
 import java.util.List;
 import javax.ejb.EJB;

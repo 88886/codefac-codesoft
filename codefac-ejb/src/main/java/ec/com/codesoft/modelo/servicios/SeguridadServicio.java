@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
-import ec.com.codesoft.modelo.Usuario;
+import ec.com.codesoft.model.Usuario;
 import ec.com.codesoft.modelo.facade.UsuarioFacade;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;

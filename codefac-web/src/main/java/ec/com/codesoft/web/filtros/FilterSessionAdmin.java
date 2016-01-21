@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.web.filtros;
 
-import ec.com.codesoft.modelo.Usuario;
+import ec.com.codesoft.model.Usuario;
 import java.io.IOException;
 import javax.faces.application.ResourceHandler;
 import javax.servlet.Filter;

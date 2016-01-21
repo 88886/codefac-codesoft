@@ -6,7 +6,8 @@
 
 package ec.com.codesoft.modelo.facade;
 
-import ec.com.codesoft.model.Usuario;
+import ec.com.codesoft.model.CatalagoProducto;
+import ec.com.codesoft.model.Distribuidor;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,7 +19,7 @@ import javax.persistence.Query;
  * @author Suco
  */
 @Stateless
-public class UsuarioFacade extends AbstractFacade<Usuario> {
+public class CatalagoProductoFacade extends AbstractFacade<CatalagoProducto> {
     @PersistenceContext(unitName = "codefacPU")
     private EntityManager em;
 
@@ -27,24 +28,28 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return em;
     }
 
-    public UsuarioFacade() {
-        super(Usuario.class);
+    public CatalagoProductoFacade() {
+        super(CatalagoProducto.class);
     }
-    public Usuario login(String nick, String clave) {
-        try
+    
+    
+     public CatalagoProducto findCatalogo(String codP){
+    
+    
+         try
         {
-            String queryString = "SELECT u FROM Usuario u where u.nick=?1 And u.clave=?2";
+            String queryString = "SELECT c FROM CatalagoProducto c where c.codigoProducto=?1";
             Query query = em.createQuery(queryString);
-            query.setParameter(1,nick);
-            query.setParameter(2,clave);
-            Usuario usuario = (Usuario) query.getSingleResult();
-            //System.out.println(usuario);
-            return usuario;
+            query.setParameter(1,codP);
+            CatalagoProducto catalago = (CatalagoProducto) query.getSingleResult();
+            System.out.println(catalago);
+            return catalago;
         }
         catch(NoResultException e)
         {
             return null;
         }
-
+    
     }
+    
 }

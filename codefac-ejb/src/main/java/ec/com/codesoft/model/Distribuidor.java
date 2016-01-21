@@ -3,16 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.modelo;
+
+package ec.com.codesoft.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,8 +27,9 @@ import javax.validation.constraints.Size;
  * @author Suco
  */
 @Entity
-@Table(name = "distribuidores")
-
+@Table(name = "distribuidor")
+@NamedQueries({
+    @NamedQuery(name = "Distribuidor.findAll", query = "SELECT d FROM Distribuidor d")})
 public class Distribuidor implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,21 +60,22 @@ public class Distribuidor implements Serializable {
     @Column(name = "ULTIMO_MOV")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimoMov;
-    @Size(max = 200)
+    @Size(max = 250)
     @Column(name = "NOTAS")
     private String notas;
     @Size(max = 100)
     @Column(name = "TELEFONO")
     private String telefono;
-    @Size(max = 50)
+    @Size(max = 1000)
     @Column(name = "CORREO")
     private String correo;
+    @OneToMany(mappedBy = "ruc")
+    private List<Compra> compraList;
 
     public Distribuidor() {
     }
 
-    public Distribuidor(String ruc) 
-    {
+    public Distribuidor(String ruc) {
         this.ruc = ruc;
     }
 
@@ -170,6 +175,14 @@ public class Distribuidor implements Serializable {
         this.correo = correo;
     }
 
+    public List<Compra> getCompraList() {
+        return compraList;
+    }
+
+    public void setCompraList(List<Compra> compraList) {
+        this.compraList = compraList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -192,7 +205,7 @@ public class Distribuidor implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.espe.codesoft.modelo.Distribuidores[ ruc=" + ruc + " ]";
+        return "ec.com.codesoft.model.Distribuidor[ ruc=" + ruc + " ]";
     }
     
 }

@@ -12,6 +12,7 @@ and open the template in the editor.
                 xmlns:p="http://primefaces.org/ui"
                 template="/template/plantilladmin.xhtml">
 
+    
     <ui:define name="contenido">
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
@@ -48,7 +49,7 @@ and open the template in the editor.
                         <h:outputText value="#{cliente.devolverEstado()}" />
                     </p:column>
                     <p:column headerText="Dirección" >
-                        <h:outputText value="#{cliente.notas}" />
+                        <h:outputText value="#{cliente.direccion}" />
                     </p:column>
 
                     <f:facet name="footer" >                               

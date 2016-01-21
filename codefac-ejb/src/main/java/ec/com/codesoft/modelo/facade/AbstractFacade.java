@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package ec.com.codesoft.modelo.facade;
 
 import java.util.List;
@@ -10,9 +11,8 @@ import javax.persistence.EntityManager;
 
 /**
  *
- * @author hendrix
+ * @author Suco
  */
-
 public abstract class AbstractFacade<T> {
     private Class<T> entityClass;
 

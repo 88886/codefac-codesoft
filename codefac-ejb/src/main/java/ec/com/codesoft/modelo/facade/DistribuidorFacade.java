@@ -3,36 +3,51 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package ec.com.codesoft.modelo.facade;
 
-import ec.com.codesoft.modelo.Distribuidor;
-import javax.ejb.LocalBean;
+import ec.com.codesoft.model.Distribuidor;
+import ec.com.codesoft.model.Usuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
- * @author Carlos
+ * @author Suco
  */
-//@LocalBean 
-@Stateless 
-public class DistribuidorFacade extends AbstractFacade<Distribuidor>
-{
-
+@Stateless
+public class DistribuidorFacade extends AbstractFacade<Distribuidor> {
     @PersistenceContext(unitName = "codefacPU")
     private EntityManager em;
 
-
-    public DistribuidorFacade() 
-    {
-        super(Distribuidor.class);
-    }
-
     @Override
-    protected EntityManager getEntityManager() 
-    {
+    protected EntityManager getEntityManager() {
         return em;
     }
+
+    public DistribuidorFacade() {
+        super(Distribuidor.class);
+    }
     
+    public Distribuidor findDistribuidor(String ruc){
+    
+    
+         try
+        {
+            String queryString = "SELECT d FROM Distribuidor d where d.ruc=?1";
+            Query query = em.createQuery(queryString);
+            query.setParameter(1,ruc);
+            Distribuidor distribuidor = (Distribuidor) query.getSingleResult();
+            System.out.println(distribuidor);
+            return distribuidor;
+        }
+        catch(NoResultException e)
+        {
+            return null;
+        }
+    
+    }
 }

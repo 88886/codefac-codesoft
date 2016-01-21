@@ -3,16 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.modelo;
+
+package ec.com.codesoft.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,19 +28,16 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "cliente")
-
+@NamedQueries({
+    @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c")})
 public class Cliente implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 13)
+    @Size(min = 1, max = 20)
     @Column(name = "CEDULA_RUC")
     private String cedulaRuc;
-    @Size(max = 50)
-    @Column(name = "NOMBRES")
-    private String nombres;
     @Size(max = 50)
     @Column(name = "APELLIDOS")
     private String apellidos;
@@ -54,11 +54,11 @@ public class Cliente implements Serializable {
     @Column(name = "CELULAR")
     private String celular;
     @Column(name = "FECHA_INGRESO")
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaIngreso;
     @Column(name = "ESTADO")
-    private Character estado; //A; activo, I:inactivo, B:bloqueado 
-    @Size(max = 15)
+    private Character estado;
+    @Size(max = 25)
     @Column(name = "TIPO")
     private String tipo;
     @Size(max = 25)
@@ -70,9 +70,14 @@ public class Cliente implements Serializable {
     @Column(name = "ULTIMO_MOV")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimoMov;
-    @Size(max = 200)
+    @Size(max = 250)
     @Column(name = "NOTAS")
     private String notas;
+    @Size(max = 50)
+    @Column(name = "nombres")
+    private String nombres;
+    @OneToMany(mappedBy = "cedulaRuc")
+    private List<Venta> ventaList;
 
     public Cliente() {
     }
@@ -87,14 +92,6 @@ public class Cliente implements Serializable {
 
     public void setCedulaRuc(String cedulaRuc) {
         this.cedulaRuc = cedulaRuc;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
     }
 
     public String getApellidos() {
@@ -149,22 +146,6 @@ public class Cliente implements Serializable {
         return estado;
     }
 
-    public String devolverEstado() {
-
-        switch (estado) {
-
-            case 'A':
-                return "Activo";
-            case 'I':
-                return "Inactivo";
-            case 'B':
-                return "Bloqueado";
-            default:
-                return "";
-
-        }
-    }
-
     public void setEstado(Character estado) {
         this.estado = estado;
     }
@@ -209,6 +190,37 @@ public class Cliente implements Serializable {
         this.notas = notas;
     }
 
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public List<Venta> getVentaList() {
+        return ventaList;
+    }
+
+    public void setVentaList(List<Venta> ventaList) {
+        this.ventaList = ventaList;
+    }
+    public String devolverEstado() {
+
+        switch (estado) {
+
+            case 'A':
+                return "Activo";
+            case 'I':
+                return "Inactivo";
+            case 'B':
+                return "Bloqueado";
+            default:
+                return "";
+
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -231,7 +243,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.espe.codesoft.modelo.Cliente[ cedulaRuc=" + cedulaRuc + " ]";
+        return "ec.com.codesoft.model.Cliente[ cedulaRuc=" + cedulaRuc + " ]";
     }
-
+    
 }

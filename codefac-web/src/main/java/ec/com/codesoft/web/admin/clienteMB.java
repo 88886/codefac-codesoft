@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.web.admin;
 
-import ec.com.codesoft.modelo.Cliente;
+import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import java.awt.Event;
 import java.io.Serializable;
@@ -88,6 +88,7 @@ public class clienteMB implements Serializable {
         } else {
             cliente.setEstado('A');// A: cliente Activo
             clienteServicio.insertar(cliente);
+            System.out.println("Guardando Cliente");
             cliente = new Cliente();
             clientes = clienteServicio.obtenerTodos();
             flagBoton1 = true;

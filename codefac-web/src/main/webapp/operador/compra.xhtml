@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+    <ui:define name="contenido">
+        <h:form id="form">
+            <p:panel id="paBusDistri" header="Distribuidor" style="width: 45%;margin-left:26%">
+                <p:panelGrid columns="5" >
+                    <p:outputLabel for="codDistri" value="Código:" />
+                    <p:inputText id="codDistri" value="#{compraMB.codDistribuidor}" required="true" requiredMessage="Campo necesario"/>                                        
+                    <p:message for="codDistri" /> 
+                    <p:commandButton icon="ui-icon-search" actionListener="#{compraMB.buscarDistribuidor()}" update=":formInfor,:form" />
+                    <p:outputLabel  value="#{compraMB.msjDistri}" />
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form id="formInfor">
+            <p:panel id="infDistr" header="Información Distribuidor" visible="#{compraMB.mostrarPanel}" style="width:56%;margin-left:20%" >
+                <p:panelGrid columns="4" id="panelGridDistr">   
+                    <p:outputLabel value="Código" />
+                    <p:inputText id="codigo" value="#{compraMB.distriEncontrado.ruc}" readonly="true"/>                                        
+
+
+                    <p:outputLabel  value="Nombre:" />
+                    <p:inputText id="nombre" value="#{compraMB.distriEncontrado.nombre}" readonly="true" />
+
+
+                    <p:outputLabel value="Telefono:" />
+                    <p:inputText id="telefono" value="#{compraMB.distriEncontrado.telefono}" readonly="true"/>
+
+
+                    <p:outputLabel  value="Direccion:" />
+                    <p:inputText id="direccion" value="#{compraMB.distriEncontrado.direccion}" readonly="true" />
+
+
+                    <p:outputLabel value="Tipo de Pago:" />
+                    <p:inputText id="tipoPago" value="#{compraMB.distriEncontrado.tipoPago}" readonly="true" />
+
+
+                    <p:outputLabel  value="Notas" />
+                    <p:inputTextarea id="notas" value="#{compraMB.distriEncontrado.notas}" style="width: 250px;" readonly="true"/>
+
+                </p:panelGrid>
+            </p:panel>
+
+            <p:panel header="Agregar Productos" visible="#{compraMB.mostrarPanel}" style="width:56%;margin-left:20%" >
+                <p:panelGrid columns="3" style="margin-left: 18%">
+                    <p:outputLabel  value="Código "/>
+                    <p:inputText id="cantidad" value="#{compraMB.codigoP}" />
+                    <p:commandButton  icon="ui-icon-search" actionListener="#{compraMB.buscarProducto()}" update=":frmIngresoCat"/>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <h:form id="frmIngresoCat">
+            <p:dialog  id="dlgCatalogo" header="Agregar Producto" widgetVar="nuevoCatalogo" modal="true" height="auto" >
+                <p:panelGrid columns="3" id="panelGrid">   
+
+                    <p:outputLabel for="codigo" value="Código:" />
+                    <p:inputText id="codigo" value="#{compraMB.codigoP}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="codigo" />
+
+                    <p:outputLabel for="Nombre" value="Nombre:" />
+                    <p:inputText id="Nombre" value="#{compraMB.catalogo.nombre}" required="true" requiredMessage="Campo necesario"/>                                        
+                    <p:message for="Nombre" />
+
+
+                   
+
+                </p:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton 
+                        ajax="true"
+                        value="Aceptar" 
+                        icon="ui-icon-disk"
+                        action="#{ejemplo.imprimir()}"
+                        update="@form"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="PF('nuevoCatalogo').hide();" update=":frmIngresoCat"/>                        
+                </f:facet>
+            </p:dialog>
+
+            <p:dataTable
+                id="tablaProductos"
+                var="catalogo" 
+                value="#{compraMB.listaCatalogo}"
+                scrollable="true" 
+                scrollHeight="365"  
+                selectionMode="single" rendered="#{compraMB.dlgCatalogo}">
+                
+                <p:column headerText="Cant">
+                    <h:outputText value="#{catalogo.unidades}" />
+                </p:column>
+                <p:column headerText="Código">
+                    <h:outputText value="#{catalogo.codigoProducto}" />
+                </p:column>
+                
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{catalogo.nombre}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+
+
+    </ui:define>
+</ui:composition>

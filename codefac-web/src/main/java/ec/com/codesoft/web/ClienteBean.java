@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.web;
 
-import ec.com.codesoft.modelo.Cliente;
+import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import java.awt.Event;
 import java.io.Serializable;

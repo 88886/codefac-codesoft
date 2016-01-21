@@ -6,7 +6,7 @@
 
 package ec.com.codesoft.modelo.facade;
 
-import ec.com.codesoft.model.Cliente;
+import ec.com.codesoft.model.Compra;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author Suco
  */
 @Stateless
-public class ClienteFacade extends AbstractFacade<Cliente> {
+public class CompraFacade extends AbstractFacade<Compra> {
     @PersistenceContext(unitName = "codefacPU")
     private EntityManager em;
 
@@ -25,8 +25,8 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
         return em;
     }
 
-    public ClienteFacade() {
-        super(Cliente.class);
+    public CompraFacade() {
+        super(Compra.class);
     }
     
 }

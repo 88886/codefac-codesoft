@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.web.seguridad;
 
-import ec.com.codesoft.modelo.Usuario;
+import ec.com.codesoft.model.Usuario;
 import ec.com.codesoft.modelo.servicios.SeguridadServicio;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
