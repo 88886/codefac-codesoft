@@ -54,6 +54,7 @@ public class compraMB implements Serializable {
         dlgCatalogo=false;
         catalogo=new CatalagoProducto();
         
+        
     }
 
     public void buscarDistribuidor() {
@@ -93,7 +94,7 @@ public class compraMB implements Serializable {
         System.out.println("Jola");
     }
     
-    public void registrarCatalogo(Event e){
+    public void registrarCatalogo(){
         System.out.println("Entrando");
         if(tipoProd == "General"){
             catalogo.setTipoProducto('G');

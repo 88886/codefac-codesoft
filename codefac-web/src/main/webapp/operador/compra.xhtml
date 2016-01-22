@@ -19,60 +19,92 @@ and open the template in the editor.
                     <p:outputLabel for="codDistri" value="Código:" />
                     <p:inputText id="codDistri" value="#{compraMB.codDistribuidor}" required="true" requiredMessage="Campo necesario"/>                                        
                     <p:message for="codDistri" /> 
-                    <p:commandButton icon="ui-icon-search" actionListener="#{compraMB.buscarDistribuidor()}" update=":formInfor,:form" />
+                    <p:commandButton icon="ui-icon-search" actionListener="#{compraMB.buscarDistribuidor()}" update=":form:infDistr,:form:paBusDistri,:form:idAgregar" />
                     <p:outputLabel  value="#{compraMB.msjDistri}" />
                 </p:panelGrid>
             </p:panel>
-        </h:form>
-        <h:form id="formInfor">
+
+
             <p:panel id="infDistr" header="Información Distribuidor" visible="#{compraMB.mostrarPanel}" style="width:56%;margin-left:20%" >
                 <p:panelGrid columns="4" id="panelGridDistr">   
                     <p:outputLabel value="Código" />
-                    <p:inputText id="codigo" value="#{compraMB.distriEncontrado.ruc}" readonly="true"/>                                        
+                    <p:inputText id="codigoD" value="#{compraMB.distriEncontrado.ruc}" readonly="true"/>                                        
 
 
                     <p:outputLabel  value="Nombre:" />
-                    <p:inputText id="nombre" value="#{compraMB.distriEncontrado.nombre}" readonly="true" />
+                    <p:inputText id="nombreD" value="#{compraMB.distriEncontrado.nombre}" readonly="true" />
 
 
                     <p:outputLabel value="Telefono:" />
-                    <p:inputText id="telefono" value="#{compraMB.distriEncontrado.telefono}" readonly="true"/>
+                    <p:inputText id="telefonoD" value="#{compraMB.distriEncontrado.telefono}" readonly="true"/>
 
 
                     <p:outputLabel  value="Direccion:" />
-                    <p:inputText id="direccion" value="#{compraMB.distriEncontrado.direccion}" readonly="true" />
+                    <p:inputText id="direccionD" value="#{compraMB.distriEncontrado.direccion}" readonly="true" />
 
 
                     <p:outputLabel value="Tipo de Pago:" />
-                    <p:inputText id="tipoPago" value="#{compraMB.distriEncontrado.tipoPago}" readonly="true" />
+                    <p:inputText id="tipoPagoD" value="#{compraMB.distriEncontrado.tipoPago}" readonly="true" />
 
 
                     <p:outputLabel  value="Notas" />
-                    <p:inputTextarea id="notas" value="#{compraMB.distriEncontrado.notas}" style="width: 250px;" readonly="true"/>
+                    <p:inputTextarea id="notasD" value="#{compraMB.distriEncontrado.notas}" style="width: 250px;" readonly="true"/>
 
                 </p:panelGrid>
             </p:panel>
 
-            <p:panel header="Agregar Productos" visible="#{compraMB.mostrarPanel}" style="width:56%;margin-left:20%" >
+            <p:panel header="Agregar Productos" visible="#{compraMB.mostrarPanel}" style="width:56%;margin-left:20%" id="idAgregar" >
                 <p:panelGrid columns="3" style="margin-left: 18%">
                     <p:outputLabel  value="Código "/>
-                    <p:inputText id="cantidad" value="#{compraMB.codigoP}" />
-                    <p:commandButton  icon="ui-icon-search" actionListener="#{compraMB.buscarProducto()}" update=":frmIngresoCat"/>
+                    <p:inputText id="cantidadA" value="#{compraMB.codigoP}" />
+                    <p:commandButton  icon="ui-icon-search" actionListener="#{compraMB.buscarProducto()}" update="@form"/>
                 </p:panelGrid>
             </p:panel>
-        </h:form>
 
-        <h:form id="frmIngresoCat">
-            <p:dialog  id="dlgCatalogo" header="Agregar Producto" widgetVar="nuevoCatalogo" modal="true" height="auto" >
+
+            <p:dialog  id="dlgCatalogo" header="Agregar Catálogo" widgetVar="nuevoCatalogo" modal="true" height="auto">
                 <p:panelGrid columns="3" id="panelGrid">   
 
                     <p:outputLabel for="codigo" value="Código:" />
                     <p:inputText id="codigo" value="#{compraMB.codigoP}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
                     <p:message for="codigo" />
+                    
+                    <p:outputLabel for="nombreC" value="Nombre: " />
+                    <p:inputText id="nombreC" value="#{compraMB.catalogo.nombre}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="nombreC" />
+                    
+                    <p:outputLabel for="descripcion"  value="Descripción"  />
+                    <p:inputText id="descripcion" value="#{compraMB.catalogo.descripcion}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="descripcion" />
+                    
+                    <p:outputLabel for="marcaC"  value="Marca: "  />
+                    <p:inputText id="marcaC" value="#{compraMB.catalogo.marca}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="marcaC" />
+                    
+                    <p:outputLabel for="precio"  value="Precio: "  />
+                    <p:inputText id="precio" value="#{compraMB.catalogo.precio}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="precio" />
+                    
+                    <p:outputLabel for="descuento"  value="Descuento: "  />
+                    <p:inputText id="descuento" value="#{compraMB.catalogo.descuento}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="descuento" />
+                    
+                    <p:outputLabel for="ubicacion"  value="Ubicación: "  />
+                    <p:inputText id="ubicacion" value="#{compraMB.catalogo.ubicacion}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="ubicacion" />
+                    
+                    <p:outputLabel for="cantidad"  value="Cantidad: "  />
+                    <p:inputText id="cantidad" value="#{compraMB.catalogo.unidades}" required="true" requiredMessage="Campo necesario" readonly="true"/>                                        
+                    <p:message for="cantidad" />
 
-                    <p:outputLabel for="Nombre" value="Nombre:" />
-                    <p:inputText id="Nombre" value="#{compraMB.catalogo.nombre}" required="true" requiredMessage="Campo necesario"/>                                        
-                    <p:message for="Nombre" />
+
+
+                    
+                    
+                  
+
+                    
+                   
 
 
                    
@@ -80,38 +112,21 @@ and open the template in the editor.
                 </p:panelGrid>
                 <f:facet name="footer">
                     <p:commandButton 
-                        ajax="true"
                         value="Aceptar" 
                         icon="ui-icon-disk"
-                        action="#{ejemplo.imprimir()}"
-                        update="@form"/>
-                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="PF('nuevoCatalogo').hide();" update=":frmIngresoCat"/>                        
+                        actionListener="#{compraMB.registrarCatalogo()}"
+                        update="@form" ajax="false"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="PF('nuevoCatalogo').hide();" update="@form"/>                        
                 </f:facet>
             </p:dialog>
 
-            <p:dataTable
-                id="tablaProductos"
-                var="catalogo" 
-                value="#{compraMB.listaCatalogo}"
-                scrollable="true" 
-                scrollHeight="365"  
-                selectionMode="single" rendered="#{compraMB.dlgCatalogo}">
-                
-                <p:column headerText="Cant">
-                    <h:outputText value="#{catalogo.unidades}" />
-                </p:column>
-                <p:column headerText="Código">
-                    <h:outputText value="#{catalogo.codigoProducto}" />
-                </p:column>
-                
-                <p:column headerText="Nombre">
-                    <h:outputText value="#{catalogo.nombre}" />
-                </p:column>
 
-            </p:dataTable>
+
+
+
+
+
+
         </h:form>
-
-
-
     </ui:define>
 </ui:composition>
