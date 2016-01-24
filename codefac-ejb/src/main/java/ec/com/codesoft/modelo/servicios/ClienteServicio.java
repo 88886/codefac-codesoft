@@ -40,4 +40,9 @@ public class ClienteServicio {
         
         return clienteFacade.findAll();
     }
+    
+    public Cliente buscarCliente(String cedula){
+        
+        return clienteFacade.find(cedula);
+    }
 }

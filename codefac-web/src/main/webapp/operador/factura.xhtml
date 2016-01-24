@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+    <ui:define name="contenido">
+        <h:form id="form">
+            <p:remoteCommand name="onload" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
+            <p:panel id="paBusDistri" header="Cliente" style="width: 45%;margin-left:26%">
+                <p:panelGrid columns="5" >
+                    <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
+                    <p:inputText id="cedCliente" value="#{facturaMB.cedCliente}" required="true" requiredMessage="Campo necesario"/>
+                    <p:message for="cedCliente" />
+                    <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr"/>
+                    <p:outputLabel  value="#{facturaMB.msjCliente}" />
+                </p:panelGrid>
+            </p:panel>
+
+
+            <p:panel id="infDistr" header="Información Distribuidor" visible="#{compraMB.mostrarPanel}" style="width:56%;margin-left:20%" >
+                <p:panelGrid columns="4" id="panelGridDistr">
+                    <p:outputLabel value="Cédula/RUC" />
+                    <p:inputText id="codigoD" value="#{facturaMB.clienteEncontrado.cedulaRuc}" readonly="true"/>
+
+
+                    <p:outputLabel  value="Nombre:" />
+                    <p:inputText id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" readonly="true" />
+
+
+                    <p:outputLabel value="Teléfono:" />
+                    <p:inputText id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" readonly="true"/>
+
+                    <p:outputLabel  value="Celular:" />
+                    <p:inputText id="celularC" value="#{facturaMB.clienteEncontrado.celular}" readonly="true" />
+                    
+                    <p:outputLabel  value="Dirección:" />
+                    <p:inputText id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" readonly="true" />
+
+                    <p:outputLabel value="Correo:" />
+                    <p:inputText id="correoD" value="#{facturaMB.clienteEncontrado.correo}" readonly="true" />
+
+
+                    <p:outputLabel  value="Notas" />
+                    <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;" readonly="true"/>
+
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
