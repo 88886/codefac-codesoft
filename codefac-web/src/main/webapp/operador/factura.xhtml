@@ -14,20 +14,22 @@ and open the template in the editor.
 
     <ui:define name="contenido">
         <h:form id="form">
+            <p:growl id="msgs" showDetail="true" />
             <p:remoteCommand name="onload" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
             <p:panel id="paBusDistri" header="Cliente" style="width: 45%;margin-left:26%">
                 <p:panelGrid columns="5" >
                     <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
                     <p:inputText id="cedCliente" value="#{facturaMB.cedCliente}" required="true" requiredMessage="Campo necesario"/>
                     <p:message for="cedCliente" />
-                    <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr"/>
+                    <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr,:formCompra:idAgregar,:formCompra:dlgInformacion,:form:paBusDistri"/>
                     <p:outputLabel  value="#{facturaMB.msjCliente}" />
                 </p:panelGrid>
             </p:panel>
 
 
-            <p:panel id="infDistr" header="Información Distribuidor" visible="#{compraMB.mostrarPanel}" style="width:56%;margin-left:20%" >
+            <p:panel id="infDistr" header="Información Distribuidor" visible="#{facturaMB.mostrarPanel}" style="width:56%;margin-left:20%" >
                 <p:panelGrid columns="4" id="panelGridDistr">
+
                     <p:outputLabel value="Cédula/RUC" />
                     <p:inputText id="codigoD" value="#{facturaMB.clienteEncontrado.cedulaRuc}" readonly="true"/>
 
@@ -41,7 +43,7 @@ and open the template in the editor.
 
                     <p:outputLabel  value="Celular:" />
                     <p:inputText id="celularC" value="#{facturaMB.clienteEncontrado.celular}" readonly="true" />
-                    
+
                     <p:outputLabel  value="Dirección:" />
                     <p:inputText id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" readonly="true" />
 
@@ -55,5 +57,44 @@ and open the template in the editor.
                 </p:panelGrid>
             </p:panel>
         </h:form>
+        <h:form id="formCompra">
+            <p:panel id="idAgregar" style="width:45%;margin-left:26%;">
+                <p:commandButton id="btnAgregarProd" value="Agregar" type="button" />
+                <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
+                    <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                 selectionMode="single" 
+                                  scrollable="true" 
+                                  scrollHeight="200"  
+                                 rowKey="#{catalogo.codigoProducto}"
+                                 selection="#{facturaMB.catalogoSeleccionado}">
+                        <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs"/>
+                        <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+
+                        <p:column headerText="Código">
+                            <h:outputText value="#{catalogo.codigoProducto}" />
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{catalogo.nombre}" />
+                        </p:column>
+                        <p:column headerText="Precio">
+                            <h:outputText value="#{catalogo.precio}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:overlayPanel>
+            </p:panel>
+            <p:dialog  id="dlgInformacion" header="Información Producto" widgetVar="infProducto" modal="true" height="auto">
+                <p:panelGrid columns="3" style="margin-left: 18%">
+                    <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
+                    <p:inputText id="cantidadP" value="#{facturaMB.cantidadComprar}" />
+                    <p:commandButton  icon="ui-icon-plusthick" 
+                     actionListener="#{facturaMB.buscarProducto()}" ajax="false"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+
+
+
+
     </ui:define>
 </ui:composition>

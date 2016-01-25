@@ -9,7 +9,9 @@ package ec.com.codesoft.modelo.facade;
 import ec.com.codesoft.model.ProductoGeneralCompra;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,20 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
 
     public ProductoGeneralCompraFacade() {
         super(ProductoGeneralCompra.class);
+    }
+    
+    public ProductoGeneralCompra findGeneralCodP(String codP) {
+
+        try {
+            String queryString = "SELECT p FROM ProductoGeneralCompra p where p.codigoProducto.codigoProducto='"+codP+"'";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            ProductoGeneralCompra producto= (ProductoGeneralCompra) query.getSingleResult();
+            return producto;
+        } catch (NoResultException e) {
+            return null;
+        }
+
     }
     
 }
