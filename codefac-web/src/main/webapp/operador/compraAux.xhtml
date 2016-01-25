@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+    <ui:define name="contenido">
+        <div style="text-align: center">
+            <h:form id="form">
+                <p:panel id="paBusDistri" header="Nueva Compra" style="width: 60%;text-align: left;margin: 0 auto;">
+                    <p:accordionPanel>
+                        <p:tab title="Datos del Distribuidor">
+                            <p:panelGrid columns="5" >
+                                <p:outputLabel for="codDistri" value="Código:" />
+                                <p:inputText id="codDistri" value="#{compraMB.codDistribuidor}" required="true" requiredMessage="Campo necesario"/>
+                                <p:message for="codDistri" />
+                                <p:commandButton icon="ui-icon-search" actionListener="#{compraMB.buscarDistribuidor()}" update=""  />
+                                <p:outputLabel  value="#{compraMB.msjDistri}" />
+                            </p:panelGrid>
+                            <p:spacer width="12px"/>
+
+                            <p:panelGrid columns="4" >
+
+                                <p:outputLabel  value="Nombre:" />
+                                <p:inputText id="nombreD" value="#{compraMB.distriEncontrado.nombre}" readonly="true" />
+
+                                <p:outputLabel value="Telefono:" />
+                                <p:inputText id="telefonoD" value="#{compraMB.distriEncontrado.telefono}" readonly="true"/>
+
+                                <p:outputLabel  value="Direccion:" />
+                                <p:inputText id="direccionD" value="#{compraMB.distriEncontrado.direccion}" readonly="true" />
+
+                                <p:outputLabel value="Tipo de Pago:" />
+                                <p:inputText id="tipoPagoD" value="#{compraMB.distriEncontrado.tipoPago}" readonly="true" />
+
+                                <p:outputLabel  value="Notas" />
+                                <p:inputTextarea id="notasD" value="#{compraMB.distriEncontrado.notas}" style="width: 250px;" readonly="true"/>
+
+                            </p:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="Datos Cliente">
+                            <p:panelGrid id="gridCompra" columns="3">
+                                <p:outputLabel for="codDocumento"  value="Código Documento :"  />
+                                <p:outputLabel for="totalCompra"  value="Total :"  />
+                                <p:outputLabel for="descuentoCompra"  value="Descuento :"  />
+                                <p:inputText id="codDocumento" value="#{compraMB.compra.codigoDocumento}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}" />
+                                <p:inputText id="totalCompra" value="#{compraMB.compra.total}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}" />
+                                <p:inputText id="descuentoCompra" value="#{compraMB.compra.descuento}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}"/>
+                                <p:message for="codDocumento"/>
+                                <p:message for="totalCompra" />
+                                <p:message for="descuentoCompra" />
+                            </p:panelGrid>
+                        </p:tab>
+
+                        <p:tab title="">
+
+                        </p:tab>
+
+                    </p:accordionPanel>
+
+                    <p:panel>
+                        <p:panel header="Detalles Productos" id="panelDetalles" style="width: 45%;margin-left:26%" visible="#{compraMB.mostrarTabla}">
+                            <p:dataTable
+                                id="tablaDetalles"
+                                var="detalles"
+                                value="#{compraMB.detallesCompra}"
+                                scrollable="true"
+                                scrollHeight="250">
+
+                                <p:column headerText="Cantidad">
+                                    <h:outputText value="#{detalles.cantidad}" />
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{detalles.nombre}" />
+                                </p:column>
+
+                                <p:column headerText="Costo">
+                                    <h:outputText value="#{detalles.costo}" />
+                                </p:column>
+
+                                <p:column headerText="Total">
+                                    <h:outputText value="#{detalles.total}" />
+                                </p:column>
+                            </p:dataTable>
+
+                            <div style="width:25%;margin-left:77%;background-color: activecaption">
+                                Total: <p:outputLabel value="#{compraMB.totalCompra} $"/>
+                            </div>
+                        </p:panel>                        
+                    </p:panel>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

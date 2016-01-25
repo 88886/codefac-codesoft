@@ -16,11 +16,9 @@ and open the template in the editor.
         <h:outputStylesheet library="css" name="estiloUsuario.css"/>
     </h:head>
     <h:body>
-
         <div id="cabecera">
             <p:graphicImage library="img" name="bannerCodefacPeque.jpg"  styleClass="imagenCabecera" />
         </div >
-
         <div id="divSesionUsuario">
             <span>
                 Sesión iniciada por:
@@ -29,12 +27,11 @@ and open the template in the editor.
 
         </div>
 
-        <div id="menu">
-
+        <div id="menu" class="menuPanel">
             <h:form id="menu" >
                 <p:growl id="messages"/>
                 <p:menubar>
-                    <p:submenu label="File" icon="ui-icon-document">
+                    <p:submenu label="Menu" icon="ui-icon-document">
                         <p:submenu label="New" icon="ui-icon-contact">
                             <p:menuitem value="Project" url="#" />
                             <p:menuitem value="Other" url="#" />
@@ -45,10 +42,14 @@ and open the template in the editor.
                     </p:submenu>
 
                     <p:submenu label="Compras" icon="ui-icon-pencil">
-                        <p:menuitem value="Undo" url="#" icon="ui-icon-arrowreturnthick-1-w" />
-                        <p:menuitem value="Redo" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                        <p:menuitem value="Nuevo" outcome="compra"  icon="ui-icon-arrowreturnthick-1-w" />
                     </p:submenu>
-                    <p:submenu label="Ventas" icon="ui-icon-help">
+
+                    <p:submenu label="Ventas" icon="ui-icon-pencil">
+                        <p:menuitem value="Nuevo" outcome="factura"  icon="ui-icon-arrowreturnthick-1-w" />
+                    </p:submenu>
+
+                    <p:submenu label="Help" icon="ui-icon-help">
                         <p:menuitem value="Contents" url="#" />
                         <p:submenu label="Search" icon="ui-icon-search">
                             <p:submenu label="Text">
@@ -77,7 +78,7 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </div>
-        <div id="contenido">
+        <div id="contenido" class="panelContenido">
             <ui:insert name="contenido"/>
         </div>
         <div id="piepagina">
