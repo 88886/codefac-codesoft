@@ -5,12 +5,21 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>Indice administrador</div>
-    </body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <div style="text-align: center">         
+            <br/>
+            <br/>
+            <img width="40%" height="12%" src="#{facesContext.externalContext.requestContextPath}/resources/img/banner_admin.png" align="top"/>
+            <h1>Bienvenido a la Sección de Administrador</h1>
+            <p style="font-size: 14px">En esta sección puede gestionar sus proveedores, clientes, productos, y otras herramientas necesarias para el correcto funcionamiento y su configuración.</p>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -14,7 +14,7 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        <div style="text-align: center"><h2>Gestion de Clientes</h2></div>
+        <div style="text-align: center"><h2>Busqueda de Clientes</h2></div>
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
             <p:panel id="panelTablaClientes" style="z-index: 0">
@@ -28,13 +28,9 @@ and open the template in the editor.
                     rowKey="#{cliente.cedulaRuc}"
                     selection="#{clienteMB.clienteSeleccionado}">
 
-                    <p:ajax event="rowSelect" listener="#{clienteMB.onRowSelect}" update=":form:msgs,btnEditarCliente"/>
+                    <p:ajax event="rowSelect" listener="#{clienteMB.onRowSelect}" update=":form:msgs"/>
                     <p:ajax event="rowUnselect" listener="#{clienteMB.onRowUnSelect}"/>
 
-                    <f:facet name="header" >                               
-                        <p:commandButton id="btnNuevoCliente" process="tablaClientes" icon="ui-icon-plus" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enCrear()}" style="width: 20px;height: 20px"/>  
-                        <p:commandButton id="btnEditarCliente" process="tablaClientes" icon="ui-icon-pencil" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enModificar()}" disabled="#{clienteMB.flagBoton1}" style="width: 20px;height: 20px" update=":form:panelGrid"/>                          
-                    </f:facet>
 
 
                     <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >

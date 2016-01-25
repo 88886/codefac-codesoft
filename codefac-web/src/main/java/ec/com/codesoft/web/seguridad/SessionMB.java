@@ -71,7 +71,7 @@ public class SessionMB implements Serializable {
             switch(usuarioLogin.getTipo())
             {
                 case "admin":
-                    return "/admin/cliente.xhtml";
+                    return "/admin/indexAdmin.xhtml";
                     
                 
                 case "operador":

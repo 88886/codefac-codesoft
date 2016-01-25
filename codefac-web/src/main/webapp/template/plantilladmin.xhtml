@@ -27,11 +27,11 @@ and open the template in the editor.
 
         </div>
 
-        <div id="menu">
+        <div id="menu" class="menuPanel">
             <h:form id="menu" >
                 <p:growl id="messages"/>
                 <p:menubar>
-                    <p:submenu label="File" icon="ui-icon-document">
+                    <p:submenu label="Menu" icon="ui-icon-document">
                         <p:submenu label="New" icon="ui-icon-contact">
                             <p:menuitem value="Project" url="#" />
                             <p:menuitem value="Other" url="#" />
@@ -41,10 +41,18 @@ and open the template in the editor.
                         <p:menuitem value="Quit" url="#" />
                     </p:submenu>
 
-                    <p:submenu label="Edit" icon="ui-icon-pencil">
-                        <p:menuitem value="Undo" url="#" icon="ui-icon-arrowreturnthick-1-w" />
-                        <p:menuitem value="Redo" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                    <p:submenu label="Clientes" icon="ui-icon-pencil">
+                        <p:menuitem value="Gestionar" outcome="cliente"  icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Buscar" outcome="buscarCliente" icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Reportes" url="#" icon="ui-icon-arrowreturnthick-1-e" />
                     </p:submenu>
+
+                    <p:submenu label="Productos" icon="ui-icon-pencil">
+                        <p:menuitem value="Gestionar" outcome="cliente"  icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Buscar" outcome="buscarCliente" icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Reportes" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                    </p:submenu>
+
                     <p:submenu label="Help" icon="ui-icon-help">
                         <p:menuitem value="Contents" url="#" />
                         <p:submenu label="Search" icon="ui-icon-search">
@@ -74,7 +82,7 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </div>
-        <div id="contenido">
+        <div id="contenido" class="panelContenido">
             <ui:insert name="contenido"/>
         </div>
         <div id="piepagina">

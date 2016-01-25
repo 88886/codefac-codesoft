@@ -18,11 +18,21 @@ body
     font-family:  Helvetica;
 }
 
-h1
+h1 , h2
 {
     color: #485798;
     
     
+}
+
+.panelContenido
+{
+    font-size: 10px;    
+}
+
+.menuPanel
+{
+    font-size: 12px;
 }
 
 #cabecera
@@ -34,6 +44,7 @@ h1
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 100;
 }
 
 
@@ -41,12 +52,12 @@ h1
 {
     background-color: darkblue;
     color: white;
-    height: 50px;
+    height: 40px;
     text-align: center;
     top: 75px;
     position: fixed;
     width: 100%;
-
+    z-index: 100;
 }
 
 #contenido
@@ -54,7 +65,8 @@ h1
     background-color: white;
     color: black;
     margin: 0 auto;
-    padding-top: 125px;
+    top: 100px;
+    padding-top: 120px;
     padding-bottom: 25px;
 }
 
