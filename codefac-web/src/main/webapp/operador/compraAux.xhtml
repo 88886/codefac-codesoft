@@ -18,7 +18,7 @@ and open the template in the editor.
                 <p:panel id="paBusDistri" header="Nueva Compra" style="width: 60%;text-align: left;margin: 0 auto;">
                     <p:accordionPanel>
                         <p:tab title="Datos del Distribuidor">
-                            <p:panelGrid columns="5" >
+                            <p:panelGrid columns="5" styleClass="panelNoBorder" >
                                 <p:outputLabel for="codDistri" value="Código:" />
                                 <p:inputText id="codDistri" value="#{compraMB.codDistribuidor}" required="true" requiredMessage="Campo necesario"/>
                                 <p:message for="codDistri" />
@@ -27,7 +27,7 @@ and open the template in the editor.
                             </p:panelGrid>
                             <p:spacer width="12px"/>
 
-                            <p:panelGrid columns="4" >
+                            <p:panelGrid columns="4" styleClass="panelNoBorder" >
 
                                 <p:outputLabel  value="Nombre:" />
                                 <p:inputText id="nombreD" value="#{compraMB.distriEncontrado.nombre}" readonly="true" />
@@ -45,58 +45,30 @@ and open the template in the editor.
                                 <p:inputTextarea id="notasD" value="#{compraMB.distriEncontrado.notas}" style="width: 250px;" readonly="true"/>
 
                             </p:panelGrid>
-                        </p:tab>
+                            
+                            <p:spacer width="12px"/>
 
-                        <p:tab title="Datos Cliente">
-                            <p:panelGrid id="gridCompra" columns="3">
-                                <p:outputLabel for="codDocumento"  value="Código Documento :"  />
-                                <p:outputLabel for="totalCompra"  value="Total :"  />
-                                <p:outputLabel for="descuentoCompra"  value="Descuento :"  />
-                                <p:inputText id="codDocumento" value="#{compraMB.compra.codigoDocumento}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}" />
-                                <p:inputText id="totalCompra" value="#{compraMB.compra.total}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}" />
-                                <p:inputText id="descuentoCompra" value="#{compraMB.compra.descuento}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}"/>
-                                <p:message for="codDocumento"/>
-                                <p:message for="totalCompra" />
-                                <p:message for="descuentoCompra" />
-                            </p:panelGrid>
-                        </p:tab>
-
-                        <p:tab title="">
+                            <p:panel id="panelCompra" visible="true" style="width:100%;">
+                                <p:panelGrid id="gridCompra" columns="3" styleClass="panelNoBorder">
+                                    <p:outputLabel for="codDocumento"  value="Código Documento :"  />
+                                    <p:outputLabel for="totalCompra"  value="Total :"  />
+                                    <p:outputLabel for="descuentoCompra"  value="Descuento :"  />
+                                    <p:inputText id="codDocumento" value="#{compraMB.compra.codigoDocumento}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}" />
+                                    <p:inputText id="totalCompra" value="#{compraMB.compra.total}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}" />
+                                    <p:inputText id="descuentoCompra" value="#{compraMB.compra.descuento}" required="true" requiredMessage="Campo necesario" readonly="#{compraMB.soloLectura}"/>
+                                    <p:message for="codDocumento"/>
+                                    <p:message for="totalCompra" />
+                                    <p:message for="descuentoCompra" />
+                                </p:panelGrid>
+                            </p:panel>
+                            
 
                         </p:tab>
 
                     </p:accordionPanel>
 
-                    <p:panel>
-                        <p:panel header="Detalles Productos" id="panelDetalles" style="width: 45%;margin-left:26%" visible="#{compraMB.mostrarTabla}">
-                            <p:dataTable
-                                id="tablaDetalles"
-                                var="detalles"
-                                value="#{compraMB.detallesCompra}"
-                                scrollable="true"
-                                scrollHeight="250">
 
-                                <p:column headerText="Cantidad">
-                                    <h:outputText value="#{detalles.cantidad}" />
-                                </p:column>
-                                <p:column headerText="Nombre">
-                                    <h:outputText value="#{detalles.nombre}" />
-                                </p:column>
 
-                                <p:column headerText="Costo">
-                                    <h:outputText value="#{detalles.costo}" />
-                                </p:column>
-
-                                <p:column headerText="Total">
-                                    <h:outputText value="#{detalles.total}" />
-                                </p:column>
-                            </p:dataTable>
-
-                            <div style="width:25%;margin-left:77%;background-color: activecaption">
-                                Total: <p:outputLabel value="#{compraMB.totalCompra} $"/>
-                            </div>
-                        </p:panel>                        
-                    </p:panel>
                 </p:panel>
             </h:form>
         </div>

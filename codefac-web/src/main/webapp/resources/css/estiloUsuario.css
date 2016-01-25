@@ -21,8 +21,8 @@ body
 h1 , h2
 {
     color: #485798;
-    
-    
+
+
 }
 
 .panelContenido
@@ -88,14 +88,14 @@ h1 , h2
     background-color: activeborder;
     width: 300px;
     height: 75px;
-    
+
 }
 
 .menuPF
 {
     width: 100%;    
     text-align: center;
-   
+
 }
 
 .menuItem
@@ -112,4 +112,9 @@ h1 , h2
     top: 20px;
     color: white;
     font-size: 13px;
+}
+
+.panelNoBorder, .panelNoBorder tr, .panelNoBorder td{
+    border: hidden;
+    border-color: white;
 }
