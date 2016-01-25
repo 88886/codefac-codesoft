@@ -15,7 +15,13 @@ body
     border: 0px;
     padding: 0px;
     margin: 0px;
+    font-family:  Helvetica;
     
+}
+
+h1,h2
+{
+    color: #485798; 
 }
 
 #cabecera

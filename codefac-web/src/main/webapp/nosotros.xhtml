@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaprincipal.xhtml">
+
+    <ui:define name="contenido">
+        <p:panel id="basic" header="Nosotros"  style="margin-bottom:20px;text-align: center">
+            <img width="12%" height="12%" src="#{facesContext.externalContext.requestContextPath}/resources/img/logo2.jpg" align="top"/>
+            <p style="width: 50%;text-align: left;margin-right: auto;
+margin-left: auto;">Codefac ¨pymes¨ es un software de facturación que permite gestionar de forma automatizada el proceso de compras, bodegaje y ventas para pequeñas y medianas empresas.</p>
+
+            <img width="20%" height="20%" src="#{facesContext.externalContext.requestContextPath}/resources/img/bannerCodesoft.png" align="top"/>
+            
+            <p style="width: 50%;text-align: left;margin-right: auto;
+margin-left: auto;">Codefac fue desarrollado por Codesoft, empresa que ofrece servicios tecnológicos en diferentes áreas de software, hardware . Para contactarnos puede ingresar en el siguiente <h:link outcome="ubicacion" value="Link"/> .</p>
+            
+        </p:panel>
+    </ui:define>
+</ui:composition>

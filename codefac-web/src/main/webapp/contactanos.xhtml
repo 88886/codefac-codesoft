@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaprincipal.xhtml">
+
+    <ui:define name="contenido">
+        <p:panel id="basic" header="Contáctanos"  style="margin-bottom:20px;text-align: center">
+            <table style="text-align: left;margin: 0 auto">
+                <tr>
+                    <td><h2>Telefonos</h2></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>Convencional:</td>
+                    <td>2339487</td>
+                </tr>
+
+                <tr>
+                    <td>Celular 1:</td>
+                    <td>0986612116</td>
+                </tr>
+
+                <tr>
+                    <td>Celular 2:</td>
+                    <td>099490533</td>
+                </tr>
+
+                <tr>
+                    <td><h2>Pagina Oficial:</h2></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td>Web Oficial: </td>
+                    <td> <a href="http://codesoft.zz.mu" >www.codesoft.com.ec</a></td>
+
+                </tr>
+
+
+            </table>
+            <br/>
+            <br/>
+
+            <table  style="text-align: left;margin: 0 auto" cellpadding="15px">
+
+                <tr>
+                    <td>
+                        <a href="https://www.facebook.com/codesoft.ec/?fref=ts"></a><img width="50px" height="50px" src="#{facesContext.externalContext.requestContextPath}/resources/img/iconos/facebook_icono.png" align="top"/>
+                    </td>
+
+                    <td>
+                        <img width="50px" height="50px" src="#{facesContext.externalContext.requestContextPath}/resources/img/iconos/twiter_icono.png" align="top"/>
+                    </td>
+
+                    <td>
+                        <img width="50px" height="50px" src="#{facesContext.externalContext.requestContextPath}/resources/img/iconos/whatsap-icono.png" align="top"/>
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+
+
+
+
+
+        </p:panel>
+    </ui:define>
+</ui:composition>

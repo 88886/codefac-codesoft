@@ -22,33 +22,35 @@ and open the template in the editor.
         </div>
         <div id="menu">
             <h:form id="menuPlantilla">
-             <p:growl id="messages"/>
-             <p:layoutUnit position="center"> 
-            <p:tabMenu activeIndex="#{param.i}" style="width: 559px; margin-left:auto; margin-right:auto;">
-                <p:menuitem   value="Inicio" icon="ui-icon-star">
-                    <f:param name="i" value="0" />
-                </p:menuitem>
-                <p:menuitem value="Login"  icon="ui-icon-document">
-                    <f:param name="i" value="2" />
-                </p:menuitem>
-                <p:menuitem value="Nosotros"  icon="ui-icon-search">
-                    <f:param name="i" value="1" />
-                </p:menuitem>
-                <p:menuitem value="Contactanos"  icon="ui-icon-search">
-                    <f:param name="i" value="1" />
-                </p:menuitem>
-                <p:menuitem value="Ayuda"  icon="ui-icon-person">
-                    <f:param name="i" value="4" />
-                </p:menuitem>
-            </p:tabMenu>
-             </p:layoutUnit>
+                <p:growl id="messages"/>
+                <p:layoutUnit position="center"> 
+                    <p:tabMenu activeIndex="#{param.i}" style="width: 590px; margin-left:auto; margin-right:auto;">
+                        <p:menuitem outcome="index"   value="Inicio" icon="ui-icon-star">
+                            <f:param name="i" value="0" />
+                        </p:menuitem>
+                        <p:menuitem outcome="login" value="Login"  icon="ui-icon-document">
+                            <f:param name="i" value="1" />
+                        </p:menuitem>
+                        <p:menuitem outcome="nosotros" value="Nosotros"  icon="ui-icon-search">
+                            <f:param name="i" value="2" />
+                        </p:menuitem>
+                        <p:menuitem outcome="ubicacion" value="ubicación"   icon="ui-icon-person">
+                            <f:param name="i" value="3" />
+                        </p:menuitem>
+                        <p:menuitem outcome="contactanos" value="Contactanos"  icon="ui-icon-search">
+                            <f:param name="i" value="4" />
+                        </p:menuitem>
+
+                    </p:tabMenu>
+                </p:layoutUnit>
+            </h:form>
         </div>
-            <div id="contenido">
-                <ui:insert name="contenido"/>
-            </div>
+        <div id="contenido">
+            <ui:insert name="contenido"/>
+        </div>
         <div id="piepagina">
             <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
         </div>
-        </h:form>
+
     </h:body>
 </html>
