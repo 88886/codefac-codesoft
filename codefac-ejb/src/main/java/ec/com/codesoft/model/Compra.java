@@ -13,6 +13,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,22 +37,24 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Compra.findAll", query = "SELECT c FROM Compra c")})
 public class Compra implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODIGO_COMPRA")
     private Integer codigoCompra;
-    @Size(max = 64)
+   // @Size(max = 64)
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
-    @Size(max = 64)
+    //@Size(max = 64)
     @Column(name = "TIPO_DOCUMENTO")
     private String tipoDocumento;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "TOTAL")
     private BigDecimal total;
     @Column(name = "FECHA")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
@@ -69,6 +73,18 @@ public class Compra implements Serializable {
     private List<ProductoGeneralCompra> productoGeneralCompraList;
 
     public Compra() {
+      
+    }
+    public void llenarCampos() {
+        this.codigoCompra=0;
+        this.codigoDocumento="";
+        this.codigoPerido=null;
+        this.descuento=new BigDecimal("0.0f");
+        this.fecha=new Date();
+        this.nick=null;
+        this.ruc=null;
+        this.tipoDocumento="";
+        this.total=new BigDecimal("0.0f");
     }
 
     public Compra(Integer codigoCompra) {
