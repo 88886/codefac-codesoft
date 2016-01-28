@@ -137,7 +137,7 @@ public class compraMB implements Serializable {
     }
 
     public void buscarDistribuidor() {
-
+        System.out.println(codDistribuidor);
         distriEncontrado = distribServicio.buscarDistribuidor(codDistribuidor);
         if (distriEncontrado == null) {
             System.out.println("NNEncontrado");
