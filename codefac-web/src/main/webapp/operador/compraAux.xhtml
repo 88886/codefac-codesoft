@@ -18,6 +18,7 @@ and open the template in the editor.
                 <p:accordionPanel>
                     <p:tab title="Datos del Distribuidor">
                         <h:form id="formDatosDistribuidor">
+                            
                             <p:panelGrid columns="5" styleClass="panelNoBorder" >
                                 <p:outputLabel for="codDistri" value="Código:" />
                                 <p:inputText id="codDistri" value="#{compraMB.codDistribuidor}" required="true" requiredMessage="Campo necesario"/>
@@ -69,129 +70,132 @@ and open the template in the editor.
 
                     </p:tab>
 
-                    <p:tab title="Detalle Cliente">
-                        <h:form>
-                            <p:panel header="Agregar Productos" visible="true" style="width:56%;margin-left:20%" id="idAgregar" >
-                                <p:panelGrid columns="3" style="margin-left: 18%" styleClass="panelNoBorder" >
-                                    <p:outputLabel  value="Código "/>
-                                    <p:inputText id="cantidadA" value="#{compraMB.codigoP}" />
-                                    <p:commandButton  icon="ui-icon-search" actionListener="#{compraMB.buscarProducto()}" update=":form2" ajax="false"/>
-                                </p:panelGrid>                                
-                            </p:panel>
-                        </h:form>
+                    <p:tab title="Detalle de la Compra">
+                        <p:panel id="detalleCompra">
+                            <h:form id="formElegirCodigo">
+                                <p:panel header="Agregar Productos" visible="#{compraMB.mostrarPanelGeneral}" style="width:56%;margin-left:20%" id="idAgregar" >
+                                    <p:panelGrid columns="3" style="margin-left: 18%" styleClass="panelNoBorder" >
+                                        <p:outputLabel  value="Código "/>
+                                        <p:inputText id="cantidadA" value="#{compraMB.codigoP}" />
+                                        <p:commandButton  icon="ui-icon-search" actionListener="#{compraMB.buscarProducto()}" update=":detalleCompra:formGeneral" />
+                                    </p:panelGrid>                                
+                                </p:panel>
+                            </h:form>
 
-                        <h:form id="formEspecifico">                            
-                            <p:panel header="Ingrese la cantidad" style="width: 100%;text-align: center" id="panelTabEspe" styleClass="panelNoBorder">
-                                <p:panelGrid style="margin:  0 auto" columns="3" id="panelGridE">
+                            <h:form id="formGeneral">
+                                <p:panel header="Ingrese la cantidad y el precio:" style="width: 100%;" id="panelTabGenral" styleClass="panelNoBorder" visible="#{compraMB.mostrarIngresoGeneral}" >
+                                    <p:panelGrid columns="3" style="margin:  0 auto" id="panelGrid" styleClass="panelNoBorder">
 
-                                    <p:outputLabel for="codigoEsG"  value="Código General :"  />
-                                    <p:outputLabel for="costoEs"  value="Costo :"  />
-                                    <p:outputLabel for="cantidadEs"  value="Cantidad :"  />
+                                        <p:outputLabel for="codigoPG"  value="Código :"  />
+                                        <p:outputLabel for="costoG"  value="Costo Individual :"  />
+                                        <p:outputLabel for="cantidadG"  value="Cantidad :"  />
+
+                                        <p:inputText id="codigoPG" value="#{compraMB.codigoP}" required="true" requiredMessage="Campo necesario" readonly="true" />
+                                        <p:inputText id="costoG" style="width: 80px;" value="#{compraMB.productoGeneral.costoIndividual}" required="true" requiredMessage="Campo necesario" />
+                                        <p:inputText id="cantidadG" style="width: 50px;" value="#{compraMB.productoGeneral.cantidad}" required="true" requiredMessage="Campo necesario" />
+
+                                        <p:message for="codigoPG" />
+                                        <p:message for="costoG" />
+                                        <p:message for="cantidadG" />
+
+                                    </p:panelGrid>
+
+                                    <div style="text-align: center">
+                                        <p:commandButton
+                                            value="Aceptar"
+                                            icon="ui-icon-disk"
+                                            actionListener="#{compraMB.registrarProductoGeneral()}"
+                                            ajax="false"/>
+
+                                        <p:commandButton
+                                            value="Cancelar"
+                                            icon="ui-icon-disk"
+                                            style="background-image:none;background-color:red;"
+                                            actionListener="#{compraMB.registrarProductoEspecifico()}"
+                                            ajax="false"/>
+
+                                    </div>
+
+                                </p:panel>
+
+                            </h:form>
+
+                            <h:form id="formEspecifico">                            
+                                <p:panel header="Ingrese la cantidad" style="width: 100%;text-align: center" id="panelTabEspe" styleClass="panelNoBorder" visible="#{compraMB.mostrarIngresoEspecifico}">
+                                    <p:panelGrid style="margin:  0 auto" columns="3" id="panelGridE">
+
+                                        <p:outputLabel for="codigoEsG"  value="Código General :"  />
+                                        <p:outputLabel for="costoEs"  value="Costo :"  />
+                                        <p:outputLabel for="cantidadEs"  value="Cantidad :"  />
 
 
-                                    <p:inputText id="codigoEsG"  value="#{compraMB.codigoP}" required="true" requiredMessage="Campo necesario" readonly="true" />
-                                    <p:inputText id="costoEs" style="width: 100px" value="#{compraMB.costoEspecifico}" required="true" requiredMessage="Campo necesario" />
-                                    <p:inputText id="cantidadEs" style="width: 50px" value="#{compraMB.cantidadEspecifico}" required="true" requiredMessage="Campo necesario" />
+                                        <p:inputText id="codigoEsG"  value="#{compraMB.codigoP}" required="true" requiredMessage="Campo necesario" readonly="true" />
+                                        <p:inputText id="costoEs" style="width: 100px" value="#{compraMB.costoEspecifico}" required="true" requiredMessage="Campo necesario" />
+                                        <p:inputText id="cantidadEs" style="width: 50px" value="#{compraMB.cantidadEspecifico}" required="true" requiredMessage="Campo necesario" />
 
 
-                                    <p:message for="codigoEsG" />
-                                    <p:message for="costoEs" />
-                                    <p:message for="cantidadEs" />
+                                        <p:message for="codigoEsG" />
+                                        <p:message for="costoEs" />
+                                        <p:message for="cantidadEs" />
 
-                                </p:panelGrid>
+                                    </p:panelGrid>
 
-                                <div style="text-align: center">
-                                    <p:commandButton
-                                        value="Aceptar"
-                                        icon="ui-icon-disk"
-                                        actionListener="#{compraMB.registrarProductoEspecifico()}"
-                                        ajax="false"/>
+                                    <div style="text-align: center">
+                                        <p:commandButton
+                                            value="Aceptar"
+                                            icon="ui-icon-disk"
+                                            actionListener="#{compraMB.registrarProductoEspecifico()}"
+                                            ajax="false"/>
 
-                                    <p:commandButton
-                                        value="Cancelar"
-                                        icon="ui-icon-disk"
-                                        style="background-image:none;background-color:red;"
-                                        actionListener="#{compraMB.registrarProductoEspecifico()}"
-                                        ajax="false"/>
-                                </div>
-                            </p:panel>
-                        </h:form>
+                                        <p:commandButton
+                                            value="Cancelar"
+                                            icon="ui-icon-disk"
+                                            style="background-image:none;background-color:red;"
+                                            actionListener="#{compraMB.registrarProductoEspecifico()}"
+                                            ajax="false"/>
+                                    </div>
+                                </p:panel>
+                            </h:form>
 
 
 
-                        <p:spacer width="12px"/>
+                            <p:spacer width="12px"/>
 
-                        <p:dataTable
-                            id="tablaDetalles"
-                            var="detalles"
-                            value="#{compraMB.detallesCompra}"
-                            scrollable="false"
-                            scrollHeight="250">
+                            <p:dataTable
+                                id="tablaDetalles"
+                                var="detalles"
+                                value="#{compraMB.detallesCompra}"
+                                scrollable="false"
+                                scrollHeight="250">
 
-                            <p:column headerText="Cantidad">
-                                <h:outputText value="#{detalles.cantidad}" />
-                            </p:column>
-                            <p:column headerText="Nombre">
-                                <h:outputText value="#{detalles.nombre}" />
-                            </p:column>
+                                <p:column headerText="Cantidad">
+                                    <h:outputText value="#{detalles.cantidad}" />
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{detalles.nombre}" />
+                                </p:column>
 
-                            <p:column headerText="Costo">
-                                <h:outputText  value="#{detalles.costo}" />
-                            </p:column>
+                                <p:column headerText="Costo">
+                                    <h:outputText  value="#{detalles.costo}" />
+                                </p:column>
 
-                            <p:column headerText="Total">
-                                <h:outputText value="#{detalles.total}" />
-                            </p:column>
-                        </p:dataTable>
+                                <p:column headerText="Total">
+                                    <h:outputText value="#{detalles.total}" />
+                                </p:column>
+                            </p:dataTable>
 
-                        <p:spacer width="12px"/>
+                            <p:spacer width="12px"/>
 
-                        <div style="width:25%;margin-left:77%;background-color: activecaption">
-                            Total: <p:outputLabel value="#{compraMB.totalCompra} $"/>
-                        </div>
-
+                            <div style="width:25%;margin-left:77%;background-color: activecaption">
+                                Total: <p:outputLabel value="#{compraMB.totalCompra} $"/>
+                            </div>
+                        </p:panel>
                     </p:tab>
 
                 </p:accordionPanel>
             </p:panel>
         </div>
 
-
-
-        <h:form id="formGeneral">
-            <p:panel style="width: 45%;margin-left:26%" id="panelTabGenral" >
-                <p:panelGrid columns="3" id="panelGrid" styleClass="panelNoBorder">
-
-                    <p:outputLabel for="codigoPG"  value="Código :"  />
-                    <p:inputText id="codigoPG" value="#{compraMB.codigoP}" required="true" requiredMessage="Campo necesario" readonly="true" />
-                    <p:message for="codigoPG" />
-
-                    <p:outputLabel for="cantidadG"  value="Cantidad :"  />
-                    <p:inputText id="cantidadG" value="#{compraMB.productoGeneral.cantidad}" required="true" requiredMessage="Campo necesario" />
-                    <p:message for="cantidadG" />
-
-                    <p:outputLabel for="costoG"  value="Costo Individual :"  />
-                    <p:inputText id="costoG" value="#{compraMB.productoGeneral.costoIndividual}" required="true" requiredMessage="Campo necesario" />
-                    <p:message for="costoG" />
-
-                    <p:outputLabel for="canMalEstG"  value="Productos Mal Estado :"  />
-                    <p:inputText id="canMalEstG" value="#{compraMB.productoGeneral.cantidadMalEstado}" required="true" requiredMessage="Campo necesario" />
-                    <p:message for="canMalEstG" />
-
-                    <p:outputLabel for="canCadG"  value="Productos Caducados :"  />
-                    <p:inputText id="canCadG" value="#{compraMB.productoGeneral.cantidadCaducada}" required="true" requiredMessage="Campo necesario" />
-                    <p:message for="canCadG" />
-
-                    <p:commandButton
-                        value="Aceptar"
-                        icon="ui-icon-disk"
-                        actionListener="#{compraMB.registrarProductoGeneral()}"
-                        ajax="false"/>
-                </p:panelGrid>
-
-            </p:panel>
-
-        </h:form>
 
         <h:form id="form2">
 

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -60,9 +61,11 @@ public class ProductoIndividualCompra implements Serializable {
     private Date fechaReservaTemporal;
     @OneToMany(mappedBy = "codigoUnico")
     private List<DetalleProductoIndividual> detalleProductoIndividualList;
+    
     @JoinColumn(name = "CODIGO_COMPRA", referencedColumnName = "CODIGO_COMPRA")
-    @ManyToOne
+    @ManyToOne()    
     private Compra codigoCompra;
+    
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO")
     @ManyToOne
     private CatalagoProducto codigoProducto;

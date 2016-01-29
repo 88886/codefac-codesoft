@@ -15,7 +15,7 @@ and open the template in the editor.
     <ui:define name="contenido">
         <h:form id="form">
             <p:remoteCommand name="onload" action="#{compraMB.verificarDialogo()}" autoRun="true" />
-            <p:panel id="paBusDistri" header="Distribuidor" style="width: 45%;margin-left:26%">
+            <p:panel id="paBusDistri" header="Distribuidor" style="width: 45%;margin-left:26%" >
                 <p:panelGrid columns="5" >
                     <p:outputLabel for="codDistri" value="Código:" />
                     <p:inputText id="codDistri" value="#{compraMB.codDistribuidor}" required="true" requiredMessage="Campo necesario"/>

@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,8 +24,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -40,8 +38,6 @@ public class Compra implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "CODIGO_COMPRA")
     private Integer codigoCompra;
    // @Size(max = 64)
@@ -67,9 +63,11 @@ public class Compra implements Serializable {
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
-    @OneToMany(mappedBy = "codigoCompra")
+    
+    @OneToMany(mappedBy = "codigoCompra",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ProductoIndividualCompra> productoIndividualCompraList;
-    @OneToMany(mappedBy = "codigoCompra")
+    
+    @OneToMany(mappedBy = "codigoCompra",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ProductoGeneralCompra> productoGeneralCompraList;
 
     public Compra() {
@@ -201,7 +199,9 @@ public class Compra implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.codesoft.model.Compra[ codigoCompra=" + codigoCompra + " ]";
+        return "Compra{" + "codigoCompra=" + codigoCompra + ", codigoDocumento=" + codigoDocumento + ", tipoDocumento=" + tipoDocumento + ", total=" + total + ", fecha=" + fecha + ", descuento=" + descuento + ", ruc=" + ruc + ", codigoPerido=" + codigoPerido + ", nick=" + nick + ", productoIndividualCompraList=" + productoIndividualCompraList + ", productoGeneralCompraList=" + productoGeneralCompraList + '}';
     }
+
+    
     
 }

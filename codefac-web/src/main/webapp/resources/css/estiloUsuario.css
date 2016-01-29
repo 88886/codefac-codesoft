@@ -118,3 +118,8 @@ h1 , h2
     border: hidden;
     border-color: white;
 }
+
+
+.customTitleBar > .ui-panel-titlebar {
+    background: #485798;
+    }
