@@ -35,7 +35,7 @@ public class ProductoIndividualCompraFacade extends AbstractFacade<ProductoIndiv
     public Long findStockIndividual(String codP) {
 
         try {
-            String queryString = "SELECT count(i.codigoUnico) FROM ProductoIndividualCompra i where i.codigoProducto.codigoProducto='"+codP+"'";
+            String queryString = "SELECT count(i.codigoUnico) FROM ProductoIndividualCompra i where i.codigoProducto.codigoProducto='" + codP + "' and i.estadoProceso<> 'vendido'";
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
             Long stock = (Long) query.getSingleResult();
@@ -43,7 +43,30 @@ public class ProductoIndividualCompraFacade extends AbstractFacade<ProductoIndiv
         } catch (NoResultException e) {
             return null;
         }
+    }
 
+    public ProductoIndividualCompra findProdIndividual(String codP, String codCat) {
+        try {
+            String queryString = "SELECT i FROM ProductoIndividualCompra i where i.codigoProducto.codigoProducto='" + codCat + "' and i.codigoUnico='" + codP + "'  ";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            ProductoIndividualCompra producto = (ProductoIndividualCompra) query.getSingleResult();
+            return producto;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public ProductoIndividualCompra findProdIndividualCodUnico(String codP) {
+        try {
+            String queryString = "SELECT i FROM ProductoIndividualCompra i where i.codigoUnico='" + codP + "'  ";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            ProductoIndividualCompra producto = (ProductoIndividualCompra) query.getSingleResult();
+            return producto;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 }

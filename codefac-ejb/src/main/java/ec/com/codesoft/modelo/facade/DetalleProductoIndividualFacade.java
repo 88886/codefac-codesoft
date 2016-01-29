@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.modelo.facade;
 
 import ec.com.codesoft.model.DetalleProductoIndividual;
+import ec.com.codesoft.model.ProductoIndividualCompra;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -17,6 +20,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class DetalleProductoIndividualFacade extends AbstractFacade<DetalleProductoIndividual> {
+
     @PersistenceContext(unitName = "codefacPU")
     private EntityManager em;
 
@@ -28,5 +32,17 @@ public class DetalleProductoIndividualFacade extends AbstractFacade<DetalleProdu
     public DetalleProductoIndividualFacade() {
         super(DetalleProductoIndividual.class);
     }
-    
+
+    public List<ProductoIndividualCompra> findProductosIndividualCantidad(int cantidad, String codP) {
+        try {
+            String queryString = "SELECT p FROM ProductoIndividualCompra p where p.codigoProducto.codigoProducto='"+codP+"'";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            List<ProductoIndividualCompra> productos = (List<ProductoIndividualCompra>) query.setMaxResults(cantidad).getResultList();
+            return productos;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
 }
