@@ -13,86 +13,174 @@ and open the template in the editor.
                 template="/template/plantillaOperador.xhtml">
 
     <ui:define name="contenido">
-        <h:form id="form">
-            <p:growl id="msgs" showDetail="true" />
-            <p:remoteCommand name="onload" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
-            <p:panel id="paBusDistri" header="Cliente" style="width: 45%;margin-left:26%">
-                <p:panelGrid columns="5" >
-                    <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
-                    <p:inputText id="cedCliente" value="#{facturaMB.cedCliente}" required="true" requiredMessage="Campo necesario"/>
-                    <p:message for="cedCliente" />
-                    <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr,:formCompra:idAgregar,:formCompra:dlgInformacion,:form:paBusDistri"/>
-                    <p:outputLabel  value="#{facturaMB.msjCliente}" />
-                </p:panelGrid>
-            </p:panel>
+        <p:panel id="panelFactura" header="Factura" style="width: 60%;text-align: left;margin: 0 auto;" >
+            <h:form id="tipoCliente">
+                <p:remoteCommand name="onloadE" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
+                <p:remoteCommand name="onloadG" action="#{facturaMB.verificarDialogoG()}" autoRun="true" />
+                <h:panelGrid columns="5" style="margin-bottom:10px;margin-left: 30%" cellpadding="8">
+                    <p:outputLabel for="tipoCl" value="Tipo: " />
+                    <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
+                        <f:selectItem itemLabel="Consumidor Final" itemValue="C" />
+                        <f:selectItem itemLabel="Factura" itemValue="F" />
+                    </p:selectOneRadio>
+                    <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.escojerTipoCLiente()}" style="width: 20px;height: 20px" update=":form:infDistr"/>  
+                </h:panelGrid>
+            </h:form>
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true" />
+                <p:accordionPanel id="infDistr" styleClass="panelNoBorder" rendered="true">
+                    <p:tab title="Información Cliente"> 
+                        <p:panelGrid columns="6" style="margin: 0 auto;" >
+                            <p:commandButton id="btnBuscarCli" value="B U S C A R " type="button"  />
+                            <p:overlayPanel id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:600px">
+                                <p:dataTable var="cliente" value="#{facturaMB.clientesLista}"
+                                             selectionMode="single" 
+                                             scrollable="true" 
+                                             scrollHeight="200"  
+                                             rowKey="#{cliente.cedulaRuc}"
+                                             selection="#{facturaMB.clienteSeleccionado}">
+                                    <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente(event)}" update=":form:msgs,:form:infDistr"/>
+                                    <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectCliente(event)}"/>
+
+                                    <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}">
+                                        <h:outputText value="#{cliente.cedulaRuc}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}">
+                                        <h:outputText value="#{cliente.nombre}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:overlayPanel>
+                            <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
+                            <p:inputText id="cedCliente" value="#{facturaMB.cedCliente}" required="true" requiredMessage="Campo necesario"/>
+                            <p:message for="cedCliente" />
+                            <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr"/>
+                            <p:outputLabel  value="#{facturaMB.msjCliente}" />
+                        </p:panelGrid>
+                        <p:spacer/>
+                        <p:panelGrid columns="4" id="panelGridDistr" style="margin-left:5%">
+
+                            <p:outputLabel  value="Nombre:      " />
+                            <p:inputText id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" readonly="true"  />
 
 
-            <p:panel id="infDistr" header="Información Distribuidor" visible="#{facturaMB.mostrarPanel}" style="width:56%;margin-left:20%" >
-                <p:panelGrid columns="4" id="panelGridDistr">
+                            <p:outputLabel value="Teléfono:" />
+                            <p:inputText id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" readonly="true"/>
 
-                    <p:outputLabel value="Cédula/RUC" />
-                    <p:inputText id="codigoD" value="#{facturaMB.clienteEncontrado.cedulaRuc}" readonly="true"/>
+                            <p:outputLabel  value="Celular:" />
+                            <p:inputText id="celularC" value="#{facturaMB.clienteEncontrado.celular}" readonly="true" />
 
+                            <p:outputLabel  value="Dirección:" />
+                            <p:inputText id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" readonly="true" />
 
-                    <p:outputLabel  value="Nombre:" />
-                    <p:inputText id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" readonly="true" />
-
-
-                    <p:outputLabel value="Teléfono:" />
-                    <p:inputText id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" readonly="true"/>
-
-                    <p:outputLabel  value="Celular:" />
-                    <p:inputText id="celularC" value="#{facturaMB.clienteEncontrado.celular}" readonly="true" />
-
-                    <p:outputLabel  value="Dirección:" />
-                    <p:inputText id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" readonly="true" />
-
-                    <p:outputLabel value="Correo:" />
-                    <p:inputText id="correoD" value="#{facturaMB.clienteEncontrado.correo}" readonly="true" />
+                            <p:outputLabel value="Correo:" />
+                            <p:inputText id="correoD" value="#{facturaMB.clienteEncontrado.correo}" readonly="true" />
 
 
-                    <p:outputLabel  value="Notas" />
-                    <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;" readonly="true"/>
+                            <p:outputLabel  value="Notas" />
+                            <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;" readonly="true"/>
 
-                </p:panelGrid>
-            </p:panel>
-        </h:form>
-        <h:form id="formCompra">
-            <p:panel id="idAgregar" style="width:45%;margin-left:26%;">
-                <p:commandButton id="btnAgregarProd" value="Agregar" type="button" />
-                <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
-                    <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
-                                 selectionMode="single" 
-                                  scrollable="true" 
-                                  scrollHeight="200"  
-                                 rowKey="#{catalogo.codigoProducto}"
-                                 selection="#{facturaMB.catalogoSeleccionado}">
-                        <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs"/>
-                        <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+                        </p:panelGrid>
+                    </p:tab>
+                </p:accordionPanel>
+            </h:form>
+            <h:form id="formCompra">
+                <p:panel id="idAgregar" style="width:100%;" visible="true">
+                    <p:commandButton id="btnAgregarProd" value="A G R E G A R " type="button"  />
+                    <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
+                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                     selectionMode="single" 
+                                     scrollable="true" 
+                                     scrollHeight="200"  
+                                     rowKey="#{catalogo.codigoProducto}"
+                                     selection="#{facturaMB.catalogoSeleccionado}">
+                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
+                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
 
-                        <p:column headerText="Código">
-                            <h:outputText value="#{catalogo.codigoProducto}" />
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}">
+                                <h:outputText value="#{catalogo.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}">
+                                <h:outputText value="#{catalogo.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{catalogo.precio}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
+                </p:panel>
+            </h:form>
+            <h:form id="formGeneral">
+                <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" modal="true" height="auto">
+                    <p:panelGrid columns="4" >
+                        <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
+                        <p:inputText id="cantidadP" value="#{facturaMB.cantidadComprar}" required="true" />
+                        <p:commandButton  icon="ui-icon-plusthick" 
+                                          actionListener="#{facturaMB.venta()}" ajax="false" update="@form"/>
+                        <p:outputLabel value="#{facturaMB.msjStock}" style="color: darkred"/>
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
+            <h:form id="formEspecifico">
+                <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" modal="true" height="auto">
+                    <p:panelGrid columns="5" >
+                        <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
+                        <p:outputLabel  value="Código Único : "/>
+                        <p:inputText id="codPEspec" value="#{facturaMB.codPEspe}" required="true" requiredMessage="Campo Necesario" />
+                        <p:commandButton  icon="ui-icon-plusthick" 
+                                          actionListener="#{facturaMB.venta()}" ajax="false" />
+                        <p:outputLabel  value="#{facturaMB.msjCodUnico}" style="color: darkred"/>
+                        <p:message for="codPEspec" />
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
+            <h:form id="formDetalles">
+                <p:panel id="idDetallesFactura" >
+                    <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}">   
+                        <p:column headerText="Cantidad" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.cantidad}" />
                         </p:column>
-                        <p:column headerText="Nombre">
-                            <h:outputText value="#{catalogo.nombre}" />
+                        <p:column headerText="Código" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.codigo}" />
                         </p:column>
-                        <p:column headerText="Precio">
-                            <h:outputText value="#{catalogo.precio}" />
+                        <p:column headerText="Descripción" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.nombre}" />
+                        </p:column>
+                        <p:column headerText="P. Unitario" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.costo}" />
+                        </p:column>
+                        <p:column headerText="Total" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.total}" />
+                        </p:column>
+                        <p:column headerText="Acciones" style="text-align: left">
+                            <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura"/>
                         </p:column>
                     </p:dataTable>
-                </p:overlayPanel>
-            </p:panel>
-            <p:dialog  id="dlgInformacion" header="Información Producto" widgetVar="infProducto" modal="true" height="auto">
-                <p:panelGrid columns="3" style="margin-left: 18%">
-                    <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
-                    <p:inputText id="cantidadP" value="#{facturaMB.cantidadComprar}" />
-                    <p:commandButton  icon="ui-icon-plusthick" 
-                     actionListener="#{facturaMB.buscarProducto()}" ajax="false"/>
+
+                    <p:spacer/>
+                    <p:panelGrid columns="2" style="margin-left: 70%">
+                        <p:outputLabel  value="Subtotal:"/>
+                        <p:inputText id="subTotal" value="#{facturaMB.subtotal}" readonly="true"/>
+                        <p:outputLabel  value="Iva (12%):"/>
+                        <p:inputText id="iva" value="#{facturaMB.iva}" readonly="true"/>
+                        <p:outputLabel  value="Total : "/>
+                        <p:inputText id="total" value="#{facturaMB.total}" readonly="true"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:panelGrid columns="2" style="margin: 0 auto;">
+                    <p:commandButton value="F A C T U R A R" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" update=":form:msgs">
+                    <p:confirm header="Confirmación" message="Está seguro?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" action="factura" ajax="false"/>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </p:panelGrid>
-            </p:dialog>
-        </h:form>
 
+            </h:form>
 
+        </p:panel>
 
 
 
