@@ -36,6 +36,7 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
         try {
             String queryString = "SELECT p FROM ProductoGeneralCompra p where p.codigoProducto.codigoProducto='"+codP+"'";
             Query query = em.createQuery(queryString);
+//            System.out.println(queryString);
             //query.setParameter(1, codP);
             ProductoGeneralCompra producto= (ProductoGeneralCompra) query.getSingleResult();
             return producto;

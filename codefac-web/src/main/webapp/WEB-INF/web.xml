@@ -28,7 +28,7 @@
     
     <error-page>
       <error-code>404</error-code>
-      <location>/index.xhtml</location>
+      <location>/errorPage/paginaNoEncontrada.xhtml</location>
     </error-page>
 
 </web-app>

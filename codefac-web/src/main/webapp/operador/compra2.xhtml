@@ -5,7 +5,7 @@
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
-                template="/template/plantilladmin.xhtml">
+                template="/template/plantillaOperador.xhtml">
 
     <ui:define name="contenido">
         <div style="text-align:center">
@@ -19,6 +19,7 @@
                                 <p:outputLabel  value="Código:" />
                                 <p:inputText value="#{comprarMB.compra.ruc.ruc}" />
                                 <p:commandButton value="buscar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
+
                             </p:panelGrid>
                         </div>
 
@@ -111,7 +112,7 @@
                     <p:panel style="font-size: 14px;text-align: center" styleClass="panelNoBorder">
                         <p:panelGrid columns="2" style="margin: 0 auto">
                             <p:commandButton value="Comprar" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  />
-                            <p:commandButton id="nonAjax"  ajax="false" action="compra2" value="Cancelar">
+                            <p:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar">
                                 <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
                             </p:commandButton>
                         </p:panelGrid>
@@ -143,8 +144,19 @@
                             </div>
                         </p:panel>
                     </h:form>
-                </p:dialog> 
+                </p:dialog>
 
+                <!-- Dialogo de confirmacion para agregar un nuevo Distribuidor -->
+                <p:dialog header="Agregar Distribuidor" widgetVar="confirmarDistribuidor" modal="true">
+                    <h:form>
+                        <h2>El usuario no existe</h2>
+                        <p:commandButton onclick="PF('confirmarDistribuidor').hide();" value="Aceptar"/>
+                        <p:commandButton actionListener="#{comprarMB.crearNuevoDistribuidor()}"  style="background-image: none;background-color: forestgreen" value="Crear Distribuidor">
+                            <p:ajax event="dialogReturn" listener="#{comprarMB.recibirDatos}" update=":formDetalleDistribuidor" />
+                        </p:commandButton>                        
+
+                    </h:form>
+                </p:dialog>
 
 
             </p:panel>            

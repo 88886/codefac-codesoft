@@ -11,8 +11,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,8 +39,9 @@ import javax.validation.constraints.Size;
 public class Venta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Basic(optional = false)
+    //@NotNull
     @Column(name = "CODIGO_FACTURA")
     private Integer codigoFactura;
     @Column(name = "FECHA")
@@ -62,9 +66,9 @@ public class Venta implements Serializable {
     private Integer descuento;
     @Column(name = "INCREMENTO")
     private Integer incremento;
-    @OneToMany(mappedBy = "codigoFactura")
+    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
     private List<CreditoFactura> creditoFacturaList;
-    @OneToMany(mappedBy = "codigoFactura")
+    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
     private List<DetalleProductoIndividual> detalleProductoIndividualList;
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
@@ -75,11 +79,12 @@ public class Venta implements Serializable {
     @JoinColumn(name = "CEDULA_RUC", referencedColumnName = "CEDULA_RUC")
     @ManyToOne
     private Cliente cedulaRuc;
-    @OneToMany(mappedBy = "codigoFactura")
+    
+    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
     private List<DetalleProductoGeneral> detalleProductoGeneralList;
-    @OneToMany(mappedBy = "codigoFactura")
+    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
     private List<NotaCreditoDebito> notaCreditoDebitoList;
-    @OneToMany(mappedBy = "codigoFactura")
+    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
     private List<DetallesServicio> detallesServicioList;
 
     public Venta() {

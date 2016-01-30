@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.web.operador;
 
-
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.Compra;
 import ec.com.codesoft.model.Distribuidor;
@@ -18,12 +17,15 @@ import ec.com.codesoft.modelo.servicios.ProductoGeneralCompraServicio;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -95,6 +97,10 @@ public class comprarMB implements Serializable {
         if (distribuidoAux != null) {
             this.compra.setRuc(distribuidoAux);
             System.out.println(distribuidoAux);
+        } else {
+            //cuando el distribuidor no existe mostrar un dialogo para crear un nuevo Ditribuidor
+            RequestContext.getCurrentInstance().execute("PF('confirmarDistribuidor').show()");
+            //confirmarDistribuidor
         }
     }
 
@@ -152,18 +158,14 @@ public class comprarMB implements Serializable {
     }
 
     public void ejecutarCompra() {
-        
-        List<ProductoIndividualCompra> detalleIndividual=new ArrayList<ProductoIndividualCompra>();
-        List<ProductoGeneralCompra> detalleGeneral=new ArrayList<ProductoGeneralCompra>();
-        
-        for (DetalleCompraModelo detalle : detalleCompra) 
-        {
-            if(detalle.getCodigoGeneral())
-            {
+
+        List<ProductoIndividualCompra> detalleIndividual = new ArrayList<ProductoIndividualCompra>();
+        List<ProductoGeneralCompra> detalleGeneral = new ArrayList<ProductoGeneralCompra>();
+
+        for (DetalleCompraModelo detalle : detalleCompra) {
+            if (detalle.getCodigoGeneral()) {
                 detalleGeneral.add(detalle.getProductoGeneral());
-            }
-            else
-            {
+            } else {
                 detalleIndividual.add(detalle.getProductoIndividual());
             }
         }
@@ -173,8 +175,35 @@ public class comprarMB implements Serializable {
         compraServicio.insertar(compra);
     }
 
-   
+    public void crearNuevoDistribuidor() {
+        System.out.println("abriendo nuevo panel...");
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        List<String> values = new ArrayList<String>();
+        
+        values.add(compra.getRuc().getRuc());
+        params.put("ruc", values);
+        //options.put("width", 640);
+        //options.put("height", 340);
+        // options.put("contentWidth", "100%");
+        // options.put("contentHeight", "100%");
+        //options.put("headerElement", "customheader");
+        RequestContext.getCurrentInstance().execute("PF('confirmarDistribuidor').hide()");
+        RequestContext.getCurrentInstance().openDialog("crearDistribuidor", options, params);
+        
+        //RequestContext.getCurrentInstance().op
+
+    }
     
+    public void recibirDatos(SelectEvent event)
+    {
+        compra.setRuc((Distribuidor) event.getObject());   
+        System.out.println("dato recibido");
+        System.out.println(compra.getRuc());
+    }
+
     /////////////////////////////METODOS GET Y SET//////////////////////////////
     public Compra getCompra() {
         return compra;

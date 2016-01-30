@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Nuevo Distribuidor</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="estiloUsuario.css"/>
+    </h:head>
+    <h:body>
+        <h:form>
+        <p:panel style="text-align: center;" styleClass="menuPanel" >
+            <p:panelGrid columns="2" style="margin: 0 auto;text-align: left" styleClass="panelNoBorder">
+                <p:outputLabel for="ruc" value="RUC: "/>
+                <p:inputText id="ruc" value="#{crearDistribuidorMB.distribuidor.ruc}" />
+
+                <p:outputLabel value="Nombre: "/>
+                <p:inputText value="#{crearDistribuidorMB.distribuidor.nombre}" />
+
+                <p:outputLabel value="Direccion: "/>
+                <p:inputText value="#{crearDistribuidorMB.distribuidor.direccion}" />
+
+                <p:outputLabel value="Telefono1: "/>
+                <p:inputText value="#{crearDistribuidorMB.distribuidor.telefono}" />
+
+                <p:outputLabel value="Email: "/>
+                <p:inputText value="#{crearDistribuidorMB.distribuidor.correo}" />
+
+                <p:outputLabel value="Contacto: "/>
+                <p:inputText value="#{crearDistribuidorMB.distribuidor.contacto}" />
+                
+                
+                
+            </p:panelGrid>
+
+            <p:spacer height="15px"/>
+
+            <div>
+                <p:commandButton actionListener="#{crearDistribuidorMB.grabar()}" value="Grabar"/>
+                <p:commandButton value="Cancelar"/>
+            </div>
+        </p:panel>
+            </h:form>
+    </h:body>
+    
+</html>

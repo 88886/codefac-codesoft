@@ -34,8 +34,9 @@ public class ProductoGeneralCompra implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "CODIGO_GENERADO")
+    @Column(name = "CODIGO_GENERADO")
     private Integer codigoGenerado;
+    
     @Column(name = "CANTIDAD")
     private Integer cantidad;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation

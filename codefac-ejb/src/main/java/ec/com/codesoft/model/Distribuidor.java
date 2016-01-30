@@ -32,6 +32,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Distribuidor.findAll", query = "SELECT d FROM Distribuidor d")})
 public class Distribuidor implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
     @NotNull
