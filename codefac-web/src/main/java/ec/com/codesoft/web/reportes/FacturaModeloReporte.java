@@ -34,6 +34,12 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     
     private List<FacturaDetalleModeloReporte> detalles;
 
+    public FacturaModeloReporte() {
+        this.detalles= new ArrayList<FacturaDetalleModeloReporte>();
+    }
+    
+    
+
     public FacturaModeloReporte(String codigoFactura, String nombreCliente, String direccion, String ruc, String telefono, String fechaFactura, String formaPago, String nota, BigDecimal total, BigDecimal ivaTotal, BigDecimal subtotal) {
         this.codigoFactura = codigoFactura;
         this.nombreCliente = nombreCliente;
@@ -139,7 +145,8 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
 
 
     @Override
-    public Map<String, Object> getParametros() {
+    public Map<String, Object> getParametros() 
+    {
         Map<String, Object> lista=new HashMap<String,Object>();
         lista.put("codigoFactura",this.codigoFactura);
         lista.put("nombreCliente",nombreCliente);
@@ -151,7 +158,8 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
         lista.put("nota",nota);
         lista.put("total",total);
         lista.put("ivaTotal",ivaTotal);
-        lista.put("subtotal",subtotal);
+        lista.put("subTotal",subtotal);
+        
         return lista;
         
     }
@@ -164,8 +172,34 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
 
     @Override
     public String getPath() {
-        return "reportes/reporteFactura.jasper";
+        return "reportes/factura.jasper";
     }    
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getFechaFactura() {
+        return fechaFactura;
+    }
+
+    public void setFechaFactura(String fechaFactura) {
+        this.fechaFactura = fechaFactura;
+    }
+    
+    
     
     
 }

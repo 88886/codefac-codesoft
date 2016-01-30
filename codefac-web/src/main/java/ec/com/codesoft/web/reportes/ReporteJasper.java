@@ -41,25 +41,25 @@ public abstract class ReporteJasper<T> {
         //parametros.put("codigoFactura", "1236123");
         //String reportPath2 = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteCliente.jasper");
         //File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("rpJSF.jasper"));
-        List<T> lista=new ArrayList<T>(); 
-        FacturaDetalleModeloReporte detalle = new FacturaDetalleModeloReporte(
-                2,
-                "123123",
-                "esfero",
-                new BigDecimal(10),
-                new BigDecimal(20),
-                new BigDecimal(30));
-
-       // factura.agregarDetalle(detalle);
-        lista.add((T) detalle);
-        detalle = new FacturaDetalleModeloReporte(
-                2,
-                "123123",
-                "esfero",
-                new BigDecimal(10),
-                new BigDecimal(20),
-                new BigDecimal(30));
-        lista.add((T) detalle);
+//        List<T> lista=new ArrayList<T>(); 
+//        FacturaDetalleModeloReporte detalle = new FacturaDetalleModeloReporte(
+//                "2",
+//                "123123",
+//                "esfero",
+//                new BigDecimal(10),
+//                new BigDecimal(20),
+//                new BigDecimal(30));
+//
+//       // factura.agregarDetalle(detalle);
+//        lista.add((T) detalle);
+//        detalle = new FacturaDetalleModeloReporte(
+//                "2",
+//                "123123",
+//                "esfero",
+//                new BigDecimal(10),
+//                new BigDecimal(20),
+//                new BigDecimal(30));
+//        lista.add((T) detalle);
         
         
         

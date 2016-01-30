@@ -36,6 +36,19 @@
             <from-outcome>crearDistribuidor</from-outcome>
             <to-view-id>/operador/crearDistribuidor.xhtml</to-view-id>
         </navigation-case>
+        
+        
+        <navigation-case>
+            <from-outcome>factura</from-outcome>
+            <to-view-id>/operador/factura.xhtml</to-view-id>
+        </navigation-case>
+        
+        
+        <navigation-case>
+            <from-outcome>crearCliente</from-outcome>
+            <to-view-id>/operador/nuevoCliente.xhtml</to-view-id>
+        </navigation-case>
+        
     </navigation-rule>
     
 </faces-config>

@@ -64,56 +64,56 @@ public class GenerarPdf implements Serializable {
     
     
     public void abrirPDF() {
-        FacturaModeloReporte factura = new FacturaModeloReporte(
-                "001",
-                "Juan Perez",
-                "Sangolqui",
-                "040000123",
-                "02223123",
-                "1990-01-01",
-                "efectivo",
-                "ninguna nota",
-                new BigDecimal(100),
-                new BigDecimal(300),
-                new BigDecimal(500));
-
-        FacturaDetalleModeloReporte detalle = new FacturaDetalleModeloReporte(
-                2,
-                "123123",
-                "esfero",
-                new BigDecimal(10),
-                new BigDecimal(20),
-                new BigDecimal(30));
-
-        factura.agregarDetalle(detalle);
-        detalle = new FacturaDetalleModeloReporte(
-                2,
-                "123123",
-                "esfero",
-                new BigDecimal(10),
-                new BigDecimal(20),
-                new BigDecimal(30));
-
-        factura.agregarDetalle(detalle);
-        detalle = new FacturaDetalleModeloReporte(
-                1,
-                "12343",
-                "laptop",
-                new BigDecimal(100),
-                new BigDecimal(200),
-                new BigDecimal(300));
-
-        factura.agregarDetalle(detalle);
-
-        detalle = new FacturaDetalleModeloReporte(
-                1,
-                "123",
-                "mouse",
-                new BigDecimal(1),
-                new BigDecimal(2),
-                new BigDecimal(3));
-
-        factura.agregarDetalle(detalle);
+        FacturaModeloReporte factura = new FacturaModeloReporte();
+//                "001",
+//                "Juan Perez",
+//                "Sangolqui",
+//                "040000123",
+//                "02223123",
+//                "1990-01-01",
+//                "efectivo",
+//                "ninguna nota",
+//                new BigDecimal(100),
+//                new BigDecimal(300),
+//                new BigDecimal(500));
+//
+//        FacturaDetalleModeloReporte detalle = new FacturaDetalleModeloReporte(
+//                "2",
+//                "123123",
+//                "esfero",
+//                new BigDecimal(10),
+//                new BigDecimal(20),
+//                new BigDecimal(30));
+//
+//        factura.agregarDetalle(detalle);
+//        detalle = new FacturaDetalleModeloReporte(
+//                "2",
+//                "123123",
+//                "esfero",
+//                new BigDecimal(10),
+//                new BigDecimal(20),
+//                new BigDecimal(30));
+//
+//        factura.agregarDetalle(detalle);
+//        detalle = new FacturaDetalleModeloReporte(
+//                "1",
+//                "12343",
+//                "laptop",
+//                new BigDecimal(100),
+//                new BigDecimal(200),
+//                new BigDecimal(300));
+//
+//        factura.agregarDetalle(detalle);
+//
+//        detalle = new FacturaDetalleModeloReporte(
+//                "1",
+//                "123",
+//                "mouse",
+//                new BigDecimal(1),
+//                new BigDecimal(2),
+//                new BigDecimal(3));
+//
+//        factura.agregarDetalle(detalle);
         
         try {
             factura.exportarPDF();

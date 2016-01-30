@@ -54,7 +54,9 @@ and open the template in the editor.
                             <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
                             <p:inputText id="cedCliente" value="#{facturaMB.cedCliente}" required="true" requiredMessage="Campo necesario"/>
                             <p:message for="cedCliente" />
-                            <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr"/>
+                            <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr">
+                                <p:ajax event="dialogReturn" listener="#{facturaMB.recibirDatos}" update=":form:infDistr" />
+                            </p:commandButton>
                             <p:outputLabel  value="#{facturaMB.msjCliente}" />
                         </p:panelGrid>
                         <p:spacer/>
@@ -168,14 +170,28 @@ and open the template in the editor.
                     </p:panelGrid>
                 </p:panel>
                 <p:panelGrid columns="2" style="margin: 0 auto;">
-                    <p:commandButton value="F A C T U R A R" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" update=":form:msgs">
-                    <p:confirm header="Confirmación" message="Está seguro?" icon="ui-icon-alert" />
-                    </p:commandButton>
+
+
+                    <p:commandButton value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
+ 
                     <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" action="factura" ajax="false"/>
+
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                         <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
+
+
+                    <!-- Dialogo de confirmacion para grabar o cancelar-->
+                    <p:dialog header="Agregar Distribuidor" widgetVar="confirmarFactura" modal="true">
+                        <h:form>
+                            <h2>Desea Grabar la Factura?</h2>
+                            <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar"/>
+                            <p:commandButton value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />                                               
+
+                        </h:form>
+                    </p:dialog>
+
                 </p:panelGrid>
 
             </h:form>

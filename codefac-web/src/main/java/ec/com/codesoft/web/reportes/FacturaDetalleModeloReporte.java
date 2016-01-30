@@ -5,21 +5,26 @@
  */
 package ec.com.codesoft.web.reportes;
 
-import java.math.BigDecimal;
+
 
 /**
  *
  * @author carlo
  */
 public class FacturaDetalleModeloReporte{
-    private Integer cantidad;
+    private String cantidad;
     private String codigo;
     private String descripcion;
-    private BigDecimal descuento;
-    private BigDecimal precioUnitario;
-    private BigDecimal total;
+    private String descuento;
+    private String precioUnitario;
+    private String total;
 
-    public FacturaDetalleModeloReporte(Integer cantidad, String codigo, String descripcion, BigDecimal descuento, BigDecimal precioUnitario, BigDecimal total) {
+    public FacturaDetalleModeloReporte() {
+    }
+    
+    
+
+    public FacturaDetalleModeloReporte(String cantidad, String codigo, String descripcion, String descuento, String precioUnitario, String total) {
         this.cantidad = cantidad;
         this.codigo = codigo;
         this.descripcion = descripcion;
@@ -28,11 +33,11 @@ public class FacturaDetalleModeloReporte{
         this.total = total;
     }
 
-    public Integer getCantidad() {
+    public String getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -52,27 +57,27 @@ public class FacturaDetalleModeloReporte{
         this.descripcion = descripcion;
     }
 
-    public BigDecimal getDescuento() {
+    public String getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(BigDecimal descuento) {
+    public void setDescuento(String descuento) {
         this.descuento = descuento;
     }
 
-    public BigDecimal getPrecioUnitario() {
+    public String getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
+    public void setPrecioUnitario(String precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public BigDecimal getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(String total) {
         this.total = total;
     }
     
