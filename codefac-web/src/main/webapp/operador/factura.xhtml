@@ -20,10 +20,10 @@ and open the template in the editor.
                 <h:panelGrid columns="5" style="margin-bottom:10px;margin-left: 30%" cellpadding="8">
                     <p:outputLabel for="tipoCl" value="Tipo: " />
                     <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
-                        <f:selectItem itemLabel="Consumidor Final" itemValue="C" />
+                        <f:selectItem itemLabel="Nota de Venta" itemValue="C" />
                         <f:selectItem itemLabel="Factura" itemValue="F" />
                     </p:selectOneRadio>
-                    <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.escojerTipoCLiente()}" style="width: 20px;height: 20px" update=":form:infDistr"/>  
+                    <p:ajax event="click" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
                 </h:panelGrid>
             </h:form>
             <h:form id="form">
@@ -155,12 +155,12 @@ and open the template in the editor.
                             <h:outputText value="#{detallesVenta.total}" />
                         </p:column>
                         <p:column headerText="Acciones" style="text-align: left">
-                            <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura"/>
+                            <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
                         </p:column>
                     </p:dataTable>
 
                     <p:spacer/>
-                    <p:panelGrid columns="2" style="margin-left: 70%">
+                    <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%">
                         <p:outputLabel  value="Subtotal:"/>
                         <p:inputText id="subTotal" value="#{facturaMB.subtotal}" readonly="true"/>
                         <p:outputLabel  value="Iva (12%):"/>
@@ -169,11 +169,26 @@ and open the template in the editor.
                         <p:inputText id="total" value="#{facturaMB.total}" readonly="true"/>
                     </p:panelGrid>
                 </p:panel>
+
+            </h:form>
+            <p:spacer/>
+            <h:form id="frmVueltos">
+                <p:panelGrid columns="2" style="margin-left: 70%">
+                    <p:outputLabel value="Recibo"/>
+                    <p:inputText id="recibo" value="#{facturaMB.recibo}">
+                        <p:ajax event="keyup" listener="#{facturaMB.darVuelto()}" update="vuelto"/>
+                    </p:inputText>
+                    <p:outputLabel value="Vuelto"/>
+                    <p:inputText id="vuelto" value="#{facturaMB.vuelto}"/>
+                </p:panelGrid>
+
+            </h:form>
+            <h:form id="frmFacturar">
                 <p:panelGrid columns="2" style="margin: 0 auto;">
 
 
                     <p:commandButton value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
- 
+
                     <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" action="factura" ajax="false"/>
 
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -183,9 +198,8 @@ and open the template in the editor.
 
 
                     <!-- Dialogo de confirmacion para grabar o cancelar-->
-                    <p:dialog header="Agregar Distribuidor" widgetVar="confirmarFactura" modal="true">
-                        <h:form>
-                            <h2>Desea Grabar la Factura?</h2>
+                    <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true">
+                        <h:form style="margin: 0 auto">
                             <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar"/>
                             <p:commandButton value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />                                               
 
@@ -193,9 +207,7 @@ and open the template in the editor.
                     </p:dialog>
 
                 </p:panelGrid>
-
             </h:form>
-
         </p:panel>
 
 
