@@ -62,7 +62,9 @@
                     <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder">
                         <p:panelGrid columns="7" style="margin: 0 auto;height: 100%">
                             <p:outputLabel value="Codigo General:"/>
-                            <p:inputText value="#{comprarMB.codigoDetalle}" />
+                            <p:inputText value="#{comprarMB.codigoDetalle}" >
+                                <p:ajax event="keyup" listener="#{comprarMB.verificarProducto()}"  />
+                            </p:inputText>
 
                             <p:outputLabel value="Cantidad:"/>
                             <p:inputText value="#{comprarMB.cantidadDetalle}" style="width: 50px;" />
@@ -149,7 +151,7 @@
                 <!-- Dialogo de confirmacion para agregar un nuevo Distribuidor -->
                 <p:dialog header="Agregar Distribuidor" widgetVar="confirmarDistribuidor" modal="true">
                     <h:form>
-                        <h2>El usuario no existe</h2>
+                        <h2>El distribuidor no existe</h2>
                         <p:commandButton onclick="PF('confirmarDistribuidor').hide();" value="Aceptar"/>
                         <p:commandButton actionListener="#{comprarMB.crearNuevoDistribuidor()}"  style="background-image: none;background-color: forestgreen" value="Crear Distribuidor">
                             <p:ajax event="dialogReturn" listener="#{comprarMB.recibirDatos}" update=":formDetalleDistribuidor" />
