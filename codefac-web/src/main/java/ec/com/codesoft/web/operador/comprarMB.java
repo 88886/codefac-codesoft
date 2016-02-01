@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -157,6 +158,9 @@ public class comprarMB implements Serializable {
 
     }
 
+    /**
+     * Guarda toda la compra con los detalles individuales y generales
+     */
     public void ejecutarCompra() {
 
         List<ProductoIndividualCompra> detalleIndividual = new ArrayList<ProductoIndividualCompra>();
@@ -202,6 +206,16 @@ public class comprarMB implements Serializable {
         compra.setRuc((Distribuidor) event.getObject());   
         System.out.println("dato recibido");
         System.out.println(compra.getRuc());
+    }
+    
+    
+    /**
+     * Metodo que controla al ingresar un caracter
+     * @param ae 
+     */
+    public void verificarProducto()
+    {
+        System.out.println("evento keypress");
     }
 
     /////////////////////////////METODOS GET Y SET//////////////////////////////
