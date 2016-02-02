@@ -15,61 +15,46 @@ import java.util.Map;
  *
  * @author carlo
  */
-public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloReporte>{
+public class NotaVentaModeloReporte extends ReporteJasper<FacturaDetalleModeloReporte>{
 
-    private String codigoFactura;
+    //private String codigoFactura;
     private String nombreCliente;
     private String direccion;
-    
-    private String ruc;
     private String telefono;
     
     private String fechaFactura;
-    private String formaPago;
-    private String nota;
+    private String formaPago;      
     
     private BigDecimal total;
-    private BigDecimal ivaTotal;
-    private BigDecimal subtotal;
     
     private List<FacturaDetalleModeloReporte> detalles;
 
-    public FacturaModeloReporte() {
+    public NotaVentaModeloReporte() {
         this.detalles= new ArrayList<FacturaDetalleModeloReporte>();
-        this.codigoFactura="";
         this.nombreCliente="";
         this.direccion="";
         
-        this.ruc="";
+
         this.telefono="";
         
         this.fechaFactura="";
         this.formaPago="";
-        this.nota="";
+
         
         this.total=new BigDecimal("0.0");
-        this.ivaTotal=new BigDecimal("0.0");
-        this.subtotal=new BigDecimal("0.0");
+
         
         
     }
-    
-    
 
-    public FacturaModeloReporte(String codigoFactura, String nombreCliente, String direccion, String ruc, String telefono, String fechaFactura, String formaPago, String nota, BigDecimal total, BigDecimal ivaTotal, BigDecimal subtotal) {
-        this.codigoFactura = codigoFactura;
+    public NotaVentaModeloReporte(String nombreCliente, String direccion, String telefono, String fechaFactura, String formaPago, BigDecimal total, List<FacturaDetalleModeloReporte> detalles) {
         this.nombreCliente = nombreCliente;
         this.direccion = direccion;
-        this.ruc = ruc;
         this.telefono = telefono;
         this.fechaFactura = fechaFactura;
         this.formaPago = formaPago;
-        this.nota = nota;
         this.total = total;
-        this.ivaTotal = ivaTotal;
-        this.subtotal = subtotal;
-        this.detalles= new ArrayList<FacturaDetalleModeloReporte>();
-        
+        this.detalles = detalles;
     }
     
     
@@ -78,13 +63,6 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
         detalles.add(detalle);
     }
 
-    public String getCodigoFactura() {
-        return codigoFactura;
-    }
-
-    public void setCodigoFactura(String codigoFactura) {
-        this.codigoFactura = codigoFactura;
-    }
 
     public String getNombreCliente() {
         return nombreCliente;
@@ -118,13 +96,6 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
         this.formaPago = formaPago;
     }
 
-    public String getNota() {
-        return nota;
-    }
-
-    public void setNota(String nota) {
-        this.nota = nota;
-    }
 
     public BigDecimal getTotal() {
         return total;
@@ -134,21 +105,7 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
         this.total = total;
     }
 
-    public BigDecimal getIvaTotal() {
-        return ivaTotal;
-    }
 
-    public void setIvaTotal(BigDecimal ivaTotal) {
-        this.ivaTotal = ivaTotal;
-    }
-
-    public BigDecimal getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
 
     public List<FacturaDetalleModeloReporte> getDetalles() {
         return detalles;
@@ -164,17 +121,12 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     public Map<String, Object> getParametros() 
     {
         Map<String, Object> lista=new HashMap<String,Object>();
-        lista.put("codigoFactura",this.codigoFactura);
         lista.put("nombreCliente",nombreCliente);
         lista.put("direccion",direccion);
-        lista.put("ruc",ruc);
         lista.put("telefono", telefono);
         lista.put("fechaFactura",fechaFactura);
         lista.put("formaPago",formaPago);
-        lista.put("nota",nota);
         lista.put("total",total);
-        lista.put("ivaTotal",ivaTotal);
-        lista.put("subTotal",subtotal);
         
         return lista;
         
@@ -188,16 +140,9 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
 
     @Override
     public String getPath() {
-        return "reportes/factura.jasper";
+        return "reportes/notaVenta.jasper";
     }    
 
-    public String getRuc() {
-        return ruc;
-    }
-
-    public void setRuc(String ruc) {
-        this.ruc = ruc;
-    }
 
     public String getTelefono() {
         return telefono;
@@ -214,8 +159,4 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     public void setFechaFactura(String fechaFactura) {
         this.fechaFactura = fechaFactura;
     }
-    
-    
-    
-    
 }

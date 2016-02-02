@@ -8,10 +8,12 @@ package ec.com.codesoft.modelo.servicios;
 import ec.com.codesoft.model.Compra;
 import ec.com.codesoft.model.PeriodoContable;
 import ec.com.codesoft.model.ProductoGeneralCompra;
+import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.modelo.facade.CompraFacade;
 import ec.com.codesoft.modelo.facade.PeriodoContableFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
+import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
 import ec.com.codesoft.modelo.facade.ProductoIndividualCompraFacade;
 import java.util.List;
 import javax.ejb.EJB;
@@ -31,34 +33,41 @@ public class CompraServicio {
 
     @EJB
     PeriodoContableFacade periodoFacade;
-    
+
     @EJB
     ProductoGeneralCompraFacade productoGFacade;
-    
+
     @EJB
     ProductoIndividualCompraFacade productoEspeFacade;
 
-    public void insertar(Compra compra) 
-    {
+    @EJB
+    private ProductoGeneralVentaFacade productoGeneralFacade;
+
+    public void insertar(Compra compra) {
         this.compraFacade.create(compra);
-        Integer codigo=compra.getCodigoCompra();
-        List<ProductoGeneralCompra> detalle1=compra.getProductoGeneralCompraList();
-        List<ProductoIndividualCompra> detalle2=compra.getProductoIndividualCompraList();
+        Integer codigo = compra.getCodigoCompra();
+        List<ProductoGeneralCompra> detalle1 = compra.getProductoGeneralCompraList();
+        List<ProductoIndividualCompra> detalle2 = compra.getProductoIndividualCompraList();
         System.out.println(compraFacade);
         //Detalle General Actualizado        
         for (ProductoGeneralCompra detalle : detalle1) 
         {
             detalle.setCodigoCompra(compra);
             productoGFacade.edit(detalle);
+            
+            //actualizar el stock en las tablas correspondientes
+            ProductoGeneralVenta productoVenta=productoGeneralFacade.find(detalle.getCodigoProducto().getCodigoProducto());
+            productoVenta.agregarProductos(detalle.getCantidad());
+            productoGeneralFacade.edit(productoVenta);
+            //detalle.getCantidad();
         }
-        
+
         //Detalle Especifico Actualizado
         for (ProductoIndividualCompra detalle : detalle2) {
             detalle.setCodigoCompra(compra);
             productoEspeFacade.edit(detalle);
         }
-                
-        
+
     }
 
     public void actualizar(Compra compra) {
@@ -75,21 +84,19 @@ public class CompraServicio {
     }
 
     public PeriodoContable buscar() {
-        
+
         return periodoFacade.find(new Integer(1));
     }
-    public void registrarProductoGeneral(ProductoGeneralCompra producto){
-        
+
+    public void registrarProductoGeneral(ProductoGeneralCompra producto) {
+
         productoGFacade.create(producto);
-        
+
     }
-    
-    public void registrarProductoEspecifico(ProductoIndividualCompra productoEspecifico){
-        
+
+    public void registrarProductoEspecifico(ProductoIndividualCompra productoEspecifico) {
+
         productoEspeFacade.create(productoEspecifico);
     }
-    
-    
-    
 
 }

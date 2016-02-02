@@ -7,6 +7,7 @@
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,11 +32,10 @@ import javax.validation.constraints.Size;
 public class ProductoGeneralVenta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
+    //@NotNull
     @Column(name = "CODIGO_PRODUCTO")
     private String codigoProducto;
+    
     @Column(name = "CANTIDAD_DISPONIBLE")
     private Integer cantidadDisponible;
     @Column(name = "CANTIDAD_BAJA")
@@ -48,9 +48,11 @@ public class ProductoGeneralVenta implements Serializable {
     private Integer cantidadCaducada;
     @Column(name = "LIMITE_MINIMO")
     private Integer limiteMinimo;
+    
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @OneToOne
     private CatalagoProducto catalagoProducto;
+    
     @JoinColumn(name = "CODIGO_RESERVA_PROD_GENERAL", referencedColumnName = "CODIGO_RESERVA_PROD_GENERAL")
     @ManyToOne
     private ReservaProductoGeneral codigoReservaProdGeneral;
@@ -58,6 +60,11 @@ public class ProductoGeneralVenta implements Serializable {
     public ProductoGeneralVenta() {
     }
 
+    public void agregarProductos(Integer cantidad)
+    {
+        this.cantidadDisponible=this.cantidadDisponible+cantidad;
+    }
+    
     public ProductoGeneralVenta(String codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
@@ -136,27 +143,33 @@ public class ProductoGeneralVenta implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (codigoProducto != null ? codigoProducto.hashCode() : 0);
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.codigoProducto);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductoGeneralVenta)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        ProductoGeneralVenta other = (ProductoGeneralVenta) object;
-        if ((this.codigoProducto == null && other.codigoProducto != null) || (this.codigoProducto != null && !this.codigoProducto.equals(other.codigoProducto))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProductoGeneralVenta other = (ProductoGeneralVenta) obj;
+        if (!Objects.equals(this.codigoProducto, other.codigoProducto)) {
             return false;
         }
         return true;
     }
 
+    
+
     @Override
     public String toString() {
-        return "ec.com.codesoft.model.ProductoGeneralVenta[ codigoProducto=" + codigoProducto + " ]";
+        return "ProductoGeneralVenta{" + "codigoProducto=" + codigoProducto + ", cantidadDisponible=" + cantidadDisponible + ", cantidadBaja=" + cantidadBaja + ", cantidadRobado=" + cantidadRobado + ", cantidadVendida=" + cantidadVendida + ", cantidadCaducada=" + cantidadCaducada + ", limiteMinimo=" + limiteMinimo + ", catalagoProducto=" + catalagoProducto + ", codigoReservaProdGeneral=" + codigoReservaProdGeneral + '}';
     }
+
+    
     
 }

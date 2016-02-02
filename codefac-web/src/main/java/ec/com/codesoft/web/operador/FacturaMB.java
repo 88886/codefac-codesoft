@@ -13,6 +13,7 @@ import ec.com.codesoft.model.DetallesServicio;
 import ec.com.codesoft.model.Distribuidor;
 import ec.com.codesoft.model.PeriodoContable;
 import ec.com.codesoft.model.ProductoGeneralCompra;
+import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
@@ -21,6 +22,7 @@ import ec.com.codesoft.modelo.servicios.CompraServicio;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.web.reportes.FacturaDetalleModeloReporte;
 import ec.com.codesoft.web.reportes.FacturaModeloReporte;
+import ec.com.codesoft.web.reportes.NotaVentaModeloReporte;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -40,6 +42,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import net.sf.jasperreports.engine.JRException;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -66,7 +69,7 @@ public class FacturaMB {
     private boolean mostrarInformacion;
     private List<CatalagoProducto> catalogosLista;
     private CatalagoProducto catalogoSeleccionado;
-    private ProductoGeneralCompra productoGeneral;
+    private ProductoGeneralVenta productoGeneral;
     private String msjStock;
     private String tipoCliente;
     private boolean todoPanel;
@@ -86,7 +89,7 @@ public class FacturaMB {
     Integer codigoFactura;
     private List<Cliente> clientesLista;
     private Cliente clienteSeleccionado;
-    private ProductoGeneralCompra prodGeneral;
+    private ProductoGeneralVenta prodGeneral;
     private ProductoIndividualCompra prodIndividual;
     private BigDecimal recibo;
     private BigDecimal vuelto;
@@ -127,7 +130,9 @@ public class FacturaMB {
         detallesServicio = new ArrayList<DetallesServicio>();
         clientesLista = clienteServicio.obtenerTodos();
         recibo = new BigDecimal("0.0");
+        tipoCliente = "";
     }
+    
 
     public void verificarDialogo() {
         System.out.println("VeriE");
@@ -238,7 +243,7 @@ public class FacturaMB {
 
         } else {
             //catalogo = catalogoEncontrado;
-            productoGeneral = new ProductoGeneralCompra();
+            productoGeneral = new ProductoGeneralVenta();
             System.out.println("Encontrado");
             if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
                 System.out.println("general");
@@ -247,12 +252,12 @@ public class FacturaMB {
                 // System.out.println(productoGeneral.getCantidad());
                 int numDetalles = 0;
                 for (int i = 0; i < detallesVenta.size(); i++) {
-                    if (detallesVenta.get(i).getCodigo() == catalogoSeleccionado.getCodigoProducto()) {
+                    if (detallesVenta.get(i).getCodigo().equals(catalogoSeleccionado.getCodigoProducto())) {
                         numDetalles = numDetalles + 1;
                     }
                 }
 
-                stock = productoGeneral.getCantidad() - numDetalles;
+                stock = productoGeneral.getCantidadDisponible() - numDetalles;
                 RequestContext.getCurrentInstance().execute("PF('infProducto').show()");
                 estadoDialogoGeneral = true;
 
@@ -300,14 +305,18 @@ public class FacturaMB {
 
     public void onRowSelectCliente(SelectEvent event) {
         System.out.println("En sleccion");
-        clienteEncontrado = clienteSeleccionado;
+        //clienteEncontrado = clienteSeleccionado;
+        clienteEncontrado=(Cliente) event.getObject();
         cedCliente = clienteEncontrado.getCedulaRuc();
-        System.out.println("No sleccion");
+        System.out.println(clienteEncontrado);
+        RequestContext.getCurrentInstance().execute("PF('overLayBuscarCliente').hide()");
+        System.out.println("ocultado panel");
         //clientesLista = clienteServicio.obtenerTodos();
     }
 
-    public void onRowUnSelectCliente(SelectEvent event) {
-
+    public void onRowUnSelectCliente(SelectEvent event) 
+    {
+        System.out.println("deseleccionando ...");
     }
 
     public void venta() {
@@ -322,7 +331,7 @@ public class FacturaMB {
 
         } else {
 
-            if (tipoCliente.equals("")) {
+            if (tipoCliente=="" || tipoCliente==null) {
                 FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 cerrarDialogo();
@@ -338,7 +347,7 @@ public class FacturaMB {
 
                     System.out.println("En venta");
 
-                    totalRegistro = productoGeneral.getCostoIndividual().multiply(new BigDecimal(cantidadComprar));
+                    totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
                     subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
                     subtotal = subtotal.add(totalRegistro);
                     if (tipoCliente.equals("C")) {
@@ -354,8 +363,8 @@ public class FacturaMB {
                     }
 
                     DetallesVenta detalles = new DetallesVenta(cantidadComprar,
-                            productoGeneral.getCodigoProducto().getCodigoProducto(), productoGeneral.getCodigoProducto().getNombre(),
-                            productoGeneral.getCostoIndividual(), totalRegistro);
+                            productoGeneral.getCodigoProducto(), catalogoSeleccionado.getNombre(),
+                            catalogoSeleccionado.getPrecio(), totalRegistro);
                     detallesVenta.add(detalles);
 
                     DetalleProductoGeneral detalle = new DetalleProductoGeneral();
@@ -365,7 +374,7 @@ public class FacturaMB {
                     detalle.setCodigoDetallGeneral(0);
                     detallesGeneralVenta.add(detalle);
 
-                //IMPRIMIR MANDAR AL CARLOS
+                    //IMPRIMIR MANDAR AL CARLOS
 //                    FacturaModeloReporte factura=new FacturaModeloReporte();
 //                    factura.setCodigoFactura("000");
 //                    FacturaDetalleModeloReporte detallesFactura= new FacturaDetalleModeloReporte();
@@ -444,7 +453,11 @@ public class FacturaMB {
                 //venta.setDetalleProductoGeneralList(detallesGeneralVenta);
                 //venta.setDetalleProductoIndividualList(detallesIndividualVenta);
                 //venta.setDetallesServicioList(detallesServicio);
-                venta.setTipoDocumento("Factura");
+                if (tipoCliente.equals("C")) {
+                    venta.setTipoDocumento("Nota");
+                } else {
+                    venta.setTipoDocumento("Factura");
+                }
                 venta.setEstado("facturado");
                 venta.setFecha(new Date());
                 venta.setTotal(total);
@@ -472,11 +485,11 @@ public class FacturaMB {
                     }
                     facturaServicio.insertarDetallesFacturaProductoGeneral(detallesGeneralVenta);
                     for (int j = 0; j < detallesGeneralVenta.size(); j++) {
-                        prodGeneral = new ProductoGeneralCompra();
+                        prodGeneral = new ProductoGeneralVenta();
                         prodGeneral = facturaServicio.devolverStockGeneral(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
                         Integer cantidadStock = 0;
-                        cantidadStock = prodGeneral.getCantidad() - detallesGeneralVenta.get(j).getCantidad();
-                        prodGeneral.setCantidad(cantidadStock);
+                        cantidadStock = prodGeneral.getCantidadDisponible() - detallesGeneralVenta.get(j).getCantidad();
+                        prodGeneral.setCantidadDisponible(cantidadStock);
                         facturaServicio.actulizarStockGeneral(prodGeneral);
                     }
                 }
@@ -484,48 +497,87 @@ public class FacturaMB {
                 FacesMessage msg = new FacesMessage("Factura Completa");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 // return "factura";
-                FacturaModeloReporte facturaReporte = new FacturaModeloReporte();
-                facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
-                facturaReporte.setDireccion(clienteEncontrado.getDireccion());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                facturaReporte.setTelefono(clienteEncontrado.getTelefono());
 
-                facturaReporte.setRuc(cedCliente);
-                facturaReporte.setFechaaFactura(sdf.format(venta.getFecha()));
-                facturaReporte.setFormaPago("Efectivo");
-                facturaReporte.setIvaTotal(iva);
-                facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
-                facturaReporte.setNota(" ");
-                facturaReporte.setSubtotal(subtotal);
-                //System.out.println(subtotal);
+                if (tipoCliente.equals("C")) {
 
-                facturaReporte.setTotal(total);
-                //factura.setCodigoFactura("000");
+                    NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte();
+                    notaVenta.setDireccion(clienteEncontrado.getDireccion());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
+                    notaVenta.setFechaaFactura(sdf.format(venta.getFecha()));
+                    notaVenta.setFormaPago("Efectivo");
+                    notaVenta.setNombreCliente(clienteEncontrado.getNombre());
+                    notaVenta.setTelefono(clienteEncontrado.getTelefono());
+                    notaVenta.setTotal(total);
 
-                for (DetallesVenta detalle : detallesVenta) {
-                    FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
-                    detallesFactura.setCantidad(detalle.getCantidad() + "");
-                    detallesFactura.setCodigo(detalle.getCodigo());
-                    detallesFactura.setDescripcion(detalle.getNombre());
-                    detallesFactura.setDescuento(" ");
-                    detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
-                    detallesFactura.setTotal(detalle.getTotal().toString());
-                    if (facturaReporte != null) {
-                        facturaReporte.agregarDetalle(detallesFactura);
+                    for (DetallesVenta detalle : detallesVenta) {
+                        FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+                        detallesFactura.setCantidad(detalle.getCantidad() + "");
+                        detallesFactura.setCodigo(detalle.getCodigo());
+                        detallesFactura.setDescripcion(detalle.getNombre());
+                        detallesFactura.setDescuento(" ");
+                        detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+                        detallesFactura.setTotal(detalle.getTotal().toString());
+                        if (notaVenta != null) {
+                            notaVenta.agregarDetalle(detallesFactura);
+                        }
+                    }
+
+                    try {
+                        notaVenta.exportarPDF();
+                        //detallesFactura.setCantidad(1);
+                        //factura.agregarDetalle(detallesFactura);
+                        //factura.exportarPDF();
+                    } catch (JRException ex) {
+                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                } else {
+                    FacturaModeloReporte facturaReporte = new FacturaModeloReporte();
+                    facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
+                    facturaReporte.setDireccion(clienteEncontrado.getDireccion());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    facturaReporte.setTelefono(clienteEncontrado.getTelefono());
+
+                    facturaReporte.setRuc(cedCliente);
+                    facturaReporte.setFechaaFactura(sdf.format(venta.getFecha()));
+                    facturaReporte.setFormaPago("Efectivo");
+                    facturaReporte.setIvaTotal(iva);
+                    facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
+                    facturaReporte.setNota(" ");
+                    facturaReporte.setSubtotal(subtotal);
+                    //System.out.println(subtotal);
+
+                    facturaReporte.setTotal(total);
+                    for (DetallesVenta detalle : detallesVenta) {
+                        FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+                        detallesFactura.setCantidad(detalle.getCantidad() + "");
+                        detallesFactura.setCodigo(detalle.getCodigo());
+                        detallesFactura.setDescripcion(detalle.getNombre());
+                        detallesFactura.setDescuento(" ");
+                        detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+                        detallesFactura.setTotal(detalle.getTotal().toString());
+                        if (facturaReporte != null) {
+                            facturaReporte.agregarDetalle(detallesFactura);
+                        }
+                    }
+
+                    try {
+                        facturaReporte.exportarPDF();
+                        //detallesFactura.setCantidad(1);
+                        //factura.agregarDetalle(detallesFactura);
+                        //factura.exportarPDF();
+                    } catch (JRException ex) {
+                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
-                try {
-                    facturaReporte.exportarPDF();
-                    //detallesFactura.setCantidad(1);
-                    //factura.agregarDetalle(detallesFactura);
-                    //factura.exportarPDF();
-                } catch (JRException ex) {
-                    Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
             }
+
         }
 
         //return null;
@@ -547,7 +599,12 @@ public class FacturaMB {
     public void eliminarDetalle(DetallesVenta detalleVentaEliminar) {
 
         detallesVenta.remove(detalleVentaEliminar);
-        
+        subtotal = subtotal.subtract(detalleVentaEliminar.getTotal());
+        iva = subtotal.multiply(new BigDecimal("0.12"));
+        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+        total = subtotal.multiply(new BigDecimal("1.12"));
+        total = total.setScale(2, BigDecimal.ROUND_UP);
+
     }
 
     public void ventaGeneral() {

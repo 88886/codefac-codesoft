@@ -1,0 +1,5 @@
+Actualizar la base de datos con el modelo
+	-Cambiar la relacion para reservar venta de productos generales
+	-Aumentar el campo para saber el tipo de producto en el modelo
+
+Analizar la posibilidad de manejar las obervaciones de daños, perdidas, y produscto en mal estado por periodo

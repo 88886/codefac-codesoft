@@ -176,6 +176,8 @@ public class Compra implements Serializable {
     public void setProductoGeneralCompraList(List<ProductoGeneralCompra> productoGeneralCompraList) {
         this.productoGeneralCompraList = productoGeneralCompraList;
     }
+    
+    
 
     @Override
     public int hashCode() {

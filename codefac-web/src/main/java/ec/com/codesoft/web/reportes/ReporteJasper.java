@@ -76,7 +76,7 @@ public abstract class ReporteJasper<T> {
 
         stream.flush();
         stream.close();
-        FacesContext.getCurrentInstance().responseComplete();
+        //FacesContext.getCurrentInstance().responseComplete();
 
 //        Map<String, Object> parametros = new HashMap<String, Object>();
 //        parametros.put("codigoFactura", "1236123");

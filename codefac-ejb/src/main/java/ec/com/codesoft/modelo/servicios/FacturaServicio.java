@@ -5,15 +5,15 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
-import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
-import ec.com.codesoft.model.ProductoGeneralCompra;
+import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.facade.DetalleProductoGeneralFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoIndividualFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
+import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
 import ec.com.codesoft.modelo.facade.ProductoIndividualCompraFacade;
 import ec.com.codesoft.modelo.facade.VentaFacade;
 import java.util.List;
@@ -34,6 +34,9 @@ public class FacturaServicio {
 
     @EJB
     ProductoGeneralCompraFacade productoGeneralFacade;
+    
+    @EJB
+    ProductoGeneralVentaFacade productoGeneralVentaFacade;
 
     @EJB
     DetalleProductoIndividualFacade detalleIndividualFacade;
@@ -48,7 +51,7 @@ public class FacturaServicio {
         return (productoIndividualFacade.findStockIndividual(codP).intValue());
     }
 
-    public ProductoGeneralCompra devolverStockGeneral(String codP) {
+    public ProductoGeneralVenta devolverStockGeneral(String codP) {
 
         return productoGeneralFacade.findGeneralCodP(codP);
     }
@@ -82,8 +85,8 @@ public class FacturaServicio {
         ventaFacade.create(venta);
     }
     
-    public void actulizarStockGeneral(ProductoGeneralCompra productoGeneral){
-        productoGeneralFacade.edit(productoGeneral);
+    public void actulizarStockGeneral(ProductoGeneralVenta productoGeneral){
+        productoGeneralVentaFacade.edit(productoGeneral);
     }
     
     public void actulizarStocIndividual(ProductoIndividualCompra prodIndividual){

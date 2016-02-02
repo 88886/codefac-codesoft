@@ -7,6 +7,7 @@
 package ec.com.codesoft.modelo.facade;
 
 import ec.com.codesoft.model.ProductoGeneralCompra;
+import ec.com.codesoft.model.ProductoGeneralVenta;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -31,14 +32,14 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
         super(ProductoGeneralCompra.class);
     }
     
-    public ProductoGeneralCompra findGeneralCodP(String codP) {
+    public ProductoGeneralVenta findGeneralCodP(String codP) {
 
         try {
-            String queryString = "SELECT p FROM ProductoGeneralCompra p where p.codigoProducto.codigoProducto='"+codP+"'";
+            String queryString = "SELECT p FROM ProductoGeneralVenta p where p.codigoProducto='"+codP+"'";
             Query query = em.createQuery(queryString);
 //            System.out.println(queryString);
             //query.setParameter(1, codP);
-            ProductoGeneralCompra producto= (ProductoGeneralCompra) query.getSingleResult();
+            ProductoGeneralVenta producto= (ProductoGeneralVenta) query.getSingleResult();
             return producto;
         } catch (NoResultException e) {
             return null;

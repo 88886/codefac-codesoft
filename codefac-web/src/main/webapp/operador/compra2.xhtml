@@ -15,12 +15,14 @@
                     <!-- Ecabezado para buscar el ruc del distribuidos-->
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
-                            <p:panelGrid columns="3">
+                            <p:panelGrid columns="4">
                                 <p:outputLabel  value="Código:" />
                                 <p:inputText value="#{comprarMB.compra.ruc.ruc}" />
-                                <p:commandButton value="buscar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
+                                <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
+                                <p:commandButton icon="ui-icon-search" />
 
                             </p:panelGrid>
+                            <p:defaultCommand target="btnBuscarDistribuidor" />
                         </div>
 
                         <p:spacer height="15px" />
@@ -28,16 +30,16 @@
                         <!-- Datos del distribuidor para mostrar	 -->
                         <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%">
                             <p:outputLabel value="Nombre: "/>
-                            <p:inputText value="#{comprarMB.compra.ruc.nombre}" />
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.nombre}" />
 
                             <p:outputLabel value="Direccion: "/>
-                            <p:inputText value="#{comprarMB.compra.ruc.direccion}" />
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.direccion}" />
 
                             <p:outputLabel value="Telefono: "/>
-                            <p:inputText value="#{comprarMB.compra.ruc.telefono}" />
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.telefono}" />
 
                             <p:outputLabel value="Email: "/>
-                            <p:inputText value="#{comprarMB.compra.ruc.correo}" />
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.correo}" />
 
                         </p:panelGrid>
 
@@ -45,36 +47,53 @@
 
                         <!-- Panel para mostrar datos de la compra -->
                         <p:panel >
-                            <p:panelGrid columns="4">
+                            <p:panelGrid columns="6">
                                 <p:outputLabel value="Total: "/>
-                                <p:inputText value="#{comprarMB.compra.total}" />
+                                <p:inputText id="total" value="#{comprarMB.compra.total}" />
 
                                 <p:outputLabel value="Descuento: "/>
-                                <p:inputText value="#{compraMB.compra.descuento}" />
+                                <p:inputText value="#{comprarMB.compra.descuento}" />
+
+                                <p:outputLabel value="No Documento: "/>
+                                <p:inputText value="#{comprarMB.compra.codigoDocumento}" />
                             </p:panelGrid>
 
                         </p:panel>
+
                     </p:panel>
                 </h:form>
 
-                <!-- Formulario para controlar el agregar detalle a la compra -->                
-                <h:form id="formDetalleCompra">
-                    <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder">
-                        <p:panelGrid columns="7" style="margin: 0 auto;height: 100%">
-                            <p:outputLabel value="Codigo General:"/>
-                            <p:inputText value="#{comprarMB.codigoDetalle}" >
-                                <p:ajax event="keyup" listener="#{comprarMB.verificarProducto()}"  />
-                            </p:inputText>
+                <!-- Formulario para controlar el agregar detalle a la compra -->  
 
+                <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder">
+                    <h:form id="formBuscarProducto">
+                        <p:panelGrid columns="4" style="margin: 0 auto;height: 100%">
+
+                            <p:outputLabel value="Codigo General:  "/>
+                            <p:inputText value="#{comprarMB.codigoDetalle}" />
+                            <p:commandButton  value="mas" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto" style="visibility: hidden" />
+                            <p:outputLabel id='lblNombreProducto' value="Producto: #{comprarMB.catalogo.nombre}" />
+
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+
+                <p:separator/>
+
+                <h:form id="formDetalleCompra">
+                    <p:panel  style="text-align: center" styleClass="panelNoBorder">
+                        <p:panelGrid columns="7" style="margin: 0 auto;height: 100%">
                             <p:outputLabel value="Cantidad:"/>
                             <p:inputText value="#{comprarMB.cantidadDetalle}" style="width: 50px;" />
 
                             <p:outputLabel value="Costo:"/>
                             <p:inputText value="#{comprarMB.costoDetalle}" style="width: 70px;" />
 
-                            <p:commandButton actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="tableDetalle,:formAgregarProductoEspecifico"/>
+                            <p:remoteCommand name="rc" actionListener="#{comprarMB.verificarProducto()}" />
+                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="tableDetalle,:formAgregarProductoEspecifico"/>
 
                         </p:panelGrid>
+                        <p:defaultCommand target="btnAgregarDetalle" />
                     </p:panel>
 
                     <!-- Tabla que muestra el detalle de la compra -->
@@ -110,21 +129,32 @@
                 </h:form>
 
                 <!-- Botones de Accion para la Fatura -->                
-                <h:form>
+
+                <h:form >
                     <p:panel style="font-size: 14px;text-align: center" styleClass="panelNoBorder">
                         <p:panelGrid columns="2" style="margin: 0 auto">
-                            <p:commandButton value="Comprar" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  />
-                            <p:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar">
-                                <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                            <p:commandButton partialSubmit="true" process="@this,:formDetalleDistribuidor" value="Comprar" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  >
+                                <p:confirm header="Confirmar" message="Quieres grabar la compra?" icon="ui-icon-alert" />                                
+                            </p:commandButton>
+                            <p:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar">                                
                             </p:commandButton>
                         </p:panelGrid>
                     </p:panel>
 
                     <!-- Dialogo de confirmacion -->
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
+
+                    <!-- Dialogo que nueva factura-->
+                    <p:dialog header="Nueva Compra" widgetVar="dialogNuevaCompra" modal="true">
+                        <h:form>
+                            <h2>Desea realizar otra compra?</h2>
+                            <p:commandButton  value="Nueva" action="compra" ajax="false"/>
+                            <p:commandButton value="Salir" action="compra" ajax="false" />      
+                        </h:form>
+                    </p:dialog>
 
                 </h:form>
 
@@ -148,6 +178,8 @@
                     </h:form>
                 </p:dialog>
 
+
+
                 <!-- Dialogo de confirmacion para agregar un nuevo Distribuidor -->
                 <p:dialog header="Agregar Distribuidor" widgetVar="confirmarDistribuidor" modal="true">
                     <h:form>
@@ -159,6 +191,21 @@
 
                     </h:form>
                 </p:dialog>
+
+                <!-- Dialogo que muestra un mensaje de confirmacion para crear un nuevo catalogo de proucto -->
+
+                <p:dialog header="Agregar Producto en el Catalogo"  widgetVar="confirmarProducto" modal="true">
+                    <h:form>
+                        <h2>El Producto no existe en el catologo</h2>
+                        <p:commandButton onclick="PF('confirmarProducto').hide();" value="Aceptar"/>
+                        <p:commandButton actionListener="#{comprarMB.crearNuevoCatalogo()}"  style="background-image: none;background-color: forestgreen" value="Crear Producto">
+                            <p:ajax event="dialogReturn" listener="#{comprarMB.recibirCatalogo}" update=":formDetalleCompra,:formBuscarProducto" />
+                        </p:commandButton>                        
+
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo de confirmacion para grabar -->
 
 
             </p:panel>            

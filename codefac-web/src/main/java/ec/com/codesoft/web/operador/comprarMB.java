@@ -48,6 +48,8 @@ public class comprarMB implements Serializable {
     private String codigoDetalle;
     private Integer cantidadDetalle;
     private BigDecimal costoDetalle;
+    
+    private String total;
 
     /**
      * variable para almacenar el codigo especifico a almacenar
@@ -82,11 +84,20 @@ public class comprarMB implements Serializable {
     @PostConstruct
     public void postConstruct() {
         System.out.println("reiniciando ...");
+       // this.catalogo=new CatalagoProducto();
         this.compra = new Compra();
         this.detalleCompra = new ArrayList<DetalleCompraModelo>();
         this.compra.setRuc(new Distribuidor());
-
+        this.compra.setTotal(new BigDecimal("0.0"));
+        this.compra.setDescuento(new BigDecimal("0.0"));
+        
+        
     }
+
+    public comprarMB() {
+    }
+    
+    
 
     ///////////////////////////METODOS PARA LA VISTA ///////////////////////////
     /**
@@ -137,6 +148,7 @@ public class comprarMB implements Serializable {
     public void agregarProductoEspecifico() {
 
         System.out.println(catalogo);
+        
 
         ProductoIndividualCompra detalleIndividual = new ProductoIndividualCompra();
         //detalleIndividual.setCantidad(cantidadDetalle);
@@ -173,10 +185,13 @@ public class comprarMB implements Serializable {
                 detalleIndividual.add(detalle.getProductoIndividual());
             }
         }
+        System.out.println("comprando ....");
         System.out.println(compra);
         compra.setProductoGeneralCompraList(detalleGeneral);
         compra.setProductoIndividualCompraList(detalleIndividual);
         compraServicio.insertar(compra);
+        RequestContext.getCurrentInstance().execute("PF('dialogNuevaCompra').show()");
+        //dialogNuevaCompra
     }
 
     public void crearNuevoDistribuidor() {
@@ -186,7 +201,7 @@ public class comprarMB implements Serializable {
 
         Map<String, List<String>> params = new HashMap<String, List<String>>();
         List<String> values = new ArrayList<String>();
-        
+
         values.add(compra.getRuc().getRuc());
         params.put("ruc", values);
         //options.put("width", 640);
@@ -196,26 +211,66 @@ public class comprarMB implements Serializable {
         //options.put("headerElement", "customheader");
         RequestContext.getCurrentInstance().execute("PF('confirmarDistribuidor').hide()");
         RequestContext.getCurrentInstance().openDialog("crearDistribuidor", options, params);
-        
-        //RequestContext.getCurrentInstance().op
 
+        //RequestContext.getCurrentInstance().op
     }
-    
-    public void recibirDatos(SelectEvent event)
-    {
-        compra.setRuc((Distribuidor) event.getObject());   
+
+    public void recibirDatos(SelectEvent event) {
+        compra.setRuc((Distribuidor) event.getObject());
         System.out.println("dato recibido");
         System.out.println(compra.getRuc());
     }
-    
-    
+
     /**
      * Metodo que controla al ingresar un caracter
-     * @param ae 
+     *
+     * @param ae
      */
-    public void verificarProducto()
+    public void verificarProducto() {
+        //codigoDetalle
+        System.out.println(compra);
+        System.out.println("Total"+ total);
+        catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
+        if (catalogo != null) {
+            System.out.println("El producto existe");
+        } else {
+            System.out.println("El producto no existe");
+            RequestContext.getCurrentInstance().execute("PF('confirmarProducto').show()");
+            //confirmarProducto
+
+        }
+
+    }
+
+    /**
+     * Funcion que me permite llamar a un nuevo dialogo para crear un formulario
+     */
+    public void crearNuevoCatalogo() {
+        System.out.println("abriendo nuevo panel del catalogo...");
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("codigo", true);
+
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        List<String> values = new ArrayList<String>();
+
+        values.add(codigoDetalle);
+        params.put("codigo", values);
+
+        RequestContext.getCurrentInstance().execute("PF('confirmarProducto').hide()");
+        RequestContext.getCurrentInstance().openDialog("crearCatalogoProducto", options, params);
+
+    }
+
+    public void recibirCatalogo(SelectEvent event) {
+        catalogo=(CatalagoProducto)event.getObject();
+        codigoDetalle=catalogo.getCodigoProducto();
+        System.out.println(catalogo);
+    }
+    
+    public void imprimirCompra()
     {
-        System.out.println("evento keypress");
+        System.out.println("Imprimiendo la compra ...");
+        System.out.println(compra);
     }
 
     /////////////////////////////METODOS GET Y SET//////////////////////////////
@@ -266,5 +321,27 @@ public class comprarMB implements Serializable {
     public void setCodigoEspecificoDetalle(String codigoEspecificoDetalle) {
         this.codigoEspecificoDetalle = codigoEspecificoDetalle;
     }
+
+    public comprarMB(CatalagoProducto catalogo) {
+        this.catalogo = catalogo;
+    }
+
+    public CatalagoProducto getCatalogo() {
+        return catalogo;
+    }
+
+    public void setCatalogo(CatalagoProducto catalogo) {
+        this.catalogo = catalogo;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+    
+    
 
 }

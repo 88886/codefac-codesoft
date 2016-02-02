@@ -32,15 +32,19 @@ and open the template in the editor.
                     <p:tab title="Información Cliente"> 
                         <p:panelGrid columns="6" style="margin: 0 auto;" >
                             <p:commandButton id="btnBuscarCli" value="B U S C A R " type="button"  />
-                            <p:overlayPanel id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:600px">
-                                <p:dataTable var="cliente" value="#{facturaMB.clientesLista}"
+                            <p:overlayPanel widgetVar="overLayBuscarCliente" id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
+                                
+                                <p:dataTable var="cliente" 
+                                             value="#{facturaMB.clientesLista}"
                                              selectionMode="single" 
-                                             scrollable="true" 
-                                             scrollHeight="200"  
+                                             scrollable="true"
+                                             selection="#{facturaMB.clienteSeleccionado}"
                                              rowKey="#{cliente.cedulaRuc}"
-                                             selection="#{facturaMB.clienteSeleccionado}">
-                                    <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente(event)}" update=":form:msgs,:form:infDistr"/>
-                                    <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectCliente(event)}"/>
+                                             scrollHeight="200">
+
+
+                                    <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente}" update=":form:infDistr:panelGridDistr,:form:infDistr:cedCliente,@this" />       
+                                    <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectCliente}"/>
 
                                     <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}">
                                         <h:outputText value="#{cliente.cedulaRuc}" />
@@ -184,21 +188,19 @@ and open the template in the editor.
 
             </h:form>
             <h:form id="frmFacturar">
-                <p:panelGrid columns="2" style="margin: 0 auto;">
+                <p:growl id="msgsFactura" showDetail="true" />
+                <p:panelGrid columns="3" style="margin: 0 auto;">
 
 
                     <p:commandButton value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
 
                     <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" action="factura" ajax="false"/>
 
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </p:confirmDialog>
+                    <p:commandButton value="N U E V O" style="background-image: none;background-color: chartreuse" action="factura" ajax="false"/>
 
 
                     <!-- Dialogo de confirmacion para grabar o cancelar-->
-                    <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true">
+                    <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
                         <h:form style="margin: 0 auto">
                             <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar"/>
                             <p:commandButton value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />                                               

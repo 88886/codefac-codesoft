@@ -43,23 +43,29 @@ public class CatalagoProducto implements Serializable {
     @Size(min = 1, max = 64)
     @Column(name = "CODIGO_PRODUCTO")
     private String codigoProducto;
+    
     @Size(max = 256)
     @Column(name = "NOMBRE")
     private String nombre;
+    
     @Size(max = 512)
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    
     @Size(max = 32)
     @Column(name = "MARCA")
     private String marca;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRECIO")
     private BigDecimal precio;
+    
     @Column(name = "DESCUENTO")
     private Integer descuento;
+    
     @Size(max = 64)
     @Column(name = "UBICACION")
     private String ubicacion;
+    
     @Size(max = 8)
     @Column(name = "UNIDADES")
     private String unidades;
@@ -73,8 +79,10 @@ public class CatalagoProducto implements Serializable {
     private List<ProductoIndividualCompra> productoIndividualCompraList;
     @OneToMany(mappedBy = "codigoProducto")
     private List<ProductoGeneralCompra> productoGeneralCompraList;
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "catalagoProducto")
     private ProductoGeneralVenta productoGeneralVenta;
+    
     @JoinColumn(name = "CAT_NOMBRE", referencedColumnName = "NOMBRE")
     @ManyToOne
     private CategoriaProducto catNombre;
