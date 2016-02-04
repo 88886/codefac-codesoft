@@ -164,11 +164,32 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     public Map<String, Object> getParametros() 
     {
         Map<String, Object> lista=new HashMap<String,Object>();
-        lista.put("codigoFactura",this.codigoFactura);
-        lista.put("nombreCliente",nombreCliente);
-        lista.put("direccion",direccion);
-        lista.put("ruc",ruc);
-        lista.put("telefono", telefono);
+        
+        if(this.codigoFactura!=null)
+            lista.put("codigoFactura",this.codigoFactura);
+        else
+            lista.put("codigoFactura","");
+        
+        if(this.nombreCliente!=null)
+            lista.put("nombreCliente",nombreCliente);
+        else
+            lista.put("nombreCliente","");
+        
+        if(this.direccion!=null)
+            lista.put("direccion",direccion);
+        else
+            lista.put("direccion","");
+        
+        if(this.ruc!=null)
+            lista.put("ruc",ruc);
+        else
+            lista.put("ruc","");
+        
+        if(this.telefono!=null)
+            lista.put("telefono", telefono);
+        else
+            lista.put("telefono","");
+        
         lista.put("fechaFactura",fechaFactura);
         lista.put("formaPago",formaPago);
         lista.put("nota",nota);

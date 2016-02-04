@@ -23,6 +23,7 @@ import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.web.reportes.FacturaDetalleModeloReporte;
 import ec.com.codesoft.web.reportes.FacturaModeloReporte;
 import ec.com.codesoft.web.reportes.NotaVentaModeloReporte;
+import ec.com.codesoft.web.reportes.ProformaModelo;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -97,7 +98,7 @@ public class FacturaMB {
      * Porpiedad para enlazar el numero de factura
      */
     private Integer codigoDocumento;
-            
+
     @EJB
     ClienteServicio clienteServicio;
 
@@ -136,10 +137,9 @@ public class FacturaMB {
         clientesLista = clienteServicio.obtenerTodos();
         recibo = new BigDecimal("0.0");
         tipoCliente = "";
-        
-        codigoDocumento=facturaServicio.getCodigoFactura();
+
+        codigoDocumento = facturaServicio.getCodigoFactura();
     }
-    
 
     public void verificarDialogo() {
         System.out.println("VeriE");
@@ -313,7 +313,7 @@ public class FacturaMB {
     public void onRowSelectCliente(SelectEvent event) {
         System.out.println("En sleccion");
         //clienteEncontrado = clienteSeleccionado;
-        clienteEncontrado=(Cliente) event.getObject();
+        clienteEncontrado = (Cliente) event.getObject();
         cedCliente = clienteEncontrado.getCedulaRuc();
         System.out.println(clienteEncontrado);
         RequestContext.getCurrentInstance().execute("PF('overLayBuscarCliente').hide()");
@@ -321,9 +321,98 @@ public class FacturaMB {
         //clientesLista = clienteServicio.obtenerTodos();
     }
 
-    public void onRowUnSelectCliente(SelectEvent event) 
-    {
+    public void onRowUnSelectCliente(SelectEvent event) {
         System.out.println("deseleccionando ...");
+    }
+
+    /**
+     * Agrega el detalla a la proforma
+     */
+    public void agregarDetalleProforma() {
+        System.out.println(cantidadComprar + "--" + stock);
+
+        cerrarDialogoG();
+        msjCodUnico = "";
+        msjStock = "";
+        //msjStock = "";
+        System.out.println("Si hay stock");
+        if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
+
+            System.out.println("En venta");
+
+            totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
+            subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
+            subtotal = subtotal.add(totalRegistro);
+            if (tipoCliente.equals("C")) {
+                iva = new BigDecimal("0.0");
+                iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                total = subtotal;
+                total = total.setScale(2, BigDecimal.ROUND_UP);
+            } else {
+                iva = subtotal.multiply(new BigDecimal("0.12"));
+                iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                total = subtotal.multiply(new BigDecimal("1.12"));
+                total = total.setScale(2, BigDecimal.ROUND_UP);
+            }
+
+            DetallesVenta detalles = new DetallesVenta(cantidadComprar,
+                    productoGeneral.getCodigoProducto(), catalogoSeleccionado.getNombre(),
+                    catalogoSeleccionado.getPrecio(), totalRegistro);
+            detallesVenta.add(detalles);
+
+            DetalleProductoGeneral detalle = new DetalleProductoGeneral();
+            detalle.setCantidad(cantidadComprar);
+            detalle.setCodigoProducto(catalogoSeleccionado);
+            detalle.setSubtotal(subtotalRegistro);
+            detalle.setCodigoDetallGeneral(0);
+            detallesGeneralVenta.add(detalle);
+
+
+        } else {
+            System.out.println("Especifico");
+            detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
+            // System.err.println(detalleIndividual);
+            if (detalleIndividual == null) {
+                msjCodUnico = "No existe Producto con ese código";
+                System.err.println("No existe ese Codigo Especifico");
+            } else {
+                cerrarDialogo();
+                msjCodUnico = "";
+                //cerrarDialogo();
+                productosIndividualesDetalles = new ArrayList<ProductoIndividualCompra>();
+                productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, catalogoSeleccionado.getCodigoProducto());
+                for (int i = 0; i < cantidadComprar; i++) {
+                    totalRegistro = productosIndividualesDetalles.get(i).getCosto().multiply(new BigDecimal(cantidadComprar));
+                    subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
+                    subtotal = subtotal.add(totalRegistro);
+                    if (tipoCliente.equals("C")) {
+                        iva = new BigDecimal("0.0");
+                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                        total = subtotal;
+                        total = total.setScale(2, BigDecimal.ROUND_UP);
+                    } else {
+                        iva = subtotal.multiply(new BigDecimal("0.12"));
+                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                        total = subtotal.multiply(new BigDecimal("1.12"));
+                        total = total.setScale(2, BigDecimal.ROUND_UP);
+                    }
+
+                    DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.get(i).getCodigoUnico(),
+                            productosIndividualesDetalles.get(i).getCodigoProducto().getNombre(),
+                            productosIndividualesDetalles.get(i).getCosto(), totalRegistro);
+                    detallesVenta.add(detalles);
+                    catalogoSeleccionado = new CatalagoProducto();
+                    DetalleProductoIndividual detalle = new DetalleProductoIndividual();
+                    detalle.setCodigoUnico(productosIndividualesDetalles.get(i));
+                    detalle.setSubtotal(subtotalRegistro);
+                    detallesIndividualVenta.add(detalle);
+                    //det
+
+                }
+
+            }
+        }
+
     }
 
     public void venta() {
@@ -338,7 +427,7 @@ public class FacturaMB {
 
         } else {
 
-            if (tipoCliente=="" || tipoCliente==null) {
+            if (tipoCliente == "" || tipoCliente == null) {
                 FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 cerrarDialogo();
@@ -588,6 +677,87 @@ public class FacturaMB {
         }
 
         //return null;
+    }
+
+    /**
+     * Metodo que me permite generar la proforma
+     */
+    public void proformar() {
+        System.out.println("Proformando ...");
+
+        if (detallesVenta == null) {
+            FacesMessage msg = new FacesMessage("Agregue Ventas");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            Venta venta = new Venta();
+            venta.setCedulaRuc(clienteEncontrado);
+
+            venta.setTipoDocumento("Proforma");
+
+            venta.setEstado("Proformando");
+            venta.setFecha(new Date());
+            venta.setTotal(total);
+
+            if (detallesIndividualVenta != null) {
+                for (int i = 0; i < detallesIndividualVenta.size(); i++) {
+                    detallesIndividualVenta.get(i).setCodigoFactura(venta);
+                }
+
+            }
+
+            if (detallesGeneralVenta != null) {
+                for (int j = 0; j < detallesGeneralVenta.size(); j++) {
+                    detallesGeneralVenta.get(j).setCodigoFactura(venta);
+                }
+            }
+
+            FacesMessage msg = new FacesMessage("Proforma Completa ...");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            // return "factura";
+
+            ProformaModelo facturaReporte = new ProformaModelo();
+            facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
+            facturaReporte.setDireccion(clienteEncontrado.getDireccion());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            facturaReporte.setTelefono(clienteEncontrado.getTelefono());
+
+            facturaReporte.setRuc(cedCliente);
+            facturaReporte.setFechaaFactura(sdf.format(venta.getFecha()));
+            facturaReporte.setFormaPago("Efectivo");
+            facturaReporte.setIvaTotal(iva);
+            facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
+            facturaReporte.setNota(" ");
+            facturaReporte.setSubtotal(subtotal);
+            //System.out.println(subtotal);
+
+            facturaReporte.setTotal(total);
+            for (DetallesVenta detalle : detallesVenta) {
+                FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+                detallesFactura.setCantidad(detalle.getCantidad() + "");
+                detallesFactura.setCodigo(detalle.getCodigo());
+                detallesFactura.setDescripcion(detalle.getNombre());
+                detallesFactura.setDescuento(" ");
+                detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+                detallesFactura.setTotal(detalle.getTotal().toString());
+                if (facturaReporte != null) {
+                    facturaReporte.agregarDetalle(detallesFactura);
+                }
+            }
+
+            try {
+                facturaReporte.exportarPDF();
+                //detallesFactura.setCantidad(1);
+                //factura.agregarDetalle(detallesFactura);
+                //factura.exportarPDF();
+            } catch (JRException ex) {
+                Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
+        }
+
     }
 
     public String cancelar() {
@@ -853,7 +1023,5 @@ public class FacturaMB {
     public void setCodigoDocumento(Integer codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
     }
-    
-    
 
 }
