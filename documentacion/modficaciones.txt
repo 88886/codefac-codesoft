@@ -1,0 +1,1 @@
+1.- Actualizar el modelo creado una columna llamada codigo_documento de tipo entero

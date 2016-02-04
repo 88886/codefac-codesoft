@@ -22,8 +22,9 @@
             7200
         </session-timeout>
     </session-config>
+    
     <welcome-file-list>
-        <welcome-file>operador/compra2.xhtml</welcome-file>
+        <welcome-file>login.xhtml</welcome-file>
     </welcome-file-list>
     
     <error-page>

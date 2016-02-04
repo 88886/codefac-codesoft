@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <p:panel header="Seleccione el producto para editar el inventario:" >
+            <h:form>
+                <p:dataTable value="#{inventarioCatalogoMB.listaCatalogo}"
+                             filteredValue="#{inventarioCatalogoMB.listaCatalogoFiltrado}"
+                             rowsPerPageTemplate="5,10,15"
+                             rows="10"
+                             paginator="true"
+                             id="tablaCatalogos"
+                             selectionMode="single"
+                             selection="#{inventarioCatalogoMB.catalogoProductoSeleccionado}"
+                             rowKey="#{catalogo.codigoProducto}"
+                             widgetVar="widgetCatalogo"
+                             var="catalogo">
+
+                    <p:ajax event="rowSelect" listener="#{inventarioCatalogoMB.onRowSelect}" update="@form" />
+
+                    <p:column headerText="Codigo"  filterBy="#{catalogo.codigoProducto}" filterMatchMode="contains" >
+                        <h:outputText value="#{catalogo.codigoProducto}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterMatchMode="contains">
+                        <p:outputLabel value="#{catalogo.nombre}"/>
+                    </p:column> 
+
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{catalogo.descripcion}"/>
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <p:outputLabel value="#{catalogo.precio}"/>
+                    </p:column>
+
+                    <p:column headerText="Stock">
+                        <p:outputLabel value="#{catalogo.productoGeneralVenta.cantidadDisponible}"/>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:dialog modal="true" widgetVar="widInventario" header="Editar Inventario">
+                    <p:panel styleClass="panelNoBorder">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="codigo"/>
+                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.codigoProducto}" />
+
+                            <p:outputLabel value="nombre"/>
+                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.nombre}" />
+
+                            <p:outputLabel value="descripcion"/>
+                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.descripcion}" />
+
+
+                            <p:outputLabel value="stock"/>
+                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.productoGeneralVenta.cantidadDisponible}"/>                       
+
+                        </p:panelGrid>
+
+                        <p:separator/>
+                        
+                        <p:panelGrid columns="2">
+                            <p:commandButton value="Agregar" action="#{inventarioCatalogoMB.agregarCantidadProducto}" update="@form" />
+                            <p:inputText value="#{inventarioCatalogoMB.cantidad}"/>
+                        </p:panelGrid>
+                        
+                    </p:panel>
+                </p:dialog>
+
+            </h:form>
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

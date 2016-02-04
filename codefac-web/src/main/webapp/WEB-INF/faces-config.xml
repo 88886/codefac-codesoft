@@ -59,7 +59,21 @@
             <to-view-id>/operador/index.xhtml</to-view-id>
         </navigation-case>
         
+        <navigation-case>
+            <from-outcome>reporteCliente</from-outcome>
+            <to-view-id>/admin/reporteSimpleCliente.xhtml</to-view-id>
+        </navigation-case>
         
+        <navigation-case>
+            <from-outcome>editarInventario</from-outcome>
+            <to-view-id>/admin/editarInventarioCatalogo.xhtml</to-view-id>
+        </navigation-case>
+        
+        
+        <navigation-case>
+            <from-outcome>productoGestion</from-outcome>
+            <to-view-id>/admin/producto.xhtml</to-view-id>
+        </navigation-case>
 
         
     </navigation-rule>

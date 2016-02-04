@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <div style="text-align: center"><h2>Reportes para Descargar</h2></div>
+
+
+        <!-- Reportes para descargar -->
+        <h:form>
+            <p:panel visible="false">
+                <p:dataTable
+
+                    style="height: 100%"
+                    id="tablaClientes"
+                    var="cliente" 
+                    value="#{clienteMB.clientes}"
+                    scrollable="true" 
+                    selectionMode="single" 
+                    rowKey="#{cliente.cedulaRuc}"
+                    selection="#{clienteMB.clienteSeleccionado}">
+
+
+
+                    <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >
+                        <h:outputText value="#{cliente.cedulaRuc}" />
+                    </p:column>
+                    <p:column headerText="Nombres" filterBy="#{cliente.nombre}" filterMatchMode="contains" style="width:350px" >
+                        <h:outputText value="#{cliente.nombre}"   />
+                    </p:column>
+                    <p:column headerText="Telefono" >
+                        <h:outputText value="#{cliente.telefono}" />
+                    </p:column>
+                    <p:column headerText="Correo" >
+                        <h:outputText value="#{cliente.correo}" />
+                    </p:column>
+
+                    <p:column headerText="Dirección" >
+                        <h:outputText value="#{cliente.direccion}" />
+                    </p:column>
+
+
+                </p:dataTable>
+            </p:panel>
+
+            <div style="text-align: center">
+                <h:commandLink>
+                    <p:graphicImage height="100px" width="100px" name="/img/iconos/excel_icono.png" />
+                    <p:dataExporter type="xls" target="tablaClientes" fileName="cars" pageOnly="true"/>
+                </h:commandLink>
+
+                <h:commandLink>
+                    <p:graphicImage height="100px" width="100px" name="/img/iconos/pdf_icono.png" />
+                    <p:dataExporter type="pdf" target="tablaClientes" fileName="cars" pageOnly="true" />
+                </h:commandLink>
+            </div>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

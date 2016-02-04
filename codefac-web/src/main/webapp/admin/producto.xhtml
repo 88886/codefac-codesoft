@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h:form id="formTabla">
+            <!-- Mensaje para mostrar en pantalla -->
+            <p:growl id="growl" showDetail="true" sticky="false" life="2000" />  
+            <p:remoteCommand name="onload" action="#{gestionProductoMB.verificarDialogo()}" autoRun="true" />
+
+            <div style="text-align: center"><h2>Gestion del Catalogo de Productos</h2></div>
+            <!-- Tabla que tiene el contenido del catalogo -->
+            <p:dataTable id="tablaCatalogo" value="#{gestionProductoMB.catalagoProductos}"
+                         filteredValue="#{gestionProductoMB.catalagoProductosFiltrados}"
+                         selection="#{gestionProductoMB.catalogoSeleccionado}"
+                         selectionMode="single"
+                         var="catalogo"
+                         rows="15"
+                         rowsPerPageTemplate="15,20,25"
+                         paginator="true"
+                         widgetVar="widgetCatalogo"
+                         rowKey="#{catalogo.codigoProducto}">
+
+                <f:facet name="header" >                               
+                    <p:commandButton id="btnNuevoCliente" actionListener="#{gestionProductoMB.mostrarNuevoProducto()}"  icon="ui-icon-plus" update=":idDialogProducto" />  
+                    <p:commandButton id="btnEditarCliente" actionListener="#{gestionProductoMB.mostrarEditarProducto()}" icon="ui-icon-pencil" update=":idDialogProductoEdit" />                          
+                </f:facet>
+
+                <p:column headerText="Codigo" filterBy="#{catalogo.codigoProducto}" filterMatchMode="contains">
+                    <p:outputLabel value="#{catalogo.codigoProducto}"/>
+                </p:column>
+
+                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterMatchMode="contains">
+                    <p:outputLabel value="#{catalogo.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Descripcion">
+                    <p:outputLabel value="#{catalogo.descripcion}"/>
+                </p:column>
+
+                <p:column headerText="Marca">
+                    <p:outputLabel value="#{catalogo.marca}"/>
+                </p:column>
+
+                <p:column headerText="Precio">
+                    <p:outputLabel value="#{catalogo.precio}"/>
+                </p:column>
+
+                <p:column headerText="Ubicacion">
+                    <p:outputLabel value="#{catalogo.ubicacion}"/>
+                </p:column>
+
+
+                <p:column headerText="Stock">
+                    <p:outputLabel value="#{catalogo.productoGeneralVenta.cantidadDisponible}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+        </h:form>
+
+        <!-- Dialogo para poder mostar el formulario para poder grabar -->
+        <p:dialog id="idDialogProducto" modal="true" header="Agregar Catalogo producto" widgetVar="dialogNuevoProducto" showEffect="explode" hideEffect="explode" >
+            <h:form>
+                <p:panelGrid columns="2" styleClass="panelNoBorder">
+                    <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
+                    <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalagoProducto.codigoProducto}" required=""/>
+
+                    <p:outputLabel value="Nombre: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.nombre}"/>
+
+                    <p:outputLabel value="Descripcion: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.descripcion}"/>
+
+                    <p:outputLabel value="Marca: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.marca}"/>
+
+                    <p:outputLabel value="Precio: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.precio}"/>
+
+                    <p:outputLabel value="Descuento: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.descuento}"/>
+
+                    <p:outputLabel value="Ubicacion: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.ubicacion}"/>
+
+                    <p:outputLabel value="Unidades: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.ubicacion}"/>
+
+                    <p:outputLabel value="Tipo: "/>
+                    <p:selectOneMenu id="sexo" value="#{gestionProductoMB.catalagoProducto.tipoProducto}" >
+                        <f:selectItem itemLabel="General" itemValue='G' />
+                        <f:selectItem itemLabel="Especifico" itemValue='E' />
+                    </p:selectOneMenu>
+
+                    <div>
+                        <p:panelGrid columns="2">
+                            <p:commandButton value="Grabar" actionListener="#{gestionProductoMB.grabarCatalogo()}" update=":formTabla:tablaCatalogo" ajax="false" />                             
+                            <p:commandButton value="Cancelar" actionListener="#{gestionProductoMB.cancelarGrabar()}" immediate="true" update=":formTabla:growl"  /> 
+                        </p:panelGrid>
+                    </div>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+        <!-- Dialogo para poder mostar el formulario para poder editar -->
+        <p:dialog id="idDialogProductoEdit" modal="true" header="Editar Catalogo producto" widgetVar="dialogNuevoProductoEdit" showEffect="explode" hideEffect="explode" >
+            <h:form>
+                <p:panelGrid columns="2" styleClass="panelNoBorder">
+                    <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
+                    <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalogoSeleccionado.codigoProducto}" required=""/>
+
+                    <p:outputLabel value="Nombre: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.nombre}"/>
+
+                    <p:outputLabel value="Descripcion: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.descripcion}"/>
+
+                    <p:outputLabel value="Marca: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.marca}"/>
+
+                    <p:outputLabel value="Precio: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precio}"/>
+
+                    <p:outputLabel value="Descuento: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.descuento}"/>
+
+                    <p:outputLabel value="Ubicacion: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>
+
+                    <p:outputLabel value="Unidades: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>
+
+                    <p:outputLabel value="Stock: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.productoGeneralVenta.cantidadDisponible}"/>
+
+                    <p:outputLabel value="Tipo: "/>
+                    <p:selectOneMenu id="sexo" value="#{gestionProductoMB.catalogoSeleccionado.tipoProducto}" >
+                        <f:selectItem itemLabel="General" itemValue='G' />
+                        <f:selectItem itemLabel="Especifico" itemValue='E' />
+                    </p:selectOneMenu>
+
+                    <div>
+                        <p:panelGrid columns="2">
+                            <p:commandButton value="Editar" actionListener="#{gestionProductoMB.editarCatalago()}" update=":formTabla:tablaCatalogo" ajax="false" />                             
+                            <p:commandButton value="Cancelar" actionListener="#{gestionProductoMB.cancelarEditar()}" immediate="true"  /> 
+                        </p:panelGrid>
+                    </div>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

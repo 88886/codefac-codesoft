@@ -97,8 +97,7 @@ public class CatalagoProducto implements Serializable {
         this.precio=new BigDecimal(0.0);
         this.tipoProducto=new Character('G');
         this.ubicacion="";
-        this.unidades="";
-        
+        this.unidades="";        
         
     }
     

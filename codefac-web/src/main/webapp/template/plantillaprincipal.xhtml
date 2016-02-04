@@ -24,20 +24,20 @@ and open the template in the editor.
             <h:form id="menuPlantilla">
                 <p:growl id="messages"/>
                 <p:layoutUnit position="center"> 
-                    <p:tabMenu activeIndex="#{param.i}" style="width: 590px; margin-left:auto; margin-right:auto;">
-                        <p:menuitem outcome="index"   value="Inicio" icon="ui-icon-star">
+                    <p:tabMenu activeIndex="#{param.i}" style="width: 720px; margin: 0 auto;">
+                        <p:menuitem style="width: 80px" outcome="index"   value="Inicio" icon="ui-icon-star">
                             <f:param name="i" value="0" />
                         </p:menuitem>
-                        <p:menuitem outcome="login" value="Login"  icon="ui-icon-document">
+                        <p:menuitem style="width: 80px" outcome="login" value="Login"  icon="ui-icon-document">
                             <f:param name="i" value="1" />
                         </p:menuitem>
-                        <p:menuitem outcome="nosotros" value="Nosotros"  icon="ui-icon-search">
+                        <p:menuitem style="width: 100px" outcome="nosotros" value="Nosotros"  icon="ui-icon-search">
                             <f:param name="i" value="2" />
                         </p:menuitem>
-                        <p:menuitem outcome="ubicacion" value="ubicación"   icon="ui-icon-person">
+                        <p:menuitem style="width: 150px" outcome="ubicacion" value="ubicación"   icon="ui-icon-person">
                             <f:param name="i" value="3" />
                         </p:menuitem>
-                        <p:menuitem outcome="contactanos" value="Contactanos"  icon="ui-icon-search">
+                        <p:menuitem style="width: 150px" outcome="contactanos" value="Contactanos"  icon="ui-icon-search">
                             <f:param name="i" value="4" />
                         </p:menuitem>
 

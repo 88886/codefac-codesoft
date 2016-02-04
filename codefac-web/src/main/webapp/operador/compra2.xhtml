@@ -15,14 +15,38 @@
                     <!-- Ecabezado para buscar el ruc del distribuidos-->
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
-                            <p:panelGrid columns="4">
+                            <p:panelGrid columns="4" >
                                 <p:outputLabel  value="Código:" />
-                                <p:inputText value="#{comprarMB.compra.ruc.ruc}" />
+                                <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" />
                                 <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
-                                <p:commandButton icon="ui-icon-search" />
+                                <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
+                                <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
+                                    <p:dataTable value="#{comprarMB.listaDistribuidores}" 
+                                                 var="distribuidor"
+                                                 scrollable="true"
+                                                 selectionMode="single"
+                                                 selection="#{comprarMB.distribuidorSeleccionado}"
+                                                 rowKey="#{distribuidor.ruc}"
+                                                 scrollHeight="300">
+                                        
+                                        <p:ajax event="rowSelect" listener="${comprarMB.filaSeleccionadaDistribuidor}" update=":formDetalleDistribuidor:gridDatosCompra,:formDetalleDistribuidor:txtRuc" />
+                                        
+                                        <p:column headerText="Ruc" filterBy="#{distribuidor.ruc}" >
+                                            <p:outputLabel value="#{distribuidor.ruc}" />
+                                        </p:column>
+                                        
+                                        <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}">
+                                            <p:outputLabel value="#{distribuidor.nombre}"/>
+                                        </p:column>
+                                        
+                                    </p:dataTable>
+                                    
+                                </p:overlayPanel>
 
                             </p:panelGrid>
+                            <!--Selecciona cual va a ser el focus por defecto del formulario-->
                             <p:defaultCommand target="btnBuscarDistribuidor" />
+
                         </div>
 
                         <p:spacer height="15px" />

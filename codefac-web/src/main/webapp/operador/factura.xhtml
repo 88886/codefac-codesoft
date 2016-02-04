@@ -17,14 +17,24 @@ and open the template in the editor.
             <h:form id="tipoCliente">
                 <p:remoteCommand name="onloadE" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
                 <p:remoteCommand name="onloadG" action="#{facturaMB.verificarDialogoG()}" autoRun="true" />
-                <h:panelGrid columns="5" style="margin-bottom:10px;margin-left: 30%" cellpadding="8">
-                    <p:outputLabel for="tipoCl" value="Tipo: " />
-                    <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
-                        <f:selectItem itemLabel="Nota de Venta" itemValue="C" />
-                        <f:selectItem itemLabel="Factura" itemValue="F" />
-                    </p:selectOneRadio>
-                    <p:ajax event="click" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
-                </h:panelGrid>
+                <div style="width: 100%;height: 50px">
+                    <div style="float: left;width:50%;height: 50px" >
+                        <h:panelGrid columns="5" style="margin-bottom:10px;margin-left: 30%" cellpadding="8">
+                            <p:outputLabel for="tipoCl" value="Tipo: " />
+                            <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
+                                <f:selectItem itemLabel="Nota de Venta" itemValue="C" />
+                                <f:selectItem itemLabel="Factura" itemValue="F" />
+                            </p:selectOneRadio>
+                            <p:ajax event="click" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
+                        </h:panelGrid>
+                    </div>
+                    <div style="padding-top: 5px; float: right;width:30%;height: 50px">
+                        <p:outputLabel value="Codigo Documento: "/>
+                        <p:inputText value="#{facturaMB.codigoDocumento}" />
+                    </div>
+
+                </div>
+
             </h:form>
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true" />
@@ -33,9 +43,10 @@ and open the template in the editor.
                         <p:panelGrid columns="6" style="margin: 0 auto;" >
                             <p:commandButton id="btnBuscarCli" value="B U S C A R " type="button"  />
                             <p:overlayPanel widgetVar="overLayBuscarCliente" id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
-                                
+
                                 <p:dataTable var="cliente" 
                                              value="#{facturaMB.clientesLista}"
+                                             rows="10"
                                              selectionMode="single" 
                                              scrollable="true"
                                              selection="#{facturaMB.clienteSeleccionado}"
@@ -95,6 +106,7 @@ and open the template in the editor.
                     <p:commandButton id="btnAgregarProd" value="A G R E G A R " type="button"  />
                     <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                     rows="10"
                                      selectionMode="single" 
                                      scrollable="true" 
                                      scrollHeight="200"  

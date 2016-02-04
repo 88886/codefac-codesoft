@@ -25,6 +25,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -65,10 +66,19 @@ public class comprarMB implements Serializable {
      * Referencia para guardar el catalogo seleccionando para agregar al detalle
      */
     private CatalagoProducto catalogo;
+    
+    /**
+     * Lista para cargar los distribuidores en una tabla
+     */
 
+    private List<Distribuidor> listaDistribuidores;
+    private Distribuidor distribuidorSeleccionado;
+     
     /*
      Servicios para consultar del distribuidor
      */
+    
+    
     @EJB
     private DistribuidorServicio distribServicio;
 
@@ -90,6 +100,7 @@ public class comprarMB implements Serializable {
         this.compra.setRuc(new Distribuidor());
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
+        listaDistribuidores=distribServicio.obtenerTodos();
         
         
     }
@@ -115,6 +126,8 @@ public class comprarMB implements Serializable {
             //confirmarDistribuidor
         }
     }
+    
+    
 
     /**
      * Agrega un producto a la tabla
@@ -272,6 +285,14 @@ public class comprarMB implements Serializable {
         System.out.println("Imprimiendo la compra ...");
         System.out.println(compra);
     }
+    
+    public void filaSeleccionadaDistribuidor(SelectEvent event)
+    {
+        System.out.println("fila seleccionada ...");
+        System.out.println(distribuidorSeleccionado);
+        compra.setRuc(distribuidorSeleccionado);
+        RequestContext.getCurrentInstance().execute("PF('overlayDistribuidor').hide()");
+    }
 
     /////////////////////////////METODOS GET Y SET//////////////////////////////
     public Compra getCompra() {
@@ -340,6 +361,22 @@ public class comprarMB implements Serializable {
 
     public void setTotal(String total) {
         this.total = total;
+    }
+
+    public List<Distribuidor> getListaDistribuidores() {
+        return listaDistribuidores;
+    }
+
+    public void setListaDistribuidores(List<Distribuidor> listaDistribuidores) {
+        this.listaDistribuidores = listaDistribuidores;
+    }
+
+    public Distribuidor getDistribuidorSeleccionado() {
+        return distribuidorSeleccionado;
+    }
+
+    public void setDistribuidorSeleccionado(Distribuidor distribuidorSeleccionado) {
+        this.distribuidorSeleccionado = distribuidorSeleccionado;
     }
     
     

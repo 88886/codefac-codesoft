@@ -48,8 +48,17 @@ public class CatalogoServicio {
             
             System.out.println("CODIGO: "+productoGeneral.getCodigoProducto()); 
            this.productoGeneralFacade.create(productoGeneral);
+           catalogo.setProductoGeneralVenta(productoGeneral);
         }
         
+       // this.catalogoFacade.refresh(catalogo);
+        
+    }
+    
+    public void agregarCantidadProductoGeneral(ProductoGeneralVenta producto,int cantidad)
+    {
+        producto.agregarProductos(cantidad);
+        productoGeneralFacade.edit(producto);
     }
 
     public void actualizar(CatalagoProducto catalogo) {

@@ -9,6 +9,7 @@ package ec.com.codesoft.model;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -50,7 +51,7 @@ public class ProductoGeneralVenta implements Serializable {
     private Integer limiteMinimo;
     
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO", insertable = false, updatable = false)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private CatalagoProducto catalagoProducto;
     
     @JoinColumn(name = "CODIGO_RESERVA_PROD_GENERAL", referencedColumnName = "CODIGO_RESERVA_PROD_GENERAL")

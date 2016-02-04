@@ -44,18 +44,17 @@ and open the template in the editor.
                     <p:submenu label="Clientes" icon="ui-icon-pencil">
                         <p:menuitem value="Gestionar" outcome="cliente"  icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Buscar" outcome="buscarCliente" icon="ui-icon-arrowreturnthick-1-w" />
-                        <p:menuitem value="Reportes" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                        <p:menuitem value="Reportes" outcome="reporteCliente" icon="ui-icon-arrowreturnthick-1-e" />
                     </p:submenu>
 
                     <p:submenu label="Productos" icon="ui-icon-pencil">
-                        <p:menuitem value="Gestionar" outcome="cliente"  icon="ui-icon-arrowreturnthick-1-w" />
-                        <p:menuitem value="Buscar" outcome="buscarCliente" icon="ui-icon-arrowreturnthick-1-w" />
-                        <p:menuitem value="Reportes" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                       <p:menuitem value="Gestionar" outcome="productoGestion" icon="ui-icon-arrowreturnthick-1-w" />
+                       <p:menuitem value="Agregar Inventario" outcome="editarInventario" icon="ui-icon-arrowreturnthick-1-w" />
+                       
                     </p:submenu>
 
                    
-                    <p:menuitem value="Quit" url="http://www.primefaces.org" icon="ui-icon-close" />
-
+                    
                     <f:facet name="options">
                         <p:inputText style="margin-right:10px" placeholder="Search"/>
                         <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Logout" icon="ui-icon-extlink" />

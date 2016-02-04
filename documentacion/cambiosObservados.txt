@@ -3,3 +3,7 @@ Actualizar la base de datos con el modelo
 	-Aumentar el campo para saber el tipo de producto en el modelo
 
 Analizar la posibilidad de manejar las obervaciones de daños, perdidas, y produscto en mal estado por periodo
+
+Verificar la plantilla principal para centrar los valores
+
+Agregar a al usuario una caja o punto de facturacion que va a tener los datos como cual es el numero de factura actual

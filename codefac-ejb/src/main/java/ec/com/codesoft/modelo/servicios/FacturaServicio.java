@@ -98,5 +98,14 @@ public class FacturaServicio {
         
         return productoIndividualFacade.findProdIndividualCodUnico(codUnico);
     }
+    
+    /**
+     * Obtiene el codigo de la siguiente factura
+     * @return 
+     */
+    public Integer getCodigoFactura()
+    {
+        return (ventaFacade.getCodigoUltimaFactura()+1);
+    }
 
 }

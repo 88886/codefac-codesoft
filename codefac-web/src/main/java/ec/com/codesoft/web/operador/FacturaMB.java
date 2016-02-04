@@ -93,6 +93,11 @@ public class FacturaMB {
     private ProductoIndividualCompra prodIndividual;
     private BigDecimal recibo;
     private BigDecimal vuelto;
+    /**
+     * Porpiedad para enlazar el numero de factura
+     */
+    private Integer codigoDocumento;
+            
     @EJB
     ClienteServicio clienteServicio;
 
@@ -131,6 +136,8 @@ public class FacturaMB {
         clientesLista = clienteServicio.obtenerTodos();
         recibo = new BigDecimal("0.0");
         tipoCliente = "";
+        
+        codigoDocumento=facturaServicio.getCodigoFactura();
     }
     
 
@@ -838,5 +845,15 @@ public class FacturaMB {
     public void setVuelto(BigDecimal vuelto) {
         this.vuelto = vuelto;
     }
+
+    public Integer getCodigoDocumento() {
+        return codigoDocumento;
+    }
+
+    public void setCodigoDocumento(Integer codigoDocumento) {
+        this.codigoDocumento = codigoDocumento;
+    }
+    
+    
 
 }

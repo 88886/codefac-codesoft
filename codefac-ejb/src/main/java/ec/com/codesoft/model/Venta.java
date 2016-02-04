@@ -64,18 +64,27 @@ public class Venta implements Serializable {
     private String tipoVenta;
     @Column(name = "DESCUENTO")
     private Integer descuento;
+    
     @Column(name = "INCREMENTO")
     private Integer incremento;
+    
+    @Column(name="CODIGO_DOCUMENTO")
+    private Integer codigoDocumento;
+    
     @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
     private List<CreditoFactura> creditoFacturaList;
+    
     @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
     private List<DetalleProductoIndividual> detalleProductoIndividualList;
+    
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
+    
     @JoinColumn(name = "CODIGO_PERIDO", referencedColumnName = "CODIGO_PERIDO")
     @ManyToOne
     private PeriodoContable codigoPerido;
+    
     @JoinColumn(name = "CEDULA_RUC", referencedColumnName = "CEDULA_RUC")
     @ManyToOne
     private Cliente cedulaRuc;
