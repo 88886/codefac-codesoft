@@ -52,8 +52,13 @@ public class Compra implements Serializable {
     @Column(name = "FECHA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
+    
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
+    
+    @Column(name = "IVA")
+    private BigDecimal iva;
+    
     @JoinColumn(name = "RUC", referencedColumnName = "RUC")
     @ManyToOne
     private Distribuidor ruc;
@@ -88,6 +93,7 @@ public class Compra implements Serializable {
     public Compra(Integer codigoCompra) {
         this.codigoCompra = codigoCompra;
     }
+    
 
     public Integer getCodigoCompra() {
         return codigoCompra;
@@ -176,6 +182,15 @@ public class Compra implements Serializable {
     public void setProductoGeneralCompraList(List<ProductoGeneralCompra> productoGeneralCompraList) {
         this.productoGeneralCompraList = productoGeneralCompraList;
     }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+    
     
     
 

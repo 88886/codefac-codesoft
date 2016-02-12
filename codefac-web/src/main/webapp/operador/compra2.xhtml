@@ -17,7 +17,7 @@
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
                             <p:panelGrid columns="4" >
-                                <p:outputLabel  value="Código:" />
+                                <p:outputLabel  value=" RUC :" />
                                 <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" />
                                 <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
                                 <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
@@ -29,19 +29,19 @@
                                                  selection="#{comprarMB.distribuidorSeleccionado}"
                                                  rowKey="#{distribuidor.ruc}"
                                                  scrollHeight="300">
-                                        
+
                                         <p:ajax event="rowSelect" listener="${comprarMB.filaSeleccionadaDistribuidor}" update=":formDetalleDistribuidor:gridDatosCompra,:formDetalleDistribuidor:txtRuc" />
-                                        
+
                                         <p:column headerText="Ruc" filterBy="#{distribuidor.ruc}" >
                                             <p:outputLabel value="#{distribuidor.ruc}" />
                                         </p:column>
-                                        
+
                                         <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}">
                                             <p:outputLabel value="#{distribuidor.nombre}"/>
                                         </p:column>
-                                        
+
                                     </p:dataTable>
-                                    
+
                                 </p:overlayPanel>
 
                             </p:panelGrid>
@@ -72,13 +72,7 @@
 
                         <!-- Panel para mostrar datos de la compra -->
                         <p:panel >
-                            <p:panelGrid columns="6">
-                                <p:outputLabel value="Total: "/>
-                                <p:inputText id="total" value="#{comprarMB.compra.total}" />
-
-                                <p:outputLabel value="Descuento: "/>
-                                <p:inputText value="#{comprarMB.compra.descuento}" />
-
+                            <p:panelGrid columns="2">
                                 <p:outputLabel value="No Documento: "/>
                                 <p:inputText value="#{comprarMB.compra.codigoDocumento}" />
                             </p:panelGrid>
@@ -115,7 +109,7 @@
                             <p:inputText value="#{comprarMB.costoDetalle}" style="width: 70px;" />
 
                             <p:remoteCommand name="rc" actionListener="#{comprarMB.verificarProducto()}" />
-                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="tableDetalle,:formAgregarProductoEspecifico"/>
+                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="tableDetalle,:formAgregarProductoEspecifico,panelTotales"/>
 
                         </p:panelGrid>
                         <p:defaultCommand target="btnAgregarDetalle" />
@@ -151,6 +145,31 @@
                         </p:column>
 
                     </p:dataTable>
+
+                    <!-- Panel para agrupar los totales -->
+                    <div style="text-align: center;height:140px">
+                        <p:panel id="panelTotales" style="width: 250px;float: right"  styleClass="panelNoBorder">
+                            <p:panelGrid columns="2" style="text-align: left">
+                                <p:outputLabel value="Subtotal: "/>
+                                <p:inputText value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
+                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                </p:inputText>
+
+                                <p:outputLabel value="Descuento: "/>
+                                <p:inputText value="#{comprarMB.compra.descuento}" style="width: 80px;" >
+                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                </p:inputText>
+
+                                <p:outputLabel value="Iva: "/>
+                                <p:inputText value="#{comprarMB.compra.iva}" style="width: 80px;" >
+                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                </p:inputText> 
+
+                                <p:outputLabel id="txtTotalCompra" value="Total: "/>
+                                <p:inputText id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
+                            </p:panelGrid>
+                        </p:panel>
+                    </div>
                 </h:form>
 
                 <!-- Botones de Accion para la Fatura -->                

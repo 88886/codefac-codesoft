@@ -16,6 +16,7 @@ import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
 import ec.com.codesoft.modelo.servicios.ProductoGeneralCompraServicio;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,10 @@ public class comprarMB implements Serializable {
     private String codigoDetalle;
     private Integer cantidadDetalle;
     private BigDecimal costoDetalle;
+    /**
+     * Variable para saber el valor estimado total de la compra
+     */
+    private BigDecimal sumaTotalCompra;
     
     private String total;
 
@@ -100,8 +105,9 @@ public class comprarMB implements Serializable {
         this.compra.setRuc(new Distribuidor());
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
+        this.compra.setIva(new BigDecimal("12"));
         listaDistribuidores=distribServicio.obtenerTodos();
-        
+        sumaTotalCompra=new BigDecimal(0);
         
     }
 
@@ -147,12 +153,24 @@ public class comprarMB implements Serializable {
 
                 detalle = new DetalleCompraModelo(detalleGeneral);
                 detalleCompra.add(detalle);
+                sumaTotalCompra=sumaTotalCompra.add(detalle.getSubtotal());
+                System.out.println("Suma:"+sumaTotalCompra);
+                //compra.setTotal(sumaTotalCompra.multiply(compra.getIva().divide(new BigDecimal("100")).add(new BigDecimal("1"))));
+                actualizarValoresTotales();
 
             } else {
                 contadorIngresoDetalleEspecifico = cantidadDetalle;
                 RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').show()");
             }
         }
+    }
+    
+    public void actualizarValoresTotales()
+    {
+        BigDecimal calculo=sumaTotalCompra.divide(compra.getDescuento().divide(new BigDecimal(100)).add(new BigDecimal(1)),2, RoundingMode.HALF_UP);
+        //System.out.println(calculo);
+        compra.setTotal(calculo.multiply(compra.getIva().divide(new BigDecimal("100"),2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
+        compra.setTotal(compra.getTotal().divide(new BigDecimal(1),2, RoundingMode.HALF_UP));
     }
 
     /**
@@ -378,6 +396,14 @@ public class comprarMB implements Serializable {
 
     public void setDistribuidorSeleccionado(Distribuidor distribuidorSeleccionado) {
         this.distribuidorSeleccionado = distribuidorSeleccionado;
+    }
+
+    public BigDecimal getSumaTotalCompra() {
+        return sumaTotalCompra;
+    }
+
+    public void setSumaTotalCompra(BigDecimal sumaTotalCompra) {
+        this.sumaTotalCompra = sumaTotalCompra;
     }
     
     
