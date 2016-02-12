@@ -136,6 +136,7 @@ public class NotaVentaModeloReporte extends ReporteJasper<FacturaDetalleModeloRe
         else
             lista.put("telefono", "");
         
+        
         lista.put("fechaFactura",fechaFactura);
         lista.put("formaPago",formaPago);
         lista.put("total",total);

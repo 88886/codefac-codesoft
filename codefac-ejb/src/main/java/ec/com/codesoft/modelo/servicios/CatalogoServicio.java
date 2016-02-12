@@ -43,11 +43,12 @@ public class CatalogoServicio {
             productoGeneral.setCantidadDisponible(0);
             productoGeneral.setCantidadRobado(0);
             productoGeneral.setCantidadVendida(0);
-            productoGeneral.setCatalagoProducto(catalogo);
-            productoGeneral.setCodigoProducto(catalogo.getCodigoProducto());
-            
-            System.out.println("CODIGO: "+productoGeneral.getCodigoProducto()); 
+            productoGeneral.setCatalagoProducto(catalogo);    
+           // productoGeneral.setCodigoProducto(catalogo.getCodigoProducto());
+            //productoGeneral.setCodigo(Integer.SIZE);
+           // System.out.println("CODIGO: "+productoGeneral.getCodigoProducto()); 
            this.productoGeneralFacade.create(productoGeneral);
+           
            catalogo.setProductoGeneralVenta(productoGeneral);
         }
         

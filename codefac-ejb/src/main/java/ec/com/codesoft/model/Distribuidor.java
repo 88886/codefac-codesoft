@@ -70,6 +70,7 @@ public class Distribuidor implements Serializable {
     @Size(max = 1000)
     @Column(name = "CORREO")
     private String correo;
+    
     @OneToMany(mappedBy = "ruc")
     private List<Compra> compraList;
 

@@ -35,10 +35,11 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
     public ProductoGeneralVenta findGeneralCodP(String codP) {
 
         try {
-            String queryString = "SELECT p FROM ProductoGeneralVenta p where p.codigoProducto='"+codP+"'";
+            //String queryString = "SELECT p FROM ProductoGeneralVenta p where p.codigoProducto='"+codP+"'";
+            String queryString = "SELECT p FROM CatalagoProducto c inner join c.productoGeneralVenta p  WHERE c.codigoProducto=?1";
             Query query = em.createQuery(queryString);
 //            System.out.println(queryString);
-            //query.setParameter(1, codP);
+            query.setParameter(1, codP);
             ProductoGeneralVenta producto= (ProductoGeneralVenta) query.getSingleResult();
             return producto;
         } catch (NoResultException e) {

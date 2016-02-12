@@ -56,7 +56,9 @@ public class CompraServicio {
             productoGFacade.edit(detalle);
             
             //actualizar el stock en las tablas correspondientes
-            ProductoGeneralVenta productoVenta=productoGeneralFacade.find(detalle.getCodigoProducto().getCodigoProducto());
+            //detalle.getCodigoProducto().getco
+            //System.out.println("codigo producto: "+detalle.getCodigoProducto().getCodigoProducto());
+            ProductoGeneralVenta productoVenta=productoGeneralFacade.findByCodigoProducto(detalle.getCodigoProducto().getCodigoProducto());
             productoVenta.agregarProductos(detalle.getCantidad());
             productoGeneralFacade.edit(productoVenta);
             //detalle.getCantidad();
@@ -68,6 +70,11 @@ public class CompraServicio {
             productoEspeFacade.edit(detalle);
         }
 
+    }
+    
+    public void consultar()
+    {
+        productoGeneralFacade.findByCodigoProducto("123");
     }
 
     public void actualizar(Compra compra) {

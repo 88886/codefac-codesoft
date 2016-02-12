@@ -33,21 +33,32 @@ public class VentaFacade extends AbstractFacade<Venta> {
     }
 
     /**
-     * Obtiene el valor correspondiente al codigo de la ultima factura segun la secuencia
-     * de ingreso de las documentos
-     * @return 
+     * Obtiene el valor correspondiente al codigo de la ultima factura segun la
+     * secuencia de ingreso de las documentos
+     *
+     * @return
      */
-    public Integer getCodigoUltimaFactura() 
-    {
+    public Integer getCodigoUltimaFactura() {
         try {
             String queryString = "SELECT max(v.codigoDocumento) FROM Venta v ";
             Query query = em.createQuery(queryString);
-            Integer numero= (Integer) query.getSingleResult();           
+            Integer numero = (Integer) query.getSingleResult();
             return numero;
         } catch (NoResultException e) {
             return null;
         }
 
+    }
+
+    public Venta findCodigoDocumento(Integer codigo) {
+        try {
+            String queryString = "SELECT v FROM Venta v WHERE v.codigoDocumento=" + codigo.toString();
+            System.out.println(queryString);
+            Query query = em.createQuery(queryString);
+            return (Venta)query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 }

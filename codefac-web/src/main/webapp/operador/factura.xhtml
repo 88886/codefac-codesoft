@@ -28,16 +28,12 @@ and open the template in the editor.
                             <p:ajax event="click" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
                         </h:panelGrid>
                     </div>
-                    <div style="padding-top: 5px; float: right;width:30%;height: 50px">
-                        <p:outputLabel value="Codigo Documento: "/>
-                        <p:inputText value="#{facturaMB.codigoDocumento}" />
-                    </div>
-
                 </div>
 
             </h:form>
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true" />
+
                 <p:accordionPanel id="infDistr" styleClass="panelNoBorder" rendered="true">
                     <p:tab title="Información Cliente"> 
                         <p:panelGrid columns="6" style="margin: 0 auto;" >
@@ -76,6 +72,11 @@ and open the template in the editor.
                         </p:panelGrid>
                         <p:spacer/>
                         <p:panelGrid columns="4" id="panelGridDistr" style="margin-left:5%">
+                            <p:outputLabel value=" "/>
+                            <p:outputLabel value=" "/>
+                            
+                            <p:outputLabel value="Codigo Documento: "/>
+                            <p:inputText value="#{facturaMB.codigoDocumento}" />
 
                             <p:outputLabel  value="Nombre:      " />
                             <p:inputText id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" readonly="true"  />
@@ -215,7 +216,7 @@ and open the template in the editor.
                     <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
                         <h:form style="margin: 0 auto">
                             <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar"/>
-                            <p:commandButton value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />                                               
+                            <p:commandButton  value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />                                               
 
                         </h:form>
                     </p:dialog>

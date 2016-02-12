@@ -62,8 +62,9 @@ public class Venta implements Serializable {
     @Size(max = 16)
     @Column(name = "TIPO_VENTA")
     private String tipoVenta;
+    
     @Column(name = "DESCUENTO")
-    private Integer descuento;
+    private BigDecimal descuento;
     
     @Column(name = "INCREMENTO")
     private Integer incremento;
@@ -159,11 +160,11 @@ public class Venta implements Serializable {
         this.tipoVenta = tipoVenta;
     }
 
-    public Integer getDescuento() {
+    public BigDecimal getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(Integer descuento) {
+    public void setDescuento(BigDecimal descuento) {
         this.descuento = descuento;
     }
 
@@ -238,6 +239,16 @@ public class Venta implements Serializable {
     public void setDetallesServicioList(List<DetallesServicio> detallesServicioList) {
         this.detallesServicioList = detallesServicioList;
     }
+
+    public Integer getCodigoDocumento() {
+        return codigoDocumento;
+    }
+
+    public void setCodigoDocumento(Integer codigoDocumento) {
+        this.codigoDocumento = codigoDocumento;
+    }
+    
+    
 
     @Override
     public int hashCode() {

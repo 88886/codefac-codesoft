@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -13,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -30,6 +31,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(name = "ReservaProductoGeneral.findAll", query = "SELECT r FROM ReservaProductoGeneral r")})
 public class ReservaProductoGeneral implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -41,8 +43,11 @@ public class ReservaProductoGeneral implements Serializable {
     @Column(name = "FECHA_RESERVA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaReserva;
-    @OneToMany(mappedBy = "codigoReservaProdGeneral")
-    private List<ProductoGeneralVenta> productoGeneralVentaList;
+
+    @JoinColumn(name = "CODIGO_PRODUCTO_GENERAL", referencedColumnName = "CODIGO_PRODUCTO_GENERAL")
+    @ManyToOne
+    private ProductoGeneralVenta codigoProductoGeneral;
+    //codigoProductoGeneral
 
     public ReservaProductoGeneral() {
     }
@@ -75,14 +80,16 @@ public class ReservaProductoGeneral implements Serializable {
         this.fechaReserva = fechaReserva;
     }
 
-    public List<ProductoGeneralVenta> getProductoGeneralVentaList() {
-        return productoGeneralVentaList;
+    public ProductoGeneralVenta getCodigoProductoGeneral() {
+        return codigoProductoGeneral;
     }
 
-    public void setProductoGeneralVentaList(List<ProductoGeneralVenta> productoGeneralVentaList) {
-        this.productoGeneralVentaList = productoGeneralVentaList;
+    public void setCodigoProductoGeneral(ProductoGeneralVenta codigoProductoGeneral) {
+        this.codigoProductoGeneral = codigoProductoGeneral;
     }
 
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -107,5 +114,5 @@ public class ReservaProductoGeneral implements Serializable {
     public String toString() {
         return "ec.com.codesoft.model.ReservaProductoGeneral[ codigoReservaProdGeneral=" + codigoReservaProdGeneral + " ]";
     }
-    
+
 }

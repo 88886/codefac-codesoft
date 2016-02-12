@@ -105,7 +105,20 @@ public class FacturaServicio {
      */
     public Integer getCodigoFactura()
     {
-        return (ventaFacade.getCodigoUltimaFactura()+1);
+        Integer codigo=ventaFacade.getCodigoUltimaFactura();
+        if(codigo==null)
+            return 1;
+        
+        return codigo;
+    }
+    
+    /**
+     * Busca una factura segun el numero del documento de la venta
+     * @return 
+     */
+    public Venta buscarPorCodigoDocumento(Integer codigo)
+    {
+        return ventaFacade.findCodigoDocumento(codigo);
     }
 
 }

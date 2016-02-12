@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -30,77 +29,84 @@ import javax.validation.constraints.Size;
  *
  * @author Suco
  */
-@Entity
+@Entity(name = "CatalagoProducto")
 @Table(name = "catalago_producto")
 @NamedQueries({
     @NamedQuery(name = "CatalagoProducto.findAll", query = "SELECT c FROM CatalagoProducto c")})
 public class CatalagoProducto implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
     @Column(name = "CODIGO_PRODUCTO")
     private String codigoProducto;
-    
+
+    @Column(name = "CODIGO_DISTRIBUIDOR")
+    private String codigoDistribuidor;
+
     @Size(max = 256)
     @Column(name = "NOMBRE")
     private String nombre;
-    
+
     @Size(max = 512)
     @Column(name = "DESCRIPCION")
     private String descripcion;
-    
+
     @Size(max = 32)
     @Column(name = "MARCA")
     private String marca;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRECIO")
     private BigDecimal precio;
-    
+
+    @Column(name = "PRECIO_MAYORISTA")
+    private BigDecimal precioMayorista;
+
+    @Column(name = "COSTO")
+    private BigDecimal costo;
+
     @Column(name = "DESCUENTO")
-    private Integer descuento;
-    
+    private BigDecimal descuento;
+
     @Size(max = 64)
     @Column(name = "UBICACION")
     private String ubicacion;
-    
+
     @Size(max = 8)
     @Column(name = "UNIDADES")
     private String unidades;
-    
+
     @Column(name = "TIPO_PRODUCTO")
     private Character tipoProducto;
-    
+
     @OneToMany(mappedBy = "codigoProducto")
     private List<DetalleProductoGeneral> detalleProductoGeneralList;
+
     @OneToMany(mappedBy = "codigoProducto")
     private List<ProductoIndividualCompra> productoIndividualCompraList;
+
     @OneToMany(mappedBy = "codigoProducto")
     private List<ProductoGeneralCompra> productoGeneralCompraList;
-    
+
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "catalagoProducto")
     private ProductoGeneralVenta productoGeneralVenta;
-    
+
     @JoinColumn(name = "CAT_NOMBRE", referencedColumnName = "NOMBRE")
     @ManyToOne
     private CategoriaProducto catNombre;
 
-    public CatalagoProducto() 
-    {
-        this.codigoProducto="";
-        this.descripcion="";
-        this.descuento=0;
-        this.marca="";
-        this.nombre="";
-        this.precio=new BigDecimal(0.0);
-        this.tipoProducto=new Character('G');
-        this.ubicacion="";
-        this.unidades="";        
-        
+    public CatalagoProducto() {
+        this.codigoProducto = "";
+        this.descripcion = "";
+        this.descuento = new BigDecimal("0");
+        this.marca = "";
+        this.nombre = "";
+        this.precio = new BigDecimal(0.0);
+        this.tipoProducto = new Character('G');
+        this.ubicacion = "";
+        this.unidades = "";
+
     }
-    
 
     public CatalagoProducto(String codigoProducto) {
         this.codigoProducto = codigoProducto;
@@ -144,14 +150,6 @@ public class CatalagoProducto implements Serializable {
 
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
-    }
-
-    public Integer getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(Integer descuento) {
-        this.descuento = descuento;
     }
 
     public String getUbicacion() {
@@ -218,7 +216,38 @@ public class CatalagoProducto implements Serializable {
         this.tipoProducto = tipoProducto;
     }
 
-    
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public String getCodigoDistribuidor() {
+        return codigoDistribuidor;
+    }
+
+    public void setCodigoDistribuidor(String codigoDistribuidor) {
+        this.codigoDistribuidor = codigoDistribuidor;
+    }
+
+    public BigDecimal getPrecioMayorista() {
+        return precioMayorista;
+    }
+
+    public void setPrecioMayorista(BigDecimal precioMayorista) {
+        this.precioMayorista = precioMayorista;
+    }
+
     
 
     @Override
@@ -245,5 +274,5 @@ public class CatalagoProducto implements Serializable {
     public String toString() {
         return "ec.com.codesoft.model.CatalagoProducto[ codigoProducto=" + codigoProducto + " ]";
     }
-    
+
 }

@@ -47,14 +47,19 @@ and open the template in the editor.
 
                     <p:submenu label="Ventas" icon="ui-icon-pencil">
                         <p:menuitem value="Nuevo" outcome="factura"  icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Devolucion" outcome="notaCredito"  icon="ui-icon-arrowreturnthick-1-w" />
                     </p:submenu>
 
 
-                    
+                    <p:menuitem value="Proforma" outcome="proforma"  icon="ui-icon-pencil" />
+
+
+
+
 
                     <f:facet name="options">
                         <p:inputText style="margin-right:10px" placeholder="Search"/>
-                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Logout" icon="ui-icon-extlink" />
+                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="ui-icon-extlink" />
                     </f:facet>
                 </p:menubar>
             </h:form>

@@ -97,7 +97,7 @@ public abstract class ReporteJasper<T> {
 //
 //        stream.flush();
 //        stream.close();
-//        FacesContext.getCurrentInstance().responseComplete();
+          FacesContext.getCurrentInstance().responseComplete();
     }
     
     public List<ModeloPersona> getLstPersonas() {

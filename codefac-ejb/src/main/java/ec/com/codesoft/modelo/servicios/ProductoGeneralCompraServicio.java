@@ -35,5 +35,7 @@ public class ProductoGeneralCompraServicio {
     public void eliminar(ProductoGeneralCompra distribuidor) {
         productoFacade.remove(distribuidor);
     }
+
+
     
 }

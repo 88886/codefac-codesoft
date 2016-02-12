@@ -7,3 +7,5 @@ Analizar la posibilidad de manejar las obervaciones de daños, perdidas, y produs
 Verificar la plantilla principal para centrar los valores
 
 Agregar a al usuario una caja o punto de facturacion que va a tener los datos como cual es el numero de factura actual
+
+Aumentar la posibilidad de grabar el iva cobrado

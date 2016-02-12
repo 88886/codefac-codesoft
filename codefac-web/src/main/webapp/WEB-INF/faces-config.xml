@@ -74,6 +74,21 @@
             <from-outcome>productoGestion</from-outcome>
             <to-view-id>/admin/producto.xhtml</to-view-id>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>proforma</from-outcome>
+            <to-view-id>/operador/proforma.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>notaCredito</from-outcome>
+            <to-view-id>/operador/notaCredito.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>pruebaConsulta</from-outcome>
+            <to-view-id>/test/pruebaConsulta.xhtml</to-view-id>
+        </navigation-case>
 
         
     </navigation-rule>

@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="../template/plantillaOperador.xhtml">
+
+    <ui:define name="contenido">
+        <div style="text-align: center">
+            <p:panel header="Nota de credito" style="text-align: center;width: 60%;margin: 0 auto">
+                <h:form id="formFactura">                
+                    <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
+                        <p:outputLabel value="Codigo Factura"/>
+                        <p:inputText value="#{notaCreditoMB.codigoDocumento}"/>
+                        <p:commandButton actionListener="#{notaCreditoMB.buscarFactura()}" value="Buscar" update=":formFactura:panelCliente,:formFactura:tablaDetalle,:formPieNotaCredito"/>
+                    </p:panelGrid>        
+
+                    <p:spacer height="15px"/>
+
+                    <p:panel id="panelCliente" style="width: 100%">
+                        <p:panelGrid columns="4" style="width: 100%" styleClass="panelNoBorder">
+                            <p:outputLabel value="Cliente: "/>
+                            <p:inputText value="#{notaCreditoMB.venta.cedulaRuc.nombre}" readonly="true"/>
+
+                            <p:outputLabel value="Direccion: "/>
+                            <p:inputText value="#{notaCreditoMB.venta.cedulaRuc.direccion}" readonly="true"/>
+
+                            <p:outputLabel value="Telefono: "/>
+                            <p:inputText value="#{notaCreditoMB.venta.cedulaRuc.telefono}" readonly="true"/>
+
+                        </p:panelGrid>                        
+                    </p:panel>
+
+                    <p:separator/>
+
+                    <p:dataTable id="tablaDetalle"
+                                 value="#{notaCreditoMB.detalleVenta}"
+                                 var="detalle">
+                        <p:column headerText="Cantidad">
+                            <p:outputLabel value="#{detalle.cantidad}"/>
+                        </p:column>
+
+                        <p:column headerText="Descripcion">
+                            <p:outputLabel value="#{detalle.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="P.Unitario">
+                            <p:outputLabel value="#{detalle.costo}"/>
+                        </p:column>
+
+                        <p:column headerText="Subtotal">
+                            <p:outputLabel value="#{detalle.total}"/>
+                        </p:column>                       
+
+
+                    </p:dataTable>
+
+                </h:form>
+
+                <h:form id="formPieNotaCredito">
+                    <p:panel>
+                        <p:panelGrid columns="2" style="width: 70%" styleClass="panelNoBorder">
+                            <p:outputLabel value="Razon de la Modificación"/>
+                            <p:outputLabel value="Valor de la Modificación"/>
+
+                            <p:inputTextarea value="#{notaCreditoMB.razonModificacion}" style="width: 200px"/>
+                            <p:inputText value="#{notaCreditoMB.valorModificacion}" style="width: 100px">
+                                <p:ajax event="blur" listener="#{notaCreditoMB.cambiarValor()}" update="@form" />
+                            </p:inputText>
+
+                        </p:panelGrid>
+                        <div style="height: 120px">
+                            <p:panelGrid columns="2" style="float:right;height: 120px">
+                                <p:outputLabel value="Subtotal"/>
+                                <p:inputText readonly="true" value="#{notaCreditoMB.subtotal}" />
+
+                                <p:outputLabel value="Iva 12%"/>
+                                <p:inputText readonly="true" value="#{notaCreditoMB.iva}"/>
+
+                                <p:outputLabel value="Total"/>
+                                <p:inputText readonly="true" value="#{notaCreditoMB.total}"/>
+                            </p:panelGrid>
+                        </div>
+
+
+                    </p:panel>
+
+                    <p:spacer height="15px"/>
+
+                    <div style="text-align: center">
+                        <p:commandButton value="G R A B A R" actionListener="#{notaCreditoMB.grabarNotaCredito()}" />
+                        <p:commandButton value="C A N C E L A R" ajax="false" action="notaCredito" />
+                        <p:commandButton value="Imprimir" actionListener="#{notaCreditoMB.imprimir()}" ajax="false" />
+                    </div>
+
+                </h:form>
+
+            </p:panel>
+
+            <!-- Dialogo para imprimir y salir -->
+            <p:dialog header="Nota de Venta Guardada Exitosamente" widgetVar="confirmarGuardado" modal="true">
+                <h:form>
+                    <h2>Que desea realizar?</h2>
+                    <p:commandButton  value="Imprimir" action="#{notaCreditoMB.imprimir()}" ajax="false" />
+                    <p:commandButton   style="background-image: none;background-color: forestgreen" value="Salir" ajax="false" action="notaCredito"/>                        
+
+                </h:form>
+            </p:dialog>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -1,1 +1,5 @@
 1.- Actualizar el modelo creado una columna llamada codigo_documento de tipo entero
+
+2. MOdificar los campos autoincrementales en el modelo de github
+
+3.- Guardar el Iva en la descripcion...

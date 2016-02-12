@@ -282,8 +282,9 @@ public class comprarMB implements Serializable {
     
     public void imprimirCompra()
     {
-        System.out.println("Imprimiendo la compra ...");
-        System.out.println(compra);
+        //System.out.println("Imprimiendo la compra ...");
+        //System.out.println(compra);
+        compraServicio.consultar();
     }
     
     public void filaSeleccionadaDistribuidor(SelectEvent event)

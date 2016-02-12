@@ -356,7 +356,7 @@ public class FacturaMB {
             }
 
             DetallesVenta detalles = new DetallesVenta(cantidadComprar,
-                    productoGeneral.getCodigoProducto(), catalogoSeleccionado.getNombre(),
+                    productoGeneral.getCodigo()+"", catalogoSeleccionado.getNombre(),
                     catalogoSeleccionado.getPrecio(), totalRegistro);
             detallesVenta.add(detalles);
 
@@ -417,15 +417,11 @@ public class FacturaMB {
 
     public void venta() {
         System.out.println(cantidadComprar + "--" + stock);
-        if (cantidadComprar > stock) {
-            //RequestContext.getCurrentInstance().execute("PF('infProducto').show()");
-            //estadoDialogo = true;
-            msjStock = "No existe suficiente Stock";
-            // FacesMessage msg = new FacesMessage("No existe suficiente Stock");
-            //FacesContext.getCurrentInstance().addMessage(null, msg);
-            System.out.println("No hay stock");
+       // if (cantidadComprar > stock) {
+       //     msjStock = "No existe suficiente Stock";
+       //     System.out.println("No hay stock");
 
-        } else {
+        //} else {
 
             if (tipoCliente == "" || tipoCliente == null) {
                 FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
@@ -459,7 +455,7 @@ public class FacturaMB {
                     }
 
                     DetallesVenta detalles = new DetallesVenta(cantidadComprar,
-                            productoGeneral.getCodigoProducto(), catalogoSeleccionado.getNombre(),
+                            productoGeneral.getCodigo()+"", catalogoSeleccionado.getNombre(),
                             catalogoSeleccionado.getPrecio(), totalRegistro);
                     detallesVenta.add(detalles);
 
@@ -524,7 +520,7 @@ public class FacturaMB {
                 }
 
             }
-        }
+       // }
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -557,6 +553,7 @@ public class FacturaMB {
                 venta.setEstado("facturado");
                 venta.setFecha(new Date());
                 venta.setTotal(total);
+                venta.setCodigoDocumento(codigoDocumento);
                 facturaServicio.guardarFactura(venta);
                 codigoFactura = venta.getCodigoFactura();
 
@@ -1023,5 +1020,7 @@ public class FacturaMB {
     public void setCodigoDocumento(Integer codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
     }
+    
+    
 
 }
