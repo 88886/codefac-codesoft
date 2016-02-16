@@ -26,6 +26,8 @@ import ec.com.codesoft.web.reportes.NotaVentaModeloReporte;
 import ec.com.codesoft.web.reportes.ProformaModelo;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,6 +81,7 @@ public class FacturaMB {
     private BigDecimal totalRegistro;
     private BigDecimal total;
     private BigDecimal subtotal;
+    private BigDecimal descuento;
     private BigDecimal subtotalRegistro;
     private BigDecimal iva;
     private String codPEspe;
@@ -127,6 +130,7 @@ public class FacturaMB {
         totalRegistro = new BigDecimal("0.0");
         total = new BigDecimal("0.0");
         subtotal = new BigDecimal("0.0");
+        descuento=new BigDecimal("0");
         subtotalRegistro = new BigDecimal("0.0");
         iva = new BigDecimal("0.0");
         detallesVenta = new ArrayList<DetallesVenta>();
@@ -445,9 +449,11 @@ public class FacturaMB {
                     if (tipoCliente.equals("C")) {
                         iva = new BigDecimal("0.0");
                         iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                        //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
                         total = subtotal;
                         total = total.setScale(2, BigDecimal.ROUND_UP);
                     } else {
+                        //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
                         iva = subtotal.multiply(new BigDecimal("0.12"));
                         iva = iva.setScale(2, BigDecimal.ROUND_UP);
                         total = subtotal.multiply(new BigDecimal("1.12"));
@@ -553,6 +559,7 @@ public class FacturaMB {
                 venta.setEstado("facturado");
                 venta.setFecha(new Date());
                 venta.setTotal(total);
+                venta.setDescuento(descuento);
                 venta.setCodigoDocumento(codigoDocumento);
                 facturaServicio.guardarFactura(venta);
                 codigoFactura = venta.getCodigoFactura();
@@ -788,6 +795,30 @@ public class FacturaMB {
     public void onRowUnSelect(SelectEvent event) {
 
     }
+    
+    public void calcularDescuento()
+    {
+        BigDecimal descuentoPorcentaje=descuento.divide(new BigDecimal(100)).add(new BigDecimal(1));
+        System.out.println("porcetaje "+descuentoPorcentaje);
+        BigDecimal subTotalDescuento=subtotal.divide(descuentoPorcentaje,2,BigDecimal.ROUND_FLOOR);
+        System.out.println(subTotalDescuento);
+        
+        subTotalDescuento.setScale(2,BigDecimal.ROUND_UP);
+        
+        iva=subTotalDescuento.multiply(new BigDecimal("0.12"),MathContext.DECIMAL32);
+        iva=iva.divide(new BigDecimal(1),2,BigDecimal.ROUND_UP);
+        
+        iva.setScale(2,BigDecimal.ROUND_UP);
+        
+        
+        total=subTotalDescuento.multiply(new BigDecimal("1.12"),MathContext.DECIMAL32);
+        total=total.divide(new BigDecimal(1),2,BigDecimal.ROUND_UP);
+        
+        total.setScale(2,BigDecimal.ROUND_UP);
+    }
+    
+    
+    ////////////////////METODOS GET Y SET /////////////////////
 
     public boolean getEstadoDialogo() {
         return estadoDialogo;
@@ -1019,6 +1050,14 @@ public class FacturaMB {
 
     public void setCodigoDocumento(Integer codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
     }
     
     
