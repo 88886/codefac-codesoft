@@ -12,7 +12,6 @@
             <p:panel header="Nueva Compra"  style="width: 60%;margin: 0 auto" styleClass="customTitleBar" > 
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formDetalleDistribuidor">
-                    <p:commandButton value="probar" actionListener="#{comprarMB.imprimirCompra()}"/>
                     <!-- Ecabezado para buscar el ruc del distribuidos-->
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
@@ -142,6 +141,10 @@
 
                         <p:column headerText="Subtotal">
                             <h:outputText value="#{detalle.subtotal}" />
+                        </p:column>
+                        
+                        <p:column headerText="">
+                            <p:commandButton value="Eliminar" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form"/>
                         </p:column>
 
                     </p:dataTable>

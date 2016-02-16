@@ -312,6 +312,18 @@ public class comprarMB implements Serializable {
         compra.setRuc(distribuidorSeleccionado);
         RequestContext.getCurrentInstance().execute("PF('overlayDistribuidor').hide()");
     }
+    
+    /**
+     * Eliminar un item en el detalle
+     * @return 
+     */
+    public void eliminarDetalle(DetalleCompraModelo detalle)
+    {
+        detalleCompra.remove(detalle);
+        sumaTotalCompra=sumaTotalCompra.subtract(detalle.getSubtotal());
+        actualizarValoresTotales();
+    }
+    
 
     /////////////////////////////METODOS GET Y SET//////////////////////////////
     public Compra getCompra() {
