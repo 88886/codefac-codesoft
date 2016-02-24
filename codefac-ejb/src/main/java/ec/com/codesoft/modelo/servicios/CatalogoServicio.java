@@ -79,5 +79,17 @@ public class CatalogoServicio {
         return catalogoFacade.findCatalogo(codigoP);
 
     }
+    
+    public boolean  verificarExisteProducto(String codigoP)
+    {
+        if(catalogoFacade.findCatalogo(codigoP)==null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
 }

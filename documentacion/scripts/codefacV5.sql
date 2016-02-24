@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     05/02/2016 13:11:49                          */
+/* Created on:     16/02/2016 9:21:52                           */
 /*==============================================================*/
 
 
@@ -87,6 +87,7 @@ create table CATALAGO_PRODUCTO
    DESCRIPCION          varchar(512),
    MARCA                varchar(32),
    PRECIO               decimal(8,2),
+   PRECIO_MAYORISTA     decimal(8,2),
    COSTO                decimal(8,2),
    DESCUENTO            int,
    UBICACION            varchar(64),

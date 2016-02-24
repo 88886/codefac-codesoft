@@ -48,13 +48,22 @@ and open the template in the editor.
                     </p:submenu>
 
                     <p:submenu label="Productos" icon="ui-icon-pencil">
-                       <p:menuitem value="Gestionar" outcome="productoGestion" icon="ui-icon-arrowreturnthick-1-w" />
-                       <p:menuitem value="Agregar Inventario" outcome="editarInventario" icon="ui-icon-arrowreturnthick-1-w" />
-                       
+                        <p:menuitem value="Gestionar" outcome="productoGestion" icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Agregar Inventario" outcome="editarInventario" icon="ui-icon-arrowreturnthick-1-w" />
+
                     </p:submenu>
 
-                   
-                    
+                    <p:submenu label="Compras" icon="ui-icon-pencil">
+                        <p:menuitem value="Nuevo" outcome="compraAdmin"  icon="ui-icon-arrowreturnthick-1-w" />
+                    </p:submenu>
+
+                    <p:submenu label="Ventas" icon="ui-icon-pencil">
+                        <p:menuitem value="Nuevo" outcome="factura"  icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Devolucion" outcome="notaCredito"  icon="ui-icon-arrowreturnthick-1-w" />
+                    </p:submenu>
+
+
+
                     <f:facet name="options">
                         <p:inputText style="margin-right:10px" placeholder="Search"/>
                         <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="ui-icon-extlink" />

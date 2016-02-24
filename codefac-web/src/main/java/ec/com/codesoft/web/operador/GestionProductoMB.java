@@ -9,6 +9,7 @@ import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -146,6 +147,40 @@ public class GestionProductoMB implements Serializable {
     {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(titulo,mensaje));
+    }
+    
+    public void verificarExisteCatalogoProducto()
+    {
+        boolean noexiste=catalogoServicio.verificarExisteProducto(catalagoProducto.getCodigoProducto());
+        if(noexiste)
+        {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "El producto ya existe", "!porfavor revise los datos!");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        }
+        
+    }
+    
+    public boolean filterByName(Object value, Object filter, Locale locale) 
+    {
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if (filterText == null || filterText.equals("")) {
+            return true;
+        }
+
+        if (value == null) {
+            return false;
+        }
+
+        String carName = value.toString().toUpperCase();
+        filterText = filterText.toUpperCase();
+
+        if (carName.contains(filterText)) 
+        {
+            return true;
+        } else 
+        {
+            return false;
+        }
     }
 
     //////////////////////METODOS GET Y SET ///////////////////

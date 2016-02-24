@@ -30,6 +30,8 @@ and open the template in the editor.
 
                     <p:ajax event="rowSelect" listener="#{clienteMB.onRowSelect}" update=":form:msgs,btnEditarCliente"/>
                     <p:ajax event="rowUnselect" listener="#{clienteMB.onRowUnSelect}"/>
+                    
+                    
 
                     <f:facet name="header" >                               
                         <p:commandButton id="btnNuevoCliente" process="tablaClientes" icon="ui-icon-plus" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enCrear()}" style="width: 20px;height: 20px"/>  
@@ -40,9 +42,11 @@ and open the template in the editor.
                     <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >
                         <h:outputText value="#{cliente.cedulaRuc}" />
                     </p:column>
-                    <p:column headerText="Nombres" filterBy="#{cliente.nombre}" filterMatchMode="contains" style="width:350px" >
+                    
+                    <p:column headerText="Nombres" filterBy="#{cliente.nombre}"  filterFunction="#{clienteMB.filterByName}"  filterMatchMode="contains" footerText="contains" style="width:350px" >
                         <h:outputText value="#{cliente.nombre}"   />
                     </p:column>
+                    
                     <p:column headerText="Telefono" >
                         <h:outputText value="#{cliente.telefono}" />
                     </p:column>
@@ -59,11 +63,16 @@ and open the template in the editor.
 
 
                 </p:dataTable>
-
+                
+                <!-- Dialogo para grabar un nuevo cliente -->
                 <p:dialog  id="dlgCliente" header="Administracion Cliente" widgetVar="nuevoCliente" modal="true" height="auto">
                     <p:panelGrid columns="3" id="panelGrid">   
                         <p:outputLabel for="cliCedula" value="Cédula:" />
-                        <p:inputText id="cliCedula" value="#{clienteMB.cliente.cedulaRuc}" required="true" requiredMessage="Cedula necesario"/>                                        
+                        
+                        <p:inputText id="cliCedula" value="#{clienteMB.cliente.cedulaRuc}" required="true" requiredMessage="Cedula necesario">
+                            <p:ajax event="blur" listener="#{clienteMB.verificarClienteExiste()}"  />
+                        </p:inputText>
+                        
                         <p:message for="cliCedula" />                  
 
                         <p:outputLabel for="cliNombre" value="Nombre:" />

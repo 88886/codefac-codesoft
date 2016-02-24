@@ -187,6 +187,17 @@ public class NotaCreditoMB implements Serializable {
         iva = valorModificacion.multiply(new BigDecimal("0.12"));
         total = subtotal.multiply(new BigDecimal("1.12"));
     }
+    
+    public void eliminarDetalle(DetallesVenta detalle)
+    {
+        System.out.println("Eliminando Detalle ...");
+        detalleVenta.remove(detalle);
+        System.out.println(detalle.getTotal());
+        //subtotal=subtotal.subtract(detalle.getTotal());
+        valorModificacion=new BigDecimal(0);
+        cambiarValor();
+        System.out.println(subtotal);
+    }
 
     public Integer getCodigoDocumento() {
         return codigoDocumento;

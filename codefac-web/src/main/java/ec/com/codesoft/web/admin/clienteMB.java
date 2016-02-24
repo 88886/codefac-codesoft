@@ -10,6 +10,7 @@ import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import java.awt.Event;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -17,6 +18,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -70,7 +72,7 @@ public class clienteMB implements Serializable {
 
     public void enModificar() {
         //cliente = clienteSeleccionado;
-        System.out.println("Cliente "+cliente.getNombre());
+        System.out.println("Cliente " + cliente.getNombre());
         enModificar = true;
         //cliente = clienteSeleccionado;
     }
@@ -97,6 +99,38 @@ public class clienteMB implements Serializable {
 
     public void cancelar() {
         cliente = new Cliente();
+    }
+
+    public void verificarClienteExiste() {
+        if (clienteServicio.verificarExistencia(cliente.getCedulaRuc())) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "El cliente ya existe", "!porfavor revise los datos!");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+
+        }
+
+    }
+
+    public boolean filterByName(Object value, Object filter, Locale locale) 
+    {
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if (filterText == null || filterText.equals("")) {
+            return true;
+        }
+
+        if (value == null) {
+            return false;
+        }
+
+        String carName = value.toString().toUpperCase();
+        filterText = filterText.toUpperCase();
+
+        if (carName.contains(filterText)) 
+        {
+            return true;
+        } else 
+        {
+            return false;
+        }
     }
 
     public List<Cliente> getClientes() {

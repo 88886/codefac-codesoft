@@ -45,4 +45,21 @@ public class ClienteServicio {
         
         return clienteFacade.find(cedula);
     }
+    
+    /**
+     * Verifica si el cliente no existe en la base de datos
+     * @param cedula
+     * @return 
+     */
+    public boolean verificarExistencia(String cedula)
+    {
+        if(clienteFacade.find(cedula)==null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }

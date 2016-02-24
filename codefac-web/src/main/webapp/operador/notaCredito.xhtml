@@ -5,7 +5,7 @@
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
-                template="../template/plantillaOperador.xhtml">
+                template="../template/plantilladmin.xhtml">
 
     <ui:define name="contenido">
         <div style="text-align: center">
@@ -54,6 +54,9 @@
                             <p:outputLabel value="#{detalle.total}"/>
                         </p:column>                       
 
+                        <p:column headerText="">
+                            <p:commandButton value="Eliminar" actionListener="#{notaCreditoMB.eliminarDetalle(detalle)}" ajax="false" />
+                        </p:column>     
 
                     </p:dataTable>
 

@@ -74,7 +74,7 @@ and open the template in the editor.
                         <p:panelGrid columns="4" id="panelGridDistr" style="margin-left:5%">
                             <p:outputLabel value=" "/>
                             <p:outputLabel value=" "/>
-                            
+
                             <p:outputLabel value="Codigo Documento: "/>
                             <p:inputText value="#{facturaMB.codigoDocumento}" />
 
@@ -98,6 +98,22 @@ and open the template in the editor.
                             <p:outputLabel  value="Notas" />
                             <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;" readonly="true"/>
 
+                            <p:outputLabel  value="Tipo Venta" />
+                            <p:selectOneMenu id="Categoria" >
+                                <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
+                                <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
+                                <f:selectItem itemLabel="Credito" itemValue="Credito" />
+                                <f:selectItem itemLabel="Cheque" itemValue="Credito" />
+
+                            </p:selectOneMenu>
+
+                            <p:outputLabel  value="Banco:" />
+                            <p:inputText/>
+
+                            <p:outputLabel  value="No Cheque:" />
+                            <p:inputText />
+                            
+                            
                         </p:panelGrid>
                     </p:tab>
                 </p:accordionPanel>
@@ -180,12 +196,12 @@ and open the template in the editor.
                     <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%">
                         <p:outputLabel  value="Subtotal:"/>
                         <p:inputText id="subTotal" value="#{facturaMB.subtotal}" readonly="true"/>
-                        
+
                         <p:outputLabel  value="Descuento:"/>
                         <p:inputText id="txtDescuento" value="#{facturaMB.descuento}" readonly="false">
                             <p:ajax event="blur" listener="#{facturaMB.calcularDescuento()}" update="@form"/>
                         </p:inputText>
-                        
+
                         <p:outputLabel  value="Iva (12%):"/>
                         <p:inputText id="iva" value="#{facturaMB.iva}" readonly="true"/>
                         <p:outputLabel  value="Total : "/>

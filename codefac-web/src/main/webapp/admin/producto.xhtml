@@ -41,7 +41,7 @@ and open the template in the editor.
                     <p:outputLabel value="#{catalogo.codigoProducto}"/>
                 </p:column>
 
-                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterMatchMode="contains">
+                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{gestionProductoMB.filterByName}" filterMatchMode="contains">
                     <p:outputLabel value="#{catalogo.nombre}"/>
                 </p:column>
 
@@ -76,7 +76,9 @@ and open the template in the editor.
             <h:form>
                 <p:panelGrid columns="2" styleClass="panelNoBorder">
                     <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
-                    <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalagoProducto.codigoProducto}" required=""/>
+                    <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalagoProducto.codigoProducto}" required="">
+                        <p:ajax event="blur" listener="#{gestionProductoMB.verificarExisteCatalogoProducto()}"  />
+                    </p:inputText>
 
                     <p:outputLabel value="Nombre: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.nombre}"/>
@@ -149,7 +151,7 @@ and open the template in the editor.
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>
 
                     <p:outputLabel value="Unidades: "/>
-                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.unidades}"/>
 
                     <p:outputLabel value="Stock: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.productoGeneralVenta.cantidadDisponible}"/>

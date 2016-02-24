@@ -26,17 +26,24 @@ and open the template in the editor.
                     scrollable="true" 
                     selectionMode="single" 
                     rowKey="#{cliente.cedulaRuc}"
+                    widgetVar="tableCliente"
                     selection="#{clienteMB.clienteSeleccionado}">
 
                     <p:ajax event="rowSelect" listener="#{clienteMB.onRowSelect}" update=":form:msgs"/>
                     <p:ajax event="rowUnselect" listener="#{clienteMB.onRowUnSelect}"/>
+                    
 
-
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar por todos los campos: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('tableCliente').filter()" style="width:150px" placeholder="Ingrese el texto:"/>
+                        </p:outputPanel>
+                    </f:facet>
 
                     <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >
                         <h:outputText value="#{cliente.cedulaRuc}" />
                     </p:column>
-                    <p:column headerText="Nombres" filterBy="#{cliente.nombre}" filterMatchMode="contains" style="width:350px" >
+                    <p:column headerText="Nombres" filterBy="#{cliente.nombre}" filterFunction="#{clienteMB.filterByName}" filterMatchMode="contains" style="width:350px" >
                         <h:outputText value="#{cliente.nombre}"   />
                     </p:column>
                     <p:column headerText="Telefono" >
@@ -49,7 +56,7 @@ and open the template in the editor.
                     <p:column headerText="Estado" >
                         <h:outputText value="#{cliente.devolverEstado()}" />
                     </p:column>-->
-                    
+
                     <p:column headerText="Dirección" >
                         <h:outputText value="#{cliente.direccion}" />
                     </p:column>
