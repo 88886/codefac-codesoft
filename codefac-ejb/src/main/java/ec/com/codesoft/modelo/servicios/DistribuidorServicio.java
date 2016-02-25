@@ -44,4 +44,17 @@ public class DistribuidorServicio {
        return distribuidorFacade.findDistribuidor(codigo);
 //        
     }
+    
+    //verifica la existencia de los distribuidores
+    public boolean verificarExistencia(String cedula)
+    {
+        if(distribuidorFacade.find(cedula)==null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }
