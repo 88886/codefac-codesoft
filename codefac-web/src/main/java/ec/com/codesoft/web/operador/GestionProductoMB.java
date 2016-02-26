@@ -160,6 +160,13 @@ public class GestionProductoMB implements Serializable {
         
     }
     
+    public void eliminarDetalle(CatalagoProducto catalogo) 
+    {
+        catalagoProductos.remove(catalogo);
+        
+        catalogoServicio.eliminar(catalogo);
+    }
+    
     public boolean filterByName(Object value, Object filter, Locale locale) 
     {
         String filterText = (filter == null) ? null : filter.toString().trim();
