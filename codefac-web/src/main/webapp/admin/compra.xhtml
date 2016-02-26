@@ -91,11 +91,49 @@ and open the template in the editor.
 
                 <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder">
                     <h:form id="formBuscarProducto">
-                        <p:panelGrid columns="4" style="margin: 0 auto;height: 100%">
+                        <p:panelGrid columns="5" style="margin: 0 auto;height: 100%">
 
                             <p:outputLabel value="Codigo General:  "/>
-                            <p:inputText value="#{comprarMB.codigoDetalle}" />
-                            <p:commandButton  value="mas" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto" style="visibility: hidden" />
+                            <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoDetalle}" />
+                            <p:commandButton id="btnEncontrarCatalogo" icon="ui-icon-search" />
+                            
+                            <!-- dialogo para buscar los productos de los catalogos -->
+                            <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
+                                <p:dataTable 
+                                    value="#{comprarMB.listaCatalogos}" 
+                                    var="catalogo"
+                                    selectionMode="single" 
+                                    rowKey="#{catalogo.codigoProducto}"
+                                    selection="#{comprarMB.catalogoProductoSeleccionado}" >
+                                    
+                                    <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto"/>
+                                    <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
+                                    
+                                    <p:column headerText="codigo">
+                                        <p:outputLabel value="#{catalogo.codigoProducto}"/>
+                                    </p:column>
+                                    
+                                    <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
+                                        <p:outputLabel value="#{catalogo.nombre}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="descripcion">
+                                        <p:outputLabel value="#{catalogo.descripcion}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="marca">
+                                        <p:outputLabel value="#{catalogo.marca}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="precio">
+                                        <p:outputLabel value="#{catalogo.precio}"/>
+                                    </p:column>                                    
+                                    
+                                </p:dataTable>
+                            </p:overlayPanel>
+
+                            <p:defaultCommand target="btnValidar" />
+                            <p:commandButton id="btnValidar" value="mas" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,:formDetalleCompra:panelAgregarProducto" style="visibility: hidden" />
                             <p:outputLabel id='lblNombreProducto' value="Producto: #{comprarMB.catalogo.nombre}" />
 
                         </p:panelGrid>
@@ -105,19 +143,21 @@ and open the template in the editor.
                 <p:separator/>
 
                 <h:form id="formDetalleCompra">
-                    <p:panel  style="text-align: center" styleClass="panelNoBorder">
+                    <p:panel id="panelAgregarProducto"  style="text-align: center" styleClass="panelNoBorder" visible="true">
+                        
                         <p:panelGrid columns="7" style="margin: 0 auto;height: 100%">
+                            
                             <p:outputLabel value="Cantidad:"/>
                             <p:inputText value="#{comprarMB.cantidadDetalle}" style="width: 50px;" />
 
                             <p:outputLabel value="Costo:"/>
                             <p:inputText value="#{comprarMB.costoDetalle}" style="width: 70px;" />
 
-                            <p:remoteCommand name="rc" actionListener="#{comprarMB.verificarProducto()}" />
-                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="tableDetalle,:formAgregarProductoEspecifico,panelTotales"/>
+                                                       
+                            <p:commandButton  id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="tableDetalle,:formAgregarProductoEspecifico,panelTotales,@form"/>
 
                         </p:panelGrid>
-                        <p:defaultCommand target="btnAgregarDetalle" />
+                        
                     </p:panel>
 
                     <!-- Tabla que muestra el detalle de la compra -->
@@ -181,6 +221,7 @@ and open the template in the editor.
                     </div>
                 </h:form>
 
+                
                 <!-- Botones de Accion para la Fatura -->                
 
                 <h:form >
@@ -230,13 +271,6 @@ and open the template in the editor.
                         </p:panel>
                     </h:form>
                 </p:dialog>
-                
-                <!-- dialogo para buscar los productos de los catalogos -->
-                <p:overlayPanel id="overlayCatalogo" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
-                    
-                </p:overlayPanel>
-
-
 
                 <!-- Dialogo de confirmacion para agregar un nuevo Distribuidor -->
                 <p:dialog header="Agregar Distribuidor" widgetVar="confirmarDistribuidor" modal="true">

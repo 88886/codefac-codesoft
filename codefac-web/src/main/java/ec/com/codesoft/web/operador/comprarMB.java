@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.operador;
 
 import ec.com.codesoft.model.CatalagoProducto;
+import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.Compra;
 import ec.com.codesoft.model.Distribuidor;
 import ec.com.codesoft.model.ProductoGeneralCompra;
@@ -23,8 +24,10 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.primefaces.context.RequestContext;
@@ -50,11 +53,13 @@ public class comprarMB implements Serializable {
     private String codigoDetalle;
     private Integer cantidadDetalle;
     private BigDecimal costoDetalle;
+    private boolean visibleDetalleAgregar;
+    
     /**
      * Variable para saber el valor estimado total de la compra
      */
     private BigDecimal sumaTotalCompra;
-    
+
     private String total;
 
     /**
@@ -71,19 +76,19 @@ public class comprarMB implements Serializable {
      * Referencia para guardar el catalogo seleccionando para agregar al detalle
      */
     private CatalagoProducto catalogo;
-    
+
     /**
      * Lista para cargar los distribuidores en una tabla
      */
-
     private List<Distribuidor> listaDistribuidores;
     private Distribuidor distribuidorSeleccionado;
-     
+
+    private List<CatalagoProducto> listaCatalogos;
+    private CatalagoProducto catalogoProductoSeleccionado;
+
     /*
      Servicios para consultar del distribuidor
      */
-    
-    
     @EJB
     private DistribuidorServicio distribServicio;
 
@@ -99,22 +104,26 @@ public class comprarMB implements Serializable {
     @PostConstruct
     public void postConstruct() {
         System.out.println("reiniciando ...");
-       // this.catalogo=new CatalagoProducto();
+        // this.catalogo=new CatalagoProducto();
+        this.visibleDetalleAgregar=false;
         this.compra = new Compra();
         this.detalleCompra = new ArrayList<DetalleCompraModelo>();
+        this.cantidadDetalle=0;
+        this.costoDetalle=new BigDecimal(0);
         this.compra.setRuc(new Distribuidor());
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
         this.compra.setIva(new BigDecimal("12"));
-        listaDistribuidores=distribServicio.obtenerTodos();
-        sumaTotalCompra=new BigDecimal(0);
-        
+        listaDistribuidores = distribServicio.obtenerTodos();
+        sumaTotalCompra = new BigDecimal(0);
+
+        //iniciar la tabla del catalogo servicio
+        this.listaCatalogos = catalogoServicio.obtenerTodos();
+
     }
 
     public comprarMB() {
     }
-    
-    
 
     ///////////////////////////METODOS PARA LA VISTA ///////////////////////////
     /**
@@ -132,14 +141,17 @@ public class comprarMB implements Serializable {
             //confirmarDistribuidor
         }
     }
-    
-    
 
     /**
      * Agrega un producto a la tabla
      */
-    public void agregarProducto() {
+    public void agregarProducto() 
+    {        
         System.out.println("agregando detalle ...");
+        this.visibleDetalleAgregar=false;
+        this.cantidadDetalle=1;
+        this.costoDetalle=new BigDecimal(0);
+        
         DetalleCompraModelo detalle = new DetalleCompraModelo();
         catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
         //verifica si el producto existe
@@ -153,8 +165,8 @@ public class comprarMB implements Serializable {
 
                 detalle = new DetalleCompraModelo(detalleGeneral);
                 detalleCompra.add(detalle);
-                sumaTotalCompra=sumaTotalCompra.add(detalle.getSubtotal());
-                System.out.println("Suma:"+sumaTotalCompra);
+                sumaTotalCompra = sumaTotalCompra.add(detalle.getSubtotal());
+                System.out.println("Suma:" + sumaTotalCompra);
                 //compra.setTotal(sumaTotalCompra.multiply(compra.getIva().divide(new BigDecimal("100")).add(new BigDecimal("1"))));
                 actualizarValoresTotales();
 
@@ -164,13 +176,12 @@ public class comprarMB implements Serializable {
             }
         }
     }
-    
-    public void actualizarValoresTotales()
-    {
-        BigDecimal calculo=sumaTotalCompra.divide(compra.getDescuento().divide(new BigDecimal(100)).add(new BigDecimal(1)),2, RoundingMode.HALF_UP);
+
+    public void actualizarValoresTotales() {
+        BigDecimal calculo = sumaTotalCompra.divide(compra.getDescuento().divide(new BigDecimal(100)).add(new BigDecimal(1)), 2, RoundingMode.HALF_UP);
         //System.out.println(calculo);
-        compra.setTotal(calculo.multiply(compra.getIva().divide(new BigDecimal("100"),2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
-        compra.setTotal(compra.getTotal().divide(new BigDecimal(1),2, RoundingMode.HALF_UP));
+        compra.setTotal(calculo.multiply(compra.getIva().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
+        compra.setTotal(compra.getTotal().divide(new BigDecimal(1), 2, RoundingMode.HALF_UP));
     }
 
     /**
@@ -179,7 +190,6 @@ public class comprarMB implements Serializable {
     public void agregarProductoEspecifico() {
 
         System.out.println(catalogo);
-        
 
         ProductoIndividualCompra detalleIndividual = new ProductoIndividualCompra();
         //detalleIndividual.setCantidad(cantidadDetalle);
@@ -259,8 +269,12 @@ public class comprarMB implements Serializable {
      */
     public void verificarProducto() {
         //codigoDetalle
+        this.visibleDetalleAgregar=true;
+        cantidadDetalle=0;
+        costoDetalle=new BigDecimal("0");
+        
         System.out.println(compra);
-        System.out.println("Total"+ total);
+        System.out.println("Total" + total);
         catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
         if (catalogo != null) {
             System.out.println("El producto existe");
@@ -293,37 +307,55 @@ public class comprarMB implements Serializable {
     }
 
     public void recibirCatalogo(SelectEvent event) {
-        catalogo=(CatalagoProducto)event.getObject();
-        codigoDetalle=catalogo.getCodigoProducto();
+        catalogo = (CatalagoProducto) event.getObject();
+        codigoDetalle = catalogo.getCodigoProducto();
         System.out.println(catalogo);
     }
-    
-    public void imprimirCompra()
-    {
+
+    public void imprimirCompra() {
         //System.out.println("Imprimiendo la compra ...");
         //System.out.println(compra);
         compraServicio.consultar();
     }
-    
-    public void filaSeleccionadaDistribuidor(SelectEvent event)
-    {
+
+    public void filaSeleccionadaDistribuidor(SelectEvent event) {
         System.out.println("fila seleccionada ...");
         System.out.println(distribuidorSeleccionado);
         compra.setRuc(distribuidorSeleccionado);
         RequestContext.getCurrentInstance().execute("PF('overlayDistribuidor').hide()");
     }
-    
+
     /**
      * Eliminar un item en el detalle
-     * @return 
+     *
+     * @return
      */
-    public void eliminarDetalle(DetalleCompraModelo detalle)
-    {
+    public void eliminarDetalle(DetalleCompraModelo detalle) {
         detalleCompra.remove(detalle);
-        sumaTotalCompra=sumaTotalCompra.subtract(detalle.getSubtotal());
+        sumaTotalCompra = sumaTotalCompra.subtract(detalle.getSubtotal());
         actualizarValoresTotales();
     }
     
+    
+
+    public void onRowSelect(SelectEvent event) {
+        //widgetVarCatalogo
+        //FacesMessage msg = new FacesMessage("Catalogo Seleccionado", ((CatalagoProducto) event.getObject()).getCodigoProducto());
+        //FacesContext.getCurrentInstance().addMessage(null, msg);
+        codigoDetalle = ((CatalagoProducto) (event.getObject())).getCodigoProducto();
+        visibleDetalleAgregar=true;
+        // System.out.println("ocultando panel ...");
+        RequestContext.getCurrentInstance().execute("PF('widgetVarCatalogo').hide()");
+        System.out.println(codigoDetalle);
+        //flagBoton1 = false;
+        //pro = clienteSeleccionado;
+        //System.out.println(cliente.getNombre());
+        verificarProducto();
+    }
+
+    public void onRowUnSelect(SelectEvent event) {
+        System.out.println("deseleccionando ...");
+    }
 
     /////////////////////////////METODOS GET Y SET//////////////////////////////
     public Compra getCompra() {
@@ -416,6 +448,30 @@ public class comprarMB implements Serializable {
 
     public void setSumaTotalCompra(BigDecimal sumaTotalCompra) {
         this.sumaTotalCompra = sumaTotalCompra;
+    }
+
+    public List<CatalagoProducto> getListaCatalogos() {
+        return listaCatalogos;
+    }
+
+    public void setListaCatalogos(List<CatalagoProducto> listaCatalogos) {
+        this.listaCatalogos = listaCatalogos;
+    }
+
+    public CatalagoProducto getCatalogoProductoSeleccionado() {
+        return catalogoProductoSeleccionado;
+    }
+
+    public void setCatalogoProductoSeleccionado(CatalagoProducto catalogoProductoSeleccionado) {
+        this.catalogoProductoSeleccionado = catalogoProductoSeleccionado;
+    }
+
+    public boolean isVisibleDetalleAgregar() {
+        return visibleDetalleAgregar;
+    }
+
+    public void setVisibleDetalleAgregar(boolean visibleDetalleAgregar) {
+        this.visibleDetalleAgregar = visibleDetalleAgregar;
     }
     
     

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.web.admin;
 
+import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import java.awt.Event;
@@ -47,6 +48,7 @@ public class clienteMB implements Serializable {
         cliente = new Cliente();
         flagBoton1 = true;
         enModificar = false;
+
     }
 
 //    public void onRowSelect(SelectEvent event) {
@@ -82,18 +84,23 @@ public class clienteMB implements Serializable {
     }
 
     public void registarCliente(Event e) {
-        if (enModificar) {
+        if (enModificar) 
+        {
             clienteServicio.actualizar(cliente);
             cliente = new Cliente();
             clientes = clienteServicio.obtenerTodos();
             flagBoton1 = true;
-        } else {
+        } 
+        else 
+        {
             cliente.setEstado('A');// A: cliente Activo
             clienteServicio.insertar(cliente);
+            //clientes.add(cliente);
             System.out.println("Guardando Cliente");
             cliente = new Cliente();
             clientes = clienteServicio.obtenerTodos();
             flagBoton1 = true;
+            System.out.println(clientes.size());
         }
     }
 
@@ -110,8 +117,7 @@ public class clienteMB implements Serializable {
 
     }
 
-    public boolean filterByName(Object value, Object filter, Locale locale) 
-    {
+    public boolean filterByName(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if (filterText == null || filterText.equals("")) {
             return true;
@@ -124,13 +130,19 @@ public class clienteMB implements Serializable {
         String carName = value.toString().toUpperCase();
         filterText = filterText.toUpperCase();
 
-        if (carName.contains(filterText)) 
-        {
+        if (carName.contains(filterText)) {
             return true;
-        } else 
-        {
+        } else {
             return false;
         }
+    }
+
+    public void eliminarDetalle(Cliente cliente) 
+    {
+        System.out.println("eliminando ...");
+        clientes.remove(cliente);        
+        clienteServicio.eliminar(cliente);
+        
     }
 
     public List<Cliente> getClientes() {

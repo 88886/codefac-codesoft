@@ -76,11 +76,15 @@ public class compraMB implements Serializable {
     private BigDecimal costoEspecifico;
     private String codUnico;
     private String estadoPInd;
-    
+
     ///////////////Nuevas Variables ////////////////////////////////
     private boolean mostrarIngresoGeneral;
     private boolean mostrarIngresoEspecifico;
     private boolean mostrarPanelGeneral;
+
+    /////////////// Variables para tener una tabla de los catalogos ////////
+    private List<CatalagoProducto> listaCatalogos;
+    private CatalagoProducto catalogoProductoSeleccionado;
 
     @ManagedProperty(value = "#{sessionMB}")
     private SessionMB sesion;
@@ -117,11 +121,13 @@ public class compraMB implements Serializable {
         //compra.llenarCampos();
 
         // catalogo = new CatalagoProducto();
-        this.mostrarIngresoGeneral=false;
-        this.mostrarIngresoEspecifico=false;
-        this.mostrarPanelGeneral=true;
-          
-        
+        this.mostrarIngresoGeneral = false;
+        this.mostrarIngresoEspecifico = false;
+        this.mostrarPanelGeneral = true;
+
+        //iniciar la tabla del catalogo servicio
+        this.listaCatalogos = catalogoServicio.obtenerTodos();
+
     }
 
     public void verificarDialogo() {
@@ -176,7 +182,7 @@ public class compraMB implements Serializable {
             //tabGeneral = true;
 
         } else {
-            catalogo=catalogoEncontrado;
+            catalogo = catalogoEncontrado;
             System.out.println("Encontrado");
             if (catalogoEncontrado.getTipoProducto() == 'G') {
                 System.out.println("general");
@@ -188,10 +194,10 @@ public class compraMB implements Serializable {
                 tabGeneral = true;
                 mostrarPanel = false;
                 soloLectura = true;
-                
-                mostrarIngresoGeneral=true;
-                mostrarIngresoEspecifico=false;
-                mostrarPanelGeneral=false;
+
+                mostrarIngresoGeneral = true;
+                mostrarIngresoEspecifico = false;
+                mostrarPanelGeneral = false;
             } else {
                 System.out.println("Especifico");
                 cantidadEspecifico = 1;
@@ -200,11 +206,11 @@ public class compraMB implements Serializable {
                 cerrarDialogo();
 
                 tabEspecifico = true;
-                
-                mostrarIngresoEspecifico=true;
-                mostrarIngresoGeneral=false;
-                mostrarPanelGeneral=false;
-                
+
+                mostrarIngresoEspecifico = true;
+                mostrarIngresoGeneral = false;
+                mostrarPanelGeneral = false;
+
             }
             // msjDistri = "Encontrado";
             // mostrarPanel = true;
@@ -658,7 +664,5 @@ public class compraMB implements Serializable {
     public void setMostrarPanelGeneral(boolean mostrarPanelGeneral) {
         this.mostrarPanelGeneral = mostrarPanelGeneral;
     }
-    
-    
 
 }
