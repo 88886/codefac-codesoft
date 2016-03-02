@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <f:event listener="#{comprarMB.preRender()}" type="preRenderView" />
+        
+        <div style="text-align:center">
+            <p:panel header="Editar Compra"  style="width: 60%;margin: 0 auto" styleClass="customTitleBar" >
+
+                <!-- Formulario para controlar el encabezado de la compra -->
+                <h:form id="formDetalleDistribuidor">
+
+                    <!-- Ecabezado para buscar el ruc del distribuidos-->
+                    <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
+                        <div style="text-align: left">
+                            <p:panelGrid columns="4" >
+                                <p:outputLabel  value=" RUC :" />
+                                <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" />
+                                <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
+                                <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
+                                <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
+                                    <p:dataTable value="#{comprarMB.listaDistribuidores}" 
+                                                 var="distribuidor"
+                                                 scrollable="true"
+                                                 selectionMode="single"
+                                                 selection="#{comprarMB.distribuidorSeleccionado}"
+                                                 rowKey="#{distribuidor.ruc}"
+                                                 scrollHeight="300">
+
+                                        <p:ajax event="rowSelect" listener="${comprarMB.filaSeleccionadaDistribuidor}" update=":formDetalleDistribuidor:gridDatosCompra,:formDetalleDistribuidor:txtRuc" />
+
+                                        <p:column headerText="Ruc" filterBy="#{distribuidor.ruc}" >
+                                            <p:outputLabel value="#{distribuidor.ruc}" />
+                                        </p:column>
+
+                                        <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}">
+                                            <p:outputLabel value="#{distribuidor.nombre}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                </p:overlayPanel>
+
+                            </p:panelGrid>
+                            <!--Selecciona cual va a ser el focus por defecto del formulario-->
+                            <p:defaultCommand target="btnBuscarDistribuidor" />
+
+                        </div>
+
+                        <p:spacer height="15px" />
+
+                        <!-- Datos del distribuidor para mostrar	 -->
+                        <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%">
+                            <p:outputLabel value="Nombre: "/>
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.nombre}" />
+
+                            <p:outputLabel value="Direccion: "/>
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.direccion}" />
+
+                            <p:outputLabel value="Telefono: "/>
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.telefono}" />
+
+                            <p:outputLabel value="Email: "/>
+                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.correo}" />
+
+                        </p:panelGrid>
+
+                        <p:spacer height="15px" />
+
+                        <!-- Panel para mostrar datos de la compra -->
+                        <p:panel >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="No Documento: "/>
+                                <p:inputText value="#{comprarMB.compra.codigoDocumento}" />
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                    </p:panel>
+                </h:form>
+
+                <!-- Formulario para controlar el agregar detalle a la compra -->  
+
+                <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder">
+                    <h:form id="formBuscarProducto">
+                        <!-- Cargar los datos por defecto para editar  -->              
+                        
+                        
+                        <p:panelGrid columns="5" style="margin: 0 auto;height: 100%">
+
+                            <p:outputLabel value="Codigo General:  "/>
+                            <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoDetalle}" />
+                            <p:commandButton id="btnEncontrarCatalogo" icon="ui-icon-search" />
+
+                            <!-- dialogo para buscar los productos de los catalogos -->
+                            <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
+                                <p:dataTable 
+                                    value="#{comprarMB.listaCatalogos}" 
+                                    var="catalogo"
+                                    selectionMode="single" 
+                                    rowKey="#{catalogo.codigoProducto}"
+                                    selection="#{comprarMB.catalogoProductoSeleccionado}" >
+
+                                    <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto"/>
+                                    <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
+
+                                    <p:column headerText="codigo">
+                                        <p:outputLabel value="#{catalogo.codigoProducto}"/>
+                                    </p:column>
+
+                                    <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
+                                        <p:outputLabel value="#{catalogo.nombre}"/>
+                                    </p:column>
+
+                                    <p:column headerText="descripcion">
+                                        <p:outputLabel value="#{catalogo.descripcion}"/>
+                                    </p:column>
+
+                                    <p:column headerText="marca">
+                                        <p:outputLabel value="#{catalogo.marca}"/>
+                                    </p:column>
+
+                                    <p:column headerText="precio">
+                                        <p:outputLabel value="#{catalogo.precio}"/>
+                                    </p:column>                                    
+
+                                </p:dataTable>
+                            </p:overlayPanel>
+
+                            <p:defaultCommand target="btnValidar" />
+                            <p:commandButton id="btnValidar" value="mas" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,:formDetalleCompra:panelAgregarProducto" style="visibility: hidden" />
+                            <p:outputLabel id='lblNombreProducto' value="Producto: #{comprarMB.catalogo.nombre}" />
+
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+
+                <p:separator/>
+
+                <h:form id="formDetalleCompra">
+                    <p:panel id="panelAgregarProducto"  style="text-align: center" styleClass="panelNoBorder" visible="#{comprarMB.visibleDetalleAgregar}">
+
+                        <p:panelGrid columns="7" style="margin: 0 auto;height: 100%">
+
+                            <p:outputLabel value="Cantidad:"/>
+                            <p:inputText value="#{comprarMB.cantidadDetalle}" style="width: 50px;" />
+
+                            <p:outputLabel value="Costo:"/>
+                            <p:inputText value="#{comprarMB.costoDetalle}" style="width: 70px;" />
+
+                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="@form,:formDetalleCompra" />
+
+                        </p:panelGrid>
+
+                    </p:panel>
+
+
+                    <!-- Tabla que muestra el detalle de la compra -->
+                    <p:dataTable id="tableDetalle" value="#{comprarMB.detalleCompra}" var="detalle">
+                        <p:column headerText="Codigo">
+                            <h:outputText value="#{detalle.codigo}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{detalle.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Descripcion">
+                            <h:outputText value="#{detalle.descripcion}" />
+                        </p:column>
+
+                        <p:column headerText="Precio U.">
+                            <h:outputText value="#{detalle.costoIndividual}" />
+                        </p:column>
+
+
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{detalle.cantidad}" />
+                        </p:column>
+
+
+                        <p:column headerText="Subtotal">
+                            <h:outputText value="#{detalle.subtotal}" />
+                        </p:column>
+
+                        <p:column headerText="">
+                            <p:commandButton value="Eliminar" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form,:formTotales"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+
+                <!-- Panel para agrupar los totales -->
+                <h:form id="formTotales" >
+                    <div style="text-align: center;height:140px">
+                        <p:panel id="panelTotales" style="width: 250px;float: right"  styleClass="panelNoBorder">
+                            <p:panelGrid columns="2" style="text-align: left">
+                                <p:outputLabel value="Subtotal: "  />
+                                <p:inputText value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
+                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                </p:inputText>
+
+                                <p:outputLabel value="Descuento: "/>
+                                <p:inputText value="#{comprarMB.compra.descuento}" style="width: 80px;" >
+                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                </p:inputText>
+
+                                <p:outputLabel value="Iva: "/>
+                                <p:inputText value="#{comprarMB.compra.iva}" style="width: 80px;" >
+                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                </p:inputText> 
+
+                                <p:outputLabel id="txtTotalCompra" value="Total: "/>
+                                <p:inputText id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
+                            </p:panelGrid>
+                        </p:panel>
+                    </div>
+                </h:form>
+
+                <!-- Botones de Accion para la Fatura -->                
+
+                <h:form >
+                    <p:panel style="font-size: 14px;text-align: center" styleClass="panelNoBorder">
+                        <p:panelGrid columns="2" style="margin: 0 auto">
+                            <p:commandButton partialSubmit="true" process="@this,:formDetalleDistribuidor" value="Guardar" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  >
+                                <p:confirm header="Confirmar" message="Quieres grabar la compra?" icon="ui-icon-alert" />                                
+                            </p:commandButton>
+                            <p:commandButton id="nonAjax"  ajax="false" action="gestionarCompra" value="Cancelar">                                
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <!-- Dialogo de confirmacion -->
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+                    <!-- Dialogo que nueva factura-->
+                    <p:dialog header="Nueva Compra" widgetVar="dialogNuevaCompra" modal="true">
+                        <h:form>
+                            <h2>Desea realizar otra compra?</h2>
+                            <p:commandButton  value="Nueva" action="compra" ajax="false"/>
+                            <p:commandButton value="Salir" action="compra" ajax="false" />      
+                        </h:form>
+                    </p:dialog>
+
+                </h:form>
+
+                <!-- Dialogo para agregar el producto especifico-->
+                <p:dialog header="Ingreso de producto" widgetVar="dlgProductoGeneral" modal="true" height="100">
+                    <h:form id="formAgregarProductoEspecifico">
+                        <p:focus id="focus" for="txtCodigoDetalle"/>
+                        <p:panel styleClass="panelNoBorder">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel  value="Ingrese el codigo Especifico:"/>
+                                <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoEspecificoDetalle}" />
+                            </p:panelGrid>
+
+                            <p:spacer height="15px" />
+
+                            <div>
+                                <p:commandButton value="Aceptar" actionListener="#{comprarMB.agregarProductoEspecifico()}" update=":formDetalleCompra,txtCodigoDetalle,focus,:formTotales" />
+                                <p:commandButton value="Salir"  />
+                            </div>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo de confirmacion para agregar un nuevo Distribuidor -->
+                <p:dialog header="Agregar Distribuidor" widgetVar="confirmarDistribuidor" modal="true">
+                    <h:form>
+                        <h2>El distribuidor no existe</h2>
+                        <p:commandButton onclick="PF('confirmarDistribuidor').hide();" value="Aceptar"/>
+                        <p:commandButton actionListener="#{comprarMB.crearNuevoDistribuidor()}"  style="background-image: none;background-color: forestgreen" value="Crear Distribuidor">
+                            <p:ajax event="dialogReturn" listener="#{comprarMB.recibirDatos}" update=":formDetalleDistribuidor" />
+                        </p:commandButton>                        
+
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo que muestra un mensaje de confirmacion para crear un nuevo catalogo de proucto -->
+
+                <p:dialog header="Agregar Producto en el Catalogo"  widgetVar="confirmarProducto" modal="true">
+                    <h:form>
+                        <h2>El Producto no existe en el catologo</h2>
+                        <p:commandButton onclick="PF('confirmarProducto').hide();" value="Aceptar"/>
+                        <p:commandButton actionListener="#{comprarMB.crearNuevoCatalogo()}"  style="background-image: none;background-color: forestgreen" value="Crear Producto">
+                            <p:ajax event="dialogReturn" listener="#{comprarMB.recibirCatalogo}" update=":formDetalleCompra,:formBuscarProducto" />
+                        </p:commandButton>                        
+
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo de confirmacion para grabar -->
+
+
+            </p:panel>            
+        </div>
+    </ui:define>
+</ui:composition>

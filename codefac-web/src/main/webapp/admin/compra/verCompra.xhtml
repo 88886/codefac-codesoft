@@ -14,18 +14,22 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
+        <f:event listener="#{comprarMB.preRender()}" type="preRenderView" />
+        
         <div style="text-align:center">
-            <p:panel header="Nueva Compra"  style="width: 60%;margin: 0 auto" styleClass="customTitleBar" > 
+            <p:panel header="Ver Compra"  style="width: 60%;margin: 0 auto" styleClass="customTitleBar" >
+
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formDetalleDistribuidor">
+
                     <!-- Ecabezado para buscar el ruc del distribuidos-->
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
                             <p:panelGrid columns="4" >
                                 <p:outputLabel  value=" RUC :" />
-                                <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" />
-                                <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
-                                <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
+                                <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" readonly="true" />
+                                <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" disabled="true" />
+                                <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" disabled="true" />
                                 <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
                                     <p:dataTable value="#{comprarMB.listaDistribuidores}" 
                                                  var="distribuidor"
@@ -79,7 +83,7 @@ and open the template in the editor.
                         <p:panel >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="No Documento: "/>
-                                <p:inputText value="#{comprarMB.compra.codigoDocumento}" />
+                                <p:inputText value="#{comprarMB.compra.codigoDocumento}" readonly="true" />
                             </p:panelGrid>
 
                         </p:panel>
@@ -89,14 +93,17 @@ and open the template in the editor.
 
                 <!-- Formulario para controlar el agregar detalle a la compra -->  
 
-                <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder">
+                <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder" visible="false">
                     <h:form id="formBuscarProducto">
+                        <!-- Cargar los datos por defecto para editar  -->              
+                        
+                        
                         <p:panelGrid columns="5" style="margin: 0 auto;height: 100%">
 
                             <p:outputLabel value="Codigo General:  "/>
                             <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoDetalle}" />
                             <p:commandButton id="btnEncontrarCatalogo" icon="ui-icon-search" />
-                            
+
                             <!-- dialogo para buscar los productos de los catalogos -->
                             <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
                                 <p:dataTable 
@@ -105,30 +112,30 @@ and open the template in the editor.
                                     selectionMode="single" 
                                     rowKey="#{catalogo.codigoProducto}"
                                     selection="#{comprarMB.catalogoProductoSeleccionado}" >
-                                    
+
                                     <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto"/>
                                     <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
-                                    
+
                                     <p:column headerText="codigo">
                                         <p:outputLabel value="#{catalogo.codigoProducto}"/>
                                     </p:column>
-                                    
+
                                     <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
                                         <p:outputLabel value="#{catalogo.nombre}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="descripcion">
                                         <p:outputLabel value="#{catalogo.descripcion}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="marca">
                                         <p:outputLabel value="#{catalogo.marca}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="precio">
                                         <p:outputLabel value="#{catalogo.precio}"/>
                                     </p:column>                                    
-                                    
+
                                 </p:dataTable>
                             </p:overlayPanel>
 
@@ -143,25 +150,24 @@ and open the template in the editor.
                 <p:separator/>
 
                 <h:form id="formDetalleCompra">
-                    <p:panel id="panelAgregarProducto"  style="text-align: center" styleClass="panelNoBorder" visible="true">
-                        
+                    <p:panel id="panelAgregarProducto"  style="text-align: center" styleClass="panelNoBorder" visible="#{comprarMB.visibleDetalleAgregar}">
+
                         <p:panelGrid columns="7" style="margin: 0 auto;height: 100%">
-                            
+
                             <p:outputLabel value="Cantidad:"/>
                             <p:inputText value="#{comprarMB.cantidadDetalle}" style="width: 50px;" />
 
                             <p:outputLabel value="Costo:"/>
                             <p:inputText value="#{comprarMB.costoDetalle}" style="width: 70px;" />
 
-                                                       
-                            <p:commandButton  id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="tableDetalle,:formAgregarProductoEspecifico,panelTotales,@form"/>
+                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="@form,:formDetalleCompra" />
 
                         </p:panelGrid>
-                        
+
                     </p:panel>
 
-                    <!-- Tabla que muestra el detalle de la compra -->
 
+                    <!-- Tabla que muestra el detalle de la compra -->
                     <p:dataTable id="tableDetalle" value="#{comprarMB.detalleCompra}" var="detalle">
                         <p:column headerText="Codigo">
                             <h:outputText value="#{detalle.codigo}" />
@@ -190,47 +196,49 @@ and open the template in the editor.
                         </p:column>
 
                         <p:column headerText="">
-                            <p:commandButton value="Eliminar" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form"/>
+                            <p:commandButton value="Eliminar" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form,:formTotales" disabled="true"/>
                         </p:column>
 
                     </p:dataTable>
 
-                    <!-- Panel para agrupar los totales -->
+                </h:form>
+
+                <!-- Panel para agrupar los totales -->
+                <h:form id="formTotales" >
                     <div style="text-align: center;height:140px">
                         <p:panel id="panelTotales" style="width: 250px;float: right"  styleClass="panelNoBorder">
                             <p:panelGrid columns="2" style="text-align: left">
-                                <p:outputLabel value="Subtotal: "/>
-                                <p:inputText value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
-                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                <p:outputLabel value="Subtotal: "  />
+                                <p:inputText value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" readonly="true" >
+                                    
                                 </p:inputText>
 
                                 <p:outputLabel value="Descuento: "/>
-                                <p:inputText value="#{comprarMB.compra.descuento}" style="width: 80px;" >
-                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                <p:inputText value="#{comprarMB.compra.descuento}" style="width: 80px;" readonly="true" >
+                                    
                                 </p:inputText>
 
                                 <p:outputLabel value="Iva: "/>
-                                <p:inputText value="#{comprarMB.compra.iva}" style="width: 80px;" >
-                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                <p:inputText value="#{comprarMB.compra.iva}" style="width: 80px;" readonly="true" >
+                                    
                                 </p:inputText> 
 
-                                <p:outputLabel id="txtTotalCompra" value="Total: "/>
-                                <p:inputText id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
+                                <p:outputLabel id="txtTotalCompra" value="Total: " />
+                                <p:inputText id="total" value="#{comprarMB.compra.total}" style="width: 80px;" readonly="true" />
                             </p:panelGrid>
                         </p:panel>
                     </div>
                 </h:form>
 
-                
                 <!-- Botones de Accion para la Fatura -->                
 
                 <h:form >
                     <p:panel style="font-size: 14px;text-align: center" styleClass="panelNoBorder">
                         <p:panelGrid columns="2" style="margin: 0 auto">
-                            <p:commandButton partialSubmit="true" process="@this,:formDetalleDistribuidor" value="Comprar" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  >
+                            <p:commandButton partialSubmit="true" process="@this,:formDetalleDistribuidor" value="Guardar" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}" disabled="true"  >
                                 <p:confirm header="Confirmar" message="Quieres grabar la compra?" icon="ui-icon-alert" />                                
                             </p:commandButton>
-                            <p:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar">                                
+                            <p:commandButton id="nonAjax"  ajax="false" action="gestionarCompra" value="Regresar">                                
                             </p:commandButton>
                         </p:panelGrid>
                     </p:panel>
@@ -259,13 +267,13 @@ and open the template in the editor.
                         <p:panel styleClass="panelNoBorder">
                             <p:panelGrid columns="2">
                                 <p:outputLabel  value="Ingrese el codigo Especifico:"/>
-                                <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoEspecificoDetalle}"/>
+                                <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoEspecificoDetalle}" />
                             </p:panelGrid>
 
                             <p:spacer height="15px" />
 
                             <div>
-                                <p:commandButton value="Aceptar" actionListener="#{comprarMB.agregarProductoEspecifico()}" update=":formDetalleCompra,txtCodigoDetalle,focus" />
+                                <p:commandButton value="Aceptar" actionListener="#{comprarMB.agregarProductoEspecifico()}" update=":formDetalleCompra,txtCodigoDetalle,focus,:formTotales" />
                                 <p:commandButton value="Salir"  />
                             </div>
                         </p:panel>

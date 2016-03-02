@@ -21,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import org.omg.PortableServer.THREAD_POLICY_ID;
 
 /**
  *
@@ -116,6 +117,11 @@ public class ProductoGeneralCompra implements Serializable {
 
     public void setCodigoProducto(CatalagoProducto codigoProducto) {
         this.codigoProducto = codigoProducto;
+    }
+    
+    public BigDecimal getSubtotal()
+    {
+        return this.costoIndividual.multiply(new BigDecimal(this.cantidad));        
     }
 
     @Override

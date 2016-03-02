@@ -72,13 +72,55 @@ public class CompraServicio {
 
     }
     
+    /**
+     * Obtiene todas las compras realizadas
+     */
+    public List<Compra> obtenerTodos()
+    {
+        return compraFacade.findAll();
+    }
+    
     public void consultar()
     {
         productoGeneralFacade.findByCodigoProducto("123");
     }
+    
+    public Compra findCompra(Integer codigo)
+    {
+        return compraFacade.find(codigo);
+    }
 
-    public void actualizar(Compra compra) {
-        compraFacade.edit(compra);
+    public void actualizar(Compra compra) 
+    {
+        this.compraFacade.create(compra);
+        
+        Integer codigo = compra.getCodigoCompra();
+        
+        List<ProductoGeneralCompra> detalle1 = compra.getProductoGeneralCompraList();
+        List<ProductoIndividualCompra> detalle2 = compra.getProductoIndividualCompraList();
+        
+        System.out.println(compraFacade);
+        //Detalle General Actualizado        
+        for (ProductoGeneralCompra detalle : detalle1) 
+        {
+            detalle.setCodigoCompra(compra);
+            productoGFacade.edit(detalle);
+            
+            //actualizar el stock en las tablas correspondientes
+            //detalle.getCodigoProducto().getco
+            //System.out.println("codigo producto: "+detalle.getCodigoProducto().getCodigoProducto());
+            ProductoGeneralVenta productoVenta=productoGeneralFacade.findByCodigoProducto(detalle.getCodigoProducto().getCodigoProducto());
+            productoVenta.agregarProductos(detalle.getCantidad());
+            productoGeneralFacade.edit(productoVenta);
+            //detalle.getCantidad();
+        }
+
+        //Detalle Especifico Actualizado
+        for (ProductoIndividualCompra detalle : detalle2) {
+            
+            detalle.setCodigoCompra(compra);
+            productoEspeFacade.edit(detalle);
+        }
     }
 
     public void eliminar(Compra compra) {

@@ -219,6 +219,33 @@ public class Compra implements Serializable {
         return "Compra{" + "codigoCompra=" + codigoCompra + ", codigoDocumento=" + codigoDocumento + ", tipoDocumento=" + tipoDocumento + ", total=" + total + ", fecha=" + fecha + ", descuento=" + descuento + ", ruc=" + ruc + ", codigoPerido=" + codigoPerido + ", nick=" + nick + ", productoIndividualCompraList=" + productoIndividualCompraList + ", productoGeneralCompraList=" + productoGeneralCompraList + '}';
     }
 
+    /**
+     * Metodos aumentados
+     * @return 
+     */
+    public String imprimirDetalle()
+    {
+        String cadena="";
+        
+        for (ProductoGeneralCompra producto : productoGeneralCompraList) {
+            cadena+=producto.getCodigoProducto().getNombre()+",";
+        }
+        
+        for (ProductoIndividualCompra producto : productoIndividualCompraList) {
+            cadena+=producto.getCodigoProducto().getNombre()+",";
+        }
+        
+        //verificar que existan detalles para recortar el ultimo digito
+        if(cadena.length()>3)
+        {
+            cadena=cadena.substring(0,cadena.length()-1);
+        }
+        
+        System.out.println(cadena.length());
+        
+        return cadena;
+        
+    }
     
     
 }

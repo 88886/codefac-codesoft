@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+
+        <h:form id="formTabla">
+
+            <!-- tabla que muestra el contenido de las compras -->
+            <p:dataTable
+                
+                value="#{gestionarCompraMB.listaCompras}"
+                var="compra"
+                
+                >
+
+                <p:column headerText="Codigo">
+                    <p:outputLabel value="#{compra.codigoCompra}"/>
+                </p:column>
+
+                <p:column headerText="Cod Documento">
+                    <p:outputLabel value="#{compra.codigoDocumento}"/>
+                </p:column>
+
+                <p:column headerText="Detalle">
+                    <p:outputLabel value="#{compra.imprimirDetalle()}"/>
+                </p:column>
+
+                <p:column headerText="Total">
+                    <p:outputLabel value="#{compra.total}"/>
+                </p:column>
+
+                <p:column headerText="Descuento">
+                    <p:outputLabel value="#{compra.descuento}"/>
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Ver" action="#{gestionarCompraMB.abrirDialogEditar(compra)}"  >
+                        <f:param name="id" value="#{compra.codigoCompra}" />
+                    </p:commandButton> 
+                    
+                    <p:commandButton value="Eliminar" actionListener="#{gestionarCompraMB.eliminar(compra)}" update="">
+                        <p:confirm header="Confirmacion" message="Esta seguro que quiere eliminar?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    
+                </p:column>
+
+            </p:dataTable>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

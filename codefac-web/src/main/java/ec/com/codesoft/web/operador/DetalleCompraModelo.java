@@ -140,6 +140,11 @@ public class DetalleCompraModelo
     public void setProductoIndividual(ProductoIndividualCompra productoIndividual) {
         this.productoIndividual = productoIndividual;
     }
+
+    @Override
+    public String toString() {
+        return "DetalleCompraModelo{" + "codigo=" + codigo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", cantidad=" + cantidad + ", costoIndividual=" + costoIndividual + ", subtotal=" + subtotal + ", tipoGeneral=" + tipoGeneral + ", productoGeneral=" + productoGeneral + ", productoIndividual=" + productoIndividual + '}';
+    }
     
     
     
