@@ -5,13 +5,17 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
+import ec.com.codesoft.model.Banco;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
+import ec.com.codesoft.model.Intereses;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.model.Venta;
+import ec.com.codesoft.modelo.facade.BancoFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoGeneralFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoIndividualFacade;
+import ec.com.codesoft.modelo.facade.InteresesFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
 import ec.com.codesoft.modelo.facade.ProductoIndividualCompraFacade;
@@ -46,6 +50,12 @@ public class FacturaServicio {
 
     @EJB
     VentaFacade ventaFacade;
+    
+    @EJB
+    InteresesFacade interesFacade;
+    
+    @EJB
+    BancoFacade bancofacade;
 
     public int devolverStockIndividual(String codP) {
         return (productoIndividualFacade.findStockIndividual(codP).intValue());
@@ -120,5 +130,15 @@ public class FacturaServicio {
     {
         return ventaFacade.findCodigoDocumento(codigo);
     }
-
+    
+    public List<Intereses> devolverIntereses(){
+        return interesFacade.findAll();
+    } 
+    
+    public List<Banco> devolverBancos(){
+        return bancofacade.findAll();
+    } 
+    public Banco devolverInteresBanco(String nombre){
+        return bancofacade.findInteresesBanco(nombre);
+    }
 }
