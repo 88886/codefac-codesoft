@@ -99,21 +99,28 @@ and open the template in the editor.
                             <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;" readonly="true"/>
 
                             <p:outputLabel  value="Tipo Venta" />
-                            <p:selectOneMenu id="Categoria" >
+                            <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}">
                                 <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
                                 <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
                                 <f:selectItem itemLabel="Credito" itemValue="Credito" />
-                                <f:selectItem itemLabel="Cheque" itemValue="Credito" />
-
+                                <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
+                                <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr"/>        
                             </p:selectOneMenu>
 
-                            <p:outputLabel  value="Banco:" />
-                            <p:inputText/>
+                            <p:outputLabel/>
+                            <p:panel  rendered="#{facturaMB.estBanco}" id="idBanco">
+                                <p:outputLabel  value="Banco :" />
+                                <p:multiSelectListbox id="tipoBanco" value="#{facturaMB.nombreBanco}" effect="slide">
+                                    <f:selectItems value="#{facturaMB.selectGeneral}" />  
+                                    <p:ajax event="clik" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr"/>        
+                                </p:multiSelectListbox>                                 
+                            </p:panel>
 
-                            <p:outputLabel  value="No Cheque:" />
-                            <p:inputText />
-                            
-                            
+                            <p:panel  rendered="#{facturaMB.estCheue}" id="idCheque">
+                                <p:outputLabel  value="No Cheque:" />
+                                <p:inputText value="#{facturaMB.NCheque}"/>
+                            </p:panel>
+
                         </p:panelGrid>
                     </p:tab>
                 </p:accordionPanel>

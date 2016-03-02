@@ -5,14 +5,14 @@
  */
 package ec.com.codesoft.web.operador;
 
+import ec.com.codesoft.model.Banco;
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetallesServicio;
-import ec.com.codesoft.model.Distribuidor;
+import ec.com.codesoft.model.Intereses;
 import ec.com.codesoft.model.PeriodoContable;
-import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.model.Venta;
@@ -27,8 +27,8 @@ import ec.com.codesoft.web.reportes.ProformaModelo;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,8 +44,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import net.sf.jasperreports.engine.JRException;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -97,6 +98,21 @@ public class FacturaMB {
     private ProductoIndividualCompra prodIndividual;
     private BigDecimal recibo;
     private BigDecimal vuelto;
+    private boolean estPanPagos; //esatdo paneles de tipos de pagos
+    private boolean estBanco; //panel Banco
+    private boolean estCheue; //panel Cheque
+    private String tipoPago; //tipo de pago cheque banco etc
+    private String tituloPago; //variable que indica si es Banco o Cheque-> titulo
+    private String NCheque; //variable que contiene el N de Cheque
+    private List<Intereses> intereses;
+    private List<Banco> bancos;
+    private Banco bancoBuscar;
+    private List<Intereses> interesesPorBanco;
+    private List<SelectItem> selectGeneral;
+    private List<SelectItemGroup> selectGroupBancos; //lista de Selects Groups Bancos
+    private List<SelectItemGroup> selectMeses; //lista de Selects Groups Meses
+    private String nombreBanco;
+
     /**
      * Porpiedad para enlazar el numero de factura
      */
@@ -130,7 +146,7 @@ public class FacturaMB {
         totalRegistro = new BigDecimal("0.0");
         total = new BigDecimal("0.0");
         subtotal = new BigDecimal("0.0");
-        descuento=new BigDecimal("0");
+        descuento = new BigDecimal("0");
         subtotalRegistro = new BigDecimal("0.0");
         iva = new BigDecimal("0.0");
         detallesVenta = new ArrayList<DetallesVenta>();
@@ -141,8 +157,70 @@ public class FacturaMB {
         clientesLista = clienteServicio.obtenerTodos();
         recibo = new BigDecimal("0.0");
         tipoCliente = "";
-
         codigoDocumento = facturaServicio.getCodigoFactura();
+        estPanPagos = false;
+        estBanco = false;
+        estBanco = false;
+        tipoPago = "Efectivo";
+        NCheque = "";
+
+        //incializar las opciones de Bancos
+        bancos = facturaServicio.devolverBancos();
+        selectGeneral = new ArrayList<SelectItem>(); //cambiar esto por el select intem general
+        selectGroupBancos = new ArrayList<SelectItemGroup>();
+        selectMeses = new ArrayList<SelectItemGroup>();
+
+        for (int i = 0; i < bancos.size(); i++) {
+            selectGroupBancos.add(new SelectItemGroup(bancos.get(i).getNombre()));
+            bancoBuscar = facturaServicio.devolverInteresBanco(bancos.get(i).getNombre());
+            interesesPorBanco = bancoBuscar.getInteresesList();
+            SelectItem select[] = new SelectItem[interesesPorBanco.size()];
+            for (int j = 0; j < interesesPorBanco.size(); j++) {
+                System.out.println("Banco " + bancoBuscar.getNombre() + interesesPorBanco.get(j).getMeses());
+                //System.out.println(bancos.get(i).getNombre()+"-> Intereses "+ interesesPorBanco.get(j));
+                selectMeses.add(new SelectItemGroup(interesesPorBanco.get(j).getMeses() + " meses"));
+                System.out.println(selectMeses.size());
+                select[j] = selectMeses.get(j);
+                //selectMeses.add(new SelectItemGroup(interesesPorBanco.get(j).getNotas()));
+                //interesesPorBanco.get(j).getMeses().toString() + " meses")
+
+            }
+
+            selectGroupBancos.get(i).setSelectItems(select);
+
+            selectGeneral.add(selectGroupBancos.get(i));
+
+        }
+
+//        SelectItemGroup Tresmeses = new SelectItemGroup("3 Meses");
+//        SelectItemGroup Seismeses = new SelectItemGroup("6 Meses");
+//        SelectItemGroup Nuevemeses = new SelectItemGroup("9 Meses");
+//        SelectItemGroup DoceMeses = new SelectItemGroup("12 Meses");
+//
+//        for (int i = 0; i < selectGroupBancos.size(); i++) {
+//            selectGroupBancos.get(i).setSelectItems(new SelectItem[]{Tresmeses, Seismeses, Nuevemeses, DoceMeses});
+//            selectGeneral.add(selectGroupBancos.get(i));
+//        }
+    }
+
+    public void llenarMesesBanco() {
+        //llenar los meses por cada banco
+//        int indice = 0;
+//        interesesPorBanco = facturaServicio.devolverInteresBanco(nombreBanco);
+//        for (int i = 0; i < interesesPorBanco.size(); i++) {
+//            selectMeses.add(new SelectItemGroup(interesesPorBanco.get(i).getMeses().toString()));
+//        }
+//
+//        for (int i = 0; i < selectGroupBancos.size(); i++) {
+//            if (selectGroupBancos.get(i).equals(nombreBanco)) {
+//                indice = i;
+//                for (int j = 0; j <= selectMeses.size(); j++) {
+//                    selectGroupBancos.get(i).setSelectItems(new SelectItem[]{selectMeses.get(j)});
+//                }
+//            }
+//        }
+//        selectGeneral.add(selectGroupBancos.get(indice));
+
     }
 
     public void verificarDialogo() {
@@ -360,7 +438,7 @@ public class FacturaMB {
             }
 
             DetallesVenta detalles = new DetallesVenta(cantidadComprar,
-                    productoGeneral.getCodigo()+"", catalogoSeleccionado.getNombre(),
+                    productoGeneral.getCodigo() + "", catalogoSeleccionado.getNombre(),
                     catalogoSeleccionado.getPrecio(), totalRegistro);
             detallesVenta.add(detalles);
 
@@ -370,7 +448,6 @@ public class FacturaMB {
             detalle.setSubtotal(subtotalRegistro);
             detalle.setCodigoDetallGeneral(0);
             detallesGeneralVenta.add(detalle);
-
 
         } else {
             System.out.println("Especifico");
@@ -422,111 +499,110 @@ public class FacturaMB {
     public void venta() {
         System.out.println(cantidadComprar + "--" + stock);
        // if (cantidadComprar > stock) {
-       //     msjStock = "No existe suficiente Stock";
-       //     System.out.println("No hay stock");
+        //     msjStock = "No existe suficiente Stock";
+        //     System.out.println("No hay stock");
 
         //} else {
+        if (tipoCliente == "" || tipoCliente == null) {
+            FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            cerrarDialogo();
+            cerrarDialogoG();
+        } else {
 
-            if (tipoCliente == "" || tipoCliente == null) {
-                FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                cerrarDialogo();
-                cerrarDialogoG();
-            } else {
+            cerrarDialogoG();
+            msjCodUnico = "";
+            msjStock = "";
+            //msjStock = "";
+            System.out.println("Si hay stock");
+            if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
 
-                cerrarDialogoG();
-                msjCodUnico = "";
-                msjStock = "";
-                //msjStock = "";
-                System.out.println("Si hay stock");
-                if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
+                System.out.println("En venta");
 
-                    System.out.println("En venta");
+                totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
+                subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
+                subtotal = subtotal.add(totalRegistro);
+                if (tipoCliente.equals("C")) {
+                    iva = new BigDecimal("0.0");
+                    iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                    //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
+                    total = subtotal;
+                    total = total.setScale(2, BigDecimal.ROUND_UP);
+                } else {
+                    //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
+                    iva = subtotal.multiply(new BigDecimal("0.12"));
+                    iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                    total = subtotal.multiply(new BigDecimal("1.12"));
+                    total = total.setScale(2, BigDecimal.ROUND_UP);
+                }
 
-                    totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
-                    subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
-                    subtotal = subtotal.add(totalRegistro);
-                    if (tipoCliente.equals("C")) {
-                        iva = new BigDecimal("0.0");
-                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                        //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
-                        total = subtotal;
-                        total = total.setScale(2, BigDecimal.ROUND_UP);
-                    } else {
-                        //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
-                        iva = subtotal.multiply(new BigDecimal("0.12"));
-                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                        total = subtotal.multiply(new BigDecimal("1.12"));
-                        total = total.setScale(2, BigDecimal.ROUND_UP);
-                    }
+                DetallesVenta detalles = new DetallesVenta(cantidadComprar,
+                        productoGeneral.getCodigo() + "", catalogoSeleccionado.getNombre(),
+                        catalogoSeleccionado.getPrecio(), totalRegistro);
+                detallesVenta.add(detalles);
 
-                    DetallesVenta detalles = new DetallesVenta(cantidadComprar,
-                            productoGeneral.getCodigo()+"", catalogoSeleccionado.getNombre(),
-                            catalogoSeleccionado.getPrecio(), totalRegistro);
-                    detallesVenta.add(detalles);
+                DetalleProductoGeneral detalle = new DetalleProductoGeneral();
+                detalle.setCantidad(cantidadComprar);
+                detalle.setCodigoProducto(catalogoSeleccionado);
+                detalle.setSubtotal(subtotalRegistro);
+                detalle.setCodigoDetallGeneral(0);
+                detallesGeneralVenta.add(detalle);
 
-                    DetalleProductoGeneral detalle = new DetalleProductoGeneral();
-                    detalle.setCantidad(cantidadComprar);
-                    detalle.setCodigoProducto(catalogoSeleccionado);
-                    detalle.setSubtotal(subtotalRegistro);
-                    detalle.setCodigoDetallGeneral(0);
-                    detallesGeneralVenta.add(detalle);
-
-                    //IMPRIMIR MANDAR AL CARLOS
+                //IMPRIMIR MANDAR AL CARLOS
 //                    FacturaModeloReporte factura=new FacturaModeloReporte();
 //                    factura.setCodigoFactura("000");
 //                    FacturaDetalleModeloReporte detallesFactura= new FacturaDetalleModeloReporte();
 //                    detallesFactura.setCantidad(1);
 //                    factura.agregarDetalle(detallesFactura);
 //                    factura.exportarPDF();
-                    //}
+                //}
+            } else {
+                System.out.println("Especifico");
+                detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
+                // System.err.println(detalleIndividual);
+                if (detalleIndividual == null) {
+                    msjCodUnico = "No existe Producto con ese código";
+                    System.err.println("No existe ese Codigo Especifico");
                 } else {
-                    System.out.println("Especifico");
-                    detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
-                    // System.err.println(detalleIndividual);
-                    if (detalleIndividual == null) {
-                        msjCodUnico = "No existe Producto con ese código";
-                        System.err.println("No existe ese Codigo Especifico");
-                    } else {
-                        cerrarDialogo();
-                        msjCodUnico = "";
-                        //cerrarDialogo();
-                        productosIndividualesDetalles = new ArrayList<ProductoIndividualCompra>();
-                        productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, catalogoSeleccionado.getCodigoProducto());
-                        for (int i = 0; i < cantidadComprar; i++) {
-                            totalRegistro = productosIndividualesDetalles.get(i).getCosto().multiply(new BigDecimal(cantidadComprar));
-                            subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
-                            subtotal = subtotal.add(totalRegistro);
-                            if (tipoCliente.equals("C")) {
-                                iva = new BigDecimal("0.0");
-                                iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                                total = subtotal;
-                                total = total.setScale(2, BigDecimal.ROUND_UP);
-                            } else {
-                                iva = subtotal.multiply(new BigDecimal("0.12"));
-                                iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                                total = subtotal.multiply(new BigDecimal("1.12"));
-                                total = total.setScale(2, BigDecimal.ROUND_UP);
-                            }
-
-                            DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.get(i).getCodigoUnico(),
-                                    productosIndividualesDetalles.get(i).getCodigoProducto().getNombre(),
-                                    productosIndividualesDetalles.get(i).getCosto(), totalRegistro);
-                            detallesVenta.add(detalles);
-                            catalogoSeleccionado = new CatalagoProducto();
-                            DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                            detalle.setCodigoUnico(productosIndividualesDetalles.get(i));
-                            detalle.setSubtotal(subtotalRegistro);
-                            detallesIndividualVenta.add(detalle);
-                            //det
-
+                    cerrarDialogo();
+                    msjCodUnico = "";
+                    //cerrarDialogo();
+                    productosIndividualesDetalles = new ArrayList<ProductoIndividualCompra>();
+                    productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, catalogoSeleccionado.getCodigoProducto());
+                    for (int i = 0; i < cantidadComprar; i++) {
+                        totalRegistro = productosIndividualesDetalles.get(i).getCosto().multiply(new BigDecimal(cantidadComprar));
+                        subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
+                        subtotal = subtotal.add(totalRegistro);
+                        if (tipoCliente.equals("C")) {
+                            iva = new BigDecimal("0.0");
+                            iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                            total = subtotal;
+                            total = total.setScale(2, BigDecimal.ROUND_UP);
+                        } else {
+                            iva = subtotal.multiply(new BigDecimal("0.12"));
+                            iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                            total = subtotal.multiply(new BigDecimal("1.12"));
+                            total = total.setScale(2, BigDecimal.ROUND_UP);
                         }
 
-                    }
-                }
+                        DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.get(i).getCodigoUnico(),
+                                productosIndividualesDetalles.get(i).getCodigoProducto().getNombre(),
+                                productosIndividualesDetalles.get(i).getCosto(), totalRegistro);
+                        detallesVenta.add(detalles);
+                        catalogoSeleccionado = new CatalagoProducto();
+                        DetalleProductoIndividual detalle = new DetalleProductoIndividual();
+                        detalle.setCodigoUnico(productosIndividualesDetalles.get(i));
+                        detalle.setSubtotal(subtotalRegistro);
+                        detallesIndividualVenta.add(detalle);
+                        //det
 
+                    }
+
+                }
             }
-       // }
+
+        }
+        // }
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -795,31 +871,45 @@ public class FacturaMB {
     public void onRowUnSelect(SelectEvent event) {
 
     }
-    
-    public void calcularDescuento()
-    {
-        BigDecimal descuentoPorcentaje=descuento.divide(new BigDecimal(100)).add(new BigDecimal(1));
-        System.out.println("porcetaje "+descuentoPorcentaje);
-        BigDecimal subTotalDescuento=subtotal.divide(descuentoPorcentaje,2,BigDecimal.ROUND_FLOOR);
-        System.out.println(subTotalDescuento);
-        
-        subTotalDescuento.setScale(2,BigDecimal.ROUND_UP);
-        
-        iva=subTotalDescuento.multiply(new BigDecimal("0.12"),MathContext.DECIMAL32);
-        iva=iva.divide(new BigDecimal(1),2,BigDecimal.ROUND_UP);
-        
-        iva.setScale(2,BigDecimal.ROUND_UP);
-        
-        
-        total=subTotalDescuento.multiply(new BigDecimal("1.12"),MathContext.DECIMAL32);
-        total=total.divide(new BigDecimal(1),2,BigDecimal.ROUND_UP);
-        
-        total.setScale(2,BigDecimal.ROUND_UP);
-    }
-    
-    
-    ////////////////////METODOS GET Y SET /////////////////////
 
+    public void calcularDescuento() {
+        BigDecimal descuentoPorcentaje = descuento.divide(new BigDecimal(100)).add(new BigDecimal(1));
+        System.out.println("porcetaje " + descuentoPorcentaje);
+        BigDecimal subTotalDescuento = subtotal.divide(descuentoPorcentaje, 2, BigDecimal.ROUND_FLOOR);
+        System.out.println(subTotalDescuento);
+
+        subTotalDescuento.setScale(2, BigDecimal.ROUND_UP);
+
+        iva = subTotalDescuento.multiply(new BigDecimal("0.12"), MathContext.DECIMAL32);
+        iva = iva.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
+
+        iva.setScale(2, BigDecimal.ROUND_UP);
+
+        total = subTotalDescuento.multiply(new BigDecimal("1.12"), MathContext.DECIMAL32);
+        total = total.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
+
+        total.setScale(2, BigDecimal.ROUND_UP);
+    }
+
+    // metodo para escojer el tipo de pago
+    public void escojerTipoPago() {
+        System.out.println("EscojerTipoPago  " + tipoPago);
+        if (tipoPago.equals("Efectivo")) {
+
+        } else if (tipoPago.equals("Tarjeta Credito")) {
+            System.out.println("tarjeta");
+            estCheue = false;
+            estBanco = true;
+        } else if (tipoPago.equals("Credito")) {
+
+        } else if (tipoPago.equals("Cheque")) {
+            System.out.println("cheque");
+            estBanco = false;
+            estCheue = true;
+        }
+    }
+
+    ////////////////////METODOS GET Y SET /////////////////////
     public boolean getEstadoDialogo() {
         return estadoDialogo;
     }
@@ -1059,7 +1149,77 @@ public class FacturaMB {
     public void setDescuento(BigDecimal descuento) {
         this.descuento = descuento;
     }
-    
-    
+
+    public boolean getEstPanPagos() {
+        return estPanPagos;
+    }
+
+    public void setEstPanPagos(boolean estPanPagos) {
+        this.estPanPagos = estPanPagos;
+    }
+
+    public String getTipoPago() {
+        return tipoPago;
+    }
+
+    public void setTipoPago(String tipoPago) {
+        this.tipoPago = tipoPago;
+    }
+
+    public String getTituloPago() {
+        return tituloPago;
+    }
+
+    public void setTituloPago(String tituloPago) {
+        this.tituloPago = tituloPago;
+    }
+
+    public String getNCheque() {
+        return NCheque;
+    }
+
+    public void setNCheque(String NCheque) {
+        this.NCheque = NCheque;
+    }
+
+    public boolean getEstBanco() {
+        return estBanco;
+    }
+
+    public void setEstBanco(boolean estBanco) {
+        this.estBanco = estBanco;
+    }
+
+    public boolean getEstCheue() {
+        return estCheue;
+    }
+
+    public void setEstCheue(boolean estCheue) {
+        this.estCheue = estCheue;
+    }
+
+    public List<SelectItem> getSelectGeneral() {
+        return selectGeneral;
+    }
+
+    public void setSelectGeneral(List<SelectItem> selectGeneral) {
+        this.selectGeneral = selectGeneral;
+    }
+
+    public String getNombreBanco() {
+        return nombreBanco;
+    }
+
+    public void setNombreBanco(String nombreBanco) {
+        this.nombreBanco = nombreBanco;
+    }
+
+    public List<SelectItemGroup> getSelectGroupBancos() {
+        return selectGroupBancos;
+    }
+
+    public void setSelectGroupBancos(List<SelectItemGroup> selectGroupBancos) {
+        this.selectGroupBancos = selectGroupBancos;
+    }
 
 }
