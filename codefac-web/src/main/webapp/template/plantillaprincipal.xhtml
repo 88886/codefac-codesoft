@@ -24,16 +24,22 @@ and open the template in the editor.
             <h:form id="menuPlantilla">
                 <p:growl id="messages"/>
                 <p:layoutUnit position="center"> 
-                    <p:tabMenu activeIndex="#{param.i}" style="width: 720px; margin: 0 auto;">
+                    <p:tabMenu activeIndex="#{param.i}" style="width: 850px; margin: 0 auto;">
                         <p:menuitem style="width: 80px" outcome="index"   value="Inicio" icon="ui-icon-star">
                             <f:param name="i" value="0" />
                         </p:menuitem>
                         <p:menuitem style="width: 80px" outcome="login" value="Login"  icon="ui-icon-document">
                             <f:param name="i" value="1" />
                         </p:menuitem>
+                        
                         <p:menuitem style="width: 100px" outcome="nosotros" value="Nosotros"  icon="ui-icon-search">
                             <f:param name="i" value="2" />
                         </p:menuitem>
+                        
+                        <p:menuitem style="width: 100px" outcome="productoIndex" value="productos"  icon="ui-icon-search">
+                            <f:param name="i" value="2" />
+                        </p:menuitem>
+                        
                         <p:menuitem style="width: 150px" outcome="ubicacion" value="ubicación"   icon="ui-icon-person">
                             <f:param name="i" value="3" />
                         </p:menuitem>

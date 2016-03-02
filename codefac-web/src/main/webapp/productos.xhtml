@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaprincipal.xhtml">
+
+    <ui:define name="contenido">
+        <h:form>
+
+            <p:panel header="Lista de productos">
+                <p:dataTable
+                    value="#{catalogoProductosMB.listaProductos}"
+                    filteredValue="#{catalogoProductosMB.listaProductoFiltro}"
+                    var="catalogo"
+                    widgetVar="carsTable"
+                    emptyMessage="La lista esta vacia"                      
+                    style="font-size: 12px;"
+                    >
+                    
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Criterio de busqueda :" />
+                            <p:inputText id="globalFilter" onkeyup="PF('carsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+
+
+                    <p:column headerText="Codigo">
+                        <p:outputLabel value="#{catalogo.codigoProducto}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterMatchMode="contains">
+                        <p:outputLabel value="#{catalogo.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{catalogo.descripcion}" />
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <p:outputLabel value="#{catalogo.precio}" />
+                    </p:column>
+
+                    <p:column>
+                        <p:commandButton icon="ui-icon-search" actionListener="#{catalogoProductosMB.selecionarCatalogo(catalogo)}" update="@form" />
+
+                    </p:column>
+
+                </p:dataTable>
+
+                <!-- Dialogo para mostrar el detalle de los productos-->
+                <p:dialog header="Producto" widgetVar="dlg3" modal="true" showEffect="explode" hideEffect="explode">
+
+                    <div style="text-align: center">
+                        <p:graphicImage width="200" height="200" value="/resources/img/fotoNoDisponible.jpg" style="margin: 0 auto"  /> 
+                    </div>
+
+                    <p:panelGrid columns="2">
+
+
+                        <p:outputLabel  value="Codigo: "/>
+                        <p:outputLabel value="#{catalogoProductosMB.catalogoSeleccionado.codigoProducto}"/>
+
+                        <p:outputLabel value="Nombre: "/>
+                        <p:outputLabel value="#{catalogoProductosMB.catalogoSeleccionado.nombre}"/>
+
+                        <p:outputLabel value="Descripcion: "/>
+                        <p:outputLabel value="#{catalogoProductosMB.catalogoSeleccionado.descripcion}"/>
+
+                        <p:outputLabel value="Marca: "/>
+                        <p:outputLabel value="#{catalogoProductosMB.catalogoSeleccionado.marca}"/>
+
+                        <p:outputLabel value="Precio: "/>
+                        <p:outputLabel value="#{catalogoProductosMB.catalogoSeleccionado.precio}"/>
+
+                        <p:outputLabel value="Precio Mayorista: "/>
+                        <p:outputLabel value="#{catalogoProductosMB.catalogoSeleccionado.precioMayorista}"/>
+
+                        <p:outputLabel value="Descuento: "/>
+                        <p:outputLabel value="#{catalogoProductosMB.catalogoSeleccionado.descuento}"/>
+
+                    </p:panelGrid>
+                </p:dialog>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
