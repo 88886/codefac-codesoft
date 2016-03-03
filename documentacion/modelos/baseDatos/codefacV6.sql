@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     02/03/2016 15:52:39                          */
+/* Created on:     03/03/2016 11:43:23                          */
 /*==============================================================*/
 
 
@@ -14,6 +14,8 @@ drop table if exists CATEGORIA_PRODUCTO;
 
 drop table if exists CLIENTE;
 
+drop table if exists COMBO_PRODUCTO;
+
 drop table if exists COMPRA;
 
 drop table if exists CONFIGURACION;
@@ -23,6 +25,8 @@ drop table if exists CREDITOBANCO;
 drop table if exists CREDITO_FACTURA;
 
 drop table if exists DETALLES_SERVICIO;
+
+drop table if exists DETALLE_COMBO_PRODUCTO;
 
 drop table if exists DETALLE_PRODUCTO_GENERAL;
 
@@ -134,6 +138,22 @@ create table CLIENTE
 );
 
 /*==============================================================*/
+/* Table: COMBO_PRODUCTO                                        */
+/*==============================================================*/
+create table COMBO_PRODUCTO
+(
+   ID_COMBO_PRODUCTO    int not null auto_increment,
+   NOMBRE               varchar(128),
+   PRECIO               numeric(8,2),
+   COSTO                numeric(8,2),
+   DESCUENTO            numeric(8,2),
+   DESCRIPCION          varchar(512),
+   STOCK                int,
+   ESTADO               varchar(8),
+   primary key (ID_COMBO_PRODUCTO)
+);
+
+/*==============================================================*/
 /* Table: COMPRA                                                */
 /*==============================================================*/
 create table COMPRA
@@ -200,6 +220,18 @@ create table DETALLES_SERVICIO
    COSTO                decimal(8,2),
    DESCRIPCION_         varchar(128),
    primary key (COD_DETALLE_SERVICIO)
+);
+
+/*==============================================================*/
+/* Table: DETALLE_COMBO_PRODUCTO                                */
+/*==============================================================*/
+create table DETALLE_COMBO_PRODUCTO
+(
+   ID_DETALLE_COMBO     int not null,
+   ID_COMBO_PRODUCTO    int,
+   CODIGO_PRODUCTO      varchar(64),
+   CANTIDAD             int,
+   primary key (ID_DETALLE_COMBO)
 );
 
 /*==============================================================*/
@@ -449,6 +481,12 @@ alter table DETALLES_SERVICIO add constraint FK_REFERENCE_24 foreign key (CODIGO
 
 alter table DETALLES_SERVICIO add constraint FK_REFERENCE_25 foreign key (CODIGO_SERVICIO)
       references SERVICIOS (CODIGO_SERVICIO) on delete restrict on update restrict;
+
+alter table DETALLE_COMBO_PRODUCTO add constraint FK_REFERENCE_33 foreign key (ID_COMBO_PRODUCTO)
+      references COMBO_PRODUCTO (ID_COMBO_PRODUCTO) on delete restrict on update restrict;
+
+alter table DETALLE_COMBO_PRODUCTO add constraint FK_REFERENCE_34 foreign key (CODIGO_PRODUCTO)
+      references CATALAGO_PRODUCTO (CODIGO_PRODUCTO) on delete restrict on update restrict;
 
 alter table DETALLE_PRODUCTO_GENERAL add constraint FK_REFERENCE_13 foreign key (CODIGO_FACTURA)
       references VENTA (CODIGO_FACTURA) on delete restrict on update restrict;
