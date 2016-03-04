@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+
+        <p:panel header="Gestionar Combos">
+            <h:form>
+                <p:dataTable
+                    value="#{gestionarCombosMB.listaCombos}"
+                    var="combo"
+                    >
+
+                    <f:facet name="header" >                               
+                        <p:commandButton id="btnNuevoCliente" ajax="false" action="crearCombo"  icon="ui-icon-plus" update="" />  
+                        <p:commandButton id="btnEditarCliente" actionListener="#{gestionProductoMB.mostrarEditarProducto()}" icon="ui-icon-pencil" update="" />                          
+                    </f:facet>
+
+                    <p:column headerText="Codigo">
+                        <p:outputLabel value="#{combo.idComboProducto}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <p:outputLabel value="#{combo.nombre}"/>
+                    </p:column>
+
+                    <p:column headerText="Detalle">
+                        <p:outputLabel value="#{combo.imprimirDetalle()}"/>
+                    </p:column>
+
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{combo.descripcion}"/>
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <p:outputLabel value="#{combo.precio}"/>
+                    </p:column>
+
+                    <p:column headerText="Costo">
+                        <p:outputLabel value="#{combo.costo}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

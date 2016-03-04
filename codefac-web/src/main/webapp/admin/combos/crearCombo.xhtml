@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+
+        <h:form id="formNuevoCombo" style="font-size: 12px">
+            <div style="">
+                <p:panel header="Nuevo Combo Producto" >
+                    <p:panelGrid columns="4" style="margin: 0 auto">
+                        <p:outputLabel value="Nombre" />
+                        <p:inputText value="#{gestionarCombosMB.comboProductoNuevo.nombre}" />
+
+                        <p:outputLabel value="Descripcion" />
+                        <p:inputText value="#{gestionarCombosMB.comboProductoNuevo.descripcion}" />
+
+                        <p:outputLabel value="Precio" />
+                        <p:inputText value="#{gestionarCombosMB.comboProductoNuevo.precio}" />
+
+
+                        <p:outputLabel value="Costo" />
+                        <p:inputText id="txtCosto" value="#{gestionarCombosMB.comboProductoNuevo.costo}" />
+
+                        <p:outputLabel value="Descuento" />
+                        <p:inputText value="#{gestionarCombosMB.comboProductoNuevo.descuento}" />
+
+                        <p:outputLabel value="Stock" />
+                        <p:inputText value="#{gestionarCombosMB.comboProductoNuevo.stock}" />
+
+                    </p:panelGrid>
+
+                    <p:spacer height="10px"/>
+
+                    <p:panelGrid columns="6" style="margin: 0 auto"  >
+                        <p:outputLabel value="Codigo:" />
+                        <p:inputText id="txtCodigoDetalle" value="#{gestionarCombosMB.codigoDetalle}" style="width: 100px" />
+                        <p:commandButton id="btnEncontrarCatalogo" icon="ui-icon-search" />
+                        <p:outputLabel value="Cantidad" />
+                        <p:inputText value="#{gestionarCombosMB.cantidad}" style="width: 50px" />
+                        <p:commandButton id="btnAgregar" value="Agregar" actionListener="#{gestionarCombosMB.agregarDetalle()}" update=":formNuevoCombo:tableDetalleCombo,:formNuevoCombo:txtCosto" />
+                    </p:panelGrid>
+
+                    <!-- dialogo para buscar los productos de los catalogos -->
+                    <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
+                        <p:dataTable 
+                            id="tableCatalogo"
+                            value="#{gestionarCombosMB.listaCatalogos}" 
+                            var="catalogo"
+                            selectionMode="single" 
+                            rowKey="#{catalogo.codigoProducto}"
+                            selection="#{gestionarCombosMB.catalogoProductoSeleccionado}" >
+
+                            <p:ajax event="rowSelect" listener="#{gestionarCombosMB.onRowSelect}" update=":formNuevoCombo:txtCodigoDetalle"/>
+                            <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
+
+                            <p:column headerText="codigo">
+                                <p:outputLabel value="#{catalogo.codigoProducto}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
+                                <p:outputLabel value="#{catalogo.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="descripcion">
+                                <p:outputLabel value="#{catalogo.descripcion}"/>
+                            </p:column>
+
+                            <p:column headerText="marca">
+                                <p:outputLabel value="#{catalogo.marca}"/>
+                            </p:column>
+
+                            <p:column headerText="precio">
+                                <p:outputLabel value="#{catalogo.precio}"/>
+                            </p:column>                                    
+
+                        </p:dataTable>
+                    </p:overlayPanel>
+
+
+                    <p:spacer height="20px"/>
+
+                    <p:dataTable 
+                        id="tableDetalleCombo"
+                        value="#{gestionarCombosMB.detalleCombos}"
+                        var="detalle"
+                        >
+
+
+                        <p:column headerText="Codigo">
+                            <p:outputLabel value="" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:outputLabel value="#{detalle.codigoProducto.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Descripcion">
+                            <p:outputLabel value="#{detalle.codigoProducto.descripcion}" />
+                        </p:column>
+
+                        <p:column headerText="Precio">
+                            <p:outputLabel value="#{detalle.codigoProducto.precio}" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <p:outputLabel value="#{detalle.cantidad}" />
+                        </p:column>
+
+                        <p:column headerText="Subtotal">
+                            <p:outputLabel value="#{detalle.subtotal}" />
+                        </p:column>
+
+
+                    </p:dataTable>
+
+                    <p:panel style="text-align: center">
+                        <p:commandButton actionListener="#{gestionarCombosMB.grabarCombo()}"  value="Guardar" style="background-image: none ;background-color: forestgreen;color: white " >
+                            <p:confirm header="Confirmar" message="Estas seguro que quieres grabar?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:commandButton immediate="true" action="crearCombo" ajax="false" value="Limpiar" />
+                        <p:commandButton immediate="true" action="gestionarCombo" value="Cancelar" style="background-image: none;background-color: chocolate;color: white" />                       
+
+                    </p:panel>
+
+                    <!-- Dialogo para confirmar grabar o no -->
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+                    <!-- Dialogo que pregunta si quiere crear un nuevo combo-->
+                    <p:dialog header="Nueva Compra" widgetVar="dialogNuevo" modal="true">
+                        <h:form>
+                            <h2>Desea crear otro combo?</h2>
+                            <p:commandButton  value="Nueva" action="crearCombo" ajax="false"/>
+                            <p:commandButton value="Salir" action="gestionarCombo" ajax="false" />      
+                        </h:form>
+                    </p:dialog>
+                </p:panel>
+
+
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
