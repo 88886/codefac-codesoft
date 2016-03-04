@@ -7,6 +7,7 @@ package ec.com.codesoft.modelo.facade;
 
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.ComboProducto;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -14,6 +15,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author carlo
  */
+@Stateless
 public class ComboProductoFacade extends AbstractFacade<ComboProducto> 
 {
 

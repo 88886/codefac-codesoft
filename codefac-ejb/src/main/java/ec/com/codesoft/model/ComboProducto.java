@@ -8,7 +8,9 @@ package ec.com.codesoft.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,11 +41,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ComboProducto.findByDescripcion", query = "SELECT c FROM ComboProducto c WHERE c.descripcion = :descripcion"),
     @NamedQuery(name = "ComboProducto.findByStock", query = "SELECT c FROM ComboProducto c WHERE c.stock = :stock"),
     @NamedQuery(name = "ComboProducto.findByEstado", query = "SELECT c FROM ComboProducto c WHERE c.estado = :estado")})
-public class ComboProducto implements Serializable {
+public class ComboProducto implements Serializable 
+{
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "ID_COMBO_PRODUCTO")
     private Integer idComboProducto;
     @Size(max = 128)
@@ -64,8 +66,9 @@ public class ComboProducto implements Serializable {
     @Size(max = 8)
     @Column(name = "ESTADO")
     private String estado;
-    @OneToMany(mappedBy = "idComboProducto")
-    private Collection<DetalleComboProducto> detalleComboProductoCollection;
+    
+    @OneToMany(mappedBy = "idComboProducto",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<DetalleComboProducto> detalleComboProductoCollection;
 
     public ComboProducto() {
     }
@@ -137,15 +140,35 @@ public class ComboProducto implements Serializable {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public String imprimirDetalle()
+    {
+        String cadena="";
+        for (DetalleComboProducto detalle : detalleComboProductoCollection) 
+        {
+            cadena+=detalle.getCodigoProducto().getNombre()+",";
+        }
+        return cadena;
+    }
 
-    @XmlTransient
-    public Collection<DetalleComboProducto> getDetalleComboProductoCollection() {
+//    @XmlTransient
+//    public Collection<DetalleComboProducto> getDetalleComboProductoCollection() {
+//        return detalleComboProductoCollection;
+//    }
+//
+//    public void setDetalleComboProductoCollection(Collection<DetalleComboProducto> detalleComboProductoCollection) {
+//        this.detalleComboProductoCollection = detalleComboProductoCollection;
+//    }
+
+    public List<DetalleComboProducto> getDetalleComboProductoCollection() {
         return detalleComboProductoCollection;
     }
 
-    public void setDetalleComboProductoCollection(Collection<DetalleComboProducto> detalleComboProductoCollection) {
+    public void setDetalleComboProductoCollection(List<DetalleComboProducto> detalleComboProductoCollection) {
         this.detalleComboProductoCollection = detalleComboProductoCollection;
     }
+    
+    
 
     @Override
     public int hashCode() {

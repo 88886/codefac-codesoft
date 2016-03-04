@@ -87,6 +87,9 @@ public class CatalagoProducto implements Serializable {
 
     @OneToMany(mappedBy = "codigoProducto")
     private List<ProductoGeneralCompra> productoGeneralCompraList;
+    
+    @OneToMany(mappedBy = "codigoProducto")
+    private List<DetalleComboProducto> detalleComboProductoCollection;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "catalagoProducto")
     private ProductoGeneralVenta productoGeneralVenta;

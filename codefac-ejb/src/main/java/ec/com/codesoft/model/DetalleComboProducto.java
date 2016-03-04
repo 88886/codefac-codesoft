@@ -6,9 +6,12 @@
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.omg.PortableServer.THREAD_POLICY_ID;
 
 @Entity
 @Table(name = "detalle_combo_producto")
@@ -27,16 +31,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DetalleComboProducto.findByCantidad", query = "SELECT d FROM DetalleComboProducto d WHERE d.cantidad = :cantidad")})
 public class DetalleComboProducto implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_DETALLE_COMBO")
     private Integer idDetalleCombo;
     @Column(name = "CANTIDAD")
     private Integer cantidad;
+    
     @JoinColumn(name = "ID_COMBO_PRODUCTO", referencedColumnName = "ID_COMBO_PRODUCTO")
     @ManyToOne
     private ComboProducto idComboProducto;
+    
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO")
     @ManyToOne
     private CatalagoProducto codigoProducto;
@@ -78,6 +84,14 @@ public class DetalleComboProducto implements Serializable {
 
     public void setCodigoProducto(CatalagoProducto codigoProducto) {
         this.codigoProducto = codigoProducto;
+    }
+    
+    public String getSubtotal()
+    {
+        
+        System.out.println(this.codigoProducto.getPrecio().multiply(new BigDecimal(cantidad)));
+        return this.codigoProducto.getPrecio().multiply(new BigDecimal(cantidad)).toString();
+        
     }
 
     @Override

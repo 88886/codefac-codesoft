@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     03/03/2016 11:43:23                          */
+/* Created on:     03/03/2016 12:44:08                          */
 /*==============================================================*/
 
 
@@ -227,7 +227,7 @@ create table DETALLES_SERVICIO
 /*==============================================================*/
 create table DETALLE_COMBO_PRODUCTO
 (
-   ID_DETALLE_COMBO     int not null,
+   ID_DETALLE_COMBO     int not null auto_increment,
    ID_COMBO_PRODUCTO    int,
    CODIGO_PRODUCTO      varchar(64),
    CANTIDAD             int,
