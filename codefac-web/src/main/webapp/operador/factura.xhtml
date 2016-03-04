@@ -13,7 +13,7 @@ and open the template in the editor.
                 template="/template/plantillaOperador.xhtml">
 
     <ui:define name="contenido">
-        <p:panel id="panelFactura" header="Factura" style="width: 60%;text-align: left;margin: 0 auto;" >
+        <p:panel id="panelFactura" header="Factura" style="width: 70%;text-align: left;margin: 0 auto;" >
             <h:form id="tipoCliente">
                 <p:remoteCommand name="onloadE" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
                 <p:remoteCommand name="onloadG" action="#{facturaMB.verificarDialogoG()}" autoRun="true" />
@@ -109,18 +109,39 @@ and open the template in the editor.
 
                             <p:outputLabel/>
                             <p:panel  rendered="#{facturaMB.estBanco}" id="idBanco">
-                                <p:outputLabel  value="Banco :" />
-                                <p:multiSelectListbox id="tipoBanco" value="#{facturaMB.nombreBanco}" effect="slide">
-                                    <f:selectItems value="#{facturaMB.selectGeneral}" />  
-                                    <p:ajax event="clik" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr"/>        
-                                </p:multiSelectListbox>                                 
+                                <p:panelGrid columns="2">
+                                    <p:outputLabel for="tipoBanco"  value="Banco :" />
+                                    <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="width:125px">
+                                        <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                                        <p:ajax event="change" listener="#{facturaMB.devolverBancoNombre()}" update=":form:infDistr"/>        
+                                    </p:selectOneMenu>  
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" id="idMeses">
+                                    <p:outputLabel for="mesesBanco"  value="Meses :" />
+                                    <p:selectOneMenu  id="mesesBanco" value="#{facturaMB.mesSeleccionado}" style="width:125px">
+                                        <f:selectItem itemLabel="Seleccione el Mes"/>
+                                        <f:selectItems var="meses" value="#{facturaMB.intereses}" itemLabel="#{meses.meses} meses" itemValue="#{meses.meses}" />
+                                        <p:ajax event="change" listener="#{facturaMB.calcularlInteres()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
+                                    </p:selectOneMenu>  
+                                </p:panelGrid>
+
+                                <p:panelGrid id="idCampoInteres" columns="2">
+                                    <p:outputLabel value="Interés :"/>
+                                    <p:inputText value="#{facturaMB.campoInteres}" readonly="true" style="width:25%"/>
+                                </p:panelGrid>
                             </p:panel>
 
                             <p:panel  rendered="#{facturaMB.estCheue}" id="idCheque">
-                                <p:outputLabel  value="No Cheque:" />
-                                <p:inputText value="#{facturaMB.NCheque}"/>
+                                <p:panelGrid columns="4">
+                                    <p:outputLabel for="bancoCheques" value="Banco:" />
+                                    <p:selectOneMenu  id="bancoCheques" value="#{facturaMB.nombreBanco}" style="width:125px">
+                                        <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                                    </p:selectOneMenu>  
+                                    <p:outputLabel value="No Cheque:" />
+                                    <p:inputText value="#{facturaMB.NCheque}"/>
+                                </p:panelGrid>
                             </p:panel>
-
                         </p:panelGrid>
                     </p:tab>
                 </p:accordionPanel>
@@ -194,6 +215,12 @@ and open the template in the editor.
                         <p:column headerText="Total" style="text-align: left">
                             <h:outputText value="#{detallesVenta.total}" />
                         </p:column>
+                        <p:column headerText="Precio" style="text-align: left">
+                            <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="width:125px">
+                                <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                            </p:selectOneMenu>  
+                        </p:column>
+
                         <p:column headerText="Acciones" style="text-align: left">
                             <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
                         </p:column>
@@ -211,8 +238,15 @@ and open the template in the editor.
 
                         <p:outputLabel  value="Iva (12%):"/>
                         <p:inputText id="iva" value="#{facturaMB.iva}" readonly="true"/>
-                        <p:outputLabel  value="Total : "/>
-                        <p:inputText id="total" value="#{facturaMB.total}" readonly="true"/>
+
+                        <p:outputLabel  value="Total + Iva : "/>
+                        <p:inputText id="totalIva" value="#{facturaMB.total}" readonly="true"/>
+
+                        <p:outputLabel  value="Recargo Tarjeta : "/>
+                        <p:inputText id="interes" value="#{facturaMB.interesTarjeta}" readonly="true"/>
+
+                        <p:outputLabel  value="Total a Pagar : "/>
+                        <p:inputText id="totalPagar" value="#{facturaMB.totalPagar}" readonly="true"/>
                     </p:panelGrid>
                 </p:panel>
 

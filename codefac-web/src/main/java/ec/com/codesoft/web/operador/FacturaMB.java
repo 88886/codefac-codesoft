@@ -112,10 +112,17 @@ public class FacturaMB {
     private List<SelectItemGroup> selectGroupBancos; //lista de Selects Groups Bancos
     private List<SelectItemGroup> selectMeses; //lista de Selects Groups Meses
     private String nombreBanco;
+    private BigDecimal campoInteres; // variable para mostrar el intereas del banco 
+    private  boolean estadoInteres;
+    private Integer mesSeleccionado; //mesSeleccionado
+    private Boolean banderaInteres; //controlar la 1 vez que calcule el interes
+    private BigDecimal interesTarjeta;
+    private BigDecimal totalPagar;
 
     /**
      * Porpiedad para enlazar el numero de factura
      */
+    
     private Integer codigoDocumento;
 
     @EJB
@@ -163,64 +170,51 @@ public class FacturaMB {
         estBanco = false;
         tipoPago = "Efectivo";
         NCheque = "";
+        estadoInteres=false;
+        campoInteres=new BigDecimal("0.0");
+        banderaInteres=true;
+        interesTarjeta=new BigDecimal("0.0");
+        totalPagar=new BigDecimal("0.0");
+        
 
-        //incializar las opciones de Bancos
+        //devolver todos los bancos
         bancos = facturaServicio.devolverBancos();
-        selectGeneral = new ArrayList<SelectItem>(); //cambiar esto por el select intem general
-        selectGroupBancos = new ArrayList<SelectItemGroup>();
-        selectMeses = new ArrayList<SelectItemGroup>();
-
-        for (int i = 0; i < bancos.size(); i++) {
-            selectGroupBancos.add(new SelectItemGroup(bancos.get(i).getNombre()));
-            bancoBuscar = facturaServicio.devolverInteresBanco(bancos.get(i).getNombre());
-            interesesPorBanco = bancoBuscar.getInteresesList();
-            SelectItem select[] = new SelectItem[interesesPorBanco.size()];
-            for (int j = 0; j < interesesPorBanco.size(); j++) {
-                System.out.println("Banco " + bancoBuscar.getNombre() + interesesPorBanco.get(j).getMeses());
-                //System.out.println(bancos.get(i).getNombre()+"-> Intereses "+ interesesPorBanco.get(j));
-                selectMeses.add(new SelectItemGroup(interesesPorBanco.get(j).getMeses() + " meses"));
-                System.out.println(selectMeses.size());
-                select[j] = selectMeses.get(j);
-                //selectMeses.add(new SelectItemGroup(interesesPorBanco.get(j).getNotas()));
-                //interesesPorBanco.get(j).getMeses().toString() + " meses")
-
-            }
-
-            selectGroupBancos.get(i).setSelectItems(select);
-
-            selectGeneral.add(selectGroupBancos.get(i));
-
-        }
-
-//        SelectItemGroup Tresmeses = new SelectItemGroup("3 Meses");
-//        SelectItemGroup Seismeses = new SelectItemGroup("6 Meses");
-//        SelectItemGroup Nuevemeses = new SelectItemGroup("9 Meses");
-//        SelectItemGroup DoceMeses = new SelectItemGroup("12 Meses");
-//
-//        for (int i = 0; i < selectGroupBancos.size(); i++) {
-//            selectGroupBancos.get(i).setSelectItems(new SelectItem[]{Tresmeses, Seismeses, Nuevemeses, DoceMeses});
-//            selectGeneral.add(selectGroupBancos.get(i));
-//        }
+        nombreBanco=bancos.get(0).getNombre();
+        intereses=bancos.get(0).getInteresesList();
+        
+        
     }
 
-    public void llenarMesesBanco() {
-        //llenar los meses por cada banco
-//        int indice = 0;
-//        interesesPorBanco = facturaServicio.devolverInteresBanco(nombreBanco);
-//        for (int i = 0; i < interesesPorBanco.size(); i++) {
-//            selectMeses.add(new SelectItemGroup(interesesPorBanco.get(i).getMeses().toString()));
-//        }
-//
-//        for (int i = 0; i < selectGroupBancos.size(); i++) {
-//            if (selectGroupBancos.get(i).equals(nombreBanco)) {
-//                indice = i;
-//                for (int j = 0; j <= selectMeses.size(); j++) {
-//                    selectGroupBancos.get(i).setSelectItems(new SelectItem[]{selectMeses.get(j)});
-//                }
-//            }
-//        }
-//        selectGeneral.add(selectGroupBancos.get(indice));
-
+   public void calcularlInteres(){
+       System.err.println("Calcular Interes");
+       for(int i=0;i<bancos.size();i++){
+           if(bancos.get(i).getNombre().equals(nombreBanco)){
+               for(int j=0;j<bancos.get(i).getInteresesList().size();j++){
+                   if(bancos.get(i).getInteresesList().get(j).getMeses()== mesSeleccionado){
+                       
+                       estadoInteres=true;
+                       campoInteres=bancos.get(i).getInteresesList().get(j).getValor();
+                       interesTarjeta=(total.multiply(campoInteres.divide(new BigDecimal("100"))));
+                       totalPagar=total.add(interesTarjeta);
+                       System.err.println("Total "+total+"  Interes"+ interesTarjeta);
+                       interesTarjeta=interesTarjeta.setScale(2,BigDecimal.ROUND_UP);
+                       totalPagar=totalPagar.setScale(2, BigDecimal.ROUND_UP);
+                   }
+               }
+           }
+       }
+   }
+    
+    public void devolverBancoNombre(){
+    
+        bancoBuscar = facturaServicio.devolverInteresBanco(nombreBanco);
+        intereses=bancoBuscar.getInteresesList();
+        campoInteres=new BigDecimal("0.0");
+//        System.err.println(nombreBanco);
+//        System.out.println(mesSeleccionado);
+//        calcularlInteres();
+        
+        
     }
 
     public void verificarDialogo() {
@@ -336,7 +330,7 @@ public class FacturaMB {
             System.out.println("Encontrado");
             if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
                 System.out.println("general");
-
+                System.err.println("codifoP"+catalogoSeleccionado.getCodigoProducto());
                 productoGeneral = facturaServicio.devolverStockGeneral(catalogoSeleccionado.getCodigoProducto());
                 // System.out.println(productoGeneral.getCantidad());
                 int numDetalles = 0;
@@ -534,6 +528,7 @@ public class FacturaMB {
                     iva = iva.setScale(2, BigDecimal.ROUND_UP);
                     total = subtotal.multiply(new BigDecimal("1.12"));
                     total = total.setScale(2, BigDecimal.ROUND_UP);
+                    
                 }
 
                 DetallesVenta detalles = new DetallesVenta(cantidadComprar,
@@ -573,7 +568,7 @@ public class FacturaMB {
                         totalRegistro = productosIndividualesDetalles.get(i).getCosto().multiply(new BigDecimal(cantidadComprar));
                         subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
                         subtotal = subtotal.add(totalRegistro);
-                        if (tipoCliente.equals("C")) {
+                        if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
                             iva = new BigDecimal("0.0");
                             iva = iva.setScale(2, BigDecimal.ROUND_UP);
                             total = subtotal;
@@ -1206,6 +1201,16 @@ public class FacturaMB {
         this.selectGeneral = selectGeneral;
     }
 
+    public BigDecimal getCampoInteres() {
+        return campoInteres;
+    }
+
+    public void setCampoInteres(BigDecimal campoInteres) {
+        this.campoInteres = campoInteres;
+    }
+    
+    
+
     public String getNombreBanco() {
         return nombreBanco;
     }
@@ -1221,5 +1226,58 @@ public class FacturaMB {
     public void setSelectGroupBancos(List<SelectItemGroup> selectGroupBancos) {
         this.selectGroupBancos = selectGroupBancos;
     }
+
+    public List<Banco> getBancos() {
+        return bancos;
+    }
+
+    public void setBancos(List<Banco> bancos) {
+        this.bancos = bancos;
+    }
+
+    public List<Intereses> getIntereses() {
+        return intereses;
+    }
+
+    public void setIntereses(List<Intereses> intereses) {
+        this.intereses = intereses;
+    }
+
+    public boolean getEstadoInteres() {
+        return estadoInteres;
+    }
+
+    public void setEstadoInteres(boolean estadoInteres) {
+        this.estadoInteres = estadoInteres;
+    }
+
+    public Integer getMesSeleccionado() {
+        return mesSeleccionado;
+    }
+
+    public void setMesSeleccionado(Integer mesSeleccionado) {
+        this.mesSeleccionado = mesSeleccionado;
+    }
+
+    public BigDecimal getInteresTarjeta() {
+        return interesTarjeta;
+    }
+
+    public void setInteresTarjeta(BigDecimal interesTarjeta) {
+        this.interesTarjeta = interesTarjeta;
+    }
+
+    public BigDecimal getTotalPagar() {
+        return totalPagar;
+    }
+
+    public void setTotalPagar(BigDecimal totalPagar) {
+        this.totalPagar = totalPagar;
+    }
+    
+    
+    
+    
+    
 
 }
