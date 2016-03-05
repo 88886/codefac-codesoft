@@ -34,7 +34,9 @@ public class ProformaModelo extends ReporteJasper<FacturaDetalleModeloReporte>{
     
     private List<FacturaDetalleModeloReporte> detalles;
 
-    public ProformaModelo() {
+    public ProformaModelo(String raiz) 
+    {
+        super(raiz);
         this.detalles= new ArrayList<FacturaDetalleModeloReporte>();
         this.codigoFactura="";
         this.nombreCliente="";
@@ -56,7 +58,8 @@ public class ProformaModelo extends ReporteJasper<FacturaDetalleModeloReporte>{
     
     
 
-    public ProformaModelo(String codigoFactura, String nombreCliente, String direccion, String ruc, String telefono, String fechaFactura, String formaPago, String nota, BigDecimal total, BigDecimal ivaTotal, BigDecimal subtotal) {
+    public ProformaModelo(String codigoFactura, String nombreCliente, String direccion, String ruc, String telefono, String fechaFactura, String formaPago, String nota, BigDecimal total, BigDecimal ivaTotal, BigDecimal subtotal,String raiz) {
+        super(raiz);
         this.codigoFactura = codigoFactura;
         this.nombreCliente = nombreCliente;
         this.direccion = direccion;

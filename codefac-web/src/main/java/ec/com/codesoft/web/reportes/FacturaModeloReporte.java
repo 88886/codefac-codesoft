@@ -34,7 +34,9 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     
     private List<FacturaDetalleModeloReporte> detalles;
 
-    public FacturaModeloReporte() {
+    public FacturaModeloReporte(String raiz) 
+    {
+        super(raiz);
         this.detalles= new ArrayList<FacturaDetalleModeloReporte>();
         this.codigoFactura="";
         this.nombreCliente="";
@@ -56,7 +58,8 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     
     
 
-    public FacturaModeloReporte(String codigoFactura, String nombreCliente, String direccion, String ruc, String telefono, String fechaFactura, String formaPago, String nota, BigDecimal total, BigDecimal ivaTotal, BigDecimal subtotal) {
+    public FacturaModeloReporte(String codigoFactura, String nombreCliente, String direccion, String ruc, String telefono, String fechaFactura, String formaPago, String nota, BigDecimal total, BigDecimal ivaTotal, BigDecimal subtotal,String raiz) {
+        super(raiz);
         this.codigoFactura = codigoFactura;
         this.nombreCliente = nombreCliente;
         this.direccion = direccion;
@@ -234,9 +237,7 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
 
     public void setFechaFactura(String fechaFactura) {
         this.fechaFactura = fechaFactura;
-    }
-    
-    
+    }        
     
     
 }

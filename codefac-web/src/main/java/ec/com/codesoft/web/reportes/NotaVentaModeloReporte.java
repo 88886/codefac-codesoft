@@ -29,7 +29,9 @@ public class NotaVentaModeloReporte extends ReporteJasper<FacturaDetalleModeloRe
     
     private List<FacturaDetalleModeloReporte> detalles;
 
-    public NotaVentaModeloReporte() {
+    public NotaVentaModeloReporte(String raiz) 
+    {
+        super(raiz);
         this.detalles= new ArrayList<FacturaDetalleModeloReporte>();
         this.nombreCliente="";
         this.direccion="";
@@ -47,7 +49,8 @@ public class NotaVentaModeloReporte extends ReporteJasper<FacturaDetalleModeloRe
         
     }
 
-    public NotaVentaModeloReporte(String nombreCliente, String direccion, String telefono, String fechaFactura, String formaPago, BigDecimal total, List<FacturaDetalleModeloReporte> detalles) {
+    public NotaVentaModeloReporte(String nombreCliente, String direccion, String telefono, String fechaFactura, String formaPago, BigDecimal total, List<FacturaDetalleModeloReporte> detalles,String raiz) {
+        super(raiz);
         this.nombreCliente = nombreCliente;
         this.direccion = direccion;
         this.telefono = telefono;

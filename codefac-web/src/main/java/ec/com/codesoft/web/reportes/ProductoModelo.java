@@ -25,7 +25,8 @@ public class ProductoModelo extends ReporteJasper<ProductoModelo> {
 
     private List<ProductoModelo> lista;
 
-    public ProductoModelo(String codigo, String nombre, String descripcion, String costo, String iva, String precio) {
+    public ProductoModelo(String codigo, String nombre, String descripcion, String costo, String iva, String precio,String raiz) {
+        super(raiz);
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -35,7 +36,9 @@ public class ProductoModelo extends ReporteJasper<ProductoModelo> {
         this.lista = new ArrayList<ProductoModelo>();
     }
 
-    public ProductoModelo() {
+    public ProductoModelo(String raiz) 
+    {
+        super(raiz);
         this.lista = new ArrayList<ProductoModelo>();
     }
 

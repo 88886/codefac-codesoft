@@ -13,6 +13,7 @@ import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.modelo.servicios.NotaCreditoDebitoServicio;
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.reportes.FacturaDetalleModeloReporte;
 import ec.com.codesoft.web.reportes.NotaVentaModeloReporte;
 import java.io.IOException;
@@ -68,6 +69,9 @@ public class NotaCreditoMB implements Serializable {
 
     @EJB
     private NotaCreditoDebitoServicio notasServicios;
+
+    @EJB
+    private SistemaServicio sistemaServicio;
 
     @PostConstruct
     public void postConstruct() {
@@ -144,10 +148,10 @@ public class NotaCreditoMB implements Serializable {
 
     }
 
-    public void imprimir() {       
-    
+    public void imprimir() {
+
         System.out.println("imprimiendo ...");
-        NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte();
+        NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
         notaVenta.setDireccion(venta.getCedulaRuc().getDireccion());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
@@ -169,7 +173,7 @@ public class NotaCreditoMB implements Serializable {
                 notaVenta.agregarDetalle(detallesFactura);
             }
         }
-        
+
         try {
             notaVenta.exportarPDF();
             System.out.println("generando pdf ...");
@@ -179,7 +183,6 @@ public class NotaCreditoMB implements Serializable {
             Logger.getLogger(NotaCreditoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
     }
 
     public void cambiarValor() {
@@ -187,14 +190,13 @@ public class NotaCreditoMB implements Serializable {
         iva = valorModificacion.multiply(new BigDecimal("0.12"));
         total = subtotal.multiply(new BigDecimal("1.12"));
     }
-    
-    public void eliminarDetalle(DetallesVenta detalle)
-    {
+
+    public void eliminarDetalle(DetallesVenta detalle) {
         System.out.println("Eliminando Detalle ...");
         detalleVenta.remove(detalle);
         System.out.println(detalle.getTotal());
         //subtotal=subtotal.subtract(detalle.getTotal());
-        valorModificacion=new BigDecimal(0);
+        valorModificacion = new BigDecimal(0);
         cambiarValor();
         System.out.println(subtotal);
     }

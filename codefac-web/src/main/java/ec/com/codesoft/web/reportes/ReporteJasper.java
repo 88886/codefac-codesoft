@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.web.reportes;
 
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
+import ec.com.codesoft.web.seguridad.SistemaMB;
 import ec.com.codesoft.web.test.modelo.ModeloPersona;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -13,6 +15,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.NoneScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -24,10 +30,21 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
- * @author carlo
+ * @author carlos
  */
-public abstract class ReporteJasper<T> {
 
+public abstract class ReporteJasper<T> 
+{
+    
+    private String raiz;
+
+    public ReporteJasper(String raiz) 
+    {
+        this.raiz = raiz;
+    }
+    
+    
+    
     public abstract List<T> getLista();
 
     public abstract Map<String, Object> getParametros();
@@ -63,7 +80,13 @@ public abstract class ReporteJasper<T> {
         
         
         
-        String reportePath=FacesContext.getCurrentInstance().getExternalContext().getRealPath(getPath());
+        //String reportePath=FacesContext.getCurrentInstance().getExternalContext().getRealPath(getPath());
+        //String reportePath="E:/reportes/"+getPath();
+        
+        //String raiz=sistemaServicio.getConfiguracion().getPathReportes();
+        System.out.println("sistema: "+raiz);
+        String reportePath=raiz+getPath();
+        
         
         //jasperPrint2 = JasperFillManager.fillReport(reportPath2, new HashMap(), beanCollectionDataSource2);
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportePath,getParametros(), new JRBeanCollectionDataSource(getLista(),false));
@@ -135,4 +158,6 @@ public abstract class ReporteJasper<T> {
 
         return lstPersonas;
     }
+
+    
 }

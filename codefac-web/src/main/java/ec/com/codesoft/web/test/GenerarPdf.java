@@ -64,7 +64,7 @@ public class GenerarPdf implements Serializable {
     
     
     public void abrirPDF() {
-        FacturaModeloReporte factura = new FacturaModeloReporte();
+        //FacturaModeloReporte factura = new FacturaModeloReporte();
 //                "001",
 //                "Juan Perez",
 //                "Sangolqui",
@@ -115,13 +115,14 @@ public class GenerarPdf implements Serializable {
 //
 //        factura.agregarDetalle(detalle);
         
-        try {
-            factura.exportarPDF();
-        } catch (JRException ex) {
-            Logger.getLogger(GenerarPdf.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GenerarPdf.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            
+//            //factura.exportarPDF();
+//        } catch (JRException ex) {
+//            Logger.getLogger(GenerarPdf.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(GenerarPdf.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public void exportarPDF() throws JRException, IOException {

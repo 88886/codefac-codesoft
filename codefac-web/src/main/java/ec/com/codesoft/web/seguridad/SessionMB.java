@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.web.seguridad;
 
+import ec.com.codesoft.model.Configuracion;
 import ec.com.codesoft.model.Usuario;
 import ec.com.codesoft.modelo.servicios.SeguridadServicio;
 import java.io.Serializable;
@@ -24,8 +25,12 @@ import javax.websocket.Session;
  */
 @ManagedBean
 @SessionScoped
-public class SessionMB implements Serializable {
-
+public class SessionMB implements Serializable 
+{
+    /**
+     * Configuraciones del sistema
+     */
+    private Configuracion configuracion;
     /**
      * Nick del usuario que intenta loguearse
      */

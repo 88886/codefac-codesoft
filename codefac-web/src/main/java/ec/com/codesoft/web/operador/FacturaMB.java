@@ -20,6 +20,7 @@ import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import ec.com.codesoft.modelo.servicios.CompraServicio;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.reportes.FacturaDetalleModeloReporte;
 import ec.com.codesoft.web.reportes.FacturaModeloReporte;
 import ec.com.codesoft.web.reportes.NotaVentaModeloReporte;
@@ -136,6 +137,9 @@ public class FacturaMB {
 
     @EJB
     private CompraServicio compraServicio;
+    
+    @EJB
+    private SistemaServicio sistemaServicio;
 
     @PostConstruct
     public void inicializar() {
@@ -671,7 +675,7 @@ public class FacturaMB {
 
                 if (tipoCliente.equals("C")) {
 
-                    NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte();
+                    NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
                     notaVenta.setDireccion(clienteEncontrado.getDireccion());
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                     notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
@@ -706,7 +710,7 @@ public class FacturaMB {
                     }
 
                 } else {
-                    FacturaModeloReporte facturaReporte = new FacturaModeloReporte();
+                    FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
                     facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
                     facturaReporte.setDireccion(clienteEncontrado.getDireccion());
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -790,7 +794,7 @@ public class FacturaMB {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             // return "factura";
 
-            ProformaModelo facturaReporte = new ProformaModelo();
+            ProformaModelo facturaReporte = new ProformaModelo(sistemaServicio.getConfiguracion().getPathReportes());
             facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
             facturaReporte.setDireccion(clienteEncontrado.getDireccion());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
