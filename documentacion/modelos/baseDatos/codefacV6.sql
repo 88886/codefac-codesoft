@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     03/03/2016 12:44:08                          */
+/* Created on:     07/03/2016 9:56:10                           */
 /*==============================================================*/
 
 
@@ -97,7 +97,8 @@ create table CATALAGO_PRODUCTO
    PRECIO               decimal(8,2),
    PRECIO_MAYORISTA     decimal(8,2),
    COSTO                decimal(8,2),
-   DESCUENTO            int,
+   DESCUENTO            numeric(8,2),
+   DESCUENTO_MAYORISTA  numeric(8,2),
    UBICACION            varchar(64),
    UNIDADES             varchar(8),
    TIPO_PRODUCTO        char(1),
@@ -178,6 +179,7 @@ create table CONFIGURACION
 (
    ID_CONFIGURACION     int not null auto_increment,
    IVA                  numeric(8,2),
+   PATHREPORTES         varchar(512),
    primary key (ID_CONFIGURACION)
 );
 
