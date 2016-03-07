@@ -68,6 +68,9 @@ public class CatalagoProducto implements Serializable {
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
 
+    @Column(name = "DESCUENTO_MAYORISTA")
+    private BigDecimal descuentoMayorista;
+
     @Size(max = 64)
     @Column(name = "UBICACION")
     private String ubicacion;
@@ -87,7 +90,7 @@ public class CatalagoProducto implements Serializable {
 
     @OneToMany(mappedBy = "codigoProducto")
     private List<ProductoGeneralCompra> productoGeneralCompraList;
-    
+
     @OneToMany(mappedBy = "codigoProducto")
     private List<DetalleComboProducto> detalleComboProductoCollection;
 
@@ -251,6 +254,14 @@ public class CatalagoProducto implements Serializable {
         this.precioMayorista = precioMayorista;
     }
 
+    public BigDecimal getDescuentoMayorista() {
+        return descuentoMayorista;
+    }
+
+    public void setDescuentoMayorista(BigDecimal descuentoMayorista) {
+        this.descuentoMayorista = descuentoMayorista;
+    }
+    
     
 
     @Override
