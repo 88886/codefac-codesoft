@@ -22,6 +22,8 @@ public class DetallesVenta {
     private BigDecimal costo;
     private BigDecimal total;
     private List<Descuentos> descuentos;
+    private String precioSeleccionado;
+    private String  escogerDescuento;
 
     public DetallesVenta() {
     }
@@ -83,6 +85,30 @@ public class DetallesVenta {
     public void setDescuentos(List<Descuentos> descuentos) {
         this.descuentos = descuentos;
     }
+
+    
+
+    public String getPrecioSeleccionado() {
+        return precioSeleccionado;
+    }
+
+    public void setPrecioSeleccionado(String precioSeleccionado) {
+        this.precioSeleccionado = precioSeleccionado;
+    }
+
+    public String getEscogerDescuento() {
+        return escogerDescuento;
+    }
+
+    public void setEscogerDescuento(String escogerDescuento) {
+        this.escogerDescuento = escogerDescuento;
+    }
+    
+    
+    
+    
+    
+    
 
    
     
