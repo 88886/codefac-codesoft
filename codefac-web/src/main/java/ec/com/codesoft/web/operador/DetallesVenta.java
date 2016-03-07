@@ -7,6 +7,7 @@
 package ec.com.codesoft.web.operador;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  *
@@ -20,6 +21,7 @@ public class DetallesVenta {
     private String nombre;
     private BigDecimal costo;
     private BigDecimal total;
+    private List<Descuentos> descuentos;
 
     public DetallesVenta() {
     }
@@ -74,6 +76,20 @@ public class DetallesVenta {
         this.total = total;
     }
 
+    public List<Descuentos> getDescuentos() {
+        return descuentos;
+    }
+
+    public void setDescuentos(List<Descuentos> descuentos) {
+        this.descuentos = descuentos;
+    }
+
+   
+    
+
+  
+
+    
     
    
     
