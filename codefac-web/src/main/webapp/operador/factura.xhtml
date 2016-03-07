@@ -18,8 +18,8 @@ and open the template in the editor.
                 <p:remoteCommand name="onloadE" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
                 <p:remoteCommand name="onloadG" action="#{facturaMB.verificarDialogoG()}" autoRun="true" />
                 <div style="width: 100%;height: 50px">
-                    <div style="float: left;width:50%;height: 50px" >
-                        <h:panelGrid columns="5" style="margin-bottom:10px;margin-left: 30%" cellpadding="8">
+                    <div style="float: left;width:100%;height: 50px" >
+                        <h:panelGrid columns="5" style="margin-bottom:10px;margin-left:35%" cellpadding="8">
                             <p:outputLabel for="tipoCl" value="Tipo: " />
                             <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
                                 <f:selectItem itemLabel="Nota de Venta" itemValue="C" />
@@ -199,7 +199,7 @@ and open the template in the editor.
             </h:form>
             <h:form id="formDetalles">
                 <p:panel id="idDetallesFactura" >
-                    <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}">   
+                    <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}" id="tablaDetallesFactura">   
                         <p:column headerText="Cantidad" style="text-align: left">
                             <h:outputText value="#{detallesVenta.cantidad}" />
                         </p:column>
@@ -215,9 +215,11 @@ and open the template in the editor.
                         <p:column headerText="Total" style="text-align: left">
                             <h:outputText value="#{detallesVenta.total}" />
                         </p:column>
-                        <p:column headerText="Precio" style="text-align: left">
-                            <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="width:125px">
-                                <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                        <p:column headerText="Descuento" style="text-align: left" id="colDescuento">
+                            <p:selectOneMenu  value="#{facturaMB.descuentoSeleccionado}" style="width:125px">
+                                <f:selectItem itemLabel="Sin descuento"/>
+                                <f:selectItems var="descuento" value="#{detallesVenta.descuentos}" itemLabel="#{descuento.nombre}" itemValue="#{descuento.valor}"/>
+                                <p:ajax event="change" listener="#{facturaMB.aplicarDescuentos(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
                             </p:selectOneMenu>  
                         </p:column>
 

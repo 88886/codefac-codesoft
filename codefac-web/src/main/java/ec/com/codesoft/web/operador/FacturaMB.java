@@ -114,16 +114,16 @@ public class FacturaMB {
     private List<SelectItemGroup> selectMeses; //lista de Selects Groups Meses
     private String nombreBanco;
     private BigDecimal campoInteres; // variable para mostrar el intereas del banco 
-    private  boolean estadoInteres;
+    private boolean estadoInteres;
     private Integer mesSeleccionado; //mesSeleccionado
     private Boolean banderaInteres; //controlar la 1 vez que calcule el interes
     private BigDecimal interesTarjeta;
     private BigDecimal totalPagar;
+    private BigDecimal descuentoSeleccionado;
 
     /**
      * Porpiedad para enlazar el numero de factura
      */
-    
     private Integer codigoDocumento;
 
     @EJB
@@ -168,57 +168,55 @@ public class FacturaMB {
         clientesLista = clienteServicio.obtenerTodos();
         recibo = new BigDecimal("0.0");
         tipoCliente = "";
-        codigoDocumento = facturaServicio.getCodigoFactura();
+        codigoDocumento = 0;//facturaServicio.getCodigoFactura();
         estPanPagos = false;
         estBanco = false;
         estBanco = false;
         tipoPago = "Efectivo";
         NCheque = "";
-        estadoInteres=false;
-        campoInteres=new BigDecimal("0.0");
-        banderaInteres=true;
-        interesTarjeta=new BigDecimal("0.0");
-        totalPagar=new BigDecimal("0.0");
-        
+        estadoInteres = false;
+        campoInteres = new BigDecimal("0.0");
+        banderaInteres = true;
+        interesTarjeta = new BigDecimal("0.0");
+        totalPagar = new BigDecimal("0.0");
+        descuentoSeleccionado=new BigDecimal("0.0");
 
         //devolver todos los bancos
         bancos = facturaServicio.devolverBancos();
-        nombreBanco=bancos.get(0).getNombre();
-        intereses=bancos.get(0).getInteresesList();
-        
-        
+        nombreBanco = bancos.get(0).getNombre();
+        intereses = bancos.get(0).getInteresesList();
+
     }
 
-   public void calcularlInteres(){
-       System.err.println("Calcular Interes");
-       for(int i=0;i<bancos.size();i++){
-           if(bancos.get(i).getNombre().equals(nombreBanco)){
-               for(int j=0;j<bancos.get(i).getInteresesList().size();j++){
-                   if(bancos.get(i).getInteresesList().get(j).getMeses()== mesSeleccionado){
-                       
-                       estadoInteres=true;
-                       campoInteres=bancos.get(i).getInteresesList().get(j).getValor();
-                       interesTarjeta=(total.multiply(campoInteres.divide(new BigDecimal("100"))));
-                       totalPagar=total.add(interesTarjeta);
-                       System.err.println("Total "+total+"  Interes"+ interesTarjeta);
-                       interesTarjeta=interesTarjeta.setScale(2,BigDecimal.ROUND_UP);
-                       totalPagar=totalPagar.setScale(2, BigDecimal.ROUND_UP);
-                   }
-               }
-           }
-       }
-   }
-    
-    public void devolverBancoNombre(){
-    
+    public void calcularlInteres() {
+        System.err.println("Calcular Interes");
+        for (int i = 0; i < bancos.size(); i++) {
+            if (bancos.get(i).getNombre().equals(nombreBanco)) {
+                for (int j = 0; j < bancos.get(i).getInteresesList().size(); j++) {
+                    if (bancos.get(i).getInteresesList().get(j).getMeses() == mesSeleccionado) {
+
+                        estadoInteres = true;
+                        campoInteres = bancos.get(i).getInteresesList().get(j).getValor();
+                        interesTarjeta = (total.multiply(campoInteres.divide(new BigDecimal("100"))));
+                        totalPagar = total.add(interesTarjeta);
+                        System.err.println("Total " + total + "  Interes" + interesTarjeta);
+                        interesTarjeta = interesTarjeta.setScale(2, BigDecimal.ROUND_UP);
+                        totalPagar = totalPagar.setScale(2, BigDecimal.ROUND_UP);
+                    }
+                }
+            }
+        }
+    }
+
+    public void devolverBancoNombre() {
+
         bancoBuscar = facturaServicio.devolverInteresBanco(nombreBanco);
-        intereses=bancoBuscar.getInteresesList();
-        campoInteres=new BigDecimal("0.0");
+        intereses = bancoBuscar.getInteresesList();
+        campoInteres = new BigDecimal("0.0");
 //        System.err.println(nombreBanco);
 //        System.out.println(mesSeleccionado);
 //        calcularlInteres();
-        
-        
+
     }
 
     public void verificarDialogo() {
@@ -288,6 +286,47 @@ public class FacturaMB {
         //System.out.println(compra.getRuc());
     }
 
+    /*
+    // Aplicar descuentos funcion que aplica descuentos
+    */
+    public void aplicarDescuentos(DetallesVenta detallesVentaRecibido){
+        total=new BigDecimal("0.0");
+        subtotal=new BigDecimal("0.0");
+        System.out.println(detallesVentaRecibido.getNombre()+detallesVentaRecibido.getCosto());
+        for(int i=0;i<detallesVenta.size();i++){
+            if(detallesVenta.get(i).getCodigo().equals(detallesVentaRecibido.getCodigo())){
+                System.out.println("Es igual el producto");
+                detallesVenta.get(i).setCosto(descuentoSeleccionado);
+                detallesVenta.get(i).setTotal(descuentoSeleccionado.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));
+            }
+            System.out.println("total: "+ total);
+                totalRegistro = detallesVenta.get(i).getTotal();
+                subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
+                subtotal = subtotal.add(totalRegistro);
+                if (tipoCliente.equals("C")) {
+                    iva = new BigDecimal("0.0");
+                    iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                    //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
+                    System.out.println("total: "+ total);
+                    total = subtotal;
+                    total = total.setScale(2, BigDecimal.ROUND_UP);
+                    totalPagar=total;
+                } else {
+                    //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
+                    iva = subtotal.multiply(new BigDecimal("0.12"));
+                    iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                    total = subtotal.multiply(new BigDecimal("1.12"));
+                    total = total.setScale(2, BigDecimal.ROUND_UP);
+                    totalPagar=total;
+
+                }
+                
+                
+        }
+        
+       // detallesVentaRecibido.setCosto(descuentoSeleccionado);
+    }
+    
     public void buscarProducto() {
 
         catalogoEncontrado = catalogoServicio.buscarCatalogo(codigoP);
@@ -334,7 +373,7 @@ public class FacturaMB {
             System.out.println("Encontrado");
             if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
                 System.out.println("general");
-                System.err.println("codifoP"+catalogoSeleccionado.getCodigoProducto());
+                System.err.println("codifoP" + catalogoSeleccionado.getCodigoProducto());
                 productoGeneral = facturaServicio.devolverStockGeneral(catalogoSeleccionado.getCodigoProducto());
                 // System.out.println(productoGeneral.getCantidad());
                 int numDetalles = 0;
@@ -526,18 +565,26 @@ public class FacturaMB {
                     //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
                     total = subtotal;
                     total = total.setScale(2, BigDecimal.ROUND_UP);
+                    totalPagar=total;
                 } else {
                     //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
                     iva = subtotal.multiply(new BigDecimal("0.12"));
                     iva = iva.setScale(2, BigDecimal.ROUND_UP);
                     total = subtotal.multiply(new BigDecimal("1.12"));
                     total = total.setScale(2, BigDecimal.ROUND_UP);
-                    
+                    totalPagar=total;
+
                 }
 
                 DetallesVenta detalles = new DetallesVenta(cantidadComprar,
                         productoGeneral.getCodigo() + "", catalogoSeleccionado.getNombre(),
                         catalogoSeleccionado.getPrecio(), totalRegistro);
+                Descuentos precioMayorista = new Descuentos("Precio Mayorista", catalogoSeleccionado.getPrecioMayorista());
+                Descuentos precioDescuento = new Descuentos("Precio Descuento", catalogoSeleccionado.getDescuento());
+                List<Descuentos> descuentos = new ArrayList<Descuentos>();
+                descuentos.add(precioMayorista);
+                descuentos.add(precioDescuento);
+                detalles.setDescuentos(descuentos);
                 detallesVenta.add(detalles);
 
                 DetalleProductoGeneral detalle = new DetalleProductoGeneral();
@@ -577,16 +624,24 @@ public class FacturaMB {
                             iva = iva.setScale(2, BigDecimal.ROUND_UP);
                             total = subtotal;
                             total = total.setScale(2, BigDecimal.ROUND_UP);
+                            totalPagar=total;
                         } else {
                             iva = subtotal.multiply(new BigDecimal("0.12"));
                             iva = iva.setScale(2, BigDecimal.ROUND_UP);
                             total = subtotal.multiply(new BigDecimal("1.12"));
                             total = total.setScale(2, BigDecimal.ROUND_UP);
+                            totalPagar=total;
                         }
 
                         DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.get(i).getCodigoUnico(),
                                 productosIndividualesDetalles.get(i).getCodigoProducto().getNombre(),
                                 productosIndividualesDetalles.get(i).getCosto(), totalRegistro);
+                        Descuentos precioMayorista = new Descuentos("Precio Mayorista", catalogoSeleccionado.getPrecioMayorista());
+                        Descuentos precioDescuento = new Descuentos("Precio Descuento", catalogoSeleccionado.getDescuento());
+                        List<Descuentos> descuentos = new ArrayList<Descuentos>();
+                        descuentos.add(precioMayorista);
+                        descuentos.add(precioDescuento);
+                        detalles.setDescuentos(descuentos);
                         detallesVenta.add(detalles);
                         catalogoSeleccionado = new CatalagoProducto();
                         DetalleProductoIndividual detalle = new DetalleProductoIndividual();
@@ -888,6 +943,7 @@ public class FacturaMB {
         total = total.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
 
         total.setScale(2, BigDecimal.ROUND_UP);
+        totalPagar=total;
     }
 
     // metodo para escojer el tipo de pago
@@ -1212,8 +1268,6 @@ public class FacturaMB {
     public void setCampoInteres(BigDecimal campoInteres) {
         this.campoInteres = campoInteres;
     }
-    
-    
 
     public String getNombreBanco() {
         return nombreBanco;
@@ -1278,10 +1332,14 @@ public class FacturaMB {
     public void setTotalPagar(BigDecimal totalPagar) {
         this.totalPagar = totalPagar;
     }
-    
-    
-    
-    
+
+    public BigDecimal getDescuentoSeleccionado() {
+        return descuentoSeleccionado;
+    }
+
+    public void setDescuentoSeleccionado(BigDecimal descuentoSeleccionado) {
+        this.descuentoSeleccionado = descuentoSeleccionado;
+    }
     
 
 }
