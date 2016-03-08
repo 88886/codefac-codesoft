@@ -117,6 +117,9 @@ public class CatalagoProducto implements Serializable {
     public CatalagoProducto(String codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
+    
+    
+    //////////////////////METODOS GET AND SET ///////////////////
 
     public String getCodigoProducto() {
         return codigoProducto;

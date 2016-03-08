@@ -5,12 +5,92 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <div style="text-align: left">         
+            <h:form>
+                <p:panel header="Ventas">
+                    <p:dataTable 
+                        value="#{gestionarVentaMB.venta}"
+                        var="venta"
+                        rowStyleClass="#{venta.estado eq 'anulado'?'filaRoja':'null'}"
+                        emptyMessage="No existen datos disponibles"
+                        filteredValue="#{gestionarVentaMB.ventasFiltro}"
+                        widgetVar="ventaTable"
+                        >
+
+                        <p:column headerText="Codigo" style="width: 70px" >
+                            <p:outputLabel value="#{venta.codigoFactura}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{venta.codigoDocumento}" headerText="No Factura" style="width: 100px;" filterMatchMode="contains">
+                            <p:outputLabel value="#{venta.codigoDocumento}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{venta.cedulaRuc.cedulaRuc}" headerText="Cedula" style="width: 70px;" filterMatchMode="contains" >
+                            <p:outputLabel value="#{venta.cedulaRuc.cedulaRuc}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{venta.tipoDocumento}" headerText="Tipo" style="width: 50px;" filterMatchMode="contains" >
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('ventaTable').filter()" >
+                                    <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Factura" itemValue="Factura" />
+                                    <f:selectItem itemLabel="Nota" itemValue="Nota" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <p:outputLabel value="#{venta.tipoDocumento}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{venta.estado}" headerText="Estado" style="width: 80px;" filterMatchMode="exact" >
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('ventaTable').filter()" >
+                                    <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Facturado" itemValue="facturado" />
+                                    <f:selectItem itemLabel="Anulado" itemValue="anulado" />
+
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <p:outputLabel value="#{venta.estado}"/>
+                        </p:column>
+
+                        <p:column headerText="Detalle">
+                            <p:outputLabel value="#{venta.toStringDetalle()}"/>
+                        </p:column>
+
+                        <p:column headerText="Total" style="width: 100px;">
+                            <p:outputLabel value="#{venta.total}"/>
+                        </p:column>
+
+                        <p:column headerText="Acciones" style="width: 180px;" >
+                            <p:commandButton action="#{gestionarVentaMB.imprimir(venta)}" value="Imprimir" ajax="false" />
+
+                            <p:commandButton style="background-image: none;background-color: coral" value="Anular" actionListener="#{gestionarVentaMB.anular(venta)}" update="@form" disabled="#{venta.estado eq 'anulado'?'true':'false'}" >
+                                <p:confirm header="Confirmar" message="Estas seguro que quieres anular la factura !los cambios son irreversibles!?" icon="ui-icon-alert" />
+                            </p:commandButton> 
+
+                            <p:commandButton action="verVenta" icon="ui-icon-search" style="background-color: darkgreen;background-image: none" >
+                                <f:param name="id" value="#{venta.codigoFactura}" />
+                            </p:commandButton>
+                        </p:column>
+
+
+
+                    </p:dataTable>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </p:panel>
+
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -248,6 +248,30 @@ public class Venta implements Serializable {
         this.codigoDocumento = codigoDocumento;
     }
     
+    public String toStringDetalle()
+    {
+        String cadena="";
+        List<DetalleProductoGeneral> listaGeneral=detalleProductoGeneralList;
+        for (DetalleProductoGeneral detalle : listaGeneral) 
+        {
+            cadena=cadena+detalle.getCodigoProducto().getNombre()+",";
+        }
+        
+        List<DetalleProductoIndividual> listaIndividual=detalleProductoIndividualList;
+        for (DetalleProductoIndividual detalle : listaIndividual) 
+        {
+            cadena=cadena+detalle.getCodigoUnico().getCodigoProducto().getNombre()+",";
+        }
+        
+        if(cadena.length()>3)
+        {
+            cadena=cadena.substring(0,cadena.length()-1);
+        
+        }
+        
+        return cadena;
+        
+    }
     
 
     @Override
