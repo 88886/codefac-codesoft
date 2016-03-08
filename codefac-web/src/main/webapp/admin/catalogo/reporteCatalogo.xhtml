@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h:form>
+            <p:fieldset legend="Reporte Catalogo Simple" style="margin-bottom:20px">
+
+                <p:dataTable
+
+                    id="idCatalogo"
+                    value="#{reporteCatalogoMB.listaCatalogo}"
+                    var="catalogo"
+                    rendered="false"
+                    style="font-size: 8px"
+
+                    >
+
+                    <p:column headerText="Codigo">
+                        <p:outputLabel value="#{catalogo.codigoProducto}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <p:outputLabel value="#{catalogo.nombre}"/>
+                    </p:column>
+
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{catalogo.descripcion}"/>
+                    </p:column>
+
+                    <p:column headerText="PVP">
+                        <p:outputLabel value="#{catalogo.precio}"/>
+                    </p:column>
+
+                    <p:column headerText="IVA">
+                        <p:outputLabel value="#{reporteCatalogoMB.iva(catalogo.precio)}"/>
+                    </p:column>
+
+                    <p:column headerText="PVP+IVA">
+                        <p:outputLabel value="#{reporteCatalogoMB.addIva(catalogo.precio)}"/>
+                    </p:column>
+
+                    <p:column headerText="P.Mayorista">
+                        <p:outputLabel value="#{catalogo.precioMayorista}"/>
+                    </p:column>
+
+                    <p:column headerText="IVA">
+                        <p:outputLabel value="#{reporteCatalogoMB.iva(catalogo.precioMayorista)}"/>
+                    </p:column>
+
+                    <p:column headerText="P.Mayorista+ IVA">
+                        <p:outputLabel value="#{reporteCatalogoMB.addIva(catalogo.precioMayorista)}"/>
+                    </p:column>
+                </p:dataTable>
+
+                <h:outputText
+                    value="En el siguiente reporte muestra un listado de todos los productos , con el PVP, Precio mayorista, y el iva :" 
+                    />
+                <br/>
+                <p:spacer width="20px"/>
+                
+                <div style="text-align: center">
+                    <h:commandLink>
+                        <p:graphicImage height="100px" width="100px" name="/img/iconos/excel_icono.png" />
+                        <p:dataExporter type="xls" target="idCatalogo" fileName="catalago" pageOnly="true"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage height="100px" width="100px" name="/img/iconos/pdf_icono.png" />
+                        <p:dataExporter type="pdf" target="idCatalogo" fileName="catalogo" pageOnly="true" />
+                    </h:commandLink>
+                </div>
+
+
+            </p:fieldset>
+        </h:form>
+    </ui:define>
+</ui:composition>

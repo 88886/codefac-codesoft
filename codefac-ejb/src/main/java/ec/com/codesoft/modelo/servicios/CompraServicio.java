@@ -65,7 +65,8 @@ public class CompraServicio {
         }
 
         //Detalle Especifico Actualizado
-        for (ProductoIndividualCompra detalle : detalle2) {
+        for (ProductoIndividualCompra detalle : detalle2) 
+        {
             detalle.setCodigoCompra(compra);
             productoEspeFacade.edit(detalle);
         }
@@ -122,6 +123,8 @@ public class CompraServicio {
             productoEspeFacade.edit(detalle);
         }
     }
+    
+    
 
     public void eliminar(Compra compra) {
         compraFacade.remove(compra);

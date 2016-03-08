@@ -123,3 +123,12 @@ h1 , h2
 .customTitleBar > .ui-panel-titlebar {
     background: #485798;
     }
+    
+    
+
+.filaRoja
+{
+      background: none repeat scroll 0 0 ;
+      background-color: wheat;
+      font-weight: bold;
+}

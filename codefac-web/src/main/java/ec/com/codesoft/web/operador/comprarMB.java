@@ -143,7 +143,8 @@ public class comprarMB implements Serializable {
     /**
      * Consulta un distribuidor de la base
      */
-    public void preRender() {
+    public void preRender() 
+    {
         System.out.println("Prerender ...");
         Map params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         

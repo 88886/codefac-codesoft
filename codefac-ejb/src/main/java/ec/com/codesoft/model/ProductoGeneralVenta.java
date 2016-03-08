@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -35,15 +34,16 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "ProductoGeneralVenta.findAll", query = "SELECT p FROM ProductoGeneralVenta p")})
 public class ProductoGeneralVenta implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODIGO_PRODUCTO_GENERAL")
     private Integer codigo;
     //@NotNull
-   // @Column(name = "CODIGO_PRODUCTO")
-   // private String codigoProducto;
-    
+    // @Column(name = "CODIGO_PRODUCTO")
+    // private String codigoProducto;
+
     @Column(name = "CANTIDAD_DISPONIBLE")
     private Integer cantidadDisponible;
     @Column(name = "CANTIDAD_BAJA")
@@ -56,33 +56,37 @@ public class ProductoGeneralVenta implements Serializable {
     private Integer cantidadCaducada;
     @Column(name = "LIMITE_MINIMO")
     private Integer limiteMinimo;
-    
+
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO")
     @OneToOne(cascade = CascadeType.ALL)
     private CatalagoProducto catalagoProducto;
-    
+
     @OneToMany(mappedBy = "codigoProductoGeneral")
     private List<ReservaProductoGeneral> reservaProductoGeneralList;
 
     public ProductoGeneralVenta() {
     }
 
-    public void agregarProductos(Integer cantidad)
+    public void agregarProductos(Integer cantidad) {
+        this.cantidadDisponible = this.cantidadDisponible + cantidad;
+    }
+
+    public void addStock(Integer cantidad) 
     {
-        this.cantidadDisponible=this.cantidadDisponible+cantidad;
+        this.cantidadDisponible+=cantidad;
     }
     
-  //  public ProductoGeneralVenta(String codigoProducto) {
-  //      this.codigoProducto = codigoProducto;
-  //  }
+    ////////////////////// METODOS GET AND SET ///////////////////
+            //  public ProductoGeneralVenta(String codigoProducto) {
+            //      this.codigoProducto = codigoProducto;
+            //  }
+            //  public String getCodigoProducto() {
+            //     return codigoProducto;
+            // }
+            //   public void setCodigoProducto(String codigoProducto) {
+            //       this.codigoProducto = codigoProducto;
+            //  }
 
-  //  public String getCodigoProducto() {
-   //     return codigoProducto;
-   // }
-
- //   public void setCodigoProducto(String codigoProducto) {
- //       this.codigoProducto = codigoProducto;
-  //  }
 
     public Integer getCantidadDisponible() {
         return cantidadDisponible;
@@ -156,9 +160,6 @@ public class ProductoGeneralVenta implements Serializable {
         this.codigo = codigo;
     }
 
-      
-    
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -181,14 +182,9 @@ public class ProductoGeneralVenta implements Serializable {
         return true;
     }
 
-    
-    
-
     @Override
     public String toString() {
-        return "ProductoGeneralVenta{codigo=" +codigo+", cantidadDisponible=" + cantidadDisponible + ", cantidadBaja=" + cantidadBaja + ", cantidadRobado=" + cantidadRobado + ", cantidadVendida=" + cantidadVendida + ", cantidadCaducada=" + cantidadCaducada + ", limiteMinimo=" + limiteMinimo + ", catalagoProducto=" + catalagoProducto +  '}';
+        return "ProductoGeneralVenta{codigo=" + codigo + ", cantidadDisponible=" + cantidadDisponible + ", cantidadBaja=" + cantidadBaja + ", cantidadRobado=" + cantidadRobado + ", cantidadVendida=" + cantidadVendida + ", cantidadCaducada=" + cantidadCaducada + ", limiteMinimo=" + limiteMinimo + ", catalagoProducto=" + catalagoProducto + '}';
     }
 
-    
-    
 }

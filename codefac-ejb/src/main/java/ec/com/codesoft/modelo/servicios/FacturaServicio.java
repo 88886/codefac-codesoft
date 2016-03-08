@@ -6,6 +6,7 @@
 package ec.com.codesoft.modelo.servicios;
 
 import ec.com.codesoft.model.Banco;
+import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.Intereses;
@@ -13,6 +14,7 @@ import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.facade.BancoFacade;
+import ec.com.codesoft.modelo.facade.CompraFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoGeneralFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoIndividualFacade;
 import ec.com.codesoft.modelo.facade.InteresesFacade;
@@ -24,6 +26,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 /**
  *
@@ -32,6 +36,9 @@ import javax.ejb.Stateless;
 @LocalBean
 @Stateless
 public class FacturaServicio {
+    
+    @EJB
+    CompraFacade compraFacade;
 
     @EJB
     ProductoIndividualCompraFacade productoIndividualFacade;
@@ -79,6 +86,46 @@ public class FacturaServicio {
             detalleGeneralFacade.create(detalles.get(i));
         }
     }
+    
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void anularVenta(Venta venta)
+    {
+        venta.setEstado("anulado");        
+        ventaFacade.edit(venta);
+        
+        List<DetalleProductoGeneral> listaGeneral=venta.getDetalleProductoGeneralList();
+        for (DetalleProductoGeneral detalle : listaGeneral) 
+        {
+            ProductoGeneralVenta productoGeneralVenta=detalle.getCodigoProducto().getProductoGeneralVenta();
+            productoGeneralVenta.addStock(detalle.getCantidad());   
+            productoGeneralVentaFacade.edit(productoGeneralVenta);
+           
+        }
+        
+        List<DetalleProductoIndividual> listaEspecifico=venta.getDetalleProductoIndividualList();
+        
+        for (DetalleProductoIndividual detalle : listaEspecifico) 
+        {
+            ProductoIndividualCompra productoIndividual=detalle.getCodigoUnico();
+            productoIndividualFacade.edit(productoIndividual);
+            
+        }
+        
+        
+        
+        
+    }
+    
+    /**
+     * Busca la factura por el codigo principal
+     */
+    public Venta buscarVentaById(Integer id)
+    {
+        return ventaFacade.find(id);
+    }
+    
+    ///////////////////////METODOS GET AND SET
 
     public List<ProductoIndividualCompra> obtenerProductoIndivudualCantidad(int cantidad, String codP) {
 
@@ -107,6 +154,16 @@ public class FacturaServicio {
     public ProductoIndividualCompra devolverProductoIndividual(String codUnico){
         
         return productoIndividualFacade.findProdIndividualCodUnico(codUnico);
+    }
+    
+    
+    /**
+     * Obtiene todas las ventas realizadas
+     * @return 
+     */
+    public List<Venta> obtenerVentas()
+    {
+        return ventaFacade.findAll();
     }
     
     /**
