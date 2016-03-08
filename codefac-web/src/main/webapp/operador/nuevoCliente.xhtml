@@ -35,13 +35,19 @@ and open the template in the editor.
                 <p:outputLabel value="Email: "/>
                 <p:inputText value="#{crearCliente.cliente.correo}" />
                 
+               <p:outputLabel  value="Tipo Cliente" />
+               <p:selectOneMenu id="tipoCliente" value="#{crearCliente.cliente.tipo}">
+                                <f:selectItem itemLabel="Cliente Final" itemValue="Cliente Final" />
+                                <f:selectItem itemLabel="Distribuidor" itemValue="Distribuidor" />
+                            </p:selectOneMenu>
+                
             </p:panelGrid>
 
             <p:spacer height="15px"/>
 
             <div>
                 <p:commandButton actionListener="#{crearCliente.guardar()}" value="Grabar"/>
-                <p:commandButton value="Cancelar"/>
+                <p:commandButton value="Cancelar" actionListener="#{crearCliente.cancelar()}"/>
             </div>
         </p:panel>
             </h:form>
