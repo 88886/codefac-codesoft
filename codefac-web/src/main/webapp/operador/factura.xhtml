@@ -103,7 +103,7 @@ and open the template in the editor.
                                 <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
                                 <f:selectItem itemLabel="Credito" itemValue="Credito" />
                                 <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
-                                <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr"/>        
+                                <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
                             </p:selectOneMenu>
 
                             <p:outputLabel/>
@@ -263,6 +263,7 @@ and open the template in the editor.
             </h:form>
             <p:spacer/>
             <h:form id="frmVueltos">
+                <div style="background-image: none;background-color: #485798">
                 <p:panelGrid columns="2" style="margin-left: 70%">
                     <p:outputLabel value="Recibo"/>
                     <p:inputText id="recibo" value="#{facturaMB.recibo}">
@@ -271,6 +272,7 @@ and open the template in the editor.
                     <p:outputLabel value="Vuelto"/>
                     <p:inputText id="vuelto" value="#{facturaMB.vuelto}"/>
                 </p:panelGrid>
+                </div>
 
             </h:form>
             <h:form id="frmFacturar">

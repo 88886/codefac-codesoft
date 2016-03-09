@@ -33,12 +33,12 @@ public class DetalleProductoIndividualFacade extends AbstractFacade<DetalleProdu
         super(DetalleProductoIndividual.class);
     }
 
-    public List<ProductoIndividualCompra> findProductosIndividualCantidad(int cantidad, String codP) {
+    public ProductoIndividualCompra findProductosIndividualCantidad(int cantidad, String codP) {
         try {
             String queryString = "SELECT p FROM ProductoIndividualCompra p where p.codigoProducto.codigoProducto='"+codP+"'";
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
-            List<ProductoIndividualCompra> productos = (List<ProductoIndividualCompra>) query.setMaxResults(cantidad).getResultList();
+            ProductoIndividualCompra productos = (ProductoIndividualCompra)query.getSingleResult();
             return productos;
         } catch (NoResultException e) {
             return null;

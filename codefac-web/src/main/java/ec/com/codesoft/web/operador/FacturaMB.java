@@ -77,7 +77,7 @@ public class FacturaMB {
     private String msjStock;
     private String tipoCliente;
     private boolean todoPanel;
-    private List<ProductoIndividualCompra> productosIndividualesDetalles;
+    private ProductoIndividualCompra productosIndividualesDetalles;
     private List<DetallesVenta> detallesVenta;
     private BigDecimal totalRegistro;
     private BigDecimal total;
@@ -333,18 +333,39 @@ public class FacturaMB {
                             }
                         }
 
+                    } else {
+                        BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
+                        totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoMayorista());
+                        detallesVenta.get(i).setCosto(totalDetalleRegistro);
+                        detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())).setScale(2, BigDecimal.ROUND_UP));
+                    }
+                } else {
+                    if (detallesVentaRecibido.getEscogerDescuento().equals("Si")) {
+                        for (int j = 0; j < detallesVenta.get(i).getDescuentos().size(); j++) {
+                            if (detallesVenta.get(i).getDescuentos().get(j).getNombre().equals("dctoPVP")) {
+                                //actualizar campos total-total pagar
+                                BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
+                                totalDetalleRegistro = (detallesVenta.get(i).getCosto().subtract(detallesVenta.get(i).getCosto().multiply(detallesVenta.get(i).getDescuentos().get(j).getValor().divide(new BigDecimal("100"))))).setScale(2, BigDecimal.ROUND_UP);
+                                detallesVenta.get(i).setCosto(totalDetalleRegistro);
+                                detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())).setScale(2, BigDecimal.ROUND_UP));
+                            }
+                        }
+
+                    } else {
+                        BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
+                        totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoPVP());
+                        detallesVenta.get(i).setCosto(totalDetalleRegistro);
+                        detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())).setScale(2, BigDecimal.ROUND_UP));
                     }
                 }
-                // detallesVenta.get(i).setCosto(detallesVenta.get(i).getDescuentoSeleccionado());
-                // detallesVenta.get(i).setTotal(detallesVenta.get(i).getDescuentoSeleccionado().multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));
             }
         }
 
         total = new BigDecimal("0.0");
         totalRegistro = new BigDecimal("0.0");
-        subtotal=new BigDecimal("0.0");
+        subtotal = new BigDecimal("0.0");
         for (int k = 0; k < detallesVenta.size(); k++) {
-            System.out.println("Detalle "+ k + detallesVenta.get(k).getTotal());
+            System.out.println("Detalle " + k + detallesVenta.get(k).getTotal());
             //System.err.println("totalDetalle: "+detallesVenta.get(k).getTotal());
             totalRegistro = detallesVenta.get(k).getTotal();
             subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
@@ -545,10 +566,10 @@ public class FacturaMB {
                 cerrarDialogo();
                 msjCodUnico = "";
                 //cerrarDialogo();
-                productosIndividualesDetalles = new ArrayList<ProductoIndividualCompra>();
+                
                 productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, catalogoSeleccionado.getCodigoProducto());
                 for (int i = 0; i < cantidadComprar; i++) {
-                    totalRegistro = productosIndividualesDetalles.get(i).getCosto().multiply(new BigDecimal(cantidadComprar));
+                    totalRegistro = productosIndividualesDetalles.getCosto().multiply(new BigDecimal(cantidadComprar));
                     subtotalRegistro = totalRegistro.multiply(new BigDecimal("1.12"));
                     subtotal = subtotal.add(totalRegistro);
                     if (tipoCliente.equals("C")) {
@@ -563,13 +584,13 @@ public class FacturaMB {
                         total = total.setScale(2, BigDecimal.ROUND_UP);
                     }
 
-                    DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.get(i).getCodigoUnico(),
-                            productosIndividualesDetalles.get(i).getCodigoProducto().getNombre(),
-                            productosIndividualesDetalles.get(i).getCosto(), totalRegistro);
+                    DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.getCodigoUnico(),
+                            productosIndividualesDetalles.getCodigoProducto().getNombre(),
+                            productosIndividualesDetalles.getCosto(), totalRegistro);
                     detallesVenta.add(detalles);
                     catalogoSeleccionado = new CatalagoProducto();
                     DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                    detalle.setCodigoUnico(productosIndividualesDetalles.get(i));
+                    detalle.setCodigoUnico(productosIndividualesDetalles);
                     detalle.setSubtotal(subtotalRegistro);
                     detallesIndividualVenta.add(detalle);
                     //det
@@ -652,6 +673,8 @@ public class FacturaMB {
                 descuentos.add(precioDescuento);
                 descuentos.add(dcto);
                 descuentos.add(dctoMayorista);
+                detalles.setValorVerdaderoMayorista(catalogoSeleccionado.getPrecioMayorista());
+                detalles.setValorVerdaderoPVP(catalogoSeleccionado.getPrecio());
                 detalles.setDescuentos(descuentos);
                 detalles.setPrecioSeleccionado("PVP");
                 detalles.setEscogerDescuento("No");
@@ -680,14 +703,16 @@ public class FacturaMB {
                     msjCodUnico = "No existe Producto con ese código";
                     System.err.println("No existe ese Codigo Especifico");
                 } else {
+                    cantidadComprar=1;
                     cerrarDialogo();
                     msjCodUnico = "";
                     //cerrarDialogo();
-                    productosIndividualesDetalles = new ArrayList<ProductoIndividualCompra>();
+                    
                     productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, catalogoSeleccionado.getCodigoProducto());
-                    for (int i = 0; i < cantidadComprar; i++) {
+                    
 
                         if (clienteEncontrado.getTipo().equals("Distribuidor")) {
+                            System.out.println("precio Mayorista "+catalogoSeleccionado.getPrecioMayorista()+" Cantidad Comprar "+ cantidadComprar);
                             totalRegistro = catalogoSeleccionado.getPrecioMayorista().multiply(new BigDecimal(cantidadComprar));
                         } else {
                             totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
@@ -709,8 +734,8 @@ public class FacturaMB {
                             totalPagar = total;
                         }
 
-                        DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.get(i).getCodigoUnico(),
-                                productosIndividualesDetalles.get(i).getCodigoProducto().getNombre(),
+                        DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.getCodigoUnico(),
+                                productosIndividualesDetalles.getCodigoProducto().getNombre(),
                                 new BigDecimal("0.0"), totalRegistro);
 
                         if (clienteEncontrado.getTipo().equals("Distribuidor")) {
@@ -727,18 +752,20 @@ public class FacturaMB {
                         descuentos.add(precioDescuento);
                         descuentos.add(dcto);
                         descuentos.add(dctoMayorista);
+                        detalles.setValorVerdaderoMayorista(catalogoSeleccionado.getPrecioMayorista());
+                        detalles.setValorVerdaderoPVP(catalogoSeleccionado.getPrecio());
                         detalles.setDescuentos(descuentos);
                         detalles.setPrecioSeleccionado("PVP");
                         detalles.setEscogerDescuento("No");
                         detallesVenta.add(detalles);
                         catalogoSeleccionado = new CatalagoProducto();
                         DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                        detalle.setCodigoUnico(productosIndividualesDetalles.get(i));
+                        detalle.setCodigoUnico(productosIndividualesDetalles);
                         detalle.setSubtotal(subtotalRegistro);
                         detallesIndividualVenta.add(detalle);
                         //det
 
-                    }
+                    
 
                 }
             }
@@ -1041,6 +1068,7 @@ public class FacturaMB {
             estCheue = false;
             estBanco = false;
             creditoDirecto = false;
+            quitarRecargoTarjeta();
 
         } else if (tipoPago.equals("Tarjeta Credito")) {
             System.out.println("tarjeta");
@@ -1052,12 +1080,20 @@ public class FacturaMB {
             estCheue = false;
             estBanco = false;
             creditoDirecto = true;
+            quitarRecargoTarjeta();
         } else if (tipoPago.equals("Cheque")) {
             System.out.println("cheque");
             estBanco = false;
             estCheue = true;
             creditoDirecto = false;
+            quitarRecargoTarjeta();
         }
+    }
+    
+    public void quitarRecargoTarjeta(){
+     
+        interesTarjeta=new BigDecimal("0.0");
+        totalPagar=total;
     }
 
     ////////////////////METODOS GET Y SET /////////////////////
