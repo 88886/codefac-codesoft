@@ -35,7 +35,7 @@ and open the template in the editor.
 
                     <f:facet name="header" >                               
                         <p:commandButton id="btnNuevoCliente" process="tablaClientes" icon="ui-icon-plus" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enCrear()}" style="width: 20px;height: 20px"/>  
-                        <p:commandButton id="btnEditarCliente" process="tablaClientes" icon="ui-icon-pencil" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enModificar()}" disabled="#{clienteMB.flagBoton1}" style="width: 20px;height: 20px" update=":formDialogo:panelGrid"/>                          
+                        <p:commandButton id="btnEditarCliente" process="tablaClientes" icon="ui-icon-pencil" onclick="PF('editarCliente').show();" actionListener="#{clienteMB.enModificar()}" disabled="#{clienteMB.flagBoton1}" style="width: 20px;height: 20px" update=":formDialogoEdit:panelGrid2"/>                          
                     </f:facet>
 
 
@@ -60,6 +60,7 @@ and open the template in the editor.
                     <p:column headerText="Dirección" >
                         <h:outputText value="#{cliente.direccion}" />
                     </p:column>
+
 
                     <p:column headerText="Acciones">
                         <p:commandButton  value="Eliminar" actionListener="#{clienteMB.eliminarDetalle(cliente)}" update="@form" >
@@ -107,6 +108,13 @@ and open the template in the editor.
                     <p:inputText id="cliCorreo" value="#{clienteMB.cliente.correo}" />
                     <p:message for="cliCorreo" />  
 
+                    <p:outputLabel  value="Tipo Cliente" />
+                    <p:selectOneMenu id="tipoCliente" value="#{clienteMB.cliente.tipo}">
+                        <f:selectItem itemLabel="Cliente Final" itemValue="Cliente Final" />
+                        <f:selectItem itemLabel="Distribuidor" itemValue="Distribuidor" />
+                    </p:selectOneMenu>
+                    <p:message for="tipoCliente" /> 
+
                     <p:outputLabel for="notas" value="Notas" />
                     <p:inputTextarea id="notas" value="#{clienteMB.cliente.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
                     <p:message for="notas" />
@@ -119,6 +127,59 @@ and open the template in the editor.
                         update=":form:tablaClientes,@form"
                         actionListener="#{clienteMB.registarCliente(e)}"/>
                     <p:commandButton value="Cancelar" icon="ui-icon-cancel" actionListener="#{clienteMB.cancelar()}" onclick="PF('nuevoCliente').hide();" update=":form:tablaClientes"/>                        
+                </f:facet>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formDialogoEdit"> 
+            <!-- Dialogo para editar un cliente -->
+            <p:dialog  id="dlgEditCliente" header="Editar Cliente" widgetVar="editarCliente" modal="true" height="auto">
+                <p:panelGrid columns="3" id="panelGrid2">   
+                    <p:outputLabel for="cliCedula2" value="Cédula:" />
+
+                    <p:inputText id="cliCedula2" value="#{clienteMB.clienteSeleccionado.cedulaRuc}" required="true" requiredMessage="Cedula necesario">                        
+                    </p:inputText>
+
+                    <p:message for="cliCedula2" />                  
+
+                    <p:outputLabel for="cliNombre2" value="Nombre:" />
+                    <p:inputText id="cliNombre2" value="#{clienteMB.clienteSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario"/>
+                    <p:message for="cliNombre2" />                                
+
+                    <p:outputLabel for="cliTelefono2" value="Telefono:" />
+                    <p:inputText id="cliTelefono2" value="#{clienteMB.clienteSeleccionado.telefono}" required="true" requiredMessage="Telefono necesario"/>
+                    <p:message for="cliTelefono2" />                
+
+                    <p:outputLabel for="cliDireccion2" value="Direccion:" />
+                    <p:inputText id="cliDireccion2" value="#{clienteMB.clienteSeleccionado.direccion}" />
+                    <p:message for="cliDireccion2" />    
+
+                    <p:outputLabel for="cliCorreo2" value="Correo:" />
+                    <p:inputText id="cliCorreo2" value="#{clienteMB.clienteSeleccionado.correo}" />
+                    <p:message for="cliCorreo2" />  
+
+                    <p:outputLabel   value="Tipo Cliente" />
+                    <p:selectOneMenu id="tipoCliente2" value="#{clienteMB.clienteSeleccionado.tipo}">
+                        <f:selectItem itemLabel="Cliente Final" itemValue="Cliente Final" />
+                        <f:selectItem itemLabel="Distribuidor" itemValue="Distribuidor" />
+                    </p:selectOneMenu>
+                    <p:message for="tipoCliente2" />
+                    
+
+                    <p:outputLabel for="notas2" value="Notas" />
+                    <p:inputTextarea id="notas2" value="#{clienteMB.clienteSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                    <p:message for="notas2" />
+                </p:panelGrid>
+
+                <f:facet name="footer">
+                    <p:commandButton 
+                        value="Aceptar" 
+                        icon="ui-icon-disk"
+                        update=":form:tablaClientes,@form"
+                        actionListener="#{clienteMB.registarCliente(e)}"/>
+                    
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" actionListener="#{clienteMB.cancelar()}" onclick="PF('editarCliente').hide();" update=":form:tablaClientes"/>                        
                 </f:facet>
 
             </p:dialog>

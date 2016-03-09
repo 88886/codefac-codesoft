@@ -154,6 +154,7 @@ public class comprarMB implements Serializable {
         this.compra.setDescuento(new BigDecimal("0.0"));
         this.compra.setIva(new BigDecimal("12"));
         
+        
         if (id != null) {
             compra = compraServicio.findCompra(Integer.parseInt(id));
             cargarDatosEditar();
@@ -279,6 +280,7 @@ public class comprarMB implements Serializable {
                 detalleIndividual.add(detalle.getProductoIndividual());
             }
         }
+        
         System.out.println(detalleGeneral.size()+"-"+detalleIndividual.size());
         System.out.println("comprando ....");
         System.out.println(compra);
@@ -286,8 +288,8 @@ public class comprarMB implements Serializable {
         compra.setProductoGeneralCompraList(detalleGeneral);
         compra.setProductoIndividualCompraList(detalleIndividual);
         
-        //compraServicio.insertar(compra);
-        compraServicio.actualizar(compra);
+        compraServicio.insertar(compra);
+        //compraServicio.actualizar(compra);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevaCompra').show()");
         //dialogNuevaCompra
     }

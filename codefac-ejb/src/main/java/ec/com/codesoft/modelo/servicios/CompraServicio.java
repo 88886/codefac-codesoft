@@ -67,6 +67,7 @@ public class CompraServicio {
         //Detalle Especifico Actualizado
         for (ProductoIndividualCompra detalle : detalle2) 
         {
+            detalle.setEstadoProceso("comprado");
             detalle.setCodigoCompra(compra);
             productoEspeFacade.edit(detalle);
         }
