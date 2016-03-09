@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -30,8 +29,9 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(name = "DetalleProductoIndividual.findAll", query = "SELECT d FROM DetalleProductoIndividual d")})
 public class DetalleProductoIndividual implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //@Basic(optional = false)
@@ -41,6 +41,10 @@ public class DetalleProductoIndividual implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "SUBTOTAL")
     private BigDecimal subtotal;
+
+    @Column(name = "DESCUENTO")
+    private BigDecimal descuento;
+
     @JoinColumn(name = "CODIGO_UNICO", referencedColumnName = "CODIGO_UNICO")
     @ManyToOne
     private ProductoIndividualCompra codigoUnico;
@@ -87,6 +91,16 @@ public class DetalleProductoIndividual implements Serializable {
         this.codigoFactura = codigoFactura;
     }
 
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -111,5 +125,5 @@ public class DetalleProductoIndividual implements Serializable {
     public String toString() {
         return "ec.com.codesoft.model.DetalleProductoIndividual[ codigoDetalleIndividual=" + codigoDetalleIndividual + " ]";
     }
-    
+
 }
