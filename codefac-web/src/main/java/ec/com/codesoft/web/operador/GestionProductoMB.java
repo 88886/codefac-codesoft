@@ -8,6 +8,7 @@ package ec.com.codesoft.web.operador;
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
@@ -51,6 +52,13 @@ public class GestionProductoMB implements Serializable {
      */
     private Boolean dialogoAbierto;
     private Boolean dialogoEditAbierto;
+    
+    /**
+     * Variables para saber si el precios incluyen o no incluyen iva
+     */
+    private String ivaCosto;
+    private String ivaMayorista;
+    
 
     @EJB
     private CatalogoServicio catalogoServicio;
@@ -107,6 +115,30 @@ public class GestionProductoMB implements Serializable {
 
     public void grabarCatalogo() {
         System.out.println("Grabando el catalago ...");
+        
+        //verificar si el precio viene con o sin iva
+        if(ivaCosto.equals("+"))
+        {
+            System.out.println(catalagoProducto.getPrecio().setScale(3,BigDecimal.ROUND_DOWN));
+            //BigDecimal iva=new BigDecimal("1.12");
+            BigDecimal valor=catalagoProducto.getPrecio().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
+            //System.out.println("si:"+valor);
+            
+            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+            catalagoProducto.setPrecio(valor);
+            
+        }
+        
+        if(ivaMayorista.equals("+"))
+        {
+            BigDecimal valor=catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
+            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+            catalagoProducto.setPrecioMayorista(valor);
+            //catalagoProducto.setPrecioMayorista(catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12")).setScale(2,BigDecimal.ROUND_UP));
+        }
+        
+        
+        
         catalogoServicio.insertar(catalagoProducto);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProducto').hide()");
         catalagoProducto = new CatalagoProducto();
@@ -222,5 +254,23 @@ public class GestionProductoMB implements Serializable {
     public void setCatalagoProducto(CatalagoProducto catalagoProducto) {
         this.catalagoProducto = catalagoProducto;
     }
+
+    public String getIvaCosto() {
+        return ivaCosto;
+    }
+
+    public void setIvaCosto(String ivaCosto) {
+        this.ivaCosto = ivaCosto;
+    }
+
+    public String getIvaMayorista() {
+        return ivaMayorista;
+    }
+
+    public void setIvaMayorista(String ivaMayorista) {
+        this.ivaMayorista = ivaMayorista;
+    }
+    
+    
 
 }
