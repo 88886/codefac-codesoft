@@ -7,6 +7,7 @@
 package ec.com.codesoft.web.operador;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class DetallesVenta {
         this.nombre = nombre;
         this.costo = costo;
         this.total = total;
+        valorDescuento=new BigDecimal("0.0");
     }
 
     

@@ -47,7 +47,7 @@ public class ProductoIndividualCompraFacade extends AbstractFacade<ProductoIndiv
 
     public ProductoIndividualCompra findProdIndividual(String codP, String codCat) {
         try {
-            String queryString = "SELECT i FROM ProductoIndividualCompra i (where i.codigoProducto.codigoProducto='" + codCat + "' and i.codigoUnico='" + codP + "') and i.estadoProceso<> 'vendido'  ";
+            String queryString = "SELECT i FROM ProductoIndividualCompra i where i.codigoProducto.codigoProducto='" + codCat + "' and i.codigoUnico='" + codP + "' and i.estadoProceso<> 'vendido'  ";
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
             ProductoIndividualCompra producto = (ProductoIndividualCompra) query.getSingleResult();
