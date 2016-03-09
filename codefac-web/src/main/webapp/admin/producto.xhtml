@@ -37,7 +37,7 @@ and open the template in the editor.
                     <p:commandButton id="btnEditarCliente" actionListener="#{gestionProductoMB.mostrarEditarProducto()}" icon="ui-icon-pencil" update=":idDialogProductoEdit" />                          
                 </f:facet>
 
-                <p:column headerText="Codigo" filterBy="#{catalogo.codigoProducto}" filterMatchMode="contains">
+                <p:column headerText="Codigo" filterBy="#{catalogo.codigoProducto}" filterMatchMode="contains" style="width: 50px">
                     <p:outputLabel value="#{catalogo.codigoProducto}"/>
                 </p:column>
 
@@ -53,8 +53,20 @@ and open the template in the editor.
                     <p:outputLabel value="#{catalogo.marca}"/>
                 </p:column>
 
-                <p:column headerText="Precio">
-                    <p:outputLabel value="#{catalogo.precio}"/>
+                <p:column headerText="Precio" style="width: 50px" >
+                    <p:outputLabel value="#{catalogo.precio.setScale(2,BigDecimal.ROUND_UP)}"/>
+                </p:column>
+
+                <p:column headerText="Precio + IVA" style="width: 60px">
+                    <p:outputLabel value="#{calculosMB.incluirIva(catalogo.precio)}"/>
+                </p:column>
+
+                <p:column headerText="Precio M" style="width: 50px" >
+                    <p:outputLabel value="#{catalogo.precioMayorista.setScale(2,BigDecimal.ROUND_UP)}"/>
+                </p:column>
+
+                <p:column headerText="Precio M + IVA" style="width: 60px">
+                    <p:outputLabel value="#{calculosMB.incluirIva(catalogo.precioMayorista)}"/>
                 </p:column>
 
                 <p:column headerText="Ubicacion">
@@ -62,11 +74,11 @@ and open the template in the editor.
                 </p:column>
 
 
-                <p:column headerText="Stock">
+                <p:column headerText="Stock" style="width: 50px">
                     <p:outputLabel value="#{catalogo.productoGeneralVenta.cantidadDisponible}"/>
                 </p:column>
 
-                <p:column headerText="Accion">
+                <p:column headerText="Accion" style="width: 100px">
                     <p:commandButton value="Eliminar" actionListener="#{gestionProductoMB.eliminarDetalle(catalogo)}" update="@form">
                         <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
                     </p:commandButton>
@@ -79,13 +91,14 @@ and open the template in the editor.
                 <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
-            
+
         </h:form>
 
         <!-- Dialogo para poder mostar el formulario para poder grabar -->
         <p:dialog id="idDialogProducto" modal="true" header="Agregar Catalogo producto" widgetVar="dialogNuevoProducto" showEffect="explode" hideEffect="explode" >
             <h:form>
                 <p:panelGrid columns="2" styleClass="panelNoBorder">
+
                     <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
                     <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalagoProducto.codigoProducto}" required="">
                         <p:ajax event="blur" listener="#{gestionProductoMB.verificarExisteCatalogoProducto()}"  />
@@ -101,11 +114,27 @@ and open the template in the editor.
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.marca}"/>
 
                     <p:outputLabel value="Precio: "/>
-                    <p:inputText value="#{gestionProductoMB.catalagoProducto.precio}"/>
+
+                    <p:panelGrid columns="2" style="width: 100%">
+                        <p:inputText value="#{gestionProductoMB.catalagoProducto.precio}" style="width: 50px" />
+
+                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" >
+                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                            <f:selectItem itemLabel="- Iva " itemValue="-" />
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
 
                     <p:outputLabel value="Precio Mayorista: "/>
-                    <p:inputText value="#{gestionProductoMB.catalagoProducto.precioMayorista}"/>
 
+                    <p:panelGrid columns="2" style="width: 100%">
+                        <p:inputText value="#{gestionProductoMB.catalagoProducto.precioMayorista}" style="width: 50px" />
+
+                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" >
+                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                            <f:selectItem itemLabel="- Iva " itemValue="-" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
 
                     <p:outputLabel value="Descuento: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.descuento}"/>

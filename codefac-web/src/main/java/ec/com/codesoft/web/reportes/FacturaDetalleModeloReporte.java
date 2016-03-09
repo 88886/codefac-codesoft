@@ -11,13 +11,15 @@ package ec.com.codesoft.web.reportes;
  *
  * @author carlo
  */
-public class FacturaDetalleModeloReporte{
+public class FacturaDetalleModeloReporte
+{
     private String cantidad;
     private String codigo;
     private String descripcion;
     private String descuento;
     private String precioUnitario;
     private String total;
+    
 
     public FacturaDetalleModeloReporte() {
     }

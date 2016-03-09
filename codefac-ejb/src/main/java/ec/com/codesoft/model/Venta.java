@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -37,6 +36,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Venta.findAll", query = "SELECT v FROM Venta v")})
 public class Venta implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,39 +62,45 @@ public class Venta implements Serializable {
     @Size(max = 16)
     @Column(name = "TIPO_VENTA")
     private String tipoVenta;
-    
+
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    
+
     @Column(name = "INCREMENTO")
     private Integer incremento;
-    
-    @Column(name="CODIGO_DOCUMENTO")
+
+    @Column(name = "CODIGO_DOCUMENTO")
     private Integer codigoDocumento;
-    
-    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
+
+    @Column(name = "BANCO")
+    private String banco;
+
+    @Column(name = "CHEQUE")
+    private String cheque;
+
+    @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<CreditoFactura> creditoFacturaList;
-    
-    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<DetalleProductoIndividual> detalleProductoIndividualList;
-    
+
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
-    
+
     @JoinColumn(name = "CODIGO_PERIDO", referencedColumnName = "CODIGO_PERIDO")
     @ManyToOne
     private PeriodoContable codigoPerido;
-    
+
     @JoinColumn(name = "CEDULA_RUC", referencedColumnName = "CEDULA_RUC")
     @ManyToOne
     private Cliente cedulaRuc;
-    
-    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<DetalleProductoGeneral> detalleProductoGeneralList;
-    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<NotaCreditoDebito> notaCreditoDebitoList;
-    @OneToMany(mappedBy = "codigoFactura",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<DetallesServicio> detallesServicioList;
 
     public Venta() {
@@ -247,32 +253,45 @@ public class Venta implements Serializable {
     public void setCodigoDocumento(Integer codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
     }
-    
-    public String toStringDetalle()
-    {
-        String cadena="";
-        List<DetalleProductoGeneral> listaGeneral=detalleProductoGeneralList;
-        for (DetalleProductoGeneral detalle : listaGeneral) 
-        {
-            cadena=cadena+detalle.getCodigoProducto().getNombre()+",";
-        }
-        
-        List<DetalleProductoIndividual> listaIndividual=detalleProductoIndividualList;
-        for (DetalleProductoIndividual detalle : listaIndividual) 
-        {
-            cadena=cadena+detalle.getCodigoUnico().getCodigoProducto().getNombre()+",";
-        }
-        
-        if(cadena.length()>3)
-        {
-            cadena=cadena.substring(0,cadena.length()-1);
-        
-        }
-        
-        return cadena;
-        
+
+    public String getBanco() {
+        return banco;
+    }
+
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
+
+    public String getCheque() {
+        return cheque;
+    }
+
+    public void setCheque(String cheque) {
+        this.cheque = cheque;
     }
     
+    
+
+    public String toStringDetalle() {
+        String cadena = "";
+        List<DetalleProductoGeneral> listaGeneral = detalleProductoGeneralList;
+        for (DetalleProductoGeneral detalle : listaGeneral) {
+            cadena = cadena + detalle.getCodigoProducto().getNombre() + ",";
+        }
+
+        List<DetalleProductoIndividual> listaIndividual = detalleProductoIndividualList;
+        for (DetalleProductoIndividual detalle : listaIndividual) {
+            cadena = cadena + detalle.getCodigoUnico().getCodigoProducto().getNombre() + ",";
+        }
+
+        if (cadena.length() > 3) {
+            cadena = cadena.substring(0, cadena.length() - 1);
+
+        }
+
+        return cadena;
+
+    }
 
     @Override
     public int hashCode() {
@@ -298,5 +317,5 @@ public class Venta implements Serializable {
     public String toString() {
         return "ec.com.codesoft.model.Venta[ codigoFactura=" + codigoFactura + " ]";
     }
-    
+
 }
