@@ -63,6 +63,8 @@ public class FacturaServicio {
     
     @EJB
     BancoFacade bancofacade;
+    
+    
 
     public int devolverStockIndividual(String codP) {
         return (productoIndividualFacade.findStockIndividual(codP).intValue());
@@ -127,11 +129,11 @@ public class FacturaServicio {
     
     ///////////////////////METODOS GET AND SET
 
-    public ProductoIndividualCompra obtenerProductoIndivudualCantidad(int cantidad, String codP) {
+  //  public int obtenerProductoIndivudualCantidad(String codP) {
 
-        return detalleIndividualFacade.findProductosIndividualCantidad(cantidad, codP);
+      //  return detalleIndividualFacade.findProductosIndividualCantidad(cantidad, codP);
         
-    }
+   // }
 
     public ProductoIndividualCompra devolverIndividualCod(String cod, String codCat) {
         return productoIndividualFacade.findProdIndividual(cod, codCat);

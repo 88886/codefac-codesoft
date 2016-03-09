@@ -246,7 +246,7 @@ and open the template in the editor.
                             <p:ajax event="blur" listener="#{facturaMB.calcularDescuento()}" update="@form"/>
                         </p:inputText>
 
-                        <p:outputLabel  value="Iva (12%):"/>
+                        <p:outputLabel  value="Iva #{facturaMB.ivaMostrar.intValue()}%:"/>
                         <p:inputText id="iva" value="#{facturaMB.iva}" readonly="true"/>
 
                         <p:outputLabel  value="Total + Iva : "/>

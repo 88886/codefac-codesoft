@@ -26,6 +26,7 @@ public class DetallesVenta {
     private String  escogerDescuento;
     private BigDecimal valorVerdaderoMayorista;
     private BigDecimal valorVerdaderoPVP;
+    private BigDecimal valorDescuento;
 
     public DetallesVenta() {
     }
@@ -121,6 +122,15 @@ public class DetallesVenta {
     public void setValorVerdaderoPVP(BigDecimal valorVerdaderoPVP) {
         this.valorVerdaderoPVP = valorVerdaderoPVP;
     }
+
+    public BigDecimal getValorDescuento() {
+        return valorDescuento;
+    }
+
+    public void setValorDescuento(BigDecimal valorDescuento) {
+        this.valorDescuento = valorDescuento;
+    }
+    
     
 
     
