@@ -39,6 +39,10 @@ public class CrearCliente implements Serializable{
         cliente.setCedulaRuc(cedula);
     }
     
+    public void cancelar(){
+    
+    RequestContext.getCurrentInstance().closeDialog(null); 
+    }
     public void guardar()
     {
         clienteServicio.insertar(cliente);

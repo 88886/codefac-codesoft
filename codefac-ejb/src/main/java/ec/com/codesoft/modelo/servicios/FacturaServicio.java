@@ -127,7 +127,7 @@ public class FacturaServicio {
     
     ///////////////////////METODOS GET AND SET
 
-    public List<ProductoIndividualCompra> obtenerProductoIndivudualCantidad(int cantidad, String codP) {
+    public ProductoIndividualCompra obtenerProductoIndivudualCantidad(int cantidad, String codP) {
 
         return detalleIndividualFacade.findProductosIndividualCantidad(cantidad, codP);
         

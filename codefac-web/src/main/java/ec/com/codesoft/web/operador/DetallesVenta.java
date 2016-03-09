@@ -24,6 +24,8 @@ public class DetallesVenta {
     private List<Descuentos> descuentos;
     private String precioSeleccionado;
     private String  escogerDescuento;
+    private BigDecimal valorVerdaderoMayorista;
+    private BigDecimal valorVerdaderoPVP;
 
     public DetallesVenta() {
     }
@@ -103,6 +105,26 @@ public class DetallesVenta {
     public void setEscogerDescuento(String escogerDescuento) {
         this.escogerDescuento = escogerDescuento;
     }
+
+    public BigDecimal getValorVerdaderoMayorista() {
+        return valorVerdaderoMayorista;
+    }
+
+    public void setValorVerdaderoMayorista(BigDecimal valorVerdaderoMayorista) {
+        this.valorVerdaderoMayorista = valorVerdaderoMayorista;
+    }
+
+    public BigDecimal getValorVerdaderoPVP() {
+        return valorVerdaderoPVP;
+    }
+
+    public void setValorVerdaderoPVP(BigDecimal valorVerdaderoPVP) {
+        this.valorVerdaderoPVP = valorVerdaderoPVP;
+    }
+    
+
+    
+    
     
     
     
