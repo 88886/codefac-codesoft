@@ -64,7 +64,7 @@ and open the template in the editor.
                             <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
                             <p:inputText id="cedCliente" value="#{facturaMB.cedCliente}" required="true" requiredMessage="Campo necesario"/>
                             <p:message for="cedCliente" />
-                            <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr">
+                            <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr" >
                                 <p:ajax event="dialogReturn" listener="#{facturaMB.recibirDatos}" update=":form:infDistr" />
                             </p:commandButton>
                             <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" />
@@ -290,8 +290,9 @@ and open the template in the editor.
                     <!-- Dialogo de confirmacion para grabar o cancelar-->
                     <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
                         <h:form style="margin: 0 auto">
-                            <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar"/>
-                            <p:commandButton  value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />                                               
+                            <p:commandButton  value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />
+                            <p:commandButton  value="Nuevo" style="background-image: none;background-color: chartreuse " action="factura" ajax="false" />
+                            <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
 
                         </h:form>
                     </p:dialog>
