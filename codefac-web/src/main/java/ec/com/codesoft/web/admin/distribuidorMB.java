@@ -34,6 +34,7 @@ public class distribuidorMB implements Serializable {
     //Distribuidors
     private List<Distribuidor> distribuidores;
     private Distribuidor distribuidorSeleccionado;
+    
     private Distribuidor distribuidor;
     //Banderas auxliares
     private Boolean flagBoton1;
@@ -82,8 +83,9 @@ public class distribuidorMB implements Serializable {
         FacesMessage msg = new FacesMessage("Distribuidor Seleccionado", ((Distribuidor) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         flagBoton1 = false;
-        distribuidor = distribuidorSeleccionado;
-        System.out.println(distribuidor.getNombre());
+        
+        //distribuidor = distribuidorSeleccionado;
+        System.out.println("->"+distribuidorSeleccionado.getNombre());
 
     }
 
@@ -94,9 +96,10 @@ public class distribuidorMB implements Serializable {
         distribuidor = new Distribuidor();
     }
 
-    public void enModificar() {
-        //distribuidor = distribuidorSeleccionado;
-        System.out.println("Distribuidor " + distribuidor.getNombre());
+    public void enModificar() 
+    {
+
+        System.out.println("Modificando y Crear...");
         enModificar = true;
         //distribuidor = distribuidorSeleccionado;
     }

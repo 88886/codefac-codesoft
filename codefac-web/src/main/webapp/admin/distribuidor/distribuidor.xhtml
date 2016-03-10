@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <p:panel header="Distribuidor">
+            <!-- Formulario para manejar la tabla de datos y los botones de crear y editar -->
+            <h:form id="formTabla">
+                <p:remoteCommand name="onload" action="#{distribuidorGestionMB.verificarDialogo()}" autoRun="true" />
+                
+                <p:growl id="growl" showDetail="true" sticky="false" life="2000" />  
+                
+                <p:dataTable
+                    id="tablaDistribuidor"
+                    value="#{distribuidorGestionMB.listaDistribuidor}"
+                    var="distribuidor"
+                    rowKey="#{distribuidor.ruc}"
+                    selectionMode="single"
+                    selection="#{distribuidorGestionMB.distribuidorSeleccionado}">
+
+                    >
+
+                    <f:facet name="header" >
+                        <p:commandButton  icon="ui-icon-plus" actionListener="#{distribuidorGestionMB.mostrarNuevoDistribuidor()}" update=":formNuevo" />
+                        <p:commandButton  icon="ui-icon-pencil" />
+                    </f:facet>
+
+                    <p:column headerText="RUC">
+                        <p:outputLabel value="#{distribuidor.ruc}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <p:outputLabel value="#{distribuidor.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Direccion">
+                        <p:outputLabel value="#{distribuidor.direccion}" />
+                    </p:column>
+
+                    <p:column headerText="Telefono">
+                        <p:outputLabel value="#{distribuidor.telefono}" />
+                    </p:column>
+
+                    <p:column headerText="Correo">
+                        <p:outputLabel value="#{distribuidor.correo}" />
+                    </p:column>
+
+                    <p:column headerText="Ciudad">
+                        <p:outputLabel value="#{distribuidor.ciudad}" />
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Eliminar" actionListener="#{distribuidorGestionMB.eliminar(distribuidor)}" update=":formTabla:tablaDistribuidor" />
+                    </p:column>
+                </p:dataTable>
+            </h:form> 
+
+            <!-- Formulario para grabar -->
+            <h:form id="formNuevo">
+                <p:dialog id="dlgNuevo" widgetVar="nuevoDistribuidor" header="Nuevo Distribuidor"  >
+                    <p:panelGrid columns="3" id="panelGrid">
+                        <p:outputLabel for="disRuc" value="RUC :" />
+
+                        <p:inputText id="disRuc" value="#{distribuidorGestionMB.distribuidor.ruc}" required="true" requiredMessage="RUC necesario">
+                            <p:ajax event="blur" listener="#{distribuidorGestionMB.verificarDistribuidorExiste()}"  />
+                        </p:inputText>
+
+                        <p:message for="disRuc" />                  
+
+                        <p:outputLabel for="disNombre" value="Nombre:" />
+                        <p:inputText id="disNombre" value="#{distribuidorGestionMB.distribuidor.nombre}" required="true" requiredMessage="Nombre necesario"/>
+                        <p:message for="disNombre" /> 
+
+                        <p:outputLabel for="disCiudad" value="Ciudad" />
+                        <p:inputText id="disCiudad" value="#{distribuidorGestionMB.distribuidor.ciudad}" required="true" />
+                        <p:message for="disCiudad" />
+
+                        <p:outputLabel for="disDireccion" value="Direccion:" />
+                        <p:inputText id="disDireccion" value="#{distribuidorGestionMB.distribuidor.direccion}" />
+                        <p:message for="disDireccion" />   
+
+                        <p:outputLabel for="disTelefono" value="Telefono :" />
+                        <p:inputText id="disTelefono" value="#{distribuidorGestionMB.distribuidor.telefono}" required="true" requiredMessage="Telefono necesario"/>
+                        <p:message for="disTelefono" />
+
+
+                        <p:outputLabel for="disContacto" value="Contacto :" />
+                        <p:inputText id="disContacto" value="#{distribuidorGestionMB.distribuidor.contacto}" required="true" />
+                        <p:message for="disContacto" />
+
+
+                        <p:outputLabel for="tipoPago" value="Tipo de pagos" />
+                        <p:selectOneMenu id="tipoPago" value="#{distribuidorGestionMB.distribuidor.tipoPago}" style="width:180px" >
+                            <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
+                            <f:selectItem itemLabel="Crédito" itemValue="Credito" />
+                        </p:selectOneMenu>
+                        <p:message for="tipoPago" />  
+
+                        <p:outputLabel for="disCorreo" value="Correo :" />
+                        <p:inputText id="disCorreo" value="#{distribuidorGestionMB.distribuidor.correo}" required="true"/>
+                        <p:message for="disCorreo" />
+
+                        <p:outputLabel for="disNotas" value="Notas" />
+                        <p:inputTextarea id="disNotas" value="#{distribuidorGestionMB.distribuidor.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="disNotas" />
+
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <p:commandButton 
+                            value="Aceptar" 
+                            icon="ui-icon-disk"    
+                            actionListener="#{distribuidorGestionMB.grabar()}"
+                            update="@form,:formTabla:tablaDistribuidor"
+                            />
+                        <p:commandButton value="Cancelar" immediate="true" action="#{distribuidorGestionMB.cancelar()}" update=":formTabla:growl,:formNuevo:dlgNuevo" />                        
+                    </f:facet>
+
+                </p:dialog>
+            </h:form> 
+
+
+        </p:panel>
+    </ui:define>
+
+</ui:composition>
