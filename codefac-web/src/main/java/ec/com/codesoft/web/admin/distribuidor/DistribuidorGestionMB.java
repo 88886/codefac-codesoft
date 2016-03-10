@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.admin.distribuidor;
 
 import ec.com.codesoft.model.CatalagoProducto;
+import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.Distribuidor;
 import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -83,8 +85,16 @@ public class DistribuidorGestionMB implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('nuevoDistribuidor').hide()");
         distribuidor = new Distribuidor();
         listaDistribuidor = distribuidorServicio.obtenerTodos();
-        this.dialogoNuevoAbierto = true;
+        this.dialogoNuevoAbierto = false;
 
+    }
+
+    public void editar() {
+        System.out.println("editando ...");
+        distribuidorServicio.actualizar(distribuidorSeleccionado);
+        RequestContext.getCurrentInstance().execute("PF('editarDistribuidor').hide()");
+        listaDistribuidor = distribuidorServicio.obtenerTodos();
+        this.dialogoEditarAbierto = false;
     }
 
     public void eliminar(Distribuidor distribuidor) {
@@ -100,8 +110,16 @@ public class DistribuidorGestionMB implements Serializable {
         System.out.println(distribuidor.getNombre() + "<n--");
         System.out.println(distribuidor.getDireccion() + "<d--");
         mostrarMensaje("Cancelado", "El proceso de grabar fue cancelado");
-        dialogoNuevoAbierto=false;
+        dialogoNuevoAbierto = false;
 
+    }
+    
+    public void cancelarEditar()
+    {
+        System.out.println("cancelando ...");
+        RequestContext.getCurrentInstance().execute("PF('editarDistribuidor').hide()");
+        mostrarMensaje("Cancelado", "El proceso de editar fue cancelado");
+        dialogoEditarAbierto = false;
     }
 
     public void mostrarNuevoDistribuidor() {
@@ -109,7 +127,16 @@ public class DistribuidorGestionMB implements Serializable {
         distribuidor = new Distribuidor();
         //System.out.println(catalagoProducto);
         RequestContext.getCurrentInstance().execute("PF('nuevoDistribuidor').show()");
+        dialogoNuevoAbierto = true;
+
         //dialogoAbierto = true;
+    }
+
+    public void mostrarEditarDistribuidor() {
+        System.out.println("abriendo el dialogo para editar distribuidor ...");
+
+        RequestContext.getCurrentInstance().execute("PF('editarDistribuidor').show()");
+        dialogoEditarAbierto = true;
     }
 
     public void mostrarMensaje(String titulo, String mensaje) {
@@ -120,17 +147,25 @@ public class DistribuidorGestionMB implements Serializable {
     /**
      * Verificar el dialogo para mostrar u ocultar los dialogos
      */
-    public void verificarDialogo() 
-    {
+    public void verificarDialogo() {
         System.out.println("init ...");
         ///verificar que el dialogo para crear este abierto
-        if(dialogoNuevoAbierto)
-        {
+        if (dialogoNuevoAbierto) {
             RequestContext.getCurrentInstance().execute("PF('nuevoDistribuidor').show()");
         }
         
-        
-       
+        if (dialogoEditarAbierto) {
+            RequestContext.getCurrentInstance().execute("PF('editarDistribuidor').show()");
+        }
+
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Distribuidor Seleccionado", ((Distribuidor) event.getObject()).getNombre());
+        this.distribuidorSeleccionado=(Distribuidor) event.getObject();
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.out.println("fila seleccionada ..");
+
     }
 
     /////////////// GET AND SET /////////////////

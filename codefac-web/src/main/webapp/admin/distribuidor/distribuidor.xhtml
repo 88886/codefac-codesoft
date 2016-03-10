@@ -18,9 +18,9 @@ and open the template in the editor.
             <!-- Formulario para manejar la tabla de datos y los botones de crear y editar -->
             <h:form id="formTabla">
                 <p:remoteCommand name="onload" action="#{distribuidorGestionMB.verificarDialogo()}" autoRun="true" />
-                
+
                 <p:growl id="growl" showDetail="true" sticky="false" life="2000" />  
-                
+
                 <p:dataTable
                     id="tablaDistribuidor"
                     value="#{distribuidorGestionMB.listaDistribuidor}"
@@ -30,10 +30,12 @@ and open the template in the editor.
                     selection="#{distribuidorGestionMB.distribuidorSeleccionado}">
 
                     >
+                    
+                    <p:ajax event="rowSelect" listener="#{distribuidorGestionMB.onRowSelect}" update=":formTabla:growl"/>
 
                     <f:facet name="header" >
                         <p:commandButton  icon="ui-icon-plus" actionListener="#{distribuidorGestionMB.mostrarNuevoDistribuidor()}" update=":formNuevo" />
-                        <p:commandButton  icon="ui-icon-pencil" />
+                        <p:commandButton  icon="ui-icon-pencil" actionListener="#{distribuidorGestionMB.mostrarEditarDistribuidor()}" update=":formEditar" />
                     </f:facet>
 
                     <p:column headerText="RUC">
@@ -119,6 +121,7 @@ and open the template in the editor.
 
                     <f:facet name="footer">
                         <p:commandButton 
+                            ajax="false"
                             value="Aceptar" 
                             icon="ui-icon-disk"    
                             actionListener="#{distribuidorGestionMB.grabar()}"
@@ -130,6 +133,69 @@ and open the template in the editor.
                 </p:dialog>
             </h:form> 
 
+            <!-- Formulario para grabar -->
+            <h:form id="formEditar">
+                <p:dialog id="dlgEditar" widgetVar="editarDistribuidor" header="Editar Distribuidor"  >
+                    <p:panelGrid columns="3" id="panelGrid">
+                        <p:outputLabel for="disRuc" value="RUC :" />
+
+                        <p:inputText id="disRuc" value="#{distribuidorGestionMB.distribuidorSeleccionado.ruc}" required="true" requiredMessage="RUC necesario">
+                        </p:inputText>
+
+                        <p:message for="disRuc" />                  
+
+                        <p:outputLabel for="disNombre" value="Nombre:" />
+                        <p:inputText id="disNombre" value="#{distribuidorGestionMB.distribuidorSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario"/>
+                        <p:message for="disNombre" /> 
+
+                        <p:outputLabel for="disCiudad" value="Ciudad" />
+                        <p:inputText id="disCiudad" value="#{distribuidorGestionMB.distribuidorSeleccionado.ciudad}" required="true" />
+                        <p:message for="disCiudad" />
+
+                        <p:outputLabel for="disDireccion" value="Direccion:" />
+                        <p:inputText id="disDireccion" value="#{distribuidorGestionMB.distribuidorSeleccionado.direccion}" />
+                        <p:message for="disDireccion" />   
+
+                        <p:outputLabel for="disTelefono" value="Telefono :" />
+                        <p:inputText id="disTelefono" value="#{distribuidorGestionMB.distribuidorSeleccionado.telefono}" required="true" requiredMessage="Telefono necesario"/>
+                        <p:message for="disTelefono" />
+
+
+                        <p:outputLabel for="disContacto" value="Contacto :" />
+                        <p:inputText id="disContacto" value="#{distribuidorGestionMB.distribuidorSeleccionado.contacto}" required="true" />
+                        <p:message for="disContacto" />
+
+
+                        <p:outputLabel for="tipoPago" value="Tipo de pagos" />
+                        <p:selectOneMenu id="tipoPago" value="#{distribuidorGestionMB.distribuidorSeleccionado.tipoPago}" style="width:180px" >
+                            <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
+                            <f:selectItem itemLabel="Crédito" itemValue="Credito" />
+                        </p:selectOneMenu>
+                        <p:message for="tipoPago" />  
+
+                        <p:outputLabel for="disCorreo" value="Correo :" />
+                        <p:inputText id="disCorreo" value="#{distribuidorGestionMB.distribuidorSeleccionado.correo}" required="true"/>
+                        <p:message for="disCorreo" />
+
+                        <p:outputLabel for="disNotas" value="Notas" />
+                        <p:inputTextarea id="disNotas" value="#{distribuidorGestionMB.distribuidorSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="disNotas" />
+
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <p:commandButton 
+                            ajax="false"
+                            value="Aceptar" 
+                            icon="ui-icon-disk"    
+                            actionListener="#{distribuidorGestionMB.editar()}"
+                            update="@form,:formTabla:tablaDistribuidor"
+                            />
+                        <p:commandButton value="Cancelar" immediate="true" action="#{distribuidorGestionMB.cancelarEditar()}" update=":formTabla:growl,:formNuevo:dlgNuevo" />                        
+                    </f:facet>
+
+                </p:dialog>
+            </h:form> 
 
         </p:panel>
     </ui:define>
