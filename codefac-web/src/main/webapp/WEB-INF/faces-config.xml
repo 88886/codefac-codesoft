@@ -158,6 +158,11 @@
             <to-view-id>/admin/venta/gestionarVenta.xhtml</to-view-id>
         </navigation-case>
         
+        <navigation-case>
+            <from-outcome>facturaAdmin</from-outcome>
+            <to-view-id>/admin/venta/factura.xhtml</to-view-id>
+        </navigation-case>
+        
         
     </navigation-rule>
     
