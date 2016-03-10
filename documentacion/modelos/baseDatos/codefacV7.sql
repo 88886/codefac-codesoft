@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     09/03/2016 15:18:48                          */
+/* Created on:     10/03/2016 11:56:15                          */
 /*==============================================================*/
 
 
@@ -94,8 +94,8 @@ create table CATALAGO_PRODUCTO
    NOMBRE               varchar(256),
    DESCRIPCION          varchar(512),
    MARCA                varchar(32),
-   PRECIO               decimal(8,3),
-   PRECIO_MAYORISTA     decimal(8,3),
+   PRECIO               decimal(8,2),
+   PRECIO_MAYORISTA     decimal(8,2),
    COSTO                decimal(8,2),
    DESCUENTO            numeric(8,2),
    DESCUENTO_MAYORISTA  numeric(8,2),
@@ -247,6 +247,7 @@ create table DETALLE_PRODUCTO_GENERAL
    CANTIDAD             int,
    SUBTOTAL             numeric(8,2),
    DESCUENTO            decimal(8,2),
+   PRECIO_INDIVIDUAL    numeric(8,2),
    primary key (CODIGO_DETALL_GENERAL)
 );
 
@@ -260,6 +261,7 @@ create table DETALLE_PRODUCTO_INDIVIDUAL
    CODIGO_FACTURA       int,
    SUBTOTAL             decimal(8,2),
    DESCUENTO            decimal(8,2),
+   PRECIO_INDIVIDUAL    decimal(8,2),
    primary key (CODIGO_DETALLE_INDIVIDUAL)
 );
 
@@ -451,8 +453,6 @@ create table VENTA
    DESCUENTO            decimal(8,2),
    INCREMENTO           int,
    CODIGO_DOCUMENTO     varchar(64),
-   BANCO                varchar(64),
-   CHEQUE               varchar(64),
    primary key (CODIGO_FACTURA)
 );
 
