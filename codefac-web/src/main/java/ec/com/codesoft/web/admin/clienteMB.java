@@ -60,8 +60,7 @@ public class clienteMB implements Serializable {
         FacesMessage msg = new FacesMessage("Cliente Seleccionado", ((Cliente) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         flagBoton1 = false;
-        cliente = clienteSeleccionado;
-        System.out.println(cliente.getNombre());
+        System.out.println(clienteSeleccionado.getNombre());
 
     }
 
@@ -81,13 +80,15 @@ public class clienteMB implements Serializable {
 
     public void enCrear() {
         enModificar = false;
+        cliente=new Cliente();
     }
 
-    public void registarCliente(Event e) {
+    public void registarCliente(Event e) 
+    {
         if (enModificar) 
         {
-            clienteServicio.actualizar(cliente);
-            cliente = new Cliente();
+            clienteServicio.actualizar(clienteSeleccionado);
+            //cliente = new Cliente();
             clientes = clienteServicio.obtenerTodos();
             flagBoton1 = true;
         } 
@@ -105,7 +106,9 @@ public class clienteMB implements Serializable {
     }
 
     public void cancelar() {
-        cliente = new Cliente();
+       // cliente = new Cliente();
+       // RequestContext.getCurrentInstance().execute("PF('dlgEditCliente').hide()");
+        System.out.println("ocultando dialogo");
     }
 
     public void verificarClienteExiste() {
@@ -176,4 +179,6 @@ public class clienteMB implements Serializable {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+    
+    
 }
