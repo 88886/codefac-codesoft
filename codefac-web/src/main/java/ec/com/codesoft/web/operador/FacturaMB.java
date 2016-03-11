@@ -226,8 +226,8 @@ public class FacturaMB {
                         interesTarjeta = (total.multiply(campoInteres.divide(new BigDecimal("100"))));
                         totalPagar = total.add(interesTarjeta);
                         System.err.println("Total " + total + "  Interes" + interesTarjeta);
-                        interesTarjeta = interesTarjeta.setScale(2, BigDecimal.ROUND_UP);
-                        totalPagar = totalPagar.setScale(2, BigDecimal.ROUND_UP);
+                        //interesTarjeta = interesTarjeta.setScale(2, BigDecimal.ROUND_UP);
+                        //totalPagar = totalPagar.setScale(2, BigDecimal.ROUND_UP);
                     }
                 }
             }
@@ -340,9 +340,9 @@ public class FacturaMB {
                             if (detallesVenta.get(i).getDescuentos().get(j).getNombre().equals("dctoMayorista")) {
                                 //actualizar campos total-total pagar
                                 BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
-                                totalDetalleRegistro = (detallesVenta.get(i).getCosto().subtract(detallesVenta.get(i).getCosto().multiply(detallesVenta.get(i).getDescuentos().get(j).getValor().divide(new BigDecimal("100"))))).setScale(2, BigDecimal.ROUND_UP);
+                                totalDetalleRegistro = (detallesVenta.get(i).getCosto().subtract(detallesVenta.get(i).getCosto().multiply(detallesVenta.get(i).getDescuentos().get(j).getValor().divide(new BigDecimal("100")))));//.setScale(2, BigDecimal.ROUND_UP);
                                 detallesVenta.get(i).setCosto(totalDetalleRegistro);
-                                detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())).setScale(2, BigDecimal.ROUND_UP));
+                                detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
                                 detallesVenta.get(i).setValorDescuento(detallesVenta.get(i).getDescuentos().get(j).getValor());
                             }
                         }
@@ -351,7 +351,7 @@ public class FacturaMB {
                         BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
                         totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoMayorista());
                         detallesVenta.get(i).setCosto(totalDetalleRegistro);
-                        detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())).setScale(2, BigDecimal.ROUND_UP));
+                        detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
                         detallesVenta.get(i).setValorDescuento(new BigDecimal("0.0"));
                     }
                 } else {
@@ -360,9 +360,9 @@ public class FacturaMB {
                             if (detallesVenta.get(i).getDescuentos().get(j).getNombre().equals("dctoPVP")) {
                                 //actualizar campos total-total pagar
                                 BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
-                                totalDetalleRegistro = (detallesVenta.get(i).getCosto().subtract(detallesVenta.get(i).getCosto().multiply(detallesVenta.get(i).getDescuentos().get(j).getValor().divide(new BigDecimal("100"))))).setScale(2, BigDecimal.ROUND_UP);
+                                totalDetalleRegistro = (detallesVenta.get(i).getCosto().subtract(detallesVenta.get(i).getCosto().multiply(detallesVenta.get(i).getDescuentos().get(j).getValor().divide(new BigDecimal("100")))));//.setScale(2, BigDecimal.ROUND_UP);
                                 detallesVenta.get(i).setCosto(totalDetalleRegistro);
-                                detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())).setScale(2, BigDecimal.ROUND_UP));
+                                detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
                                 detallesVenta.get(i).setValorDescuento(detallesVenta.get(i).getDescuentos().get(j).getValor());
                                 detallesVenta.get(i).setValorDescuento(new BigDecimal("0.0"));
                             }
@@ -372,7 +372,7 @@ public class FacturaMB {
                         BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
                         totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoPVP());
                         detallesVenta.get(i).setCosto(totalDetalleRegistro);
-                        detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())).setScale(2, BigDecimal.ROUND_UP));
+                        detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
                     }
                 }
             }
@@ -389,18 +389,18 @@ public class FacturaMB {
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) {
                 iva = new BigDecimal("0.0");
-                iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                //iva = iva.setScale(2, BigDecimal.ROUND_UP);
                 //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
                 System.out.println("total: " + total);
                 total = subtotal;
-                total = total.setScale(2, BigDecimal.ROUND_UP);
+               // total = total.setScale(2, BigDecimal.ROUND_UP);
                 totalPagar = total;
             } else {
                 System.out.println("Else: " + total);
                 iva = subtotal.multiply(ivaSubTotal);
-                iva = iva.setScale(2, BigDecimal.ROUND_UP);
+               // iva = iva.setScale(2, BigDecimal.ROUND_UP);
                 total = subtotal.multiply(ivaTotal);
-                total = total.setScale(2, BigDecimal.ROUND_UP);
+              //  total = total.setScale(2, BigDecimal.ROUND_UP);
                 totalPagar = total;
 
             }
@@ -556,14 +556,14 @@ public class FacturaMB {
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) {
                 iva = new BigDecimal("0.0");
-                iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                //iva = iva.setScale(2, BigDecimal.ROUND_UP);
                 total = subtotal;
-                total = total.setScale(2, BigDecimal.ROUND_UP);
+               // total = total.setScale(2, BigDecimal.ROUND_UP);
             } else {
                 iva = subtotal.multiply(ivaSubTotal);
-                iva = iva.setScale(2, BigDecimal.ROUND_UP);
+               // iva = iva.setScale(2, BigDecimal.ROUND_UP);
                 total = subtotal.multiply(ivaTotal);
-                total = total.setScale(2, BigDecimal.ROUND_UP);
+               // total = total.setScale(2, BigDecimal.ROUND_UP);
             }
 
             DetallesVenta detalles = new DetallesVenta(cantidadComprar,
@@ -597,14 +597,14 @@ public class FacturaMB {
                     subtotal = subtotal.add(totalRegistro);
                     if (tipoCliente.equals("C")) {
                         iva = new BigDecimal("0.0");
-                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                       // iva = iva.setScale(2, BigDecimal.ROUND_UP);
                         total = subtotal;
-                        total = total.setScale(2, BigDecimal.ROUND_UP);
+                       // total = total.setScale(2, BigDecimal.ROUND_UP);
                     } else {
                         iva = subtotal.multiply(ivaSubTotal);
-                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                      //  iva = iva.setScale(2, BigDecimal.ROUND_UP);
                         total = subtotal.multiply(ivaTotal);
-                        total = total.setScale(2, BigDecimal.ROUND_UP);
+                       // total = total.setScale(2, BigDecimal.ROUND_UP);
                     }
 
                     DetallesVenta detalles = new DetallesVenta(cantidadComprar, productosIndividualesDetalles.getCodigoUnico(),
@@ -663,17 +663,17 @@ public class FacturaMB {
                 subtotal = subtotal.add(totalRegistro);
                 if (tipoCliente.equals("C")) {
                     iva = new BigDecimal("0.0");
-                    iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                   // iva = iva.setScale(2, BigDecimal.ROUND_UP);
                     //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
                     total = subtotal;
-                    total = total.setScale(2, BigDecimal.ROUND_UP);
+                    //total = total.setScale(2, BigDecimal.ROUND_UP);
                     totalPagar = total;
                 } else {
                     //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
                     iva = subtotal.multiply(ivaSubTotal);
-                    iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                   // iva = iva.setScale(2, BigDecimal.ROUND_UP);
                     total = subtotal.multiply(ivaTotal);
-                    total = total.setScale(2, BigDecimal.ROUND_UP);
+                    //total = total.setScale(2, BigDecimal.ROUND_UP);
                     totalPagar = total;
 
                 }
@@ -740,15 +740,15 @@ public class FacturaMB {
                     subtotal = subtotal.add(totalRegistro);
                     if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
                         iva = new BigDecimal("0.0");
-                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                       // iva = iva.setScale(2, BigDecimal.ROUND_UP);
                         total = subtotal;
-                        total = total.setScale(2, BigDecimal.ROUND_UP);
+                       // total = total.setScale(2, BigDecimal.ROUND_UP);
                         totalPagar = total;
                     } else {
                         iva = subtotal.multiply(ivaSubTotal);
-                        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                      //  iva = iva.setScale(2, BigDecimal.ROUND_UP);
                         total = subtotal.multiply(ivaTotal);
-                        total = total.setScale(2, BigDecimal.ROUND_UP);
+                       // total = total.setScale(2, BigDecimal.ROUND_UP);
                         totalPagar = total;
                     }
 
@@ -1112,9 +1112,9 @@ public class FacturaMB {
         detallesVenta.remove(detalleVentaEliminar);
         subtotal = subtotal.subtract(detalleVentaEliminar.getTotal());
         iva = subtotal.multiply(ivaSubTotal);
-        iva = iva.setScale(2, BigDecimal.ROUND_UP);
+        //iva = iva.setScale(2, BigDecimal.ROUND_UP);
         total = subtotal.multiply(ivaTotal);
-        total = total.setScale(2, BigDecimal.ROUND_UP);
+        //total = total.setScale(2, BigDecimal.ROUND_UP);
 
     }
 
@@ -1132,17 +1132,17 @@ public class FacturaMB {
         BigDecimal subTotalDescuento = subtotal.divide(descuentoPorcentaje, 2, BigDecimal.ROUND_FLOOR);
         System.out.println(subTotalDescuento);
 
-        subTotalDescuento.setScale(2, BigDecimal.ROUND_UP);
+       // subTotalDescuento.setScale(2, BigDecimal.ROUND_UP);
 
         iva = subTotalDescuento.multiply(ivaSubTotal, MathContext.DECIMAL32);
         iva = iva.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
 
-        iva.setScale(2, BigDecimal.ROUND_UP);
+       // iva.setScale(2, BigDecimal.ROUND_UP);
 
         total = subTotalDescuento.multiply(ivaTotal, MathContext.DECIMAL32);
         total = total.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
 
-        total.setScale(2, BigDecimal.ROUND_UP);
+        //total.setScale(2, BigDecimal.ROUND_UP);
         totalPagar = total;
     }
 
