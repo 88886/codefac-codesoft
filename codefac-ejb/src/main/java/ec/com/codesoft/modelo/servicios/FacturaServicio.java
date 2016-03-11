@@ -165,7 +165,8 @@ public class FacturaServicio {
      */
     public List<Venta> obtenerVentas()
     {
-        return ventaFacade.findAll();
+        return ventaFacade.getVentas();
+        //return ventaFacade.findAll();
     }
     
     /**

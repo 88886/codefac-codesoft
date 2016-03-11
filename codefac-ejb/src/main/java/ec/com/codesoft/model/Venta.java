@@ -98,12 +98,16 @@ public class Venta implements Serializable {
 
     @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<DetalleProductoGeneral> detalleProductoGeneralList;
+    
     @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<NotaCreditoDebito> notaCreditoDebitoList;
+    
     @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<DetallesServicio> detallesServicioList;
 
-    public Venta() {
+    public Venta() 
+    {
+        
     }
 
     public Venta(Integer codigoFactura) {

@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.modelo.facade;
 
-import ec.com.codesoft.model.Usuario;
 import ec.com.codesoft.model.Venta;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -56,6 +56,23 @@ public class VentaFacade extends AbstractFacade<Venta> {
             System.out.println(queryString);
             Query query = em.createQuery(queryString);
             return (Venta)query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+    /**
+     * Obtiene todas las ventas
+     * @return 
+     */
+    public List<Venta> getVentas()
+    {
+         try {
+            String queryString = "SELECT v FROM Venta v ";
+            System.out.println(queryString);
+            Query query = em.createQuery(queryString);
+            List<Venta> ventas=(List<Venta>)query.getResultList();
+            return ventas;
         } catch (NoResultException e) {
             return null;
         }

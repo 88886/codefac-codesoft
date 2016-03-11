@@ -824,13 +824,20 @@ public class FacturaMB {
                 venta.setDescuento(descuento);
                 venta.setCodigoDocumento(codigoDocumento);
                 venta.setTipoPago(devolverTipoPago());
+                
                 if (devolverTipoPago().equals("Cheque")) {
                     System.out.println("banco " + nombreBanco + " Cheque" + NCheque);
                     venta.setBanco(nombreBanco);
                     venta.setCheque(NCheque);
                 }
+                
                 venta.setDescuento(descuento);// descuento general
+                
+                venta.setDetalleProductoGeneralList(detallesGeneralVenta);
+                venta.setDetalleProductoIndividualList(detallesIndividualVenta);
+                
                 facturaServicio.guardarFactura(venta);
+                
                 codigoFactura = venta.getCodigoFactura();
 
                 //guardar banco
@@ -897,6 +904,12 @@ public class FacturaMB {
                         facturaServicio.actulizarStockGeneral(prodGeneral);
                     }
                 }
+                //System.out.println("detalleG: "+detallesGeneralVenta);
+                //System.out.println("detalleI: "+detallesIndividualVenta);
+                
+                
+                
+                
                 System.out.println("Facturado");
                 FacesMessage msg = new FacesMessage("Factura Completa");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
