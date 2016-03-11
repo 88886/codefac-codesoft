@@ -133,13 +133,13 @@ and open the template in the editor.
                 </p:dialog>
             </h:form> 
 
-            <!-- Formulario para grabar -->
+            <!-- Formulario para editar -->
             <h:form id="formEditar">
                 <p:dialog id="dlgEditar" widgetVar="editarDistribuidor" header="Editar Distribuidor"  >
                     <p:panelGrid columns="3" id="panelGrid">
                         <p:outputLabel for="disRuc" value="RUC :" />
 
-                        <p:inputText id="disRuc" value="#{distribuidorGestionMB.distribuidorSeleccionado.ruc}" required="true" requiredMessage="RUC necesario">
+                        <p:inputText id="disRuc" value="#{distribuidorGestionMB.distribuidorSeleccionado.ruc}" required="true" requiredMessage="RUC necesario" readonly="true">
                         </p:inputText>
 
                         <p:message for="disRuc" />                  

@@ -88,8 +88,8 @@ public class clienteMB implements Serializable {
         if (enModificar) 
         {
             clienteServicio.actualizar(clienteSeleccionado);
-            //cliente = new Cliente();
             clientes = clienteServicio.obtenerTodos();
+            System.out.println("Editando cliente...");
             flagBoton1 = true;
         } 
         else 
@@ -109,6 +109,8 @@ public class clienteMB implements Serializable {
        // cliente = new Cliente();
        // RequestContext.getCurrentInstance().execute("PF('dlgEditCliente').hide()");
         System.out.println("ocultando dialogo");
+        clientes=clienteServicio.obtenerTodos();
+        
     }
 
     public void verificarClienteExiste() {

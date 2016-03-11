@@ -54,7 +54,7 @@ and open the template in the editor.
                 </p:column>
 
                 <p:column headerText="Precio" style="width: 50px" >
-                    <p:outputLabel value="#{catalogo.precio.setScale(2,BigDecimal.ROUND_UP)}"/>
+                    <p:outputLabel value="#{calculosMB.redondeoSuperior(catalogo.precio)}"/>
                 </p:column>
 
                 <p:column headerText="Precio + IVA" style="width: 60px">
@@ -62,7 +62,7 @@ and open the template in the editor.
                 </p:column>
 
                 <p:column headerText="Precio M" style="width: 50px" >
-                    <p:outputLabel value="#{catalogo.precioMayorista.setScale(2,BigDecimal.ROUND_UP)}"/>
+                    <p:outputLabel value="#{calculosMB.redondeoSuperior(catalogo.precioMayorista)}"/>
                 </p:column>
 
                 <p:column headerText="Precio M + IVA" style="width: 60px">
