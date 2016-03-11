@@ -125,6 +125,9 @@ and open the template in the editor.
 
                     </p:panelGrid>
 
+                    <p:outputLabel value="Descuento: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.descuento}"/>
+
                     <p:outputLabel value="Precio Mayorista: "/>
 
                     <p:panelGrid columns="2" style="width: 100%">
@@ -136,13 +139,13 @@ and open the template in the editor.
                         </p:selectOneMenu>
                     </p:panelGrid>
 
-                    <p:outputLabel value="Descuento: "/>
-                    <p:inputText value="#{gestionProductoMB.catalagoProducto.descuento}"/>
+                    <p:outputLabel value="Descuento Mayorista: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.descuentoMayorista}"/>
 
                     <p:outputLabel value="Ubicacion: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.ubicacion}"/>
 
-                    <p:outputLabel value="Unidades: "/>
+                    <p:outputLabel value="Unidad medida: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.unidades}"/>
 
                     <p:outputLabel value="Tipo: "/>
@@ -179,22 +182,39 @@ and open the template in the editor.
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.marca}"/>
 
                     <p:outputLabel value="Precio: "/>
-                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precio}"/>
 
-                    <p:outputLabel value="Precio Mayorista: "/>
-                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precioMayorista}"/>
+                    <p:panelGrid columns="2" style="width: 100%">
+                        <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precio}" style="width: 50px" />
+
+                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" >
+                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                            <f:selectItem itemLabel="- Iva " itemValue="-" />
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
 
                     <p:outputLabel value="Descuento: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.descuento}"/>
 
+                    <p:outputLabel value="Precio Mayorista: "/>
+
+                    <p:panelGrid columns="2" style="width: 100%">
+                        <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precioMayorista}" style="width: 50px" />
+
+                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" >
+                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                            <f:selectItem itemLabel="- Iva " itemValue="-" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+
+                    <p:outputLabel value="Descuento Mayorista: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.descuentoMayorista}"/>
+
                     <p:outputLabel value="Ubicacion: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>
 
-                    <p:outputLabel value="Unidades: "/>
+                    <p:outputLabel value="Unidad medida: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.unidades}"/>
-
-                    <p:outputLabel value="Stock: "/>
-                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.productoGeneralVenta.cantidadDisponible}"/>
 
                     <p:outputLabel value="Tipo: "/>
                     <p:selectOneMenu id="sexo" value="#{gestionProductoMB.catalogoSeleccionado.tipoProducto}" >

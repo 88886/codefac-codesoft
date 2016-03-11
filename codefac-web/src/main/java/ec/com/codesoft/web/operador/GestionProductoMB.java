@@ -7,14 +7,17 @@ package ec.com.codesoft.web.operador;
 
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
+import ec.com.codesoft.web.util.CalculosMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import static org.castor.util.Messages.message;
@@ -62,6 +65,10 @@ public class GestionProductoMB implements Serializable {
 
     @EJB
     private CatalogoServicio catalogoServicio;
+    
+    @ManagedProperty("#{calculosMB}")
+    private CalculosMB calculosMB;
+    //private gestionarCompraMB gestionarCompra;
 
     //@EJB
     //private CatalogoServicio catologoServicio;
@@ -90,6 +97,11 @@ public class GestionProductoMB implements Serializable {
         System.out.println("abriendo el dialogo de editar ...");
         //catalagoProducto = new CatalagoProducto();
         System.out.println(catalogoSeleccionado);
+        //catalogoSeleccionado.setPrecio(catalogoSeleccionado.getPrecio().multiply(new BigDecimal("1.12")).setScale(0,RoundingMode.UP));
+        catalogoSeleccionado.setPrecio(calculosMB.incluirIva(catalogoSeleccionado.getPrecio()));
+        //catalogoSeleccionado.setPrecioMayorista(catalogoSeleccionado.getPrecioMayorista().multiply(new BigDecimal("1.12")).setScale(0,RoundingMode.UP));
+        catalogoSeleccionado.setPrecioMayorista(calculosMB.incluirIva(catalogoSeleccionado.getPrecioMayorista()));
+        
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').show()");
         dialogoEditAbierto = true;
     }
@@ -102,14 +114,15 @@ public class GestionProductoMB implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProducto').hide()");
         catalagoProducto = new CatalagoProducto();
         dialogoAbierto = false;
-        
-         mostrarMensaje("Cancelado","El proceso de grabar fue cancelado");
+        catalagoProductos=catalogoServicio.obtenerTodos();
+        mostrarMensaje("Cancelado","El proceso de grabar fue cancelado");
     }
 
     public void cancelarEditar() {
         System.out.println("cancelando editar ...");
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').hide()");
         dialogoEditAbierto=false;
+        catalagoProductos=catalogoServicio.obtenerTodos();
         mostrarMensaje("Cancelado","El proceso de editar fue cancelado");
     }
 
@@ -153,6 +166,29 @@ public class GestionProductoMB implements Serializable {
 
     public void editarCatalago() {
         System.out.println("Editando el catalogo ...");
+        
+        //verificar si el precio viene con o sin iva
+        if(ivaCosto.equals("+"))
+        {
+            
+            System.out.println(catalogoSeleccionado.getPrecio().setScale(3,BigDecimal.ROUND_DOWN));
+            //BigDecimal iva=new BigDecimal("1.12");
+            BigDecimal valor=catalogoSeleccionado.getPrecio().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
+            //System.out.println("si:"+valor);
+            
+            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+            catalogoSeleccionado.setPrecio(valor);
+            
+        }
+        
+        if(ivaMayorista.equals("+"))
+        {
+            BigDecimal valor=catalogoSeleccionado.getPrecioMayorista().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
+            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+            catalogoSeleccionado.setPrecioMayorista(valor);
+            //catalagoProducto.setPrecioMayorista(catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12")).setScale(2,BigDecimal.ROUND_UP));
+        }
+        
         catalogoServicio.actualizar(catalogoSeleccionado);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').hide()");
         dialogoEditAbierto=false;
@@ -269,6 +305,14 @@ public class GestionProductoMB implements Serializable {
 
     public void setIvaMayorista(String ivaMayorista) {
         this.ivaMayorista = ivaMayorista;
+    }
+
+    public CalculosMB getCalculosMB() {
+        return calculosMB;
+    }
+
+    public void setCalculosMB(CalculosMB calculosMB) {
+        this.calculosMB = calculosMB;
     }
     
     
