@@ -32,6 +32,11 @@ public class CalculosMB implements Serializable {
         return respuesta;
     }
 
+    /**
+     * 
+     * @param valor
+     * @return 
+     */
     public BigDecimal redondeoSuperior(BigDecimal valor) {
         if(valor!=null)
         {
