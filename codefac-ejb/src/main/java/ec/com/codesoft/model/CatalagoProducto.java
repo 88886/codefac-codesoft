@@ -97,7 +97,7 @@ public class CatalagoProducto implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "catalagoProducto")
     private ProductoGeneralVenta productoGeneralVenta;
 
-    @JoinColumn(name = "CAT_NOMBRE", referencedColumnName = "NOMBRE")
+    @JoinColumn(name = "ID_CATEGORIA", referencedColumnName = "ID_CATEGORIA")
     @ManyToOne
     private CategoriaProducto catNombre;
 

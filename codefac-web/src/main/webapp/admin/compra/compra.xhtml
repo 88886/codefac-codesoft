@@ -28,6 +28,7 @@ and open the template in the editor.
                                 <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
                                 <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
                                     <p:dataTable value="#{comprarMB.listaDistribuidores}" 
+                                                 rows="10"
                                                  var="distribuidor"
                                                  scrollable="true"
                                                  selectionMode="single"
@@ -41,7 +42,7 @@ and open the template in the editor.
                                             <p:outputLabel value="#{distribuidor.ruc}" />
                                         </p:column>
 
-                                        <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}">
+                                        <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}" filterFunction="#{filtroMB.filterByName}" >
                                             <p:outputLabel value="#{distribuidor.nombre}"/>
                                         </p:column>
 
@@ -100,6 +101,7 @@ and open the template in the editor.
                             <!-- dialogo para buscar los productos de los catalogos -->
                             <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
                                 <p:dataTable 
+                                    rows="10"
                                     value="#{comprarMB.listaCatalogos}" 
                                     var="catalogo"
                                     selectionMode="single" 

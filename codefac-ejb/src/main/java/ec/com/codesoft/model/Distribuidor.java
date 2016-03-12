@@ -58,9 +58,11 @@ public class Distribuidor implements Serializable {
     private String tipoPago;
     @Column(name = "DIAS_PAGO")
     private Integer diasPago;
+    
     @Column(name = "ULTIMO_MOV")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimoMov;
+    
     @Size(max = 250)
     @Column(name = "NOTAS")
     private String notas;
