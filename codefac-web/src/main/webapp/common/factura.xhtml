@@ -50,10 +50,10 @@ and open the template in the editor.
                                     <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente}" update=":form:infDistr:panelGridDistr,:form:infDistr:cedCliente,@this" />       
                                     <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectCliente}"/>
 
-                                    <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}">
+                                    <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}" >
                                         <h:outputText value="#{cliente.cedulaRuc}" />
                                     </p:column>
-                                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}">
+                                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
                                         <h:outputText value="#{cliente.nombre}" />
                                     </p:column>
 
@@ -169,7 +169,7 @@ and open the template in the editor.
                             <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}">
                                 <h:outputText value="#{catalogo.codigoProducto}" />
                             </p:column>
-                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}">
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
                                 <h:outputText value="#{catalogo.nombre}" />
                             </p:column>
                             <p:column headerText="Precio">
@@ -237,7 +237,7 @@ and open the template in the editor.
                     <p:spacer/>
                     <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%">
                         <p:outputLabel  value="Subtotal:"/>
-                        <p:inputText id="subTotal" value="#{facturaMB.subtotal}" readonly="true"/>
+                        <p:inputText id="subTotal" value="#{calculosMB.redondeoSuperior(facturaMB.subtotal)}" readonly="true"/>
 
                         <p:outputLabel  value="Descuento:"/>
                         <p:inputText id="txtDescuento" value="#{facturaMB.descuento}" readonly="false">
@@ -245,16 +245,16 @@ and open the template in the editor.
                         </p:inputText>
 
                         <p:outputLabel  value="Iva #{facturaMB.ivaMostrar.intValue()}%:"/>
-                        <p:inputText id="iva" value="#{facturaMB.iva}" readonly="true"/>
+                        <p:inputText id="iva" value="#{calculosMB.redondeoSuperior(facturaMB.iva)}" readonly="true"/>
 
                         <p:outputLabel  value="Total + Iva : "/>
-                        <p:inputText id="totalIva" value="#{facturaMB.total}" readonly="true"/>
+                        <p:inputText id="totalIva" value="#{calculosMB.redondeoSuperior(facturaMB.total)}" readonly="true"/>
 
                         <p:outputLabel  value="Recargo Tarjeta : "/>
-                        <p:inputText id="interes" value="#{facturaMB.interesTarjeta}" readonly="true"/>
+                        <p:inputText id="interes" value="#{calculosMB.redondeoSuperior(facturaMB.interesTarjeta)}" readonly="true"/>
 
                         <p:outputLabel  value="Total a Pagar : "/>
-                        <p:inputText id="totalPagar" value="#{facturaMB.totalPagar}" readonly="true"/>
+                        <p:inputText id="totalPagar" value="#{calculosMB.redondeoSuperior(facturaMB.totalPagar)}" readonly="true"/>
                     </p:panelGrid>
                 </p:panel>
 
