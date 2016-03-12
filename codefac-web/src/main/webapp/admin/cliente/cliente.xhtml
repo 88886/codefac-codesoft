@@ -19,6 +19,9 @@ and open the template in the editor.
             <p:growl id="msgs" showDetail="true" />
             <p:panel id="panelTablaClientes" style="z-index: 0">
                 <p:dataTable
+                    rows="15"
+                    rowsPerPageTemplate="15,20,25"
+                    paginator="true"
                     style="height: 100%"
                     id="tablaClientes"
                     var="cliente" 
@@ -165,7 +168,7 @@ and open the template in the editor.
                         <f:selectItem itemLabel="Distribuidor" itemValue="Distribuidor" />
                     </p:selectOneMenu>
                     <p:message for="tipoCliente2" />
-                    
+
 
                     <p:outputLabel for="notas2" value="Notas" />
                     <p:inputTextarea id="notas2" value="#{clienteMB.clienteSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
@@ -178,7 +181,7 @@ and open the template in the editor.
                         icon="ui-icon-disk"
                         update=":form:tablaClientes,@form"
                         actionListener="#{clienteMB.registarCliente(e)}"/>
-                    
+
                     <p:commandButton value="Cancelar" icon="ui-icon-cancel" actionListener="#{clienteMB.cancelar()}" onclick="PF('editarCliente').hide();" update=":form:tablaClientes"/>                        
                 </f:facet>
 

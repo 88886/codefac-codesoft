@@ -163,7 +163,24 @@
             <to-view-id>/admin/venta/factura.xhtml</to-view-id>
         </navigation-case>
         
+        <navigation-rule>
+            <from-view-id>/admin/venta/factura.xhtml</from-view-id>
+            <navigation-case>
+                <from-action>factura</from-action>
+                <to-view-id>/admin/venta/factura.xhtml</to-view-id>
+            </navigation-case>  
+        </navigation-rule>
         
+
+        <navigation-rule>
+            <from-view-id>/operador/factura.xhtml</from-view-id>
+            <navigation-case>
+                <from-action>factura</from-action>
+                <to-view-id>/operador/factura.xhtml</to-view-id>
+            </navigation-case>  
+        </navigation-rule>
+
+                
     </navigation-rule>
     
 </faces-config>
