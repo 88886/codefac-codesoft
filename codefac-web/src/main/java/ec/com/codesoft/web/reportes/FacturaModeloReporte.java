@@ -15,7 +15,8 @@ import java.util.Map;
  *
  * @author carlo
  */
-public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloReporte>{
+public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloReporte>
+{
 
     private String codigoFactura;
     private String nombreCliente;

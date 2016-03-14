@@ -166,7 +166,7 @@ and open the template in the editor.
                             <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
                             <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
 
-                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}">
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
                                 <h:outputText value="#{catalogo.codigoProducto}" />
                             </p:column>
                             <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
@@ -288,7 +288,7 @@ and open the template in the editor.
                     <!-- Dialogo de confirmacion para grabar o cancelar-->
                     <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
                         <h:form style="margin: 0 auto">
-                            <p:commandButton  value="Grabar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />
+                            <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />
                             <p:commandButton  value="Nuevo" style="background-image: none;background-color: chartreuse " action="factura" ajax="false" />
                             <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
 

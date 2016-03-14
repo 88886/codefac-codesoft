@@ -111,7 +111,7 @@ and open the template in the editor.
                                     <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto"/>
                                     <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
 
-                                    <p:column headerText="codigo">
+                                    <p:column headerText="codigo" filterBy="#{catalogo.codigoProducto}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" >
                                         <p:outputLabel value="#{catalogo.codigoProducto}"/>
                                     </p:column>
 
