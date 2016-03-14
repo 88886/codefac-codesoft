@@ -93,10 +93,6 @@
             <to-view-id>/admin/catalogo/producto.xhtml</to-view-id>
         </navigation-case>
         
-        <navigation-case>
-            <from-outcome>proforma</from-outcome>
-            <to-view-id>/operador/proforma.xhtml</to-view-id>
-        </navigation-case>
         
         <navigation-case>
             <from-outcome>notaCredito</from-outcome>
@@ -179,6 +175,25 @@
                 <to-view-id>/operador/factura.xhtml</to-view-id>
             </navigation-case>  
         </navigation-rule>
+        
+        <navigation-rule>
+            <from-view-id>/operador/proforma.xhtml</from-view-id>
+            <navigation-case>
+                <from-action>proforma</from-action>
+                <to-view-id>/operador/proforma.xhtml</to-view-id>
+            </navigation-case>  
+        </navigation-rule>
+        
+        <navigation-rule>
+            <from-view-id>/admin/proforma.xhtml</from-view-id>
+            <navigation-case>
+                <from-action>proforma</from-action>
+                <to-view-id>/admin/proforma.xhtml</to-view-id>
+            </navigation-case>  
+        </navigation-rule>
+        
+        
+        
 
                 
     </navigation-rule>

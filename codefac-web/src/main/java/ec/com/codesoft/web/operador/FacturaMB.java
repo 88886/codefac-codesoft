@@ -1005,7 +1005,7 @@ public class FacturaMB {
 
     public String devolverTipoPago() {
         if (estBanco) {
-            return "Credito Bsnco";
+            return "Credito Banco";
         } else if (estCheue) {
             return "Cheque";
         } else if (creditoDirecto) {
