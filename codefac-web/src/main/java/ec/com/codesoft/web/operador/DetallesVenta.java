@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.web.operador;
 
 import java.math.BigDecimal;
@@ -15,16 +14,16 @@ import java.util.List;
  * @author Suco
  */
 public class DetallesVenta {
-    
-       
+
     private int cantidad;
     private String codigo;
     private String nombre;
     private BigDecimal costo;
     private BigDecimal total;
     private List<Descuentos> descuentos;
+    
     private String precioSeleccionado;
-    private String  escogerDescuento;
+    private String escogerDescuento;
     private BigDecimal valorVerdaderoMayorista;
     private BigDecimal valorVerdaderoPVP;
     private BigDecimal valorDescuento;
@@ -38,10 +37,18 @@ public class DetallesVenta {
         this.nombre = nombre;
         this.costo = costo;
         this.total = total;
-        valorDescuento=new BigDecimal("0.0");
+        valorDescuento = new BigDecimal("0.0");
     }
 
-    
+    public DetallesVenta(int cantidad, String codigo, String nombre, BigDecimal costo, BigDecimal total,BigDecimal valorDescuento) 
+    {
+        this.cantidad = cantidad;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.costo = costo;
+        this.total = total;
+        this.valorDescuento = valorDescuento;
+    }
 
     public String getCodigo() {
         return codigo;
@@ -91,8 +98,6 @@ public class DetallesVenta {
         this.descuentos = descuentos;
     }
 
-    
-
     public String getPrecioSeleccionado() {
         return precioSeleccionado;
     }
@@ -132,27 +137,5 @@ public class DetallesVenta {
     public void setValorDescuento(BigDecimal valorDescuento) {
         this.valorDescuento = valorDescuento;
     }
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-
-   
-    
-
-  
-
-    
-    
-   
-    
-    
-    
 }

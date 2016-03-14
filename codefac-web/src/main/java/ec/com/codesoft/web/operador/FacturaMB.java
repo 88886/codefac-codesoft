@@ -1018,7 +1018,8 @@ public class FacturaMB {
     /**
      * Metodo que me permite generar la proforma
      */
-    public void proformar() {
+    public void proformar() 
+    {
         System.out.println("Proformando ...");
 
         if (detallesVenta == null) {
@@ -1072,7 +1073,7 @@ public class FacturaMB {
                 detallesFactura.setCantidad(detalle.getCantidad() + "");
                 detallesFactura.setCodigo(detalle.getCodigo());
                 detallesFactura.setDescripcion(detalle.getNombre());
-                detallesFactura.setDescuento(" ");
+                detallesFactura.setDescuento("0");
                 detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
                 detallesFactura.setTotal(detalle.getTotal().toString());
                 if (facturaReporte != null) {

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="79122a21-68f2-44e1-a565-899d243570dc">
 	<property name="ireport.zoom" value="1.1000000000000207"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="4"/>
+	<property name="ireport.y" value="2"/>
 	<parameter name="codigoFactura" class="java.lang.String"/>
 	<parameter name="nombreCliente" class="java.lang.String"/>
 	<parameter name="direccion" class="java.lang.String"/>
@@ -25,10 +25,6 @@
 	</background>
 	<title>
 		<band height="61" splitType="Stretch">
-			<image>
-				<reportElement x="0" y="0" width="533" height="44" uuid="eb7570ab-40e6-4d71-940f-5c2e1f62675e"/>
-				<imageExpression><![CDATA["C:\\Users\\carlo\\Documents\\logoFactura.jpg"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="275" y="0" width="212" height="17" uuid="413fb74e-3e09-4b11-bb95-aa50bab08f5d"/>
 				<textElement>
@@ -53,6 +49,13 @@
 			<line>
 				<reportElement x="3" y="52" width="551" height="1" uuid="118e61f6-0b45-44ec-a633-ef5ac6ce91aa"/>
 			</line>
+			<staticText>
+				<reportElement x="22" y="9" width="123" height="43" uuid="989df330-e233-4f64-acac-217b825368a1"/>
+				<textElement>
+					<font size="28" isBold="true"/>
+				</textElement>
+				<text><![CDATA[H D E M]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

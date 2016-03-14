@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.reportes;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class NotaVentaModeloReporte extends ReporteJasper<FacturaDetalleModeloRe
         this.telefono = telefono;
         this.fechaFactura = fechaFactura;
         this.formaPago = formaPago;
-        this.total = total;
+        this.total = total.setScale(2,BigDecimal.ROUND_DOWN);
         this.detalles = detalles;
     }
     
@@ -105,7 +106,7 @@ public class NotaVentaModeloReporte extends ReporteJasper<FacturaDetalleModeloRe
     }
 
     public void setTotal(BigDecimal total) {
-        this.total = total;
+        this.total = total.setScale(2,RoundingMode.UP);
     }
 
 

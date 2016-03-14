@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.reportes;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,9 +70,9 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
         this.fechaFactura = fechaFactura;
         this.formaPago = formaPago;
         this.nota = nota;
-        this.total = total;
-        this.ivaTotal = ivaTotal;
-        this.subtotal = subtotal;
+        this.total = total.setScale(2, RoundingMode.UP);
+        this.ivaTotal = ivaTotal.setScale(2, RoundingMode.DOWN);
+        this.subtotal = subtotal.setScale(2, RoundingMode.DOWN);
         this.detalles= new ArrayList<FacturaDetalleModeloReporte>();
         
     }
@@ -135,7 +136,7 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     }
 
     public void setTotal(BigDecimal total) {
-        this.total = total;
+        this.total = total.setScale(2, RoundingMode.UP);
     }
 
     public BigDecimal getIvaTotal() {
@@ -143,7 +144,7 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     }
 
     public void setIvaTotal(BigDecimal ivaTotal) {
-        this.ivaTotal = ivaTotal;
+        this.ivaTotal = ivaTotal.setScale(2, RoundingMode.DOWN);
     }
 
     public BigDecimal getSubtotal() {
@@ -151,7 +152,7 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
     }
 
     public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
+        this.subtotal = subtotal.setScale(2, RoundingMode.DOWN);
     }
 
     public List<FacturaDetalleModeloReporte> getDetalles() {
@@ -197,9 +198,9 @@ public class FacturaModeloReporte extends ReporteJasper<FacturaDetalleModeloRepo
         lista.put("fechaFactura",fechaFactura);
         lista.put("formaPago",formaPago);
         lista.put("nota",nota);
-        lista.put("total",total);
-        lista.put("ivaTotal",ivaTotal);
-        lista.put("subTotal",subtotal);
+        lista.put("total",total.setScale(2,BigDecimal.ROUND_DOWN));
+        lista.put("ivaTotal",ivaTotal.setScale(2,BigDecimal.ROUND_DOWN));
+        lista.put("subTotal",subtotal.setScale(2,BigDecimal.ROUND_DOWN));
         
         return lista;
         

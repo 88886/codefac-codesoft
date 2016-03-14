@@ -61,6 +61,12 @@ and open the template in the editor.
                             <p:outputLabel value="#{venta.estado}"/>
                         </p:column>
 
+                        <p:column headerText="Fecha" style="width: 130px" >
+                            <p:outputLabel value="#{venta.fecha}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                            </p:outputLabel>
+                        </p:column>
+
                         <p:column headerText="Detalle">
                             <p:outputLabel value="#{venta.toStringDetalle()}"/>
                         </p:column>

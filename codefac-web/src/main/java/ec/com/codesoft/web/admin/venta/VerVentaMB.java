@@ -58,8 +58,15 @@ public class VerVentaMB implements Serializable {
                     detalle.getCantidad(),
                     detalle.getCodigoProducto().getCodigoProducto(),
                     detalle.getCodigoProducto().getNombre(),
-                    detalle.getCodigoProducto().getPrecio(),
-                    detalle.getSubtotal()));
+                    detalle.getPrecioIndividual(),
+                    detalle.getSubtotal(),
+                    detalle.getDescuento()));
+            
+            //System.out.println("d-:"+detalle.getDescuento());
+        }
+        
+        for (DetalleProductoGeneral detalle : listaGeneral) {
+            System.out.println("d->"+detalle.getDescuento());
         }
 
         List<DetalleProductoIndividual> listaIndividual = venta.getDetalleProductoIndividualList();
@@ -68,8 +75,9 @@ public class VerVentaMB implements Serializable {
                     1,
                     detalle.getCodigoUnico().getCodigoProducto().getCodigoProducto(),
                     detalle.getCodigoUnico().getCodigoProducto().getNombre(),
-                    detalle.getCodigoUnico().getCodigoProducto().getPrecio(),
-                    detalle.getSubtotal()));
+                    detalle.getPrecioIndividual(),
+                    detalle.getSubtotal(),
+                    detalle.getDescuento()));
         }
 
     }

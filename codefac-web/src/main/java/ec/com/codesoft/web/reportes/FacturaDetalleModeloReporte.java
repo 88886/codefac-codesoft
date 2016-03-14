@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.web.reportes;
 
+import java.math.BigDecimal;
+
 
 
 /**
@@ -30,9 +32,9 @@ public class FacturaDetalleModeloReporte
         this.cantidad = cantidad;
         this.codigo = codigo;
         this.descripcion = descripcion;
-        this.descuento = descuento;
-        this.precioUnitario = precioUnitario;
-        this.total = total;
+        this.descuento = new BigDecimal(descuento).setScale(2,BigDecimal.ROUND_DOWN).toString();
+        this.precioUnitario = new BigDecimal(precioUnitario).setScale(2,BigDecimal.ROUND_DOWN).toString();
+        this.total = new BigDecimal(total).setScale(2,BigDecimal.ROUND_DOWN).toString();
     }
 
     public String getCantidad() {
@@ -64,7 +66,10 @@ public class FacturaDetalleModeloReporte
     }
 
     public void setDescuento(String descuento) {
-        this.descuento = descuento;
+        if(descuento==null)
+            this.descuento=new BigDecimal("0.00").toString();
+        else            
+            this.descuento = new BigDecimal(descuento).setScale(2,BigDecimal.ROUND_DOWN).toString();
     }
 
     public String getPrecioUnitario() {
@@ -72,7 +77,7 @@ public class FacturaDetalleModeloReporte
     }
 
     public void setPrecioUnitario(String precioUnitario) {
-        this.precioUnitario = precioUnitario;
+        this.precioUnitario = new BigDecimal(precioUnitario).setScale(2,BigDecimal.ROUND_DOWN).toString();
     }
 
     public String getTotal() {
@@ -80,7 +85,7 @@ public class FacturaDetalleModeloReporte
     }
 
     public void setTotal(String total) {
-        this.total = total;
+        this.total = new BigDecimal(total).setScale(2,BigDecimal.ROUND_DOWN).toString();
     }
     
     

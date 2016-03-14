@@ -18,6 +18,7 @@ import ec.com.codesoft.web.reportes.NotaVentaModeloReporte;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +136,7 @@ public class GestionarVentaMB implements Serializable {
                 detallesFactura.setCantidad(detalle.getCantidad() + "");
                 detallesFactura.setCodigo(detalle.getCodigo());
                 detallesFactura.setDescripcion(detalle.getNombre());
-                detallesFactura.setDescuento(" ");
+                detallesFactura.getDescuento();
                 detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
                 detallesFactura.setTotal(detalle.getTotal().toString());
                 if (notaVenta != null) {
@@ -167,7 +168,7 @@ public class GestionarVentaMB implements Serializable {
             facturaReporte.setIvaTotal(venta.getTotal());
             facturaReporte.setNombreCliente(venta.getCedulaRuc().getNombre());
             facturaReporte.setNota(" ");
-            BigDecimal subtotal=venta.getTotal().divide(new BigDecimal("1.12"));
+            BigDecimal subtotal=venta.getTotal().divide(new BigDecimal("1.12"),2,RoundingMode.DOWN);
             subtotal.setScale(2,BigDecimal.ROUND_UP);
             facturaReporte.setSubtotal(subtotal);
 
@@ -178,7 +179,7 @@ public class GestionarVentaMB implements Serializable {
                 detallesFactura.setCantidad(detalle.getCantidad() + "");
                 detallesFactura.setCodigo(detalle.getCodigo());
                 detallesFactura.setDescripcion(detalle.getNombre());
-                detallesFactura.setDescuento(" ");
+                detallesFactura.getDescuento();
                 detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
                 detallesFactura.setTotal(detalle.getTotal().toString());
                 if (facturaReporte != null) {

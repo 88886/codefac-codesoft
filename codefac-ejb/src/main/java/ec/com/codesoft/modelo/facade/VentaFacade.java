@@ -68,7 +68,7 @@ public class VentaFacade extends AbstractFacade<Venta> {
     public List<Venta> getVentas()
     {
          try {
-            String queryString = "SELECT v FROM Venta v ";
+            String queryString = "SELECT v FROM Venta v order by v.codigoFactura desc ";
             System.out.println(queryString);
             Query query = em.createQuery(queryString);
             List<Venta> ventas=(List<Venta>)query.getResultList();

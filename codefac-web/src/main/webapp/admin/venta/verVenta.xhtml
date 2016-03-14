@@ -78,6 +78,12 @@ and open the template in the editor.
                         <p:outputLabel value="#{detalle.cantidad}" />
                     </p:column>
 
+                    <p:column headerText="Descuento">
+                        <p:outputLabel value="#{detalle.valorDescuento}" />
+                    </p:column>
+
+
+
                     <p:column headerText="Subtotal">
                         <p:outputLabel value="#{detalle.total}" />
                     </p:column>
@@ -93,14 +99,14 @@ and open the template in the editor.
                         <p:outputLabel value="Total:" />
                         <p:outputLabel value="#{verVentaMB.venta.total}" />
                     </p:panelGrid>
-                    
+
                     <p:spacer height="30px"/>
-                    
+
                     <p:commandButton action="gestionarVenta" value="Regresar" style="margin:  0 auto" />
-                                        
+
                 </p:panel>
-                
-                
+
+
 
             </h:form>
         </p:panel>
