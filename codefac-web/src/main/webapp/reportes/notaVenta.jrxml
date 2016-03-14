@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="79122a21-68f2-44e1-a565-899d243570dc">
-	<property name="ireport.zoom" value="1.2100000000000088"/>
+	<property name="ireport.zoom" value="1.4641000000000144"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="21"/>
 	<parameter name="codigoFactura" class="java.lang.String"/>
 	<parameter name="nombreCliente" class="java.lang.String"/>
 	<parameter name="direccion" class="java.lang.String"/>
@@ -29,37 +29,37 @@
 	<pageHeader>
 		<band height="113" splitType="Stretch">
 			<textField>
-				<reportElement x="46" y="14" width="100" height="15" uuid="67cb88bf-5dd9-4896-9c60-491364086141"/>
+				<reportElement x="68" y="19" width="100" height="15" uuid="67cb88bf-5dd9-4896-9c60-491364086141"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombreCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="46" y="32" width="100" height="15" uuid="e4a06246-d948-40be-9f5c-f920fc5f6ebe"/>
+				<reportElement x="68" y="33" width="100" height="15" uuid="e4a06246-d948-40be-9f5c-f920fc5f6ebe"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="46" y="47" width="100" height="15" uuid="097e5756-582c-4f2e-918c-18472b78c13b"/>
+				<reportElement x="68" y="47" width="100" height="15" uuid="097e5756-582c-4f2e-918c-18472b78c13b"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="77" y="63" width="100" height="15" uuid="7d7ca318-48bf-40cc-890f-147efc715bcc"/>
+				<reportElement x="99" y="63" width="100" height="15" uuid="7d7ca318-48bf-40cc-890f-147efc715bcc"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fechaFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="77" y="78" width="100" height="15" uuid="20bfab91-b7da-495a-a08a-c724dff733ec"/>
+				<reportElement x="99" y="78" width="100" height="15" uuid="20bfab91-b7da-495a-a08a-c724dff733ec"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{formaPago}]]></textFieldExpression>
 			</textField>
@@ -71,39 +71,39 @@
 	<detail>
 		<band height="19" splitType="Prevent">
 			<textField>
-				<reportElement x="32" y="2" width="163" height="15" uuid="55218e91-0984-4a53-a16a-5e964d1f82d8"/>
+				<reportElement x="243" y="2" width="53" height="15" uuid="6349181a-2a72-42ef-b06d-cbe40bc426d8"/>
 				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="235" y="2" width="53" height="15" uuid="6349181a-2a72-42ef-b06d-cbe40bc426d8"/>
-				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="195" y="2" width="40" height="15" uuid="b9bf2e14-3d74-4d2b-b4e6-0e537d6cadf2"/>
+				<reportElement x="203" y="2" width="40" height="15" uuid="b9bf2e14-3d74-4d2b-b4e6-0e537d6cadf2"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="2" width="30" height="15" uuid="d797277e-9dc5-4ae7-a314-24def0f15f8f"/>
+				<reportElement x="29" y="2" width="27" height="15" uuid="d797277e-9dc5-4ae7-a314-24def0f15f8f"/>
 				<textElement>
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="56" y="2" width="147" height="15" uuid="8ce200ca-32f1-4a4e-8308-f5bb373d0af8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
 		<band height="60" splitType="Stretch">
 			<textField>
-				<reportElement x="236" y="12" width="52" height="15" uuid="b1f1d8d7-d17e-4087-93d9-8393d243c6d1"/>
+				<reportElement x="244" y="2" width="52" height="15" uuid="b1f1d8d7-d17e-4087-93d9-8393d243c6d1"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -112,7 +112,7 @@
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="390" splitType="Stretch"/>
+		<band height="409" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
 		<band height="15" splitType="Stretch"/>

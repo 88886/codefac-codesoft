@@ -23,6 +23,9 @@ and open the template in the editor.
 
                 <p:dataTable
                     id="tablaDistribuidor"
+                    rows="15"
+                    rowsPerPageTemplate="15,20,25"
+                    paginator="true"
                     value="#{distribuidorGestionMB.listaDistribuidor}"
                     var="distribuidor"
                     rowKey="#{distribuidor.ruc}"
@@ -30,7 +33,7 @@ and open the template in the editor.
                     selection="#{distribuidorGestionMB.distribuidorSeleccionado}">
 
                     >
-                    
+
                     <p:ajax event="rowSelect" listener="#{distribuidorGestionMB.onRowSelect}" update=":formTabla:growl"/>
 
                     <f:facet name="header" >
@@ -42,8 +45,8 @@ and open the template in the editor.
                         <p:outputLabel value="#{distribuidor.ruc}" />
                     </p:column>
 
-                    <p:column headerText="Nombre">
-                        <p:outputLabel value="#{distribuidor.nombre}" />
+                    <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}" filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains">
+                        <p:outputLabel value="#{distribuidor.nombre}"  />
                     </p:column>
 
                     <p:column headerText="Direccion">
