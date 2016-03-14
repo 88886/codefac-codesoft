@@ -364,7 +364,7 @@ public class FacturaMB {
                                 detallesVenta.get(i).setCosto(totalDetalleRegistro);
                                 detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
                                 detallesVenta.get(i).setValorDescuento(detallesVenta.get(i).getDescuentos().get(j).getValor());
-                                detallesVenta.get(i).setValorDescuento(new BigDecimal("0.0"));
+                                
                             }
                         }
 
@@ -373,6 +373,7 @@ public class FacturaMB {
                         totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoPVP());
                         detallesVenta.get(i).setCosto(totalDetalleRegistro);
                         detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
+                        detallesVenta.get(i).setValorDescuento(new BigDecimal("0.0"));
                     }
                 }
             }
@@ -566,6 +567,7 @@ public class FacturaMB {
                // total = total.setScale(2, BigDecimal.ROUND_UP);
             }
 
+           
             DetallesVenta detalles = new DetallesVenta(cantidadComprar,
                     productoGeneral.getCodigo() + "", catalogoSeleccionado.getNombre(),
                     catalogoSeleccionado.getPrecio(), totalRegistro);
@@ -677,9 +679,9 @@ public class FacturaMB {
                     totalPagar = total;
 
                 }
-
+                System.out.println("Codigo General "+productoGeneral.getCatalagoProducto().getCodigoProducto());
                 DetallesVenta detalles = new DetallesVenta(cantidadComprar,
-                        productoGeneral.getCodigo() + "", catalogoSeleccionado.getNombre(),
+                        productoGeneral.getCatalagoProducto().getCodigoProducto() + "", catalogoSeleccionado.getNombre(),
                         new BigDecimal("0.0"), totalRegistro);
                 if (clienteEncontrado.getTipo().equals("Distribuidor")) {
                     detalles.setCosto(catalogoSeleccionado.getPrecioMayorista());
@@ -690,6 +692,7 @@ public class FacturaMB {
                 Descuentos precioMayorista = new Descuentos("Prec Mayorista", catalogoSeleccionado.getPrecioMayorista());
                 Descuentos precioDescuento = new Descuentos("PVP", catalogoSeleccionado.getPrecio());
                 Descuentos dcto = new Descuentos("dctoPVP", catalogoSeleccionado.getDescuento());
+                System.out.println(catalogoSeleccionado.getDescuento());
                 Descuentos dctoMayorista = new Descuentos("dctoMayorista", catalogoSeleccionado.getDescuentoMayorista());
                 List<Descuentos> descuentos = new ArrayList<Descuentos>();
                 descuentos.add(precioMayorista);
@@ -887,7 +890,7 @@ public class FacturaMB {
                     }
                     for (int i = 0; i < detallesVenta.size(); i++) {                        
                         for (int j = 0; j < detallesGeneralVenta.size(); j++) {
-                    //System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
+                        System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
                             if (detallesVenta.get(i).getCodigo().equals(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto())) {
                                 detallesGeneralVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
                                 detallesGeneralVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());

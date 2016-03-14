@@ -216,10 +216,10 @@ and open the template in the editor.
                             <h:outputText value="#{detallesVenta.nombre}" />
                         </p:column>
                         <p:column headerText="P. Unitario" style="text-align: left" id="descuentoIndividual">
-                            <h:outputText value="#{detallesVenta.costo}" />
+                            <h:outputText value="#{calculosMB.redondeoSuperior(detallesVenta.costo)}" />
                         </p:column>
                         <p:column headerText="Total" style="text-align: left" id="totalDescuento">
-                            <h:outputText value="#{detallesVenta.total}" />
+                            <h:outputText value="#{calculosMB.redondeoSuperior(detallesVenta.total)}" />
                         </p:column>
                         <p:column headerText="Descuento" style="width:60px">
                             <p:selectOneMenu  value="#{detallesVenta.escogerDescuento}">
@@ -268,7 +268,7 @@ and open the template in the editor.
                             <p:ajax event="keyup" listener="#{facturaMB.darVuelto()}" update="vuelto"/>
                         </p:inputText>
                         <p:outputLabel value="Vuelto"/>
-                        <p:inputText id="vuelto" value="#{facturaMB.vuelto}"/>
+                        <p:inputText id="vuelto" value="#{calculosMB.redondeoSuperior(facturaMB.vuelto)}"/>
                     </p:panelGrid>
                 </div>
 
