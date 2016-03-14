@@ -823,7 +823,7 @@ public class FacturaMB {
                 }
                 venta.setEstado("facturado");
                 venta.setFecha(new Date());
-                venta.setTotal(total);
+                venta.setTotal(total.setScale(2, BigDecimal.ROUND_UP));
                 venta.setDescuento(descuento);
                 venta.setCodigoDocumento(codigoDocumento);
                 venta.setTipoPago(devolverTipoPago());
