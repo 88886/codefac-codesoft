@@ -976,8 +976,7 @@ public class FacturaMB {
                         detallesFactura.setCantidad(detalle.getCantidad() + "");
                         detallesFactura.setCodigo(detalle.getCodigo());
                         detallesFactura.setDescripcion(detalle.getNombre());
-
-                        detallesFactura.setDescuento(" ");
+                        detallesFactura.setDescuento(detalle.getValorDescuento().toString());
                         detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
                         detallesFactura.setTotal(detalle.getTotal().toString());
                         if (facturaReporte != null) {
