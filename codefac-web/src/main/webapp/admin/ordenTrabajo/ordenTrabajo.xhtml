@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <div>
+            <h:form>
+                <p:panel header="Orden de Trabajo" style="width: 70%;margin: 0 auto"   >
+
+                    <p:spacer width="15px"/>
+
+                    <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder" >
+                        <p:outputLabel value="CI/RUC: " />
+                        <p:inputText />
+                        <p:commandButton value="Buscar" />
+                    </p:panelGrid>
+
+                    <!--<p:separator />-->
+                    <p:spacer width="15px"/>
+
+                    <!-- Panel con los datos del cliente -->
+                    <p:panel header="Datos del Cliente" styleClass="panelNoBorder">
+                        <p:panelGrid columns="4" style="margin: 0 auto;width: 90%" >
+                            <p:outputLabel value="Nombres:" />
+                            <p:inputText/>
+
+                            <p:outputLabel value="Telefono:" />
+                            <p:inputText/>
+
+                            <p:outputLabel value="Direccion:" />
+                            <p:inputText/>
+
+                            <p:outputLabel value="Correo:" />
+                            <p:inputText/>                        
+
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <!-- Panel con los datos del trabajo a realizar -->
+                    <p:panel header="Datos del Trabajo" styleClass="panelNoBorder">
+                        <p:panelGrid columns="6" style="margin: 0 auto;width: 90%" >
+                            <p:outputLabel value="Fecha Entrega:" />
+                            <p:calendar id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" />
+
+                            <p:outputLabel value="Total" />
+                            <p:inputText style="width: 50px"/>
+
+                            <p:outputLabel value="Adelanto" />
+                            <p:inputText style="width: 50px"/>
+
+                            <p:outputLabel value="Responsable" />
+                            <p:inputText />                  
+
+                        </p:panelGrid>
+                        
+                        <p:separator />
+                        
+                        <div style="text-align: center">
+                            <p:commandButton value="Agregar Equipo" style="margin: 0 auto"/>
+                        </div>
+                        
+                    </p:panel>
+
+                    <!-- Tabla de los datos equipos para realizar la orden de trabajo-->
+                    <p:dataTable>
+
+                    </p:dataTable>
+
+                    <p:panelGrid columns="1">
+                        <p:outputLabel value="Observaciones" />
+                        <p:inputTextarea rows="4" cols="45" />
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2" style="margin: 0 auto" styleClass="panelNoBorder">
+                        <p:commandButton value=" Grabar "/>
+                        <p:commandButton value=" Cancelar "/>
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -14,7 +14,7 @@
                     <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
                         <p:outputLabel value="Codigo Factura"/>
                         <p:inputText value="#{notaCreditoMB.codigoDocumento}"/>
-                        <p:commandButton actionListener="#{notaCreditoMB.buscarFactura()}" value="Buscar" update=":formFactura:panelCliente,:formFactura:tablaDetalle,:formPieNotaCredito"/>
+                        <p:commandButton actionListener="#{notaCreditoMB.buscarFactura()}" value="Buscar" update=":formFactura:panelCliente,:formFactura:tablaDetalle,:formPieNotaCredito" ajax="false" />
                     </p:panelGrid>        
 
                     <p:spacer height="15px"/>

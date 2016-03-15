@@ -86,7 +86,7 @@ public class NotaCreditoMB implements Serializable {
      * Realizar factura por el codigo del documento
      */
     public void buscarFactura() {
-        System.out.println("buscnado factura ...");
+        System.out.println("buscando factura ...");
         //System.out.println(codigoDocumento);
 
         venta = facturaServicio.buscarPorCodigoDocumento(codigoDocumento);
@@ -109,6 +109,7 @@ public class NotaCreditoMB implements Serializable {
 
     private void cargarDetallesVenta() {
         System.out.println("agregando detalles ....");
+        detalleVenta.clear();
         List<DetalleProductoGeneral> detalleGeneral = venta.getDetalleProductoGeneralList();
         for (DetalleProductoGeneral detalle : detalleGeneral) {
             //agregando los datos al detalle visual
@@ -133,7 +134,8 @@ public class NotaCreditoMB implements Serializable {
 
     }
 
-    public void grabarNotaCredito() {
+    public void grabarNotaCredito() 
+    {
         System.out.println("Grabar  nota de credito ...");
         NotaCreditoDebito nota = new NotaCreditoDebito();
         nota.setCantidad(valorModificacion);
@@ -150,38 +152,38 @@ public class NotaCreditoMB implements Serializable {
 
     public void imprimir() {
 
-        System.out.println("imprimiendo ...");
-        NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
-        notaVenta.setDireccion(venta.getCedulaRuc().getDireccion());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
-        notaVenta.setFechaaFactura(sdf.format(venta.getFecha()));
-        notaVenta.setFormaPago(" ");
-        notaVenta.setNombreCliente(venta.getCedulaRuc().getNombre());
-        notaVenta.setTelefono(venta.getCedulaRuc().getTelefono());
-        notaVenta.setTotal(total);
-
-        for (DetallesVenta detalle : detalleVenta) {
-            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
-            detallesFactura.setCantidad(detalle.getCantidad() + "");
-            detallesFactura.setCodigo(detalle.getCodigo());
-            detallesFactura.setDescripcion(detalle.getNombre());
-            detallesFactura.setDescuento(" ");
-            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
-            detallesFactura.setTotal(detalle.getTotal().toString());
-            if (notaVenta != null) {
-                notaVenta.agregarDetalle(detallesFactura);
-            }
-        }
-
-        try {
-            notaVenta.exportarPDF();
-            System.out.println("generando pdf ...");
-        } catch (JRException ex) {
-            Logger.getLogger(NotaCreditoMB.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(NotaCreditoMB.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        System.out.println("imprimiendo ...");
+//        NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
+//        notaVenta.setDireccion(venta.getCedulaRuc().getDireccion());
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+//        notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
+//        notaVenta.setFechaaFactura(sdf.format(venta.getFecha()));
+//        notaVenta.setFormaPago(" ");
+//        notaVenta.setNombreCliente(venta.getCedulaRuc().getNombre());
+//        notaVenta.setTelefono(venta.getCedulaRuc().getTelefono());
+//        notaVenta.setTotal(total);
+//
+//        for (DetallesVenta detalle : detalleVenta) {
+//            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+//            detallesFactura.setCantidad(detalle.getCantidad() + "");
+//            detallesFactura.setCodigo(detalle.getCodigo());
+//            detallesFactura.setDescripcion(detalle.getNombre());
+//            detallesFactura.setDescuento(" ");
+//            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+//            detallesFactura.setTotal(detalle.getTotal().toString());
+//            if (notaVenta != null) {
+//                notaVenta.agregarDetalle(detallesFactura);
+//            }
+//        }
+//
+//        try {
+//            notaVenta.exportarPDF();
+//            System.out.println("generando pdf ...");
+//        } catch (JRException ex) {
+//            Logger.getLogger(NotaCreditoMB.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(NotaCreditoMB.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 
