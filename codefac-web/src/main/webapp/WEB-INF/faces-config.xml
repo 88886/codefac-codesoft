@@ -202,6 +202,11 @@
             <from-outcome>proformaOperador</from-outcome>
             <to-view-id>/operador/proforma.xhtml</to-view-id>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>reporteTest</from-outcome>
+            <to-view-id>/test/reporte.xhtml</to-view-id>
+        </navigation-case>
 
                 
     </navigation-rule>

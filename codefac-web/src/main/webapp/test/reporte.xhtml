@@ -1,21 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </h:head>
-    <h:body>
-        <h:form>
-            <h:commandButton value="Generar Pdf" actionListener="#{generarPdf.abrirPDF()}" />
-            <h:commandButton value="Exportar Pdf" actionListener="#{generarPdf.exportarPDF()}" />            
-            <h:commandButton value="Exportar Pdf Factura" actionListener="#{generarPdf.abrirPDF()}" />            
-        </h:form>    
-    </h:body>
-</html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaprincipal.xhtml">
+
+    <ui:define name="contenido">
+        <p:panel id="basic" header="Inicio"  style="margin-bottom:20px;text-align: center">
+            
+        </p:panel>
+    </ui:define>
+</ui:composition>

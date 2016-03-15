@@ -173,13 +173,31 @@ public class FacturaServicio {
      * Obtiene el codigo de la siguiente factura
      * @return 
      */
-    public Integer getCodigoFactura()
+    public Integer getCodigoFactura(String tipo)
     {
-        Integer codigo=ventaFacade.getCodigoUltimaFactura();
-        if(codigo==null)
-            return 1;
+        if(tipo.equals("Factura"))
+        {
+            Integer codigo=ventaFacade.getCodigoUltimaFactura();
+            if(codigo==null)
+                return 1;
+            else            
+                return codigo+1;          
+            
+        }
         
-        return codigo;
+        if(tipo.equals("Nota"))
+        {
+            Integer codigo=ventaFacade.getCodigoUltimaNota();
+            if(codigo==null)
+                return 1;
+            else            
+                return codigo+1;          
+            
+        }
+        
+        return 0;
+        
+        
     }
     
     /**

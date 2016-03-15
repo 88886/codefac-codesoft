@@ -42,7 +42,7 @@ and open the template in the editor.
                                     <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}">
                                         <h:outputText value="#{cliente.cedulaRuc}" />
                                     </p:column>
-                                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}">
+                                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
                                         <h:outputText value="#{cliente.nombre}" />
                                     </p:column>
 
@@ -97,10 +97,10 @@ and open the template in the editor.
                             <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
                             <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
 
-                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}">
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
                                 <h:outputText value="#{catalogo.codigoProducto}" />
                             </p:column>
-                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}">
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
                                 <h:outputText value="#{catalogo.nombre}" />
                             </p:column>
                             <p:column headerText="Precio">

@@ -182,7 +182,8 @@ public class FacturaMB {
         clientesLista = clienteServicio.obtenerTodos();
         recibo = new BigDecimal("0.0");
         tipoCliente = "F";
-        codigoDocumento = 0;//facturaServicio.getCodigoFactura();
+        //codigoDocumento = 0;//facturaServicio.getCodigoFactura();
+        codigoDocumento=facturaServicio.getCodigoFactura("Factura");
         estPanPagos = false;
         estBanco = false;
         estBanco = false;
@@ -496,12 +497,19 @@ public class FacturaMB {
 
     public void escojerTipoCLiente() {
         System.out.println(tipoCliente);
-        if (tipoCliente.equals("F")) {
+        if (tipoCliente.equals("F")) 
+        {
+            //obtiene el ultimo codigo de la factura
+            codigoDocumento=facturaServicio.getCodigoFactura("Factura");
+
 //            System.out.println(tipoCliente);
 //            todoPanel = true;
 //            cedCliente = "";
 //            clienteEncontrado.setNombre("");
         } else {
+            //obtiene el ultimo codigo de las notas
+            codigoDocumento=facturaServicio.getCodigoFactura("Nota");
+            
             System.out.println("CF" + tipoCliente);
             clienteEncontrado.setNombre("Consumidor Final");
             clienteEncontrado.setTipo("PVP");

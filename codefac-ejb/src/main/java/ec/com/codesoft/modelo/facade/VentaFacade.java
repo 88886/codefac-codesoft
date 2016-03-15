@@ -40,7 +40,23 @@ public class VentaFacade extends AbstractFacade<Venta> {
      */
     public Integer getCodigoUltimaFactura() {
         try {
-            String queryString = "SELECT max(v.codigoDocumento) FROM Venta v ";
+            String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Factura' ";
+            Query query = em.createQuery(queryString);
+            Integer numero = (Integer) query.getSingleResult();
+            return numero;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+    /**
+     * Obtiene el numero de documento de la ultima nota de entrega vendidad
+     * @return 
+     */
+
+    public Integer getCodigoUltimaNota() {
+        try {
+            String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Nota' ";
             Query query = em.createQuery(queryString);
             Integer numero = (Integer) query.getSingleResult();
             return numero;
@@ -55,23 +71,23 @@ public class VentaFacade extends AbstractFacade<Venta> {
             String queryString = "SELECT v FROM Venta v WHERE v.codigoDocumento=" + codigo.toString();
             System.out.println(queryString);
             Query query = em.createQuery(queryString);
-            return (Venta)query.getSingleResult();
+            return (Venta) query.getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
     }
-    
+
     /**
      * Obtiene todas las ventas
-     * @return 
+     *
+     * @return
      */
-    public List<Venta> getVentas()
-    {
-         try {
+    public List<Venta> getVentas() {
+        try {
             String queryString = "SELECT v FROM Venta v order by v.codigoFactura desc ";
             System.out.println(queryString);
             Query query = em.createQuery(queryString);
-            List<Venta> ventas=(List<Venta>)query.getResultList();
+            List<Venta> ventas = (List<Venta>) query.getResultList();
             return ventas;
         } catch (NoResultException e) {
             return null;
