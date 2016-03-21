@@ -68,4 +68,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             return null;
         }
     }
+    
+
 }

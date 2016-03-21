@@ -73,9 +73,10 @@ and open the template in the editor.
                             <p:inputText id="txtAdelanto" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.adelanto}" />
 
                             <p:outputLabel value="Responsable"  />
-                            <p:selectOneMenu id="cmbEmpleado" value="#{ordenTrabajoMB.ordenTrabajo.usuEmpleado}">
+
+                            <p:selectOneMenu id="cmbEmpleado" value="#{ordenTrabajoMB.nickEmpleadoSeleccionado}" >
                                 <f:selectItem itemLabel="Asigne el empleado" itemValue="" />
-                                <f:selectItems itemLabel="#{empleado.nick}" var="empleado" value="#{ordenTrabajoMB.empleados}" />
+                                <f:selectItems itemValue="#{empleado.nick}"  itemLabel="#{empleado.nick}" var="empleado" value="#{ordenTrabajoMB.empleados}" />                                
                             </p:selectOneMenu>
 
 
@@ -139,6 +140,24 @@ and open the template in the editor.
                 <h:form id="formDialogoDetalle" >
                     <p:panelGrid columns="2" styleClass="panelNoBorder">
 
+                        <p:outputLabel value="Servicios: " />
+
+                        <p:selectOneMenu id="cmbServicios" value="#{ordenTrabajoMB.idServicioSeleccionado}" >
+                            <f:selectItem itemLabel="Escoja el servicio" itemValue="" />
+                            <f:selectItems itemValue="#{servicio.codigoServicio}"  itemLabel="#{servicio.nombre}" var="servicio" value="#{ordenTrabajoMB.servicios}" />                                
+                            <p:ajax event="change" listener="#{ordenTrabajoMB.cargarCategoriasServicios()}" update=":formDialogoDetalle:cmbCategoria"/>
+                        </p:selectOneMenu>
+
+
+                        <p:outputLabel value="Categoria: " />
+
+                        <p:selectOneMenu id="cmbCategoria" value="#{ordenTrabajoMB.idCategoriaSeleccionado}" >
+                            <f:selectItem itemLabel="Escoja la Categoria: " itemValue="" />
+                            <f:selectItems itemValue="#{categoria.idCategoriaTrabajo}"  itemLabel="#{categoria.nombre}" var="categoria" value="#{ordenTrabajoMB.categorias}" />                                
+                            <p:ajax event="change" listener="#{ordenTrabajoMB.cargarDatosCategoria()}" update=":formDialogoDetalle:txtPrecio" />
+                        </p:selectOneMenu>
+
+
                         <p:outputLabel value="Nombre: " />
                         <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.equipo}" />
 
@@ -149,7 +168,7 @@ and open the template in the editor.
                         <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.trabajoRealizar}" />
 
                         <p:outputLabel value="Precio: " />
-                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" />
+                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" />
 
                         <p:outputLabel value="Descripcion: " />
                         <p:inputTextarea value="#{ordenTrabajoMB.detalleOrdenTrabajo.descripcion}" />

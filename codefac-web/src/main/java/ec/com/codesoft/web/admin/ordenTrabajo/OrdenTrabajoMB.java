@@ -5,9 +5,11 @@
  */
 package ec.com.codesoft.web.admin.ordenTrabajo;
 
+import ec.com.codesoft.model.CategoriaTrabajo;
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.OrdenTrabajo;
+import ec.com.codesoft.model.Servicios;
 import ec.com.codesoft.model.Usuario;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import ec.com.codesoft.modelo.servicios.OrdenTrabajoServicio;
@@ -29,6 +31,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ValueChangeEvent;
 import net.sf.jasperreports.engine.JRException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -41,9 +44,17 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 public class OrdenTrabajoMB implements Serializable {
 
+    /**
+     * Orden de trabajo para grabar
+     */
     private OrdenTrabajo ordenTrabajo;
+
+    /**
+     * Lista de servicios para facturar
+     */
+    private List<Servicios> servicios;
+
     private DetalleOrdenTrabajo detalleOrdenTrabajo;
-    
 
     @EJB
     private ClienteServicio clienteServicio;
@@ -54,14 +65,19 @@ public class OrdenTrabajoMB implements Serializable {
     @EJB
     private SistemaServicio sistemaServicio;
 
+    private List<CategoriaTrabajo> categorias;
     /**
-     *Listado de los usuario con perfil de empleados
+     * Listado de los usuario con perfil de empleados
      */
     private List<Usuario> empleados;
     /**
      * Variable para llevar el total de la orden de trabajo
      */
     private BigDecimal total;
+
+    private String nickEmpleadoSeleccionado;
+    private String idServicioSeleccionado;
+    private String idCategoriaSeleccionado;
 
     @PostConstruct
     public void postConstruct() {
@@ -72,14 +88,20 @@ public class OrdenTrabajoMB implements Serializable {
         ordenTrabajo.setDetalleOrdenTrabajoList(new ArrayList<DetalleOrdenTrabajo>());
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
         //total=new BigDecimal("0.00").setScale(2,BigDecimal.ROUND_DOWN);    
-        empleados=ordenTrabajoServicio.obtenerEmpleados();
+        empleados = ordenTrabajoServicio.obtenerEmpleados();
+        servicios = ordenTrabajoServicio.obtenerServicios();
+        categorias = new ArrayList<CategoriaTrabajo>();
     }
 
     /**
      * Grabar la orden de trabajo
      */
     public void grabarOrdenTrabajo() {
+        Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);        
+
+        ordenTrabajo.setUsuEmpleado(empleado);
         ordenTrabajo.setFechaEmision(new Date());
+
         ordenTrabajoServicio.grabar(ordenTrabajo);
         System.out.println("orden grabado ...");
         generaPdf();
@@ -147,6 +169,11 @@ public class OrdenTrabajoMB implements Serializable {
 //        System.out.println(ordenTrabajo.getTotal());
 
         ordenTrabajo.getDetalleOrdenTrabajoList().add(detalleOrdenTrabajo);
+        
+        CategoriaTrabajo categoria=ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
+        detalleOrdenTrabajo.setIdCategoriaTrabajo(categoria);
+        
+        detalleOrdenTrabajo.getIdCategoriaTrabajo();
         System.out.println(detalleOrdenTrabajo.getPrecio());
 
         ordenTrabajo.setTotal(ordenTrabajo.getTotal().add(detalleOrdenTrabajo.getPrecio()));
@@ -180,6 +207,33 @@ public class OrdenTrabajoMB implements Serializable {
 
     }
 
+    public void cargarCategoriasServicios() {
+        Servicios servicioSeleccionado = ordenTrabajoServicio.obtenerServicioPorCodigo(Integer.parseInt(idServicioSeleccionado));
+        categorias = servicioSeleccionado.getCategoriaTrabajoList();
+        System.out.println("cargando categorias ...");
+    }
+
+    public void cargarDatosCategoria() 
+    {
+        Servicios servicioSeleccionado = ordenTrabajoServicio.obtenerServicioPorCodigo(Integer.parseInt(idServicioSeleccionado));
+        CategoriaTrabajo categoria = ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
+        detalleOrdenTrabajo.setPrecio(categoria.getPrecio());
+        System.out.println("cargando categorias ..."+categoria.getPrecio());
+    }
+
+    public void seleccionarEmpleado(Usuario usuario) {
+        System.out.println("se llamo al usuario");
+    }
+
+    public void seleccionarEmple(ValueChangeEvent event) {
+        System.out.println("se llamo al usuario");
+
+    }
+
+    public void subjectSelectionChanged(ValueChangeEvent event) {
+        System.out.println("se llamo al usuario desde el nuevo evento");
+    }
+
     //////////////////METODOS GET AND SET ///////////////////
     public OrdenTrabajo getOrdenTrabajo() {
         return ordenTrabajo;
@@ -205,8 +259,44 @@ public class OrdenTrabajoMB implements Serializable {
         this.empleados = empleados;
     }
 
-    
-    
-    
+    public String getNickEmpleadoSeleccionado() {
+        return nickEmpleadoSeleccionado;
+    }
+
+    public void setNickEmpleadoSeleccionado(String nickEmpleadoSeleccionado) {
+        this.nickEmpleadoSeleccionado = nickEmpleadoSeleccionado;
+    }
+
+    public List<Servicios> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(List<Servicios> servicios) {
+        this.servicios = servicios;
+    }
+
+    public String getIdServicioSeleccionado() {
+        return idServicioSeleccionado;
+    }
+
+    public void setIdServicioSeleccionado(String idServicioSeleccionado) {
+        this.idServicioSeleccionado = idServicioSeleccionado;
+    }
+
+    public List<CategoriaTrabajo> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<CategoriaTrabajo> categorias) {
+        this.categorias = categorias;
+    }
+
+    public String getIdCategoriaSeleccionado() {
+        return idCategoriaSeleccionado;
+    }
+
+    public void setIdCategoriaSeleccionado(String idCategoriaSeleccionado) {
+        this.idCategoriaSeleccionado = idCategoriaSeleccionado;
+    }
 
 }

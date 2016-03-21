@@ -5,11 +5,15 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
+import ec.com.codesoft.model.CategoriaTrabajo;
 import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.OrdenTrabajo;
+import ec.com.codesoft.model.Servicios;
 import ec.com.codesoft.model.Usuario;
+import ec.com.codesoft.modelo.facade.CategoriaTrabajoFacade;
 import ec.com.codesoft.modelo.facade.DetalleOrdenTrabajoFacade;
 import ec.com.codesoft.modelo.facade.OrdenTrabajoFacade;
+import ec.com.codesoft.modelo.facade.ServiciosFacade;
 import ec.com.codesoft.modelo.facade.UsuarioFacade;
 import java.util.List;
 import javax.ejb.EJB;
@@ -32,6 +36,12 @@ public class OrdenTrabajoServicio
     
     @EJB
     private UsuarioFacade usuarioFacade;
+    
+    @EJB
+    private ServiciosFacade servicios;
+    
+    @EJB
+    private CategoriaTrabajoFacade categoriaTrabajoFacade;
     
     
     
@@ -57,5 +67,29 @@ public class OrdenTrabajoServicio
     {
         List<Usuario> empleados=usuarioFacade.getUsuariosPorPerfil("empleado");
         return empleados;
+    }
+    
+        /**
+     * Obtener el usuario por el nick 
+     * @return 
+     */
+    public Usuario getUsuarioByNick(String nick)
+    {
+        return usuarioFacade.find(nick);
+    }
+    
+    public List<Servicios> obtenerServicios()
+    {
+        return servicios.findAll();
+    }
+    
+    public Servicios obtenerServicioPorCodigo(Integer codigo)
+    {
+        return servicios.find(codigo);
+    }
+    
+    public CategoriaTrabajo obtenerCategoriaPorCodigo(Integer codigo)
+    {
+        return categoriaTrabajoFacade.find(codigo);
     }
 }

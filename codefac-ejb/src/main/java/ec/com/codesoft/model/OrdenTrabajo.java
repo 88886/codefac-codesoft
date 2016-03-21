@@ -76,7 +76,7 @@ public class OrdenTrabajo implements Serializable {
     private String diagnostico;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    @OneToMany(mappedBy = "idOrdenTrabajo")
+    @OneToMany(mappedBy = "idOrdenTrabajo",cascade = CascadeType.ALL)
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
