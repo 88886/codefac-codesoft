@@ -98,16 +98,18 @@ public class Venta implements Serializable {
 
     @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<DetalleProductoGeneral> detalleProductoGeneralList;
-    
+
     @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<NotaCreditoDebito> notaCreditoDebitoList;
-    
+
     @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<DetallesServicio> detallesServicioList;
 
-    public Venta() 
-    {
-        
+    @OneToMany(mappedBy = "codigoFactura")
+    private List<OrdenTrabajo> ordenTrabajoList;
+
+    public Venta() {
+
     }
 
     public Venta(Integer codigoFactura) {
@@ -272,6 +274,14 @@ public class Venta implements Serializable {
 
     public void setCheque(String cheque) {
         this.cheque = cheque;
+    }
+
+    public List<OrdenTrabajo> getOrdenTrabajoList() {
+        return ordenTrabajoList;
+    }
+
+    public void setOrdenTrabajoList(List<OrdenTrabajo> ordenTrabajoList) {
+        this.ordenTrabajoList = ordenTrabajoList;
     }
     
     

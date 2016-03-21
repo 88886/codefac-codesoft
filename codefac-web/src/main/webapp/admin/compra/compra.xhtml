@@ -22,8 +22,10 @@ and open the template in the editor.
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
                             <p:panelGrid columns="4" >
+                                
                                 <p:outputLabel  value=" RUC :" />
                                 <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" />
+                                
                                 <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
                                 <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
                                 <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >

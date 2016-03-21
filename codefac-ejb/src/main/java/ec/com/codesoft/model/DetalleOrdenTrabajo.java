@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -34,7 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DetalleOrdenTrabajo.findAll", query = "SELECT d FROM DetalleOrdenTrabajo d"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByIdOrdenTrabajo", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.idOrdenTrabajo = :idOrdenTrabajo"),
     @NamedQuery(name = "DetalleOrdenTrabajo.findByIdDetalleOrdenTrabajo", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.idDetalleOrdenTrabajo = :idDetalleOrdenTrabajo"),
     @NamedQuery(name = "DetalleOrdenTrabajo.findByEquipo", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.equipo = :equipo"),
     @NamedQuery(name = "DetalleOrdenTrabajo.findByDescripcion", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.descripcion = :descripcion"),
@@ -46,8 +44,6 @@ public class DetalleOrdenTrabajo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID_ORDEN_TRABAJO")
-    private Integer idOrdenTrabajo;
     @Column(name = "ID_DETALLE_ORDEN_TRABAJO")
     private Integer idDetalleOrdenTrabajo;
     @Size(max = 64)
@@ -65,28 +61,20 @@ public class DetalleOrdenTrabajo implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRECIO")
     private BigDecimal precio;
-    @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private OrdenTrabajo ordenTrabajo;
     @JoinColumn(name = "CODIGO_SERVICIO", referencedColumnName = "CODIGO_SERVICIO")
     @ManyToOne
     private Servicios codigoServicio;
-    @OneToMany(mappedBy = "idOrdenTrabajo")
+    @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO")
+    @ManyToOne
+    private OrdenTrabajo idOrdenTrabajo;
+    @OneToMany(mappedBy = "idDetalleOrdenTrabajo")
     private List<DetalleProductoOrdenTrabajo> detalleProductoOrdenTrabajoList;
 
     public DetalleOrdenTrabajo() {
     }
 
-    public DetalleOrdenTrabajo(Integer idOrdenTrabajo) {
-        this.idOrdenTrabajo = idOrdenTrabajo;
-    }
-
-    public Integer getIdOrdenTrabajo() {
-        return idOrdenTrabajo;
-    }
-
-    public void setIdOrdenTrabajo(Integer idOrdenTrabajo) {
-        this.idOrdenTrabajo = idOrdenTrabajo;
+    public DetalleOrdenTrabajo(Integer idDetalleOrdenTrabajo) {
+        this.idDetalleOrdenTrabajo = idDetalleOrdenTrabajo;
     }
 
     public Integer getIdDetalleOrdenTrabajo() {
@@ -137,20 +125,20 @@ public class DetalleOrdenTrabajo implements Serializable {
         this.precio = precio;
     }
 
-    public OrdenTrabajo getOrdenTrabajo() {
-        return ordenTrabajo;
-    }
-
-    public void setOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
-        this.ordenTrabajo = ordenTrabajo;
-    }
-
     public Servicios getCodigoServicio() {
         return codigoServicio;
     }
 
     public void setCodigoServicio(Servicios codigoServicio) {
         this.codigoServicio = codigoServicio;
+    }
+
+    public OrdenTrabajo getIdOrdenTrabajo() {
+        return idOrdenTrabajo;
+    }
+
+    public void setIdOrdenTrabajo(OrdenTrabajo idOrdenTrabajo) {
+        this.idOrdenTrabajo = idOrdenTrabajo;
     }
 
     @XmlTransient
@@ -165,7 +153,7 @@ public class DetalleOrdenTrabajo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idOrdenTrabajo != null ? idOrdenTrabajo.hashCode() : 0);
+        hash += (idDetalleOrdenTrabajo != null ? idDetalleOrdenTrabajo.hashCode() : 0);
         return hash;
     }
 
@@ -176,7 +164,7 @@ public class DetalleOrdenTrabajo implements Serializable {
             return false;
         }
         DetalleOrdenTrabajo other = (DetalleOrdenTrabajo) object;
-        if ((this.idOrdenTrabajo == null && other.idOrdenTrabajo != null) || (this.idOrdenTrabajo != null && !this.idOrdenTrabajo.equals(other.idOrdenTrabajo))) {
+        if ((this.idDetalleOrdenTrabajo == null && other.idDetalleOrdenTrabajo != null) || (this.idDetalleOrdenTrabajo != null && !this.idDetalleOrdenTrabajo.equals(other.idDetalleOrdenTrabajo))) {
             return false;
         }
         return true;
@@ -184,7 +172,7 @@ public class DetalleOrdenTrabajo implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.DetalleOrdenTrabajo[ idOrdenTrabajo=" + idOrdenTrabajo + " ]";
+        return "modelo.DetalleOrdenTrabajo[ idDetalleOrdenTrabajo=" + idDetalleOrdenTrabajo + " ]";
     }
     
 }

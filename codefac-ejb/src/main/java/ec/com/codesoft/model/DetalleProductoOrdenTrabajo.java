@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DetalleProductoOrdenTrabajo.findAll", query = "SELECT d FROM DetalleProductoOrdenTrabajo d"),
-    @NamedQuery(name = "DetalleProductoOrdenTrabajo.findByIdDetalleOrdenTrabajo", query = "SELECT d FROM DetalleProductoOrdenTrabajo d WHERE d.idDetalleOrdenTrabajo = :idDetalleOrdenTrabajo"),
+    @NamedQuery(name = "DetalleProductoOrdenTrabajo.findByIdDetalleProductoOrdenTrabajo", query = "SELECT d FROM DetalleProductoOrdenTrabajo d WHERE d.idDetalleProductoOrdenTrabajo = :idDetalleProductoOrdenTrabajo"),
     @NamedQuery(name = "DetalleProductoOrdenTrabajo.findByCantidad", query = "SELECT d FROM DetalleProductoOrdenTrabajo d WHERE d.cantidad = :cantidad"),
     @NamedQuery(name = "DetalleProductoOrdenTrabajo.findByDescuento", query = "SELECT d FROM DetalleProductoOrdenTrabajo d WHERE d.descuento = :descuento"),
     @NamedQuery(name = "DetalleProductoOrdenTrabajo.findByDescripcion", query = "SELECT d FROM DetalleProductoOrdenTrabajo d WHERE d.descripcion = :descripcion"),
@@ -41,8 +41,8 @@ public class DetalleProductoOrdenTrabajo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID_DETALLE_ORDEN_TRABAJO")
-    private Integer idDetalleOrdenTrabajo;
+    @Column(name = "ID_DETALLE_PRODUCTO_ORDEN_TRABAJO")
+    private Integer idDetalleProductoOrdenTrabajo;
     @Column(name = "CANTIDAD")
     private Integer cantidad;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -53,9 +53,9 @@ public class DetalleProductoOrdenTrabajo implements Serializable {
     private String descripcion;
     @Column(name = "SUBTOTAL")
     private BigDecimal subtotal;
-    @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO")
+    @JoinColumn(name = "ID_DETALLE_ORDEN_TRABAJO", referencedColumnName = "ID_DETALLE_ORDEN_TRABAJO")
     @ManyToOne
-    private DetalleOrdenTrabajo idOrdenTrabajo;
+    private DetalleOrdenTrabajo idDetalleOrdenTrabajo;
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO")
     @ManyToOne
     private CatalagoProducto codigoProducto;
@@ -63,16 +63,16 @@ public class DetalleProductoOrdenTrabajo implements Serializable {
     public DetalleProductoOrdenTrabajo() {
     }
 
-    public DetalleProductoOrdenTrabajo(Integer idDetalleOrdenTrabajo) {
-        this.idDetalleOrdenTrabajo = idDetalleOrdenTrabajo;
+    public DetalleProductoOrdenTrabajo(Integer idDetalleProductoOrdenTrabajo) {
+        this.idDetalleProductoOrdenTrabajo = idDetalleProductoOrdenTrabajo;
     }
 
-    public Integer getIdDetalleOrdenTrabajo() {
-        return idDetalleOrdenTrabajo;
+    public Integer getIdDetalleProductoOrdenTrabajo() {
+        return idDetalleProductoOrdenTrabajo;
     }
 
-    public void setIdDetalleOrdenTrabajo(Integer idDetalleOrdenTrabajo) {
-        this.idDetalleOrdenTrabajo = idDetalleOrdenTrabajo;
+    public void setIdDetalleProductoOrdenTrabajo(Integer idDetalleProductoOrdenTrabajo) {
+        this.idDetalleProductoOrdenTrabajo = idDetalleProductoOrdenTrabajo;
     }
 
     public Integer getCantidad() {
@@ -107,12 +107,12 @@ public class DetalleProductoOrdenTrabajo implements Serializable {
         this.subtotal = subtotal;
     }
 
-    public DetalleOrdenTrabajo getIdOrdenTrabajo() {
-        return idOrdenTrabajo;
+    public DetalleOrdenTrabajo getIdDetalleOrdenTrabajo() {
+        return idDetalleOrdenTrabajo;
     }
 
-    public void setIdOrdenTrabajo(DetalleOrdenTrabajo idOrdenTrabajo) {
-        this.idOrdenTrabajo = idOrdenTrabajo;
+    public void setIdDetalleOrdenTrabajo(DetalleOrdenTrabajo idDetalleOrdenTrabajo) {
+        this.idDetalleOrdenTrabajo = idDetalleOrdenTrabajo;
     }
 
     public CatalagoProducto getCodigoProducto() {
@@ -126,7 +126,7 @@ public class DetalleProductoOrdenTrabajo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idDetalleOrdenTrabajo != null ? idDetalleOrdenTrabajo.hashCode() : 0);
+        hash += (idDetalleProductoOrdenTrabajo != null ? idDetalleProductoOrdenTrabajo.hashCode() : 0);
         return hash;
     }
 
@@ -137,7 +137,7 @@ public class DetalleProductoOrdenTrabajo implements Serializable {
             return false;
         }
         DetalleProductoOrdenTrabajo other = (DetalleProductoOrdenTrabajo) object;
-        if ((this.idDetalleOrdenTrabajo == null && other.idDetalleOrdenTrabajo != null) || (this.idDetalleOrdenTrabajo != null && !this.idDetalleOrdenTrabajo.equals(other.idDetalleOrdenTrabajo))) {
+        if ((this.idDetalleProductoOrdenTrabajo == null && other.idDetalleProductoOrdenTrabajo != null) || (this.idDetalleProductoOrdenTrabajo != null && !this.idDetalleProductoOrdenTrabajo.equals(other.idDetalleProductoOrdenTrabajo))) {
             return false;
         }
         return true;
@@ -145,7 +145,7 @@ public class DetalleProductoOrdenTrabajo implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.DetalleProductoOrdenTrabajo[ idDetalleOrdenTrabajo=" + idDetalleOrdenTrabajo + " ]";
+        return "modelo.DetalleProductoOrdenTrabajo[ idDetalleProductoOrdenTrabajo=" + idDetalleProductoOrdenTrabajo + " ]";
     }
     
 }

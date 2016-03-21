@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -18,15 +17,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Suco
+ * @author carlo
  */
 @Entity
 @Table(name = "usuario")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findByNick", query = "SELECT u FROM Usuario u WHERE u.nick = :nick"),
+    @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave"),
+    @NamedQuery(name = "Usuario.findByCargo", query = "SELECT u FROM Usuario u WHERE u.cargo = :cargo"),
+    @NamedQuery(name = "Usuario.findByNombres", query = "SELECT u FROM Usuario u WHERE u.nombres = :nombres"),
+    @NamedQuery(name = "Usuario.findByDireccion", query = "SELECT u FROM Usuario u WHERE u.direccion = :direccion"),
+    @NamedQuery(name = "Usuario.findByTelefono", query = "SELECT u FROM Usuario u WHERE u.telefono = :telefono"),
+    @NamedQuery(name = "Usuario.findByCelular", query = "SELECT u FROM Usuario u WHERE u.celular = :celular"),
+    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuario.findByEstado", query = "SELECT u FROM Usuario u WHERE u.estado = :estado")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,13 +49,39 @@ public class Usuario implements Serializable {
     @Size(max = 128)
     @Column(name = "CLAVE")
     private String clave;
+    @Size(max = 32)
+    @Column(name = "CARGO")
+    private String cargo;
+    @Size(max = 128)
+    @Column(name = "NOMBRES")
+    private String nombres;
+    @Size(max = 128)
+    @Column(name = "DIRECCION")
+    private String direccion;
+    @Size(max = 12)
+    @Column(name = "TELEFONO")
+    private String telefono;
+    @Size(max = 12)
+    @Column(name = "CELULAR")
+    private String celular;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 64)
+    @Column(name = "EMAIL")
+    private String email;
     @Size(max = 16)
-    @Column(name = "TIPO")
-    private String tipo;
+    @Column(name = "ESTADO")
+    private String estado;
+    
     @OneToMany(mappedBy = "nick")
     private List<Compra> compraList;
     @OneToMany(mappedBy = "nick")
+    private List<OrdenTrabajo> ordenTrabajoList;
+    @OneToMany(mappedBy = "empleado")
+    private List<OrdenTrabajo> ordenTrabajoList1;
+    @OneToMany(mappedBy = "nick")
     private List<Venta> ventaList;
+    @OneToMany(mappedBy = "nick")
+    private List<Perfil> perfilList;
 
     public Usuario() {
     }
@@ -52,6 +89,23 @@ public class Usuario implements Serializable {
     public Usuario(String nick) {
         this.nick = nick;
     }
+    
+    
+    public Perfil buscarPerfil(String nombre)
+    {
+        for (Perfil perfil : perfilList) 
+        {
+            if(perfil.getTipo().equals(nombre))
+            {
+                return perfil ;
+            }
+        }
+        return null;
+                
+    }
+    
+    /////////////////////////////METODOS GET AND SET///////////////////////
+    
 
     public String getNick() {
         return nick;
@@ -69,14 +123,63 @@ public class Usuario implements Serializable {
         this.clave = clave;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getCargo() {
+        return cargo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @XmlTransient
     public List<Compra> getCompraList() {
         return compraList;
     }
@@ -85,12 +188,40 @@ public class Usuario implements Serializable {
         this.compraList = compraList;
     }
 
+    @XmlTransient
+    public List<OrdenTrabajo> getOrdenTrabajoList() {
+        return ordenTrabajoList;
+    }
+
+    public void setOrdenTrabajoList(List<OrdenTrabajo> ordenTrabajoList) {
+        this.ordenTrabajoList = ordenTrabajoList;
+    }
+
+    @XmlTransient
+    public List<OrdenTrabajo> getOrdenTrabajoList1() {
+        return ordenTrabajoList1;
+    }
+
+    public void setOrdenTrabajoList1(List<OrdenTrabajo> ordenTrabajoList1) {
+        this.ordenTrabajoList1 = ordenTrabajoList1;
+    }
+
+    @XmlTransient
     public List<Venta> getVentaList() {
         return ventaList;
     }
 
     public void setVentaList(List<Venta> ventaList) {
         this.ventaList = ventaList;
+    }
+
+    @XmlTransient
+    public List<Perfil> getPerfilList() {
+        return perfilList;
+    }
+
+    public void setPerfilList(List<Perfil> perfilList) {
+        this.perfilList = perfilList;
     }
 
     @Override
@@ -115,7 +246,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.codesoft.model.Usuario[ nick=" + nick + " ]";
+        return "modelo.Usuario[ nick=" + nick + " ]";
     }
     
 }

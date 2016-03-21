@@ -8,22 +8,24 @@ package ec.com.codesoft.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -42,13 +44,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrdenTrabajo.findByAdelanto", query = "SELECT o FROM OrdenTrabajo o WHERE o.adelanto = :adelanto"),
     @NamedQuery(name = "OrdenTrabajo.findByEstado", query = "SELECT o FROM OrdenTrabajo o WHERE o.estado = :estado"),
     @NamedQuery(name = "OrdenTrabajo.findByDiagnostico", query = "SELECT o FROM OrdenTrabajo o WHERE o.diagnostico = :diagnostico"),
-    @NamedQuery(name = "OrdenTrabajo.findByDescuento", query = "SELECT o FROM OrdenTrabajo o WHERE o.descuento = :descuento"),
-    @NamedQuery(name = "OrdenTrabajo.findByResponsable", query = "SELECT o FROM OrdenTrabajo o WHERE o.responsable = :responsable")})
+    @NamedQuery(name = "OrdenTrabajo.findByDescuento", query = "SELECT o FROM OrdenTrabajo o WHERE o.descuento = :descuento")})
 public class OrdenTrabajo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ID_ORDEN_TRABAJO")
     private Integer idOrdenTrabajo;
     @Column(name = "FECHA_EMISION")
@@ -73,11 +74,8 @@ public class OrdenTrabajo implements Serializable {
     private String diagnostico;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    @Size(max = 128)
-    @Column(name = "RESPONSABLE")
-    private String responsable;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "ordenTrabajo")
-    private DetalleOrdenTrabajo detalleOrdenTrabajo;
+    @OneToMany(mappedBy = "idOrdenTrabajo")
+    private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
     @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
     @ManyToOne
     private Venta codigoFactura;
@@ -87,6 +85,9 @@ public class OrdenTrabajo implements Serializable {
     @JoinColumn(name = "CEDULA_RUC", referencedColumnName = "CEDULA_RUC")
     @ManyToOne
     private Cliente cedulaRuc;
+    @JoinColumn(name = "USU_EMPLEADO", referencedColumnName = "NICK")
+    @ManyToOne
+    private Usuario empleado;
 
     public OrdenTrabajo() {
     }
@@ -167,20 +168,13 @@ public class OrdenTrabajo implements Serializable {
         this.descuento = descuento;
     }
 
-    public String getResponsable() {
-        return responsable;
+    @XmlTransient
+    public List<DetalleOrdenTrabajo> getDetalleOrdenTrabajoList() {
+        return detalleOrdenTrabajoList;
     }
 
-    public void setResponsable(String responsable) {
-        this.responsable = responsable;
-    }
-
-    public DetalleOrdenTrabajo getDetalleOrdenTrabajo() {
-        return detalleOrdenTrabajo;
-    }
-
-    public void setDetalleOrdenTrabajo(DetalleOrdenTrabajo detalleOrdenTrabajo) {
-        this.detalleOrdenTrabajo = detalleOrdenTrabajo;
+    public void setDetalleOrdenTrabajoList(List<DetalleOrdenTrabajo> detalleOrdenTrabajoList) {
+        this.detalleOrdenTrabajoList = detalleOrdenTrabajoList;
     }
 
     public Venta getCodigoFactura() {
@@ -205,6 +199,15 @@ public class OrdenTrabajo implements Serializable {
 
     public void setCedulaRuc(Cliente cedulaRuc) {
         this.cedulaRuc = cedulaRuc;
+    }
+
+    public Usuario getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Usuario empleado) 
+    {
+        this.empleado = empleado;
     }
 
     @Override

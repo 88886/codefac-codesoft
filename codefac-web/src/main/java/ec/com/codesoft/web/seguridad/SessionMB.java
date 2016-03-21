@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.seguridad;
 
 import ec.com.codesoft.model.Configuracion;
+import ec.com.codesoft.model.Perfil;
 import ec.com.codesoft.model.Usuario;
 import ec.com.codesoft.modelo.servicios.SeguridadServicio;
 import java.io.Serializable;
@@ -25,8 +26,8 @@ import javax.websocket.Session;
  */
 @ManagedBean
 @SessionScoped
-public class SessionMB implements Serializable 
-{
+public class SessionMB implements Serializable {
+
     /**
      * Configuraciones del sistema
      */
@@ -39,10 +40,20 @@ public class SessionMB implements Serializable
      * Clave del usuario que intenta loguearse
      */
     private String clave;
+
+    /**
+     * Variable que me permite obtener el nombre del perfil
+     */
+    private String perfilNombre;
     /**
      * Referencia al objeto que se encuentra logueado en el sistema
      */
     private Usuario usuarioLogin;
+    
+    /**
+     * Objeto que contiene el perfil del usuario logueado
+     */
+    private Perfil perfilBuscado;
 
     private Session session;
     private Transaction transaccion;
@@ -67,32 +78,50 @@ public class SessionMB implements Serializable
         if (usuarioAux != null) {
             //System.out.println("Usuario encontrado");
             //System.out.println(usuarioAux.getNick());
-            context.addMessage(null, new FacesMessage("Bienvenido al Sistema Codefac", "!Buen dia!"));
+            
             this.usuarioLogin = usuarioAux;
 
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("usuario", this.usuarioLogin);
             
-            switch(usuarioLogin.getTipo())
-            {
-                case "admin":
-                    return "/admin/indexAdmin.xhtml";
-                    
-                
-                case "operador":
-                    return "/operador/index.xhtml";
-            }
-            
-        }
-        this.nick=null;
-        this.clave=null;
-        context.addMessage(null, new FacesMessage("Los datos ingresados son incorrectos", "!Vuelva a intentar!"));
-        return "login";
+            System.out.println(perfilNombre);
+            perfilBuscado = usuarioLogin.buscarPerfil(perfilNombre);
 
+            //cuando no tiene permisos para entrar en el perfil
+            if (perfilBuscado == null) 
+            {
+                this.nick = "";
+                this.clave = "";
+                context.addMessage(null, new FacesMessage("No tiene permisos para acceder al perfil", "!Vuelva a intentar!"));                
+                return "login";
+            } else 
+            {
+                context.addMessage(null, new FacesMessage("Bienvenido al Sistema Codefac", "!Buen dia!"));
+                httpSession.setAttribute("perfil",this.perfilBuscado);
+                //cuando el perfil encontrado existe dirige a la pagina correspondiente
+                switch (perfilBuscado.getTipo()) 
+                {
+                    case "admin":
+                        System.out.println("accediendo al administrador");
+                        return "/admin/indexAdmin.xhtml";
+
+                    case "operador":
+                        return "/operador/index.xhtml";
+                }
+
+            }
+
+        } else {
+            this.nick = "";
+            this.clave = "";
+            context.addMessage(null, new FacesMessage("Los datos ingresados son incorrectos", "!Vuelva a intentar!"));
+            return "login";
+
+        }
+        return "login";
     }
 
-    public String cerrarSesion() 
-    {
+    public String cerrarSesion() {
         System.out.println("cerrar sesion");
         this.nick = null;
         this.clave = null;
@@ -134,5 +163,23 @@ public class SessionMB implements Serializable
     public void setSeguridadServicio(SeguridadServicio seguridadServicio) {
         this.seguridadServicio = seguridadServicio;
     }
+
+    public String getPerfilNombre() {
+        return perfilNombre;
+    }
+
+    public void setPerfilNombre(String perfilNombre) {
+        this.perfilNombre = perfilNombre;
+    }
+
+    public Perfil getPerfilBuscado() {
+        return perfilBuscado;
+    }
+
+    public void setPerfilBuscado(Perfil perfilBuscado) {
+        this.perfilBuscado = perfilBuscado;
+    }
+    
+    
 
 }

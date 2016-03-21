@@ -36,6 +36,7 @@ and open the template in the editor.
                     <p:tab title="Información Cliente"> 
                         <p:panelGrid columns="8" style="margin: 0 auto;" >
                             <p:commandButton id="btnBuscarCli" value="B U S C A R " type="button"  />
+                            
                             <p:overlayPanel widgetVar="overLayBuscarCliente" id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
                                 <p:dataTable var="cliente" 
                                              value="#{facturaMB.clientesLista}"
@@ -62,9 +63,11 @@ and open the template in the editor.
                             <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
                             <p:inputText id="cedCliente" value="#{facturaMB.cedCliente}" required="true" requiredMessage="Campo necesario"/>
                             <p:message for="cedCliente" />
+                            
                             <p:commandButton icon="ui-icon-search" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr" >
                                 <p:ajax event="dialogReturn" listener="#{facturaMB.recibirDatos}" update=":form:infDistr" />
                             </p:commandButton>
+                            
                             <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" />
                         </p:panelGrid>
                         <p:spacer/>

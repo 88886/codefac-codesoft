@@ -15,78 +15,158 @@ and open the template in the editor.
 
     <ui:define name="contenido" >
         <div>
-            <h:form>
+            <h:form id="formPrincipal">
                 <p:panel header="Orden de Trabajo" style="width: 70%;margin: 0 auto"   >
 
                     <p:spacer width="15px"/>
 
-                    <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder" >
+                    <p:panelGrid columns="5" style="margin: 0 auto" styleClass="panelNoBorder" >
+
                         <p:outputLabel value="CI/RUC: " />
-                        <p:inputText />
-                        <p:commandButton value="Buscar" />
+                        <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.cedulaRuc}" required="false" />
+
+                        <!-- Botonones para buscar y crear un nuevo cliente -->
+                        <p:commandButton  id="btnValidarCliente" icon="ui-icon-plus" actionListener="#{ordenTrabajoMB.validarCliente()}" update="@form" />
+                        <p:commandButton partialSubmit="true" process="
+                                         @this,
+                                         :formPrincipal:txtTotal,
+                                         :formPrincipal:datetime
+                                         :formPrincipal:txtAdelanto
+                                         :formPrincipal:txtObservaciones
+                                         "  id="btnBuscarCliente" value="B U S C A R "  actionListener="#{ordenTrabajoMB.buscarClienteDlg()}"  >
+                            <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form" />
+                        </p:commandButton>
+
                     </p:panelGrid>
 
                     <!--<p:separator />-->
                     <p:spacer width="15px"/>
 
                     <!-- Panel con los datos del cliente -->
-                    <p:panel header="Datos del Cliente" styleClass="panelNoBorder">
+                    <p:panel header="Datos del Cliente" styleClass="greenColoredPanel panelNoBorder" >
                         <p:panelGrid columns="4" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Nombres:" />
-                            <p:inputText/>
+                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.nombre}" />
 
                             <p:outputLabel value="Telefono:" />
-                            <p:inputText/>
+                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.telefono}" />
 
                             <p:outputLabel value="Direccion:" />
-                            <p:inputText/>
+                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.direccion}" />
 
                             <p:outputLabel value="Correo:" />
-                            <p:inputText/>                        
+                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.correo}" />                        
 
                         </p:panelGrid>
                     </p:panel>
 
                     <!-- Panel con los datos del trabajo a realizar -->
-                    <p:panel header="Datos del Trabajo" styleClass="panelNoBorder">
+                    <p:panel id="panelTrabajo" header="Datos del Trabajo" styleClass="panelNoBorder greenColoredPanel">
                         <p:panelGrid columns="6" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Fecha Entrega:" />
-                            <p:calendar id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" />
+                            <p:calendar  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" />
 
                             <p:outputLabel value="Total" />
-                            <p:inputText style="width: 50px"/>
+                            <p:inputText id="txtTotal" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.total}" />
 
                             <p:outputLabel value="Adelanto" />
-                            <p:inputText style="width: 50px"/>
+                            <p:inputText id="txtAdelanto" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.adelanto}" />
 
-                            <p:outputLabel value="Responsable" />
-                            <p:inputText />                  
+                            <p:outputLabel value="Responsable"  />
+                            <p:selectOneMenu id="car" value="#{ordenTrabajoMB.ordenTrabajo.empleado}">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems itemLabel="#{empleado.nick}" var="empleado" value="#{ordenTrabajoMB.empleados}" />
+                            </p:selectOneMenu>
+
 
                         </p:panelGrid>
-                        
+
                         <p:separator />
-                        
+
                         <div style="text-align: center">
-                            <p:commandButton value="Agregar Equipo" style="margin: 0 auto"/>
+                            <p:commandButton partialSubmit="true" process="@this"  value="Agregar Equipo" actionListener="#{ordenTrabajoMB.abrirEquipoDialog()}" update=":formDialogoDetalle"  style="margin: 0 auto;"/>
                         </div>
-                        
+
                     </p:panel>
 
                     <!-- Tabla de los datos equipos para realizar la orden de trabajo-->
-                    <p:dataTable>
+                    <p:dataTable
+                        id="tablaDetalle"
+                        value="#{ordenTrabajoMB.ordenTrabajo.detalleOrdenTrabajoList}"
+                        var="detalle"
+                        >
+
+                        <p:column headerText="Nombre" style="width: 150px">
+                            <p:outputLabel value="#{detalle.equipo}"  />
+                        </p:column>
+
+                        <p:column headerText="Descripcion">
+                            <p:inputTextarea value="#{detalle.descripcion}" readonly="true" />
+                        </p:column>
+
+                        <p:column headerText="Problema">
+                            <p:inputTextarea  value="#{detalle.problema}" readonly="true" />
+                        </p:column>
+
+                        <p:column headerText="Trabajo Realizar">
+                            <p:inputTextarea  value="#{detalle.trabajoRealizar}" readonly="true" />
+                        </p:column>
+
+                        <p:column headerText="Precio" style="width: 70px">
+                            <p:inputText  value="#{detalle.precio}" readonly="true" style="width: 50px" />
+                        </p:column>                    
+
 
                     </p:dataTable>
 
                     <p:panelGrid columns="1">
                         <p:outputLabel value="Observaciones" />
-                        <p:inputTextarea rows="4" cols="45" />
+                        <p:inputTextarea id="txtObservaciones" value="#{ordenTrabajoMB.ordenTrabajo.observacion}" rows="4" cols="45" />
                     </p:panelGrid>
 
-                    <p:panelGrid columns="2" style="margin: 0 auto" styleClass="panelNoBorder">
-                        <p:commandButton value=" Grabar "/>
+                    <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
+                        <p:commandButton ajax="false" value=" Grabar " actionListener="#{ordenTrabajoMB.grabarOrdenTrabajo()}">
+
+                        </p:commandButton>
                         <p:commandButton value=" Cancelar "/>
+                        <p:commandButton immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
                     </p:panelGrid>
                 </p:panel>
+            </h:form>
+
+            <!-- Dialogo para agregar los equipos al items -->
+            <p:dialog header="Agregar Detalle" widgetVar="dlgDetalle" showEffect="explode" hideEffect="explode"  modal="true">
+                <h:form id="formDialogoDetalle" >
+                    <p:panelGrid columns="2" styleClass="panelNoBorder">
+
+                        <p:outputLabel value="Nombre: " />
+                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.equipo}" />
+
+                        <p:outputLabel value="Problema: " />
+                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.problema}" />
+
+                        <p:outputLabel value="Trabajo Realizar: " />
+                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.trabajoRealizar}" />
+
+                        <p:outputLabel value="Precio: " />
+                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" />
+
+                        <p:outputLabel value="Descripcion: " />
+                        <p:inputTextarea value="#{ordenTrabajoMB.detalleOrdenTrabajo.descripcion}" />
+
+                    </p:panelGrid>
+                    <p:spacer height="10px"/>
+                    <div style="text-align: center">
+                        <p:commandButton  partialSubmit="true" process=":formDialogoDetalle,:formPrincipal:txtTotal" value="Agregar" actionListener="#{ordenTrabajoMB.agregarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal" />
+                    </div>
+                </h:form>
+            </p:dialog>
+
+            <h:form>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>
         </div>
     </ui:define>

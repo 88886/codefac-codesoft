@@ -17,13 +17,21 @@
                     <p:inputText id="usuario" required="true" value="#{sessionMB.nick}" />
                     <p:outputLabel for="clave" value="Clave:"/>
                     <p:password id="clave" required="true" value="#{sessionMB.clave}"   />
+                    
+                    <p:outputLabel for="perfil" value="Perfil:"/>
+                    <p:selectOneMenu id="perfil" value="#{sessionMB.perfilNombre}" style="width:100%">
+                        <f:selectItem itemLabel="Seleccione el perfil" itemValue="" />
+                        <f:selectItem itemLabel="Operador" itemValue="operador" />
+                        <f:selectItem itemLabel="Empleado" itemValue="empleado" />
+                        <f:selectItem itemLabel="Administrador" itemValue="admin" />
+                    </p:selectOneMenu>
                 </p:panelGrid>
                 <p:spacer height="10px"/>
 
                 <div style="margin: 0 auto;">
                     <p:commandButton value="Ingresar" action="#{sessionMB.iniciarSesion()}" update="growl" ajax="false" />
                 </div>               
-                
+
             </p:panel>
         </h:form>
 

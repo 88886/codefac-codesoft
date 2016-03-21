@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.web.filtros;
 
+import ec.com.codesoft.model.Perfil;
 import ec.com.codesoft.model.Usuario;
 import java.io.IOException;
 import javax.faces.application.ResourceHandler;
@@ -58,7 +59,9 @@ public class FilterSessionAdmin implements Filter{
             
             //verificar si el usuario pertenece a la seccion correspondiente
             Usuario usuario=(Usuario) session.getAttribute("usuario");
-            if(usuario.getTipo().equals("admin"))
+            Perfil perfil=(Perfil) session.getAttribute("perfil");
+            
+            if(perfil.getTipo().equals("admin") && usuario!=null)
             {
                 chain.doFilter(req, res); // So, just continue request.
             }

@@ -64,7 +64,7 @@
         
         <navigation-case>
             <from-outcome>crearCliente</from-outcome>
-            <to-view-id>/operador/nuevoCliente.xhtml</to-view-id>
+            <to-view-id>/dialogs/cliente/nuevoCliente.xhtml</to-view-id>
         </navigation-case>
         
         <navigation-case>
@@ -206,6 +206,16 @@
         <navigation-case>
             <from-outcome>reporteTest</from-outcome>
             <to-view-id>/test/reporte.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>buscarClientesDlg</from-outcome>
+            <to-view-id>/dialogs/cliente/buscarClientes.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>ordenTrabajo</from-outcome>
+            <to-view-id>/admin/ordenTrabajo/ordenTrabajo.xhtml</to-view-id>
         </navigation-case>
 
                 

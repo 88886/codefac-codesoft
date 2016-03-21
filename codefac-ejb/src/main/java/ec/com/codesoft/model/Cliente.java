@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -31,6 +30,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c")})
 public class Cliente implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -78,6 +78,8 @@ public class Cliente implements Serializable {
     private String nombres;
     @OneToMany(mappedBy = "cedulaRuc")
     private List<Venta> ventaList;
+    @OneToMany(mappedBy = "cedulaRuc")
+    private List<OrdenTrabajo> ordenTrabajoList;
 
     public Cliente() {
     }
@@ -205,6 +207,17 @@ public class Cliente implements Serializable {
     public void setVentaList(List<Venta> ventaList) {
         this.ventaList = ventaList;
     }
+
+    public List<OrdenTrabajo> getOrdenTrabajoList() {
+        return ordenTrabajoList;
+    }
+
+    public void setOrdenTrabajoList(List<OrdenTrabajo> ordenTrabajoList) {
+        this.ordenTrabajoList = ordenTrabajoList;
+    }
+    
+    
+
     public String devolverEstado() {
 
         switch (estado) {
@@ -245,5 +258,5 @@ public class Cliente implements Serializable {
     public String toString() {
         return "ec.com.codesoft.model.Cliente[ cedulaRuc=" + cedulaRuc + " ]";
     }
-    
+
 }
