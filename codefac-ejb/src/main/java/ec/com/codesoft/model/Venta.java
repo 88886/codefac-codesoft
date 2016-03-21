@@ -88,6 +88,10 @@ public class Venta implements Serializable {
     @ManyToOne
     private Usuario nick;
 
+    @JoinColumn(name = "USUARIO_PERMISO", referencedColumnName = "NICK")
+    @ManyToOne
+    private Usuario usuarioPermiso;
+
     @JoinColumn(name = "CODIGO_PERIDO", referencedColumnName = "CODIGO_PERIDO")
     @ManyToOne
     private PeriodoContable codigoPerido;
@@ -106,7 +110,7 @@ public class Venta implements Serializable {
     private List<DetallesServicio> detallesServicioList;
 
     @OneToMany(mappedBy = "codigoFactura")
-    private List<OrdenTrabajo> ordenTrabajoList;
+    private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
 
     public Venta() {
 
@@ -276,12 +280,21 @@ public class Venta implements Serializable {
         this.cheque = cheque;
     }
 
-    public List<OrdenTrabajo> getOrdenTrabajoList() {
-        return ordenTrabajoList;
+
+    public List<DetalleVentaOrdenTrabajo> getDetalleVentaOrdenTrabajoList() {
+        return detalleVentaOrdenTrabajoList;
     }
 
-    public void setOrdenTrabajoList(List<OrdenTrabajo> ordenTrabajoList) {
-        this.ordenTrabajoList = ordenTrabajoList;
+    public void setDetalleVentaOrdenTrabajoList(List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList) {
+        this.detalleVentaOrdenTrabajoList = detalleVentaOrdenTrabajoList;
+    }
+
+    public Usuario getUsuarioPermiso() {
+        return usuarioPermiso;
+    }
+
+    public void setUsuarioPermiso(Usuario usuarioPermiso) {
+        this.usuarioPermiso = usuarioPermiso;
     }
     
     

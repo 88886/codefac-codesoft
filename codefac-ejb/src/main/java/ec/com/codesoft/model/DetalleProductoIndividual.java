@@ -44,7 +44,7 @@ public class DetalleProductoIndividual implements Serializable {
 
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    
+
     @Column(name = "PRECIO_INDIVIDUAL")
     private BigDecimal precioIndividual;
 
@@ -54,6 +54,10 @@ public class DetalleProductoIndividual implements Serializable {
     @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
     @ManyToOne
     private Venta codigoFactura;
+
+    @JoinColumn(name = "NICK", referencedColumnName = "NICK")
+    @ManyToOne
+    private Usuario nick;
 
     public DetalleProductoIndividual() {
     }
@@ -109,8 +113,16 @@ public class DetalleProductoIndividual implements Serializable {
     public void setPrecioIndividual(BigDecimal precioIndividual) {
         this.precioIndividual = precioIndividual;
     }
+
+    public Usuario getNick() {
+        return nick;
+    }
+
+    public void setNick(Usuario nick) {
+        this.nick = nick;
+    }
     
-   
+    
 
     @Override
     public int hashCode() {

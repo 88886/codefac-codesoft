@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -11,42 +10,58 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Suco
+ * @author carlo
  */
 @Entity
 @Table(name = "detalles_servicio")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "DetallesServicio.findAll", query = "SELECT d FROM DetallesServicio d")})
+    @NamedQuery(name = "DetallesServicio.findAll", query = "SELECT d FROM DetallesServicio d"),
+    @NamedQuery(name = "DetallesServicio.findByCodDetalleServicio", query = "SELECT d FROM DetallesServicio d WHERE d.codDetalleServicio = :codDetalleServicio"),
+    @NamedQuery(name = "DetallesServicio.findByTotal", query = "SELECT d FROM DetallesServicio d WHERE d.total = :total"),
+    @NamedQuery(name = "DetallesServicio.findByNombre", query = "SELECT d FROM DetallesServicio d WHERE d.nombre = :nombre"),
+    @NamedQuery(name = "DetallesServicio.findByDescripcion", query = "SELECT d FROM DetallesServicio d WHERE d.descripcion = :descripcion"),
+    @NamedQuery(name = "DetallesServicio.findByIva", query = "SELECT d FROM DetallesServicio d WHERE d.iva = :iva")})
 public class DetallesServicio implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "COD_DETALLE_SERVICIO")
     private Integer codDetalleServicio;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "COSTO")
-    private BigDecimal costo;
+    @Column(name = "TOTAL")
+    private BigDecimal total;
+    @Size(max = 64)
+    @Column(name = "NOMBRE")
+    private String nombre;
     @Size(max = 128)
     @Column(name = "DESCRIPCION_")
     private String descripcion;
+    @Column(name = "IVA")
+    private BigDecimal iva;
     @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
     @ManyToOne
     private Venta codigoFactura;
-    @JoinColumn(name = "CODIGO_SERVICIO", referencedColumnName = "CODIGO_SERVICIO")
+    @JoinColumn(name = "ID_CATEGORIA_TRABAJO", referencedColumnName = "ID_CATEGORIA_TRABAJO")
     @ManyToOne
-    private Servicios codigoServicio;
+    private CategoriaTrabajo idCategoriaTrabajo;
+    @JoinColumn(name = "NICK", referencedColumnName = "NICK")
+    @ManyToOne
+    private Usuario nick;
 
     public DetallesServicio() {
     }
@@ -63,12 +78,20 @@ public class DetallesServicio implements Serializable {
         this.codDetalleServicio = codDetalleServicio;
     }
 
-    public BigDecimal getCosto() {
-        return costo;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    public void setCosto(BigDecimal costo) {
-        this.costo = costo;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {
@@ -79,6 +102,14 @@ public class DetallesServicio implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+
     public Venta getCodigoFactura() {
         return codigoFactura;
     }
@@ -87,12 +118,20 @@ public class DetallesServicio implements Serializable {
         this.codigoFactura = codigoFactura;
     }
 
-    public Servicios getCodigoServicio() {
-        return codigoServicio;
+    public CategoriaTrabajo getIdCategoriaTrabajo() {
+        return idCategoriaTrabajo;
     }
 
-    public void setCodigoServicio(Servicios codigoServicio) {
-        this.codigoServicio = codigoServicio;
+    public void setIdCategoriaTrabajo(CategoriaTrabajo idCategoriaTrabajo) {
+        this.idCategoriaTrabajo = idCategoriaTrabajo;
+    }
+
+    public Usuario getNick() {
+        return nick;
+    }
+
+    public void setNick(Usuario nick) {
+        this.nick = nick;
     }
 
     @Override
@@ -117,7 +156,7 @@ public class DetallesServicio implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.codesoft.model.DetallesServicio[ codDetalleServicio=" + codDetalleServicio + " ]";
+        return "modelo.DetallesServicio[ codDetalleServicio=" + codDetalleServicio + " ]";
     }
     
 }

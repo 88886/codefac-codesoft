@@ -6,8 +6,8 @@
 
 package ec.com.codesoft.model;
 
+
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -34,8 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Servicios.findAll", query = "SELECT s FROM Servicios s"),
     @NamedQuery(name = "Servicios.findByCodigoServicio", query = "SELECT s FROM Servicios s WHERE s.codigoServicio = :codigoServicio"),
     @NamedQuery(name = "Servicios.findByNombre", query = "SELECT s FROM Servicios s WHERE s.nombre = :nombre"),
-    @NamedQuery(name = "Servicios.findByDescripcion", query = "SELECT s FROM Servicios s WHERE s.descripcion = :descripcion"),
-    @NamedQuery(name = "Servicios.findByCosto", query = "SELECT s FROM Servicios s WHERE s.costo = :costo")})
+    @NamedQuery(name = "Servicios.findByDescripcion", query = "SELECT s FROM Servicios s WHERE s.descripcion = :descripcion")})
 public class Servicios implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,13 +48,8 @@ public class Servicios implements Serializable {
     @Size(max = 512)
     @Column(name = "DESCRIPCION")
     private String descripcion;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "COSTO")
-    private BigDecimal costo;
     @OneToMany(mappedBy = "codigoServicio")
-    private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
-    @OneToMany(mappedBy = "codigoServicio")
-    private List<DetallesServicio> detallesServicioList;
+    private List<CategoriaTrabajo> categoriaTrabajoList;
 
     public Servicios() {
     }
@@ -88,30 +82,13 @@ public class Servicios implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public BigDecimal getCosto() {
-        return costo;
-    }
-
-    public void setCosto(BigDecimal costo) {
-        this.costo = costo;
-    }
-
     @XmlTransient
-    public List<DetalleOrdenTrabajo> getDetalleOrdenTrabajoList() {
-        return detalleOrdenTrabajoList;
+    public List<CategoriaTrabajo> getCategoriaTrabajoList() {
+        return categoriaTrabajoList;
     }
 
-    public void setDetalleOrdenTrabajoList(List<DetalleOrdenTrabajo> detalleOrdenTrabajoList) {
-        this.detalleOrdenTrabajoList = detalleOrdenTrabajoList;
-    }
-
-    @XmlTransient
-    public List<DetallesServicio> getDetallesServicioList() {
-        return detallesServicioList;
-    }
-
-    public void setDetallesServicioList(List<DetallesServicio> detallesServicioList) {
-        this.detallesServicioList = detallesServicioList;
+    public void setCategoriaTrabajoList(List<CategoriaTrabajo> categoriaTrabajoList) {
+        this.categoriaTrabajoList = categoriaTrabajoList;
     }
 
     @Override

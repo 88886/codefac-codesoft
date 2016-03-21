@@ -73,8 +73,8 @@ and open the template in the editor.
                             <p:inputText id="txtAdelanto" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.adelanto}" />
 
                             <p:outputLabel value="Responsable"  />
-                            <p:selectOneMenu id="car" value="#{ordenTrabajoMB.ordenTrabajo.empleado}">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
+                            <p:selectOneMenu id="cmbEmpleado" value="#{ordenTrabajoMB.ordenTrabajo.usuEmpleado}">
+                                <f:selectItem itemLabel="Asigne el empleado" itemValue="" />
                                 <f:selectItems itemLabel="#{empleado.nick}" var="empleado" value="#{ordenTrabajoMB.empleados}" />
                             </p:selectOneMenu>
 

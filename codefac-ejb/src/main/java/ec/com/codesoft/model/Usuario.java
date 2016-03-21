@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
     @NamedQuery(name = "Usuario.findByEstado", query = "SELECT u FROM Usuario u WHERE u.estado = :estado")})
 public class Usuario implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -71,17 +72,26 @@ public class Usuario implements Serializable {
     @Size(max = 16)
     @Column(name = "ESTADO")
     private String estado;
-    
     @OneToMany(mappedBy = "nick")
     private List<Compra> compraList;
     @OneToMany(mappedBy = "nick")
+    private List<DetalleProductoIndividual> detalleProductoIndividualList;
+    @OneToMany(mappedBy = "nick")
     private List<OrdenTrabajo> ordenTrabajoList;
-    @OneToMany(mappedBy = "empleado")
+    @OneToMany(mappedBy = "usuEmpleado")
     private List<OrdenTrabajo> ordenTrabajoList1;
     @OneToMany(mappedBy = "nick")
     private List<Venta> ventaList;
     @OneToMany(mappedBy = "nick")
+    private List<DetalleProductoGeneral> detalleProductoGeneralList;
+    @OneToMany(mappedBy = "nick")
+    private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
+    @OneToMany(mappedBy = "nick")
     private List<Perfil> perfilList;
+    @OneToMany(mappedBy = "nick")
+    private List<DetallesServicio> detallesServicioList;
+    @OneToMany(mappedBy = "usuarioPermiso")
+    private List<Venta> ventaList1;
 
     public Usuario() {
     }
@@ -89,24 +99,18 @@ public class Usuario implements Serializable {
     public Usuario(String nick) {
         this.nick = nick;
     }
-    
-    
-    public Perfil buscarPerfil(String nombre)
-    {
-        for (Perfil perfil : perfilList) 
-        {
-            if(perfil.getTipo().equals(nombre))
-            {
-                return perfil ;
+
+    public Perfil buscarPerfil(String nombre) {
+        for (Perfil perfil : perfilList) {
+            if (perfil.getTipo().equals(nombre)) {
+                return perfil;
             }
         }
         return null;
-                
-    }
-    
-    /////////////////////////////METODOS GET AND SET///////////////////////
-    
 
+    }
+
+    /////////////////////////////METODOS GET AND SET///////////////////////
     public String getNick() {
         return nick;
     }
@@ -189,6 +193,15 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    public List<DetalleProductoIndividual> getDetalleProductoIndividualList() {
+        return detalleProductoIndividualList;
+    }
+
+    public void setDetalleProductoIndividualList(List<DetalleProductoIndividual> detalleProductoIndividualList) {
+        this.detalleProductoIndividualList = detalleProductoIndividualList;
+    }
+
+    @XmlTransient
     public List<OrdenTrabajo> getOrdenTrabajoList() {
         return ordenTrabajoList;
     }
@@ -216,6 +229,24 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    public List<DetalleProductoGeneral> getDetalleProductoGeneralList() {
+        return detalleProductoGeneralList;
+    }
+
+    public void setDetalleProductoGeneralList(List<DetalleProductoGeneral> detalleProductoGeneralList) {
+        this.detalleProductoGeneralList = detalleProductoGeneralList;
+    }
+
+    @XmlTransient
+    public List<DetalleVentaOrdenTrabajo> getDetalleVentaOrdenTrabajoList() {
+        return detalleVentaOrdenTrabajoList;
+    }
+
+    public void setDetalleVentaOrdenTrabajoList(List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList) {
+        this.detalleVentaOrdenTrabajoList = detalleVentaOrdenTrabajoList;
+    }
+
+    @XmlTransient
     public List<Perfil> getPerfilList() {
         return perfilList;
     }
@@ -223,6 +254,25 @@ public class Usuario implements Serializable {
     public void setPerfilList(List<Perfil> perfilList) {
         this.perfilList = perfilList;
     }
+
+    @XmlTransient
+    public List<DetallesServicio> getDetallesServicioList() {
+        return detallesServicioList;
+    }
+
+    public void setDetallesServicioList(List<DetallesServicio> detallesServicioList) {
+        this.detallesServicioList = detallesServicioList;
+    }
+
+    public List<Venta> getVentaList1() {
+        return ventaList1;
+    }
+
+    public void setVentaList1(List<Venta> ventaList1) {
+        this.ventaList1 = ventaList1;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -248,5 +298,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "modelo.Usuario[ nick=" + nick + " ]";
     }
-    
+
 }

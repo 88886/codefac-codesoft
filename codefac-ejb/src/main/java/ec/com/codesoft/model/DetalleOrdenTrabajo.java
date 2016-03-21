@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.model;
 
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "DetalleOrdenTrabajo.findByDescripcion", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.descripcion = :descripcion"),
     @NamedQuery(name = "DetalleOrdenTrabajo.findByProblema", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.problema = :problema"),
     @NamedQuery(name = "DetalleOrdenTrabajo.findByTrabajoRealizar", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.trabajoRealizar = :trabajoRealizar"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByPrecio", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.precio = :precio")})
+    @NamedQuery(name = "DetalleOrdenTrabajo.findByPrecio", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.precio = :precio"),
+    @NamedQuery(name = "DetalleOrdenTrabajo.findByDiagnostico", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.diagnostico = :diagnostico")})
 public class DetalleOrdenTrabajo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,12 +63,15 @@ public class DetalleOrdenTrabajo implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRECIO")
     private BigDecimal precio;
-    @JoinColumn(name = "CODIGO_SERVICIO", referencedColumnName = "CODIGO_SERVICIO")
-    @ManyToOne
-    private Servicios codigoServicio;
+    @Size(max = 512)
+    @Column(name = "DIAGNOSTICO")
+    private String diagnostico;
     @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO")
     @ManyToOne
     private OrdenTrabajo idOrdenTrabajo;
+    @JoinColumn(name = "ID_CATEGORIA_TRABAJO", referencedColumnName = "ID_CATEGORIA_TRABAJO")
+    @ManyToOne
+    private CategoriaTrabajo idCategoriaTrabajo;
     @OneToMany(mappedBy = "idDetalleOrdenTrabajo")
     private List<DetalleProductoOrdenTrabajo> detalleProductoOrdenTrabajoList;
 
@@ -125,12 +130,12 @@ public class DetalleOrdenTrabajo implements Serializable {
         this.precio = precio;
     }
 
-    public Servicios getCodigoServicio() {
-        return codigoServicio;
+    public String getDiagnostico() {
+        return diagnostico;
     }
 
-    public void setCodigoServicio(Servicios codigoServicio) {
-        this.codigoServicio = codigoServicio;
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
     }
 
     public OrdenTrabajo getIdOrdenTrabajo() {
@@ -139,6 +144,14 @@ public class DetalleOrdenTrabajo implements Serializable {
 
     public void setIdOrdenTrabajo(OrdenTrabajo idOrdenTrabajo) {
         this.idOrdenTrabajo = idOrdenTrabajo;
+    }
+
+    public CategoriaTrabajo getIdCategoriaTrabajo() {
+        return idCategoriaTrabajo;
+    }
+
+    public void setIdCategoriaTrabajo(CategoriaTrabajo idCategoriaTrabajo) {
+        this.idCategoriaTrabajo = idCategoriaTrabajo;
     }
 
     @XmlTransient

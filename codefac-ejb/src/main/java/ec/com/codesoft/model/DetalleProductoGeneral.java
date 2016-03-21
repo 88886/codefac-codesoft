@@ -45,7 +45,7 @@ public class DetalleProductoGeneral implements Serializable {
 
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    
+
     @Column(name = "PRECIO_INDIVIDUAL")
     private BigDecimal precioIndividual;
 
@@ -56,6 +56,10 @@ public class DetalleProductoGeneral implements Serializable {
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO")
     @ManyToOne
     private CatalagoProducto codigoProducto;
+
+    @JoinColumn(name = "NICK", referencedColumnName = "NICK")
+    @ManyToOne
+    private Usuario nick;
 
     public DetalleProductoGeneral() {
     }
@@ -119,8 +123,14 @@ public class DetalleProductoGeneral implements Serializable {
     public void setPrecioIndividual(BigDecimal precioIndividual) {
         this.precioIndividual = precioIndividual;
     }
-    
-    
+
+    public Usuario getNick() {
+        return nick;
+    }
+
+    public void setNick(Usuario nick) {
+        this.nick = nick;
+    }
     
     
 

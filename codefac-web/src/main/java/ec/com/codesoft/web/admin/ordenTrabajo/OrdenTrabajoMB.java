@@ -204,6 +204,8 @@ public class OrdenTrabajoMB implements Serializable {
     public void setEmpleados(List<Usuario> empleados) {
         this.empleados = empleados;
     }
+
+    
     
     
 

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -76,9 +78,6 @@ public class OrdenTrabajo implements Serializable {
     private BigDecimal descuento;
     @OneToMany(mappedBy = "idOrdenTrabajo")
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
-    @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
-    @ManyToOne
-    private Venta codigoFactura;
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
@@ -87,7 +86,9 @@ public class OrdenTrabajo implements Serializable {
     private Cliente cedulaRuc;
     @JoinColumn(name = "USU_EMPLEADO", referencedColumnName = "NICK")
     @ManyToOne
-    private Usuario empleado;
+    private Usuario usuEmpleado;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "ordenTrabajo")
+    private DetalleVentaOrdenTrabajo detalleVentaOrdenTrabajo;
 
     public OrdenTrabajo() {
     }
@@ -177,14 +178,6 @@ public class OrdenTrabajo implements Serializable {
         this.detalleOrdenTrabajoList = detalleOrdenTrabajoList;
     }
 
-    public Venta getCodigoFactura() {
-        return codigoFactura;
-    }
-
-    public void setCodigoFactura(Venta codigoFactura) {
-        this.codigoFactura = codigoFactura;
-    }
-
     public Usuario getNick() {
         return nick;
     }
@@ -201,13 +194,20 @@ public class OrdenTrabajo implements Serializable {
         this.cedulaRuc = cedulaRuc;
     }
 
-    public Usuario getEmpleado() {
-        return empleado;
+    public Usuario getUsuEmpleado() {
+        return usuEmpleado;
     }
 
-    public void setEmpleado(Usuario empleado) 
-    {
-        this.empleado = empleado;
+    public void setUsuEmpleado(Usuario usuEmpleado) {
+        this.usuEmpleado = usuEmpleado;
+    }
+
+    public DetalleVentaOrdenTrabajo getDetalleVentaOrdenTrabajo() {
+        return detalleVentaOrdenTrabajo;
+    }
+
+    public void setDetalleVentaOrdenTrabajo(DetalleVentaOrdenTrabajo detalleVentaOrdenTrabajo) {
+        this.detalleVentaOrdenTrabajo = detalleVentaOrdenTrabajo;
     }
 
     @Override
