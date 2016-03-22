@@ -87,8 +87,9 @@ public class OrdenTrabajo implements Serializable {
     @JoinColumn(name = "USU_EMPLEADO", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario usuEmpleado;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "ordenTrabajo")
-    private DetalleVentaOrdenTrabajo detalleVentaOrdenTrabajo;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordenTrabajo")
+    private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
 
     public OrdenTrabajo() {
     }
@@ -202,13 +203,15 @@ public class OrdenTrabajo implements Serializable {
         this.usuEmpleado = usuEmpleado;
     }
 
-    public DetalleVentaOrdenTrabajo getDetalleVentaOrdenTrabajo() {
-        return detalleVentaOrdenTrabajo;
+    public List<DetalleVentaOrdenTrabajo> getDetalleVentaOrdenTrabajoList() {
+        return detalleVentaOrdenTrabajoList;
     }
 
-    public void setDetalleVentaOrdenTrabajo(DetalleVentaOrdenTrabajo detalleVentaOrdenTrabajo) {
-        this.detalleVentaOrdenTrabajo = detalleVentaOrdenTrabajo;
+    public void setDetalleVentaOrdenTrabajoList(List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList) {
+        this.detalleVentaOrdenTrabajoList = detalleVentaOrdenTrabajoList;
     }
+
+    
 
     @Override
     public int hashCode() {
