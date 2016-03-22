@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.model;
 
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,7 +30,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Configuracion.findAll", query = "SELECT c FROM Configuracion c"),
     @NamedQuery(name = "Configuracion.findByIdConfiguracion", query = "SELECT c FROM Configuracion c WHERE c.idConfiguracion = :idConfiguracion"),
-    @NamedQuery(name = "Configuracion.findByIva", query = "SELECT c FROM Configuracion c WHERE c.iva = :iva")})
+    @NamedQuery(name = "Configuracion.findByIva", query = "SELECT c FROM Configuracion c WHERE c.iva = :iva"),
+    @NamedQuery(name = "Configuracion.findByPathreportes", query = "SELECT c FROM Configuracion c WHERE c.pathreportes = :pathreportes"),
+    @NamedQuery(name = "Configuracion.findByMaxItemFactura", query = "SELECT c FROM Configuracion c WHERE c.maxItemFactura = :maxItemFactura"),
+    @NamedQuery(name = "Configuracion.findByMaxItemNota", query = "SELECT c FROM Configuracion c WHERE c.maxItemNota = :maxItemNota"),
+    @NamedQuery(name = "Configuracion.findByMaxItemOrdenTrabajo", query = "SELECT c FROM Configuracion c WHERE c.maxItemOrdenTrabajo = :maxItemOrdenTrabajo")})
 public class Configuracion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,9 +45,15 @@ public class Configuracion implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "IVA")
     private BigDecimal iva;
-    
+    @Size(max = 512)
     @Column(name = "PATHREPORTES")
-    private String pathReportes;
+    private String pathreportes;
+    @Column(name = "MAX_ITEM_FACTURA")
+    private Integer maxItemFactura;
+    @Column(name = "MAX_ITEM_NOTA")
+    private Integer maxItemNota;
+    @Column(name = "MAX_ITEM_ORDEN_TRABAJO")
+    private Integer maxItemOrdenTrabajo;
 
     public Configuracion() {
     }
@@ -66,15 +78,37 @@ public class Configuracion implements Serializable {
         this.iva = iva;
     }
 
-    public String getPathReportes() {
-        return pathReportes;
+    public String getPathreportes() {
+        return pathreportes;
     }
 
-    public void setPathReportes(String pathReportes) {
-        this.pathReportes = pathReportes;
+    public void setPathreportes(String pathreportes) {
+        this.pathreportes = pathreportes;
     }
-    
-    
+
+    public Integer getMaxItemFactura() {
+        return maxItemFactura;
+    }
+
+    public void setMaxItemFactura(Integer maxItemFactura) {
+        this.maxItemFactura = maxItemFactura;
+    }
+
+    public Integer getMaxItemNota() {
+        return maxItemNota;
+    }
+
+    public void setMaxItemNota(Integer maxItemNota) {
+        this.maxItemNota = maxItemNota;
+    }
+
+    public Integer getMaxItemOrdenTrabajo() {
+        return maxItemOrdenTrabajo;
+    }
+
+    public void setMaxItemOrdenTrabajo(Integer maxItemOrdenTrabajo) {
+        this.maxItemOrdenTrabajo = maxItemOrdenTrabajo;
+    }
 
     @Override
     public int hashCode() {
