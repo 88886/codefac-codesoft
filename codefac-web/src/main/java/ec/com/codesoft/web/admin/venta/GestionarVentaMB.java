@@ -120,7 +120,7 @@ public class GestionarVentaMB implements Serializable {
         if (tipoVenta.equals("Nota")) {
             
                       
-            NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
+            NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
             notaVenta.setDireccion(venta.getCedulaRuc().getDireccion());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
@@ -156,7 +156,7 @@ public class GestionarVentaMB implements Serializable {
             }
 
         } else {
-            FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
+            FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
             facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
             facturaReporte.setDireccion(venta.getCedulaRuc().getDireccion());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");

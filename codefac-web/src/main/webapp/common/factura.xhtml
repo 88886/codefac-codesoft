@@ -188,7 +188,10 @@ and open the template in the editor.
                         <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
                         <p:inputText id="cantidadP" value="#{facturaMB.cantidadComprar}" required="true" />
                         <p:commandButton  icon="ui-icon-plusthick" 
-                                          actionListener="#{facturaMB.venta()}" ajax="false" update="@form"/>
+                                          actionListener="#{facturaMB.venta()}" ajax="true" update=":formGeneral,
+                                                                                                    :form:msgs,
+                                                                                                    :form:infDistr,
+                                                                                                    :formDetalles:tablaDetallesFactura"/>
                         <p:outputLabel value="#{facturaMB.msjStock}" style="color: darkred"/>
                     </p:panelGrid>
                 </p:dialog>
