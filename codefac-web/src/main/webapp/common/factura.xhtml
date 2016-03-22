@@ -156,8 +156,9 @@ and open the template in the editor.
                 </p:accordionPanel>
             </h:form>
             <h:form id="formCompra">
-                <p:panel id="idAgregar" style="width:100%;" visible="true">
-                    <p:commandButton id="btnAgregarProd" value="A G R E G A R " type="button"  />
+                <p:panel id="idAgregar" style="width:100%;" visible="true" header="Tipo de Detalle">
+                    <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;margin-left: 5%">
+                    <p:commandButton id="btnAgregarProd" value="P R O D U C T O S " type="button"  />
                     <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
                                      rows="10"
@@ -180,6 +181,55 @@ and open the template in the editor.
                             </p:column>
                         </p:dataTable>
                     </p:overlayPanel>
+                    
+                    <p:commandButton id="btnAgregarOrden" value="S E R V I C I O S" type="button"  />
+                    <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
+                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                     rows="10"
+                                     selectionMode="single" 
+                                     scrollable="true" 
+                                     scrollHeight="200"  
+                                     rowKey="#{catalogo.codigoProducto}"
+                                     selection="#{facturaMB.catalogoSeleccionado}">
+                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
+                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                <h:outputText value="#{catalogo.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <h:outputText value="#{catalogo.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{catalogo.precio}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
+                    
+                    <p:commandButton id="btnAgregarServicio" value="O. T R A B A J O" type="button" />
+                    <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
+                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                     rows="10"
+                                     selectionMode="single" 
+                                     scrollable="true" 
+                                     scrollHeight="200"  
+                                     rowKey="#{catalogo.codigoProducto}"
+                                     selection="#{facturaMB.catalogoSeleccionado}">
+                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
+                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                <h:outputText value="#{catalogo.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <h:outputText value="#{catalogo.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{catalogo.precio}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
+                    </p:panelGrid>
                 </p:panel>
             </h:form>
             <h:form id="formGeneral">

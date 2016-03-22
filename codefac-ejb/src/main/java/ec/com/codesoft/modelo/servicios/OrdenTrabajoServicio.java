@@ -92,4 +92,8 @@ public class OrdenTrabajoServicio
     {
         return categoriaTrabajoFacade.find(codigo);
     }
+    
+    public List<OrdenTrabajo> obtenerOrdenesTrabajo(){
+        return ordenTrabajoFacade.findAll();
+    }
 }

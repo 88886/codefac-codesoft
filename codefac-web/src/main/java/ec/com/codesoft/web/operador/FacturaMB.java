@@ -13,6 +13,7 @@ import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetallesServicio;
 import ec.com.codesoft.model.Intereses;
+import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.model.PeriodoContable;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
@@ -22,6 +23,7 @@ import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import ec.com.codesoft.modelo.servicios.CompraServicio;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
+import ec.com.codesoft.modelo.servicios.OrdenTrabajoServicio;
 import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.reportes.FacturaDetalleModeloReporte;
 import ec.com.codesoft.web.reportes.FacturaModeloReporte;
@@ -134,6 +136,9 @@ public class FacturaMB {
     private Integer maxItemFactura;
     private Integer maxItemNota;
     private Integer maxItems;
+    
+    //ordenes de trabajo
+    private List<OrdenTrabajo> ordenesTrabajo;
 
     /**
      * Porpiedad para enlazar el numero de factura
@@ -157,6 +162,9 @@ public class FacturaMB {
 
     @EJB
     private BancoServicio bancoServicio;
+    
+    @EJB
+    private OrdenTrabajoServicio ordenTrabajoServicio;
 
     @PostConstruct
     public void inicializar() {
@@ -219,6 +227,9 @@ public class FacturaMB {
         //por defecto esta factura al iniciar la venta
         maxItems = maxItemFactura;
 
+        //exclusivo para ordenes de Trabajo
+        ordenesTrabajo=ordenTrabajoServicio.obtenerOrdenesTrabajo();
+        
     }
 
     public void pruebar() {
@@ -1654,5 +1665,17 @@ public class FacturaMB {
     public void setIvaMostrar(BigDecimal ivaMostrar) {
         this.ivaMostrar = ivaMostrar;
     }
+    
+    //ORDENES TRABAJO
+
+    public List<OrdenTrabajo> getOrdenesTrabajo() {
+        return ordenesTrabajo;
+    }
+
+    public void setOrdenesTrabajo(List<OrdenTrabajo> ordenesTrabajo) {
+        this.ordenesTrabajo = ordenesTrabajo;
+    }
+    
+    
 
 }
