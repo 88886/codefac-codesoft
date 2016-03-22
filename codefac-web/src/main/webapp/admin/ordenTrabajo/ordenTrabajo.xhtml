@@ -154,24 +154,26 @@ and open the template in the editor.
                         <p:selectOneMenu id="cmbCategoria" value="#{ordenTrabajoMB.idCategoriaSeleccionado}" >
                             <f:selectItem itemLabel="Escoja la Categoria: " itemValue="" />
                             <f:selectItems itemValue="#{categoria.idCategoriaTrabajo}"  itemLabel="#{categoria.nombre}" var="categoria" value="#{ordenTrabajoMB.categorias}" />                                
-                            <p:ajax event="change" listener="#{ordenTrabajoMB.cargarDatosCategoria()}" update=":formDialogoDetalle:txtPrecio" />
+                            <p:ajax event="change" listener="#{ordenTrabajoMB.cargarDatosCategoria()}" update=":formDialogoDetalle:txtPrecio,:formDialogoDetalle:txtTrabajoRealizar,:formDialogoDetalle:txtProblema" />
                         </p:selectOneMenu>
 
 
                         <p:outputLabel value="Nombre: " />
                         <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.equipo}" />
-
-                        <p:outputLabel value="Problema: " />
-                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.problema}" />
-
-                        <p:outputLabel value="Trabajo Realizar: " />
-                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.trabajoRealizar}" />
-
-                        <p:outputLabel value="Precio: " />
-                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" />
-
+                        
                         <p:outputLabel value="Descripcion: " />
                         <p:inputTextarea value="#{ordenTrabajoMB.detalleOrdenTrabajo.descripcion}" />
+
+                        <p:outputLabel value="Problema: " />
+                        <p:inputTextarea id="txtProblema" value="#{ordenTrabajoMB.detalleOrdenTrabajo.problema}" />
+
+                        <p:outputLabel value="Trabajo Realizar: " />
+                        <p:inputTextarea id="txtTrabajoRealizar" value="#{ordenTrabajoMB.detalleOrdenTrabajo.trabajoRealizar}" />
+
+                        <p:outputLabel value="Precio: " />
+                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" style="width: 80px" />
+
+                        
 
                     </p:panelGrid>
                     <p:spacer height="10px"/>

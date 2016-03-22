@@ -29,15 +29,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "detalle_venta_orden_trabajo")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findAll", query = "SELECT d FROM DetalleVentaOrdenTrabajo d"),
-    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findByIdOrdenTrabajo", query = "SELECT d FROM DetalleVentaOrdenTrabajo d WHERE d.idOrdenTrabajo = :idOrdenTrabajo"),
-    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findByIdVentaTrabajo", query = "SELECT d FROM DetalleVentaOrdenTrabajo d WHERE d.idVentaTrabajo = :idVentaTrabajo"),
-    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findByEstado", query = "SELECT d FROM DetalleVentaOrdenTrabajo d WHERE d.estado = :estado"),
-    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findByTotal", query = "SELECT d FROM DetalleVentaOrdenTrabajo d WHERE d.total = :total"),
-    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findByIva", query = "SELECT d FROM DetalleVentaOrdenTrabajo d WHERE d.iva = :iva"),
-    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findByDescuento", query = "SELECT d FROM DetalleVentaOrdenTrabajo d WHERE d.descuento = :descuento")})
 public class DetalleVentaOrdenTrabajo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,8 +36,7 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_ORDEN_TRABAJO")
     private Integer idOrdenTrabajo;
-    @Column(name = "ID_VENTA_TRABAJO")
-    private Integer idVentaTrabajo;
+
     @Size(max = 16)
     @Column(name = "ESTADO")
     private String estado;
@@ -82,13 +72,6 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
         this.idOrdenTrabajo = idOrdenTrabajo;
     }
 
-    public Integer getIdVentaTrabajo() {
-        return idVentaTrabajo;
-    }
-
-    public void setIdVentaTrabajo(Integer idVentaTrabajo) {
-        this.idVentaTrabajo = idVentaTrabajo;
-    }
 
     public String getEstado() {
         return estado;

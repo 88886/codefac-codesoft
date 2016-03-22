@@ -53,6 +53,9 @@ public class Usuario implements Serializable {
     @Size(max = 32)
     @Column(name = "CARGO")
     private String cargo;
+    @Size(max = 32)
+    @Column(name = "CEDULA")
+    private String cedula;
     @Size(max = 128)
     @Column(name = "NOMBRES")
     private String nombres;
@@ -183,6 +186,16 @@ public class Usuario implements Serializable {
         this.estado = estado;
     }
 
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
+    
+    
+
     @XmlTransient
     public List<Compra> getCompraList() {
         return compraList;
@@ -271,8 +284,6 @@ public class Usuario implements Serializable {
     public void setVentaList1(List<Venta> ventaList1) {
         this.ventaList1 = ventaList1;
     }
-    
-    
 
     @Override
     public int hashCode() {

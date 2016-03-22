@@ -193,7 +193,7 @@ public class OrdenTrabajoMB implements Serializable {
         Map<String, List<String>> params = new HashMap<String, List<String>>();
         List<String> values = new ArrayList<String>();
 
-        values.add("1724218951");
+        values.add(ordenTrabajo.getCedulaRuc().getCedulaRuc());
         params.put("cedula", values);
 
         RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
@@ -218,6 +218,8 @@ public class OrdenTrabajoMB implements Serializable {
         Servicios servicioSeleccionado = ordenTrabajoServicio.obtenerServicioPorCodigo(Integer.parseInt(idServicioSeleccionado));
         CategoriaTrabajo categoria = ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
         detalleOrdenTrabajo.setPrecio(categoria.getPrecio());
+        detalleOrdenTrabajo.setProblema(categoria.getDescripcion());
+        detalleOrdenTrabajo.setTrabajoRealizar(categoria.getTrabajoRealizar());
         System.out.println("cargando categorias ..."+categoria.getPrecio());
     }
 

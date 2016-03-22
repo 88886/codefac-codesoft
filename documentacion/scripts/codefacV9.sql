@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     21/03/2016 14:31:04                          */
+/* Created on:     22/03/2016 9:43:39                           */
 /*==============================================================*/
 
 
@@ -138,6 +138,7 @@ create table CATEGORIA_TRABAJO
    NOMBRE               varchar(64),
    PRECIO               decimal(8,2),
    DESCRIPCION          varchar(128),
+   TRABAJO_REALIZAR     varchar(256),
    primary key (ID_CATEGORIA_TRABAJO)
 );
 

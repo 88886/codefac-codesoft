@@ -54,6 +54,12 @@ public class CategoriaTrabajo implements Serializable {
     @Size(max = 128)
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    
+    @Size(max = 256)
+    @Column(name = "TRABAJO_REALIZAR")
+    private String trabajoRealizar;
+    
+    
     @OneToMany(mappedBy = "idCategoriaTrabajo")
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
     @JoinColumn(name = "CODIGO_SERVICIO", referencedColumnName = "CODIGO_SERVICIO")
@@ -100,6 +106,16 @@ public class CategoriaTrabajo implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public String getTrabajoRealizar() {
+        return trabajoRealizar;
+    }
+
+    public void setTrabajoRealizar(String trabajoRealizar) {
+        this.trabajoRealizar = trabajoRealizar;
+    }
+    
+    
 
     @XmlTransient
     public List<DetalleOrdenTrabajo> getDetalleOrdenTrabajoList() {
