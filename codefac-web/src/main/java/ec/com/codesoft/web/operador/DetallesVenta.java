@@ -27,6 +27,7 @@ public class DetallesVenta {
     private BigDecimal valorVerdaderoMayorista;
     private BigDecimal valorVerdaderoPVP;
     private BigDecimal valorDescuento;
+    private String tipoDetalle ;
 
     public DetallesVenta() {
     }
@@ -137,5 +138,15 @@ public class DetallesVenta {
     public void setValorDescuento(BigDecimal valorDescuento) {
         this.valorDescuento = valorDescuento;
     }
+
+    public String getTipoDetalle() {
+        return tipoDetalle;
+    }
+
+    public void setTipoDetalle(String tipoDetalle) {
+        this.tipoDetalle = tipoDetalle;
+    }
+    
+    
 
 }
