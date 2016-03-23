@@ -136,9 +136,10 @@ public class FacturaMB {
     private Integer maxItemFactura;
     private Integer maxItemNota;
     private Integer maxItems;
-    
+
     //ordenes de trabajo
     private List<OrdenTrabajo> ordenesTrabajo;
+    private OrdenTrabajo ordenTrabajoSeleccionada;
 
     /**
      * Porpiedad para enlazar el numero de factura
@@ -162,7 +163,7 @@ public class FacturaMB {
 
     @EJB
     private BancoServicio bancoServicio;
-    
+
     @EJB
     private OrdenTrabajoServicio ordenTrabajoServicio;
 
@@ -228,8 +229,8 @@ public class FacturaMB {
         maxItems = maxItemFactura;
 
         //exclusivo para ordenes de Trabajo
-        ordenesTrabajo=ordenTrabajoServicio.obtenerOrdenesTrabajo();
-        
+        ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
+
     }
 
     public void pruebar() {
@@ -459,6 +460,53 @@ public class FacturaMB {
             // msjDistri = "Encontrado";
             // mostrarPanel = true;
         }
+    }
+
+    public void onRowSelectOrden(SelectEvent event) {
+
+        System.out.println("Venta Orden");
+        totalRegistro = ordenTrabajoSeleccionada.getTotal();
+        subtotalRegistro = totalRegistro.multiply(ivaTotal);
+        subtotal = subtotal.add(totalRegistro);
+        if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
+            iva = new BigDecimal("0.0");
+            // iva = iva.setScale(2, BigDecimal.ROUND_UP);
+            total = subtotal;
+            // total = total.setScale(2, BigDecimal.ROUND_UP);
+            totalPagar = total;
+        } else {
+            iva = subtotal.multiply(ivaSubTotal);
+            //  iva = iva.setScale(2, BigDecimal.ROUND_UP);
+            total = subtotal.multiply(ivaTotal);
+            // total = total.setScale(2, BigDecimal.ROUND_UP);
+            totalPagar = total;
+        }
+
+        DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
+                ordenTrabajoSeleccionada.getObservacion(),
+                ordenTrabajoSeleccionada.getTotal(), totalRegistro);
+
+        Descuentos precioMayorista = new Descuentos("Prec Mayorista",ordenTrabajoSeleccionada.getTotal());
+        Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
+        Descuentos dcto = new Descuentos("dctoPVP",new BigDecimal("0.0"));
+        //System.out.println(catalogoSeleccionado.getDescuento());
+        Descuentos dctoMayorista = new Descuentos("dctoMayorista",new BigDecimal("0.0"));
+        List<Descuentos> descuentos = new ArrayList<Descuentos>();
+        descuentos.add(precioMayorista);
+        descuentos.add(precioDescuento);
+        descuentos.add(dcto);
+        descuentos.add(dctoMayorista);
+        detalles.setValorVerdaderoMayorista(ordenTrabajoSeleccionada.getTotal());
+        detalles.setValorVerdaderoPVP(ordenTrabajoSeleccionada.getTotal());
+        detalles.setDescuentos(descuentos);
+        detalles.setPrecioSeleccionado("PVP");
+        detalles.setEscogerDescuento("No");
+        detallesVenta.add(detalles);
+        System.out.println("Detallles: "+detallesVenta);
+
+    }
+
+    public void onRowUnSelectOrden(SelectEvent event) {
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -1665,9 +1713,8 @@ public class FacturaMB {
     public void setIvaMostrar(BigDecimal ivaMostrar) {
         this.ivaMostrar = ivaMostrar;
     }
-    
-    //ORDENES TRABAJO
 
+    //ORDENES TRABAJO
     public List<OrdenTrabajo> getOrdenesTrabajo() {
         return ordenesTrabajo;
     }
@@ -1675,7 +1722,13 @@ public class FacturaMB {
     public void setOrdenesTrabajo(List<OrdenTrabajo> ordenesTrabajo) {
         this.ordenesTrabajo = ordenesTrabajo;
     }
-    
-    
+
+    public OrdenTrabajo getOrdenTrabajoSeleccionada() {
+        return ordenTrabajoSeleccionada;
+    }
+
+    public void setOrdenTrabajoSeleccionada(OrdenTrabajo ordenTrabajoSeleccionada) {
+        this.ordenTrabajoSeleccionada = ordenTrabajoSeleccionada;
+    }
 
 }
