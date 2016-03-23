@@ -11,6 +11,7 @@ import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.Creditobanco;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
+import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
 import ec.com.codesoft.model.DetallesServicio;
 import ec.com.codesoft.model.Intereses;
 import ec.com.codesoft.model.OrdenTrabajo;
@@ -140,7 +141,7 @@ public class FacturaMB {
     //ordenes de trabajo
     private List<OrdenTrabajo> ordenesTrabajo;
     private OrdenTrabajo ordenTrabajoSeleccionada;
-
+    private List<DetalleVentaOrdenTrabajo> detallesOrdenTrabajo;
     /**
      * Porpiedad para enlazar el numero de factura
      */
@@ -230,6 +231,7 @@ public class FacturaMB {
 
         //exclusivo para ordenes de Trabajo
         ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
+        detallesOrdenTrabajo=new ArrayList<DetalleVentaOrdenTrabajo>();
 
     }
 
@@ -471,7 +473,7 @@ public class FacturaMB {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia...!", "Número Máximo de Detalles Alcanzado..!");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
         } else {
-
+            DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
             totalRegistro = ordenTrabajoSeleccionada.getTotal();
             subtotalRegistro = totalRegistro.multiply(ivaTotal);
             subtotal = subtotal.add(totalRegistro);
@@ -508,6 +510,8 @@ public class FacturaMB {
             detalles.setDescuentos(descuentos);
             detalles.setPrecioSeleccionado("PVP");
             detalles.setEscogerDescuento("No");
+            detalles.setTipoDetalle("Orden Trabajo");
+            detalleOrdenTrabajo.setOrdenTrabajo(ordenTrabajoSeleccionada);
             detallesVenta.add(detalles);
             System.out.println("Detallles: " + detallesVenta);
         }
@@ -893,204 +897,235 @@ public class FacturaMB {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void facturar() {
         System.out.println("facturando");
-        if (clienteEncontrado.getCedulaRuc() == null || clienteEncontrado.getCedulaRuc() == "") {
-            //if(clienteEncontrado.get)
-            FacesMessage msg = new FacesMessage("Agregue Cliente");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            // return null;
+
+        if (detallesVenta.size() < 1) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "No existen detalles que se puedan facturar..!");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
         } else {
 
-            if (detallesVenta == null) {
-                FacesMessage msg = new FacesMessage("Agregue Ventas");
+            if (clienteEncontrado.getCedulaRuc() == null || clienteEncontrado.getCedulaRuc() == "") {
+                //if(clienteEncontrado.get)
+                FacesMessage msg = new FacesMessage("Agregue Cliente");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
+                // return null;
             } else {
-                Venta venta = new Venta();
-                venta.setCedulaRuc(clienteEncontrado);
-                PeriodoContable periodo = new PeriodoContable();
-                periodo = compraServicio.buscar();
-                venta.setCodigoPerido(periodo);
-                //venta.setDetalleProductoGeneralList(detallesGeneralVenta);
-                //venta.setDetalleProductoIndividualList(detallesIndividualVenta);
-                //venta.setDetallesServicioList(detallesServicio);
-                if (tipoCliente.equals("C")) {
-                    venta.setTipoDocumento("Nota");
+
+                if (detallesVenta == null) {
+                    FacesMessage msg = new FacesMessage("Agregue Ventas");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
                 } else {
-                    venta.setTipoDocumento("Factura");
-                }
-                venta.setEstado("facturado");
-                venta.setFecha(new Date());
-                venta.setTotal(total.setScale(2, BigDecimal.ROUND_UP));
-                venta.setDescuento(descuento);
-                venta.setCodigoDocumento(codigoDocumento);
-                venta.setTipoPago(devolverTipoPago());
+                    Venta venta = new Venta();
+                    venta.setCedulaRuc(clienteEncontrado);
+                    PeriodoContable periodo = new PeriodoContable();
+                    periodo = compraServicio.buscar();
+                    venta.setCodigoPerido(periodo);
+                    //venta.setDetalleProductoGeneralList(detallesGeneralVenta);
+                    //venta.setDetalleProductoIndividualList(detallesIndividualVenta);
+                    //venta.setDetallesServicioList(detallesServicio);
+                    if (tipoCliente.equals("C")) {
+                        venta.setTipoDocumento("Nota");
+                    } else {
+                        venta.setTipoDocumento("Factura");
+                    }
+                    venta.setEstado("facturado");
+                    venta.setFecha(new Date());
+                    venta.setTotal(total.setScale(2, BigDecimal.ROUND_UP));
+                    venta.setDescuento(descuento);
+                    venta.setCodigoDocumento(codigoDocumento);
+                    venta.setTipoPago(devolverTipoPago());
 
-                if (devolverTipoPago().equals("Cheque")) {
-                    System.out.println("banco " + nombreBanco + " Cheque" + NCheque);
-                    venta.setBanco(nombreBanco);
-                    venta.setCheque(NCheque);
-                }
+                    if (devolverTipoPago().equals("Cheque")) {
+                        System.out.println("banco " + nombreBanco + " Cheque" + NCheque);
+                        venta.setBanco(nombreBanco);
+                        venta.setCheque(NCheque);
+                    }
 
-                venta.setDescuento(descuento);// descuento general
+                    venta.setDescuento(descuento);// descuento general
 
-                venta.setDetalleProductoGeneralList(detallesGeneralVenta);
-                venta.setDetalleProductoIndividualList(detallesIndividualVenta);
+                    venta.setDetalleProductoGeneralList(detallesGeneralVenta);
+                    venta.setDetalleProductoIndividualList(detallesIndividualVenta);
 
-                facturaServicio.guardarFactura(venta);
+                    facturaServicio.guardarFactura(venta);
 
-                codigoFactura = venta.getCodigoFactura();
+                    codigoFactura = venta.getCodigoFactura();
 
-                //guardar banco
-                if (estBanco) {
-                    for (int i = 0; i < bancos.size(); i++) {
-                        if (bancos.get(i).getNombre().equals(nombreBanco)) {
-                            for (int j = 0; j < bancos.get(i).getInteresesList().size(); j++) {
-                                if (bancos.get(i).getInteresesList().get(j).getMeses() == mesSeleccionado) {
-                                    creditoBanco = new Creditobanco();
-                                    creditoBanco.setCodigoFactura(venta);
-                                    creditoBanco.setCodinteres(bancos.get(i).getInteresesList().get(j));
-                                    bancoServicio.guardarCreditoBanco(creditoBanco);
+                    //guardar banco
+                    if (estBanco) {
+                        for (int i = 0; i < bancos.size(); i++) {
+                            if (bancos.get(i).getNombre().equals(nombreBanco)) {
+                                for (int j = 0; j < bancos.get(i).getInteresesList().size(); j++) {
+                                    if (bancos.get(i).getInteresesList().get(j).getMeses() == mesSeleccionado) {
+                                        creditoBanco = new Creditobanco();
+                                        creditoBanco.setCodigoFactura(venta);
+                                        creditoBanco.setCodinteres(bancos.get(i).getInteresesList().get(j));
+                                        bancoServicio.guardarCreditoBanco(creditoBanco);
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                if (detallesIndividualVenta != null) {
-                    for (int i = 0; i < detallesIndividualVenta.size(); i++) {
+                    if (detallesIndividualVenta != null) {
+                        for (int i = 0; i < detallesIndividualVenta.size(); i++) {
 
-                        detallesIndividualVenta.get(i).setCodigoFactura(venta);
-                    }
-                    for (int i = 0; i < detallesVenta.size(); i++) {
-                        //System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesIndividualVenta.get(i).getCodigoUnico());
-                        for (int j = 0; j < detallesIndividualVenta.size(); j++) {
-                            if (detallesVenta.get(i).getCodigo().equals(detallesIndividualVenta.get(j).getCodigoUnico().getCodigoUnico())) {
-                                detallesIndividualVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
-                                detallesIndividualVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());
+                            detallesIndividualVenta.get(i).setCodigoFactura(venta);
+                        }
+                        for (int i = 0; i < detallesVenta.size(); i++) {
+                            //System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesIndividualVenta.get(i).getCodigoUnico());
+                            for (int j = 0; j < detallesIndividualVenta.size(); j++) {
+                                if (detallesVenta.get(i).getCodigo().equals(detallesIndividualVenta.get(j).getCodigoUnico().getCodigoUnico())) {
+                                    detallesIndividualVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
+                                    detallesIndividualVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());
+                                }
                             }
                         }
-                    }
-                    facturaServicio.insertarDetalleProductoIndividual(detallesIndividualVenta);
-                    for (int i = 0; i < detallesIndividualVenta.size(); i++) {
-                        prodIndividual = new ProductoIndividualCompra();
-                        prodIndividual = facturaServicio.devolverProductoIndividual(detallesIndividualVenta.get(i).getCodigoUnico().getCodigoUnico());
-                        prodIndividual.setEstadoProceso("Vendido");
-                        facturaServicio.actulizarStocIndividual(prodIndividual);
+                        facturaServicio.insertarDetalleProductoIndividual(detallesIndividualVenta);
+                        for (int i = 0; i < detallesIndividualVenta.size(); i++) {
+                            prodIndividual = new ProductoIndividualCompra();
+                            prodIndividual = facturaServicio.devolverProductoIndividual(detallesIndividualVenta.get(i).getCodigoUnico().getCodigoUnico());
+                            prodIndividual.setEstadoProceso("Vendido");
+                            facturaServicio.actulizarStocIndividual(prodIndividual);
+
+                        }
 
                     }
 
-                }
-
-                if (detallesGeneralVenta != null) {
-                    for (int j = 0; j < detallesGeneralVenta.size(); j++) {
-                        detallesGeneralVenta.get(j).setCodigoFactura(venta);
-                    }
-                    for (int i = 0; i < detallesVenta.size(); i++) {
+                    if (detallesGeneralVenta != null) {
                         for (int j = 0; j < detallesGeneralVenta.size(); j++) {
-                            System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
-                            if (detallesVenta.get(i).getCodigo().equals(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto())) {
-                                detallesGeneralVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
-                                detallesGeneralVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());
+                            detallesGeneralVenta.get(j).setCodigoFactura(venta);
+                        }
+                        for (int i = 0; i < detallesVenta.size(); i++) {
+                            for (int j = 0; j < detallesGeneralVenta.size(); j++) {
+                                System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
+                                if (detallesVenta.get(i).getCodigo().equals(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto())) {
+                                    detallesGeneralVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
+                                    detallesGeneralVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());
+                                }
                             }
                         }
-                    }
-                    facturaServicio.insertarDetallesFacturaProductoGeneral(detallesGeneralVenta);
-                    for (int j = 0; j < detallesGeneralVenta.size(); j++) {
-                        prodGeneral = new ProductoGeneralVenta();
-                        prodGeneral = facturaServicio.devolverStockGeneral(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
-                        Integer cantidadStock = 0;
-                        cantidadStock = prodGeneral.getCantidadDisponible() - detallesGeneralVenta.get(j).getCantidad();
-                        prodGeneral.setCantidadDisponible(cantidadStock);
-                        facturaServicio.actulizarStockGeneral(prodGeneral);
-                    }
-                }
-                //System.out.println("detalleG: "+detallesGeneralVenta);
-                //System.out.println("detalleI: "+detallesIndividualVenta);
-
-                System.out.println("Facturado");
-                FacesMessage msg = new FacesMessage("Factura Completa");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                // return "factura";
-
-                if (tipoCliente.equals("C")) {
-
-                    NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
-                    notaVenta.setDireccion(clienteEncontrado.getDireccion());
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                    notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
-                    notaVenta.setFechaaFactura(sdf.format(venta.getFecha()));
-                    notaVenta.setFormaPago(devolverTipoPago());
-                    notaVenta.setNombreCliente(clienteEncontrado.getNombre());
-                    notaVenta.setTelefono(clienteEncontrado.getTelefono());
-                    notaVenta.setTotal(total);
-
-                    for (DetallesVenta detalle : detallesVenta) {
-                        FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
-                        detallesFactura.setCantidad(detalle.getCantidad() + "");
-                        detallesFactura.setCodigo(detalle.getCodigo());
-                        detallesFactura.setDescripcion(detalle.getNombre());
-                        detallesFactura.setDescuento(detalle.getValorDescuento().toString());
-                        detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
-                        detallesFactura.setTotal(detalle.getTotal().toString());
-                        if (notaVenta != null) {
-                            notaVenta.agregarDetalle(detallesFactura);
+                        facturaServicio.insertarDetallesFacturaProductoGeneral(detallesGeneralVenta);
+                        for (int j = 0; j < detallesGeneralVenta.size(); j++) {
+                            prodGeneral = new ProductoGeneralVenta();
+                            prodGeneral = facturaServicio.devolverStockGeneral(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
+                            Integer cantidadStock = 0;
+                            cantidadStock = prodGeneral.getCantidadDisponible() - detallesGeneralVenta.get(j).getCantidad();
+                            prodGeneral.setCantidadDisponible(cantidadStock);
+                            facturaServicio.actulizarStockGeneral(prodGeneral);
                         }
                     }
 
-                    try {
-                        notaVenta.exportarPDF();
-                        //detallesFactura.setCantidad(1);
-                        //factura.agregarDetalle(detallesFactura);
-                        //factura.exportarPDF();
-                    } catch (JRException ex) {
-                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+                    //insertarDetalles orden Trabajo
+                    int numOrdenes = 0;
+                    for (int i = 0; i < detallesVenta.size(); i++) {
+                        if (detallesVenta.get(i).getTipoDetalle().equals("Orden Trabajo")) {
+                            DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
+                            detalleOrdenTrabajo.setCodigoFactura(venta);
+                            //detalleOrdenTrabajo.setIdOrdenTrabajo(0);
+                            detalleOrdenTrabajo.setDescuento(detallesVenta.get(i).getValorDescuento());
+                            detalleOrdenTrabajo.setEstado("Facturado");
+                            detalleOrdenTrabajo.setIva(new BigDecimal("0.0"));
+                            //detalleOrdenTrabajo.setNick(null);
+                            detalleOrdenTrabajo.setTotal(detallesVenta.get(i).getTotal());
+                            detallesOrdenTrabajo.add(detalleOrdenTrabajo);
+                            numOrdenes = i + 1;
+                        }
+
                     }
 
-                } else {
-                    FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
-                    facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
-                    facturaReporte.setDireccion(clienteEncontrado.getDireccion());
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                    facturaReporte.setTelefono(clienteEncontrado.getTelefono());
+                    //guaradmos los detalles orden trabajo
+                    if (numOrdenes >= 1) {
+                        facturaServicio.insertarDetallesVentaOrdenTrabajo(detallesOrdenTrabajo);
+                    }
 
-                    facturaReporte.setRuc(cedCliente);
-                    facturaReporte.setFechaaFactura(sdf.format(venta.getFecha()));
-                    facturaReporte.setFormaPago(devolverTipoPago());
-                    facturaReporte.setIvaTotal(iva);
-                    facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
-                    facturaReporte.setNota(" ");
-                    facturaReporte.setSubtotal(subtotal);
+//                   
+                    //System.out.println("detalleG: "+detallesGeneralVenta);
+                    //System.out.println("detalleI: "+detallesIndividualVenta);
+                    System.out.println("Facturado");
+                    FacesMessage msg = new FacesMessage("Factura Completa");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                    // return "factura";
 
-                    //System.out.println(subtotal);
-                    facturaReporte.setTotal(total);
-                    for (DetallesVenta detalle : detallesVenta) {
-                        FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
-                        detallesFactura.setCantidad(detalle.getCantidad() + "");
-                        detallesFactura.setCodigo(detalle.getCodigo());
-                        detallesFactura.setDescripcion(detalle.getNombre());
-                        detallesFactura.setDescuento(detalle.getValorDescuento().toString());
-                        detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
-                        detallesFactura.setTotal(detalle.getTotal().toString());
-                        if (facturaReporte != null) {
-                            facturaReporte.agregarDetalle(detallesFactura);
+                    if (tipoCliente.equals("C")) {
+
+                        NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
+                        notaVenta.setDireccion(clienteEncontrado.getDireccion());
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                        notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
+                        notaVenta.setFechaaFactura(sdf.format(venta.getFecha()));
+                        notaVenta.setFormaPago(devolverTipoPago());
+                        notaVenta.setNombreCliente(clienteEncontrado.getNombre());
+                        notaVenta.setTelefono(clienteEncontrado.getTelefono());
+                        notaVenta.setTotal(total);
+
+                        for (DetallesVenta detalle : detallesVenta) {
+                            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+                            detallesFactura.setCantidad(detalle.getCantidad() + "");
+                            detallesFactura.setCodigo(detalle.getCodigo());
+                            detallesFactura.setDescripcion(detalle.getNombre());
+                            detallesFactura.setDescuento(detalle.getValorDescuento().toString());
+                            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+                            detallesFactura.setTotal(detalle.getTotal().toString());
+                            if (notaVenta != null) {
+                                notaVenta.agregarDetalle(detallesFactura);
+                            }
+                        }
+
+                        try {
+                            notaVenta.exportarPDF();
+                            //detallesFactura.setCantidad(1);
+                            //factura.agregarDetalle(detallesFactura);
+                            //factura.exportarPDF();
+                        } catch (JRException ex) {
+                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    } else {
+                        FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
+                        facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
+                        facturaReporte.setDireccion(clienteEncontrado.getDireccion());
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                        facturaReporte.setTelefono(clienteEncontrado.getTelefono());
+
+                        facturaReporte.setRuc(cedCliente);
+                        facturaReporte.setFechaaFactura(sdf.format(venta.getFecha()));
+                        facturaReporte.setFormaPago(devolverTipoPago());
+                        facturaReporte.setIvaTotal(iva);
+                        facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
+                        facturaReporte.setNota(" ");
+                        facturaReporte.setSubtotal(subtotal);
+
+                        //System.out.println(subtotal);
+                        facturaReporte.setTotal(total);
+                        for (DetallesVenta detalle : detallesVenta) {
+                            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+                            detallesFactura.setCantidad(detalle.getCantidad() + "");
+                            detallesFactura.setCodigo(detalle.getCodigo());
+                            detallesFactura.setDescripcion(detalle.getNombre());
+                            detallesFactura.setDescuento(detalle.getValorDescuento().toString());
+                            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+                            detallesFactura.setTotal(detalle.getTotal().toString());
+                            if (facturaReporte != null) {
+                                facturaReporte.agregarDetalle(detallesFactura);
+                            }
+                        }
+
+                        try {
+                            facturaReporte.exportarPDF();
+                            //detallesFactura.setCantidad(1);
+                            //factura.agregarDetalle(detallesFactura);
+                            //factura.exportarPDF();
+                        } catch (JRException ex) {
+                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-
-                    try {
-                        facturaReporte.exportarPDF();
-                        //detallesFactura.setCantidad(1);
-                        //factura.agregarDetalle(detallesFactura);
-                        //factura.exportarPDF();
-                    } catch (JRException ex) {
-                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
                 }
-                RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
+
             }
-
         }
 
         //return null;

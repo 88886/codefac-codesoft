@@ -6,9 +6,9 @@
 package ec.com.codesoft.modelo.servicios;
 
 import ec.com.codesoft.model.Banco;
-import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
+import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
 import ec.com.codesoft.model.Intereses;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
@@ -17,6 +17,7 @@ import ec.com.codesoft.modelo.facade.BancoFacade;
 import ec.com.codesoft.modelo.facade.CompraFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoGeneralFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoIndividualFacade;
+import ec.com.codesoft.modelo.facade.DetalleVentaOrdenTrabajoFacade;
 import ec.com.codesoft.modelo.facade.InteresesFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
@@ -64,6 +65,9 @@ public class FacturaServicio {
     @EJB
     BancoFacade bancofacade;
     
+    @EJB
+    DetalleVentaOrdenTrabajoFacade detalleVentaOrdenTrabajoFacade;
+    
     
 
     public int devolverStockIndividual(String codP) {
@@ -86,6 +90,13 @@ public class FacturaServicio {
 
         for (int i = 0; i < detalles.size(); i++) {
             detalleGeneralFacade.create(detalles.get(i));
+        }
+    }
+    
+    public void insertarDetallesVentaOrdenTrabajo(List<DetalleVentaOrdenTrabajo> detalles) {
+
+        for (int i = 0; i < detalles.size(); i++) {
+            detalleVentaOrdenTrabajoFacade.create(detalles.get(i));
         }
     }
     
