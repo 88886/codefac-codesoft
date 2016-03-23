@@ -225,8 +225,8 @@ and open the template in the editor.
                             <p:column headerText="Cliente" filterBy="#{ordenes.cedulaRuc.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
                                 <h:outputText value="#{ordenes.cedulaRuc.nombre}" />
                             </p:column>
-                            <p:column headerText="Descripción" filterBy="#{ordenes.observacion}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                <h:outputText value="#{ordenes.observacion}" />
+                            <p:column headerText="Problema" filterBy="#{ordenes.toStringDetalle()}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <h:outputText value="#{ordenes.toStringDetalle()}" />
                             </p:column>
                             <p:column headerText="Precio">
                                 <h:outputText value="#{ordenes.total}" />

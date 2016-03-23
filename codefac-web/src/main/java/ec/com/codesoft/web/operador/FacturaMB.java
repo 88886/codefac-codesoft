@@ -492,7 +492,7 @@ public class FacturaMB {
             }
 
             DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
-                    ordenTrabajoSeleccionada.getObservacion(),
+                    ordenTrabajoSeleccionada.toStringDetalle(),
                     ordenTrabajoSeleccionada.getTotal(), totalRegistro);
 
             Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
@@ -511,7 +511,7 @@ public class FacturaMB {
             detalles.setPrecioSeleccionado("PVP");
             detalles.setEscogerDescuento("No");
             detalles.setTipoDetalle("Orden Trabajo");
-            detalleOrdenTrabajo.setOrdenTrabajo(ordenTrabajoSeleccionada);
+            detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
             detallesVenta.add(detalles);
             System.out.println("Detallles: " + detallesVenta);
         }

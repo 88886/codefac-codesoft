@@ -67,6 +67,8 @@ public class VentaFacade extends AbstractFacade<Venta> {
             return numero;
         } catch (NoResultException e) {
             return null;
+        }catch(NullPointerException ex){
+            return 0;
         }
 
     }
