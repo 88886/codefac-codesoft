@@ -69,6 +69,16 @@ public class OrdenTrabajoServicio
         return empleados;
     }
     
+    
+    /**
+     * Metodo para anular la orden de trabajo
+     */
+    public void anularOrdenTrabajo(OrdenTrabajo orden)
+    {
+        orden.setEstado("anulado");
+        ordenTrabajoFacade.edit(orden);
+    }
+    
         /**
      * Obtener el usuario por el nick 
      * @return 

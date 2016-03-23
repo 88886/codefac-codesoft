@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     22/03/2016 12:34:34                          */
+/* Created on:     23/03/2016 13:27:28                          */
 /*==============================================================*/
 
 
@@ -299,6 +299,7 @@ create table DETALLE_ORDEN_TRABAJO
    TRABAJO_REALIZAR     varchar(256),
    PRECIO               numeric(8,2),
    DIAGNOSTICO          varchar(512),
+   ESTADO               varchar(64),
    primary key (ID_DETALLE_ORDEN_TRABAJO)
 );
 
@@ -353,14 +354,15 @@ create table DETALLE_PRODUCTO_ORDEN_TRABAJO
 /*==============================================================*/
 create table DETALLE_VENTA_ORDEN_TRABAJO
 (
-   ID_ORDEN_TRABAJO     int not null auto_increment,
+   ID_DETALLE_VENTA_ORDEN_TRABAJO int not null auto_increment,
+   ID_ORDEN_TRABAJO     int,
    CODIGO_FACTURA       int,
    NICK                 varchar(64),
    ESTADO               varchar(16),
    TOTAL                numeric(8,2),
    IVA                  numeric(8,2),
    DESCUENTO            decimal(8,2),
-   primary key (ID_ORDEN_TRABAJO)
+   primary key (ID_DETALLE_VENTA_ORDEN_TRABAJO)
 );
 
 /*==============================================================*/
@@ -666,14 +668,14 @@ alter table DETALLE_PRODUCTO_ORDEN_TRABAJO add constraint FK_REFERENCE_38 foreig
 alter table DETALLE_PRODUCTO_ORDEN_TRABAJO add constraint FK_REFERENCE_40 foreign key (CODIGO_PRODUCTO)
       references CATALAGO_PRODUCTO (CODIGO_PRODUCTO) on delete restrict on update restrict;
 
-alter table DETALLE_VENTA_ORDEN_TRABAJO add constraint FK_REFERENCE_39 foreign key (ID_ORDEN_TRABAJO)
+alter table DETALLE_VENTA_ORDEN_TRABAJO add constraint FK_REFERENCE_48 foreign key (ID_ORDEN_TRABAJO)
       references ORDEN_TRABAJO (ID_ORDEN_TRABAJO) on delete restrict on update restrict;
-
-alter table DETALLE_VENTA_ORDEN_TRABAJO add constraint FK_REFERENCE_48 foreign key (CODIGO_FACTURA)
-      references VENTA (CODIGO_FACTURA) on delete restrict on update restrict;
 
 alter table DETALLE_VENTA_ORDEN_TRABAJO add constraint FK_REFERENCE_49 foreign key (NICK)
       references USUARIO (NICK) on delete restrict on update restrict;
+
+alter table DETALLE_VENTA_ORDEN_TRABAJO add constraint FK_REFERENCE_54 foreign key (CODIGO_FACTURA)
+      references VENTA (CODIGO_FACTURA) on delete restrict on update restrict;
 
 alter table INTERESES add constraint FK_REFERENCE_32 foreign key (CODIGO_BANCO)
       references BANCO (CODIGO_BANCO) on delete restrict on update restrict;

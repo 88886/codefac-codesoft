@@ -18,10 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -29,14 +27,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "detalle_venta_orden_trabajo")
+@NamedQueries({
+    @NamedQuery(name = "DetalleVentaOrdenTrabajo.findAll", query = "SELECT d FROM DetalleVentaOrdenTrabajo d")})
 public class DetalleVentaOrdenTrabajo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID_ORDEN_TRABAJO")
-    private Integer idOrdenTrabajo;
-
+    @Column(name = "ID_DETALLE_VENTA_ORDEN_TRABAJO")
+    private Integer idDetalleVentaOrdenTrabajo;
     @Size(max = 16)
     @Column(name = "ESTADO")
     private String estado;
@@ -47,31 +46,30 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
     private BigDecimal iva;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private OrdenTrabajo ordenTrabajo;
-    @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
+    @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO")
     @ManyToOne
-    private Venta codigoFactura;
+    private OrdenTrabajo idOrdenTrabajo;
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
+    @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
+    @ManyToOne
+    private Venta codigoFactura;
 
     public DetalleVentaOrdenTrabajo() {
     }
 
-    public DetalleVentaOrdenTrabajo(Integer idOrdenTrabajo) {
-        this.idOrdenTrabajo = idOrdenTrabajo;
+    public DetalleVentaOrdenTrabajo(Integer idDetalleVentaOrdenTrabajo) {
+        this.idDetalleVentaOrdenTrabajo = idDetalleVentaOrdenTrabajo;
     }
 
-    public Integer getIdOrdenTrabajo() {
-        return idOrdenTrabajo;
+    public Integer getIdDetalleVentaOrdenTrabajo() {
+        return idDetalleVentaOrdenTrabajo;
     }
 
-    public void setIdOrdenTrabajo(Integer idOrdenTrabajo) {
-        this.idOrdenTrabajo = idOrdenTrabajo;
+    public void setIdDetalleVentaOrdenTrabajo(Integer idDetalleVentaOrdenTrabajo) {
+        this.idDetalleVentaOrdenTrabajo = idDetalleVentaOrdenTrabajo;
     }
-
 
     public String getEstado() {
         return estado;
@@ -105,20 +103,12 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
         this.descuento = descuento;
     }
 
-    public OrdenTrabajo getOrdenTrabajo() {
-        return ordenTrabajo;
+    public OrdenTrabajo getIdOrdenTrabajo() {
+        return idOrdenTrabajo;
     }
 
-    public void setOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
-        this.ordenTrabajo = ordenTrabajo;
-    }
-
-    public Venta getCodigoFactura() {
-        return codigoFactura;
-    }
-
-    public void setCodigoFactura(Venta codigoFactura) {
-        this.codigoFactura = codigoFactura;
+    public void setIdOrdenTrabajo(OrdenTrabajo idOrdenTrabajo) {
+        this.idOrdenTrabajo = idOrdenTrabajo;
     }
 
     public Usuario getNick() {
@@ -129,10 +119,18 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
         this.nick = nick;
     }
 
+    public Venta getCodigoFactura() {
+        return codigoFactura;
+    }
+
+    public void setCodigoFactura(Venta codigoFactura) {
+        this.codigoFactura = codigoFactura;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idOrdenTrabajo != null ? idOrdenTrabajo.hashCode() : 0);
+        hash += (idDetalleVentaOrdenTrabajo != null ? idDetalleVentaOrdenTrabajo.hashCode() : 0);
         return hash;
     }
 
@@ -143,7 +141,7 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
             return false;
         }
         DetalleVentaOrdenTrabajo other = (DetalleVentaOrdenTrabajo) object;
-        if ((this.idOrdenTrabajo == null && other.idOrdenTrabajo != null) || (this.idOrdenTrabajo != null && !this.idOrdenTrabajo.equals(other.idOrdenTrabajo))) {
+        if ((this.idDetalleVentaOrdenTrabajo == null && other.idDetalleVentaOrdenTrabajo != null) || (this.idDetalleVentaOrdenTrabajo != null && !this.idDetalleVentaOrdenTrabajo.equals(other.idDetalleVentaOrdenTrabajo))) {
             return false;
         }
         return true;
@@ -151,7 +149,7 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.DetalleVentaOrdenTrabajo[ idOrdenTrabajo=" + idOrdenTrabajo + " ]";
+        return "modelo.DetalleVentaOrdenTrabajo[ idDetalleVentaOrdenTrabajo=" + idDetalleVentaOrdenTrabajo + " ]";
     }
     
 }
