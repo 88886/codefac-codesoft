@@ -38,11 +38,14 @@ public class VentaFacade extends AbstractFacade<Venta> {
      *
      * @return
      */
+    
     public Integer getCodigoUltimaFactura() {
         try {
             String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Factura' ";
             Query query = em.createQuery(queryString);
-            Integer numero = (Integer) query.getSingleResult();
+            //System.out.println(query.getSingleResult());
+            Integer numero = Integer.parseInt(query.getSingleResult().toString());
+            
             return numero;
         } catch (NoResultException e) {
             return null;
@@ -58,7 +61,7 @@ public class VentaFacade extends AbstractFacade<Venta> {
         try {
             String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Nota' ";
             Query query = em.createQuery(queryString);
-            Integer numero = (Integer) query.getSingleResult();
+            Integer numero = Integer.parseInt(query.getSingleResult().toString());
             return numero;
         } catch (NoResultException e) {
             return null;
