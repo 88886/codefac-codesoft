@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <div style="text-align: left">         
+            <h:form>
+                <p:panel header="Ordenes de Trabajo">
+                    <p:dataTable 
+                        value="#{gestionarOrdenTrabajoMB.ordenTrabajoList}"
+                        var="orden"
+                        rowStyleClass="#{orden.estado eq 'anulado'?'filaRoja':'null'}"
+                        emptyMessage="No existen datos disponibles"
+                        filteredValue="#{gestionarOrdenTrabajoMB.ordenTrabajoFiltro}"
+                        widgetVar="ventaTable"
+                        >
+
+                        <p:column filterBy="#{orden.idOrdenTrabajo}" headerText="No Orden" style="width: 60px;" filterMatchMode="contains">
+                            <p:outputLabel value="#{orden.idOrdenTrabajo}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{orden.cedulaRuc.cedulaRuc}" headerText="Cedula" style="width: 90px;" filterMatchMode="contains" >
+                            <p:outputLabel value="#{orden.cedulaRuc.cedulaRuc}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{orden.cedulaRuc.nombre}" headerText="Nombres" style="width: 120px;" filterMatchMode="contains" >
+                            <p:outputLabel value="#{orden.cedulaRuc.nombre}"/>
+                        </p:column>
+
+
+                        <p:column filterBy="#{orden.estado}" headerText="Estado" style="width: 80px;" filterMatchMode="exact" >
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('ventaTable').filter()" >
+                                    <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Facturado" itemValue="facturado" />
+                                    <f:selectItem itemLabel="Revision" itemValue="revision" />
+                                    <f:selectItem itemLabel="Reparado" itemValue="reparado" />
+                                    <f:selectItem itemLabel="NoReparado" itemValue="noreparado" />
+                                    <f:selectItem itemLabel="Anulado" itemValue="anulado" />
+
+
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <p:outputLabel value="#{orden.estado}"/>
+                        </p:column>
+
+                        <p:column headerText="Detalle">
+                            <p:outputLabel value="#{orden.toStringDetalle()}"/>
+                        </p:column>
+
+
+                        <p:column headerText="Fecha Ingreso" style="width: 110px" >
+                            <p:outputLabel value="#{orden.fechaEmision}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </p:outputLabel>
+                        </p:column>
+
+                        <p:column headerText="Fecha Entrega" style="width: 110px" >
+                            <p:outputLabel value="#{orden.fechaEntrega}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </p:outputLabel>
+                        </p:column>
+
+                        <p:column headerText="Acciones" style="width: 180px;" >
+                            <p:commandButton action="#{gestionarOrdenTrabajoMB.imprimir(orden)}" value="Imprimir" ajax="false" />
+
+                            <p:commandButton style="background-image: none;background-color: coral" value="Anular" actionListener="#{gestionarOrdenTrabajoMB.anular(orden)}" update="@form" disabled="#{orden.estado eq 'anulado'?'true':'false'}" >
+                                <p:confirm header="Confirmar" message="Estas seguro que quieres anular la orden de trabajo !los cambios son irreversibles!?" icon="ui-icon-alert" />
+                            </p:commandButton> 
+
+                            <p:commandButton action="verVenta" icon="ui-icon-search" style="background-color: darkgreen;background-image: none" >
+                                <f:param name="id" value="#{venta.codigoFactura}" />
+                            </p:commandButton>
+                        </p:column>
+
+
+                    </p:dataTable>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </p:panel>
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

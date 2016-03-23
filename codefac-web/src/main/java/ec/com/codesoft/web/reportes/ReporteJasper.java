@@ -26,70 +26,37 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
  * @author carlos
  */
+public abstract class ReporteJasper<T> {
 
-public abstract class ReporteJasper<T> 
-{
-    
     private String raiz;
 
-    public ReporteJasper(String raiz) 
-    {
+    public ReporteJasper(String raiz) {
         this.raiz = raiz;
     }
-    
-    
-    
+
     public abstract List<T> getLista();
 
     public abstract Map<String, Object> getParametros();
 
     public abstract String getPath();
-    
+
     private List<ModeloPersona> lstPersonas = new ArrayList<ModeloPersona>();
 
-    public void exportarPDF() throws JRException, IOException {
-        //Map<String, Object> parametros = getParametros();
-        //parametros.put("codigoFactura", "1236123");
-        //String reportPath2 = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteCliente.jasper");
-        //File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("rpJSF.jasper"));
-//        List<T> lista=new ArrayList<T>(); 
-//        FacturaDetalleModeloReporte detalle = new FacturaDetalleModeloReporte(
-//                "2",
-//                "123123",
-//                "esfero",
-//                new BigDecimal(10),
-//                new BigDecimal(20),
-//                new BigDecimal(30));
-//
-//       // factura.agregarDetalle(detalle);
-//        lista.add((T) detalle);
-//        detalle = new FacturaDetalleModeloReporte(
-//                "2",
-//                "123123",
-//                "esfero",
-//                new BigDecimal(10),
-//                new BigDecimal(20),
-//                new BigDecimal(30));
-//        lista.add((T) detalle);
-        
-        
-        
+    public void exportarPDF2() throws JRException, IOException {
+
         //String reportePath=FacesContext.getCurrentInstance().getExternalContext().getRealPath(getPath());
         //String reportePath="E:/reportes/"+getPath();
-        
-        //String raiz=sistemaServicio.getConfiguracion().getPathReportes();
-        System.out.println("sistema: "+raiz);
-        String reportePath=raiz+getPath();
-        
-        
-        //jasperPrint2 = JasperFillManager.fillReport(reportPath2, new HashMap(), beanCollectionDataSource2);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(reportePath,getParametros(), new JRBeanCollectionDataSource(getLista(),false));
+        System.out.println("sistema: " + raiz);
+        String reportePath = raiz + getPath();
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportePath, getParametros(), new JRBeanCollectionDataSource(getLista(), false));
 
         HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         response.addHeader("Content-disposition", "attachment; filename=jsfReporte.pdf");
@@ -99,32 +66,47 @@ public abstract class ReporteJasper<T>
 
         stream.flush();
         stream.close();
-        //FacesContext.getCurrentInstance().responseComplete();
 
-//        Map<String, Object> parametros = new HashMap<String, Object>();
-//        parametros.put("codigoFactura", "1236123");
-//        parametros.put("nombre", "Carlos Sanchez");
-//
-//        //String reportPath2 = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reporteCliente.jasper");
-//        //File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("rpJSF.jasper"));
-//        String reportePath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("reportes/reporteFactura.jasper");
-//
-//        //jasperPrint2 = JasperFillManager.fillReport(reportPath2, new HashMap(), beanCollectionDataSource2);
-//        JasperPrint jasperPrint = JasperFillManager.fillReport(reportePath, parametros, new JRBeanCollectionDataSource(getLstPersonas(), false));
-//
-//        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//        response.addHeader("Content-disposition", "attachment; filename=jsfReporte.pdf");
-//        ServletOutputStream stream = response.getOutputStream();
-//
-//        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-//
-//        stream.flush();
-//        stream.close();
-          FacesContext.getCurrentInstance().responseComplete();
+        FacesContext.getCurrentInstance().responseComplete();
     }
-    
-    public List<ModeloPersona> getLstPersonas() {
+
+    public void exportarPDF() throws JRException, IOException {
+
+        //String reportePath=FacesContext.getCurrentInstance().getExternalContext().getRealPath(getPath());
+        //String reportePath="E:/reportes/"+getPath();
+        System.out.println("sistema: " + raiz);
+        String reportePath = raiz + getPath();
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportePath, getParametros(), new JRBeanCollectionDataSource(getLista(), false));
+
+        //HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        //response.addHeader("Content-disposition", "attachment; filename=jsfReporte.pdf");
+        //ServletOutputStream stream = response.getOutputStream();
+
+        //JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+
+        //stream.flush();
+        //stream.close();
+
+        FacesContext.getCurrentInstance().responseComplete();
+
+        byte[] bytes = JasperRunManager.runReportToPdf(reportePath,getParametros(), new JRBeanCollectionDataSource(getLista()));
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        response.setContentType("application/pdf");
+        response.setContentLength(bytes.length);
         
+        
+        ServletOutputStream outStream = response.getOutputStream();
+        outStream.write(bytes, 0, bytes.length);
+        
+        outStream.flush();
+        outStream.close();
+
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+
+    public List<ModeloPersona> getLstPersonas() {
+
         ModeloPersona per = new ModeloPersona();
         per.setNombres("Mito");
         per.setApellidos("Code");
@@ -159,5 +141,4 @@ public abstract class ReporteJasper<T>
         return lstPersonas;
     }
 
-    
 }

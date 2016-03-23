@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -84,6 +85,7 @@ public class OrdenTrabajoMB implements Serializable {
         ordenTrabajo = new OrdenTrabajo();
         ordenTrabajo.setTotal(new BigDecimal("0.00"));
         ordenTrabajo.setCedulaRuc(new Cliente());
+        ordenTrabajo.setAdelanto(new BigDecimal("0.00"));
         // ordenTrabajo.setDetalleOrdenTrabajo(new ArrayList<DetalleOrdenTrabajo>());
         ordenTrabajo.setDetalleOrdenTrabajoList(new ArrayList<DetalleOrdenTrabajo>());
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
@@ -97,17 +99,27 @@ public class OrdenTrabajoMB implements Serializable {
      * Grabar la orden de trabajo
      */
     public void grabarOrdenTrabajo() {
-        Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);        
 
-        ordenTrabajo.setUsuEmpleado(empleado);
-        ordenTrabajo.setFechaEmision(new Date());
+        //Valida que existan detalles en la orden de trabajo
+        if (ordenTrabajo.getDetalleOrdenTrabajoList().size() == 0) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No existe items para grabar");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        } else {
+            Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);
 
-        ordenTrabajoServicio.grabar(ordenTrabajo);
-        System.out.println("orden grabado ...");
-        generaPdf();
+            ordenTrabajo.setUsuEmpleado(empleado);
+            ordenTrabajo.setFechaEmision(new Date());
+
+            ordenTrabajoServicio.grabar(ordenTrabajo);
+            System.out.println("orden grabado ...");
+            
+            //dlgGrabado
+            RequestContext.getCurrentInstance().execute("PF('dlgGrabado').show()");
+            //generaPdf();
+        }
     }
 
-    private void generaPdf() {
+    public void generaPdf() {
         System.out.println("generando pdf..");
         OrdenTrabajoReporte orden = new OrdenTrabajoReporte(sistemaServicio.getConfiguracion().getPathreportes());
         orden.setAbono(ordenTrabajo.getAdelanto().toString());
@@ -169,10 +181,10 @@ public class OrdenTrabajoMB implements Serializable {
 //        System.out.println(ordenTrabajo.getTotal());
 
         ordenTrabajo.getDetalleOrdenTrabajoList().add(detalleOrdenTrabajo);
-        
-        CategoriaTrabajo categoria=ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
+
+        CategoriaTrabajo categoria = ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
         detalleOrdenTrabajo.setIdCategoriaTrabajo(categoria);
-        
+
         detalleOrdenTrabajo.getIdCategoriaTrabajo();
         System.out.println(detalleOrdenTrabajo.getPrecio());
 
@@ -186,22 +198,35 @@ public class OrdenTrabajoMB implements Serializable {
     }
 
     public void validarCliente() {
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        options.put("height", 300);
+        System.out.println("Validando cliente ...");
+        System.out.println(ordenTrabajo.getCedulaRuc().getCedulaRuc());
+        Cliente clienteBuscado = clienteServicio.buscarCliente(ordenTrabajo.getCedulaRuc().getCedulaRuc());
+        if (clienteBuscado != null) {
+            ordenTrabajo.setCedulaRuc(clienteBuscado);
+        } else {
+            Map<String, Object> options = new HashMap<String, Object>();
+            options.put("modal", true);
+            options.put("height", 300);
 
-        Map<String, List<String>> params = new HashMap<String, List<String>>();
-        List<String> values = new ArrayList<String>();
+            Map<String, List<String>> params = new HashMap<String, List<String>>();
+            List<String> values = new ArrayList<String>();
 
-        values.add(ordenTrabajo.getCedulaRuc().getCedulaRuc());
-        params.put("cedula", values);
+            values.add(ordenTrabajo.getCedulaRuc().getCedulaRuc());
+            params.put("cedula", values);
 
-        RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
+            RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
+        }
     }
 
     public void onClientChosen(SelectEvent event) {
+
         Cliente cliente = (Cliente) event.getObject();
-        ordenTrabajo.setCedulaRuc(cliente);
+        //verifica que exista el cliente o si cancelo la creacion
+        if (cliente == null) {
+            ordenTrabajo.setCedulaRuc(new Cliente());
+        } else {
+            ordenTrabajo.setCedulaRuc(cliente);
+        }
 
         System.out.println("Cliente llego " + cliente);
 
@@ -213,14 +238,13 @@ public class OrdenTrabajoMB implements Serializable {
         System.out.println("cargando categorias ...");
     }
 
-    public void cargarDatosCategoria() 
-    {
+    public void cargarDatosCategoria() {
         Servicios servicioSeleccionado = ordenTrabajoServicio.obtenerServicioPorCodigo(Integer.parseInt(idServicioSeleccionado));
         CategoriaTrabajo categoria = ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
         detalleOrdenTrabajo.setPrecio(categoria.getPrecio());
         detalleOrdenTrabajo.setProblema(categoria.getDescripcion());
         detalleOrdenTrabajo.setTrabajoRealizar(categoria.getTrabajoRealizar());
-        System.out.println("cargando categorias ..."+categoria.getPrecio());
+        System.out.println("cargando categorias ..." + categoria.getPrecio());
     }
 
     public void seleccionarEmpleado(Usuario usuario) {

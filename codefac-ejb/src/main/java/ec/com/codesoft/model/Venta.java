@@ -111,6 +111,8 @@ public class Venta implements Serializable {
 
     @OneToMany(mappedBy = "codigoFactura")
     private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
+    
+    
 
     public Venta() {
 

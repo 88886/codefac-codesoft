@@ -95,6 +95,8 @@ public class Usuario implements Serializable {
     private List<DetallesServicio> detallesServicioList;
     @OneToMany(mappedBy = "usuarioPermiso")
     private List<Venta> ventaList1;
+    
+    
 
     public Usuario() {
     }

@@ -88,8 +88,9 @@ public class OrdenTrabajo implements Serializable {
     @ManyToOne
     private Usuario usuEmpleado;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordenTrabajo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenTrabajo")
     private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
+
 
     public OrdenTrabajo() {
     }
@@ -97,6 +98,19 @@ public class OrdenTrabajo implements Serializable {
     public OrdenTrabajo(Integer idOrdenTrabajo) {
         this.idOrdenTrabajo = idOrdenTrabajo;
     }
+    
+    ///////////////METODOS AGREGADOS////////////////////////////////////
+    public String toStringDetalle()
+    {
+        String texto="";
+        for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) 
+        {
+            texto+=detalle.getProblema()+",";
+        }
+        return texto;
+    }
+    
+    /////////////////////////METODOS GET AND SET ///////////////////////
 
     public Integer getIdOrdenTrabajo() {
         return idOrdenTrabajo;
