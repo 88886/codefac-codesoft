@@ -197,6 +197,14 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
     }
 
+    public void eliminar(DetalleOrdenTrabajo detalle)
+    {
+        this.ordenTrabajo.getDetalleOrdenTrabajoList().remove(detalle);
+    }
+    
+    /**
+     * Verifica que exista un cliente en la base de datos
+     */
     public void validarCliente() {
         System.out.println("Validando cliente ...");
         System.out.println(ordenTrabajo.getCedulaRuc().getCedulaRuc());

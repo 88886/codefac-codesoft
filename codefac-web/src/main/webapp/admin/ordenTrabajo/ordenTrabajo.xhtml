@@ -121,6 +121,12 @@ and open the template in the editor.
                             <p:inputText  value="#{detalle.precio}" readonly="true" style="width: 50px" />
                         </p:column>                    
 
+                        <p:column headerText="Acciones" style="width: 50px">
+                            <p:commandButton partialSubmit="true" process="@this" icon="ui-icon-closethick" actionListener="#{ordenTrabajoMB.eliminar(detalle)}" style="background-image: none;background-color: coral" update="@form" >
+                                <p:confirm header="Confirmar" message="Quieres quitar el detalle?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-pencil" />
+                        </p:column>
 
                     </p:dataTable>
 
