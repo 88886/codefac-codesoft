@@ -928,7 +928,7 @@ public class FacturaMB {
 
                 if (tipoCliente.equals("C")) {
 
-                    NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
+                    NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
                     notaVenta.setDireccion(clienteEncontrado.getDireccion());
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                     notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
@@ -963,7 +963,7 @@ public class FacturaMB {
                     }
 
                 } else {
-                    FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathReportes());
+                    FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
                     facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
                     facturaReporte.setDireccion(clienteEncontrado.getDireccion());
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -1060,7 +1060,7 @@ public class FacturaMB {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             // return "factura";
 
-            ProformaModelo facturaReporte = new ProformaModelo(sistemaServicio.getConfiguracion().getPathReportes());
+            ProformaModelo facturaReporte = new ProformaModelo(sistemaServicio.getConfiguracion().getPathreportes());
             facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
             facturaReporte.setDireccion(clienteEncontrado.getDireccion());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");

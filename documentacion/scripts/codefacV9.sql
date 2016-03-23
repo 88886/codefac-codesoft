@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     22/03/2016 9:43:39                           */
+/* Created on:     22/03/2016 12:34:34                          */
 /*==============================================================*/
 
 
@@ -210,6 +210,7 @@ create table CONFIGURACION
    MAX_ITEM_FACTURA     int,
    MAX_ITEM_NOTA        int,
    MAX_ITEM_ORDEN_TRABAJO int,
+   LICENCIA             varchar(64),
    primary key (ID_CONFIGURACION)
 );
 
@@ -355,7 +356,6 @@ create table DETALLE_VENTA_ORDEN_TRABAJO
    ID_ORDEN_TRABAJO     int not null auto_increment,
    CODIGO_FACTURA       int,
    NICK                 varchar(64),
-   ID_VENTA_TRABAJO     int,
    ESTADO               varchar(16),
    TOTAL                numeric(8,2),
    IVA                  numeric(8,2),
@@ -557,6 +557,7 @@ create table USUARIO
    NICK                 varchar(64) not null,
    CLAVE                varchar(128),
    CARGO                varchar(32),
+   CEDULA               varchar(16),
    NOMBRES              varchar(128),
    DIRECCION            varchar(128),
    TELEFONO             varchar(12),
