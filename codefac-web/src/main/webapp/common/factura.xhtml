@@ -215,11 +215,7 @@ and open the template in the editor.
                                      scrollHeight="200"  
                                      rowKey="#{ordenes.idOrdenTrabajo}"
                                      selection="#{facturaMB.ordenTrabajoSeleccionada}">
-                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectOrden(event)}" update=":formGeneral,
-                                                                                                                :form:msgs,
-                                                                                                                :form:infDistr,
-                                                                                                                :formDetalles:tablaDetallesFactura,
-                                                                                                                :formCompra:movieAgregarS,
+                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
                                                                                                                 :formDetalles:panelTotales" />  
                             <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden(event)}"/>
 
@@ -271,9 +267,7 @@ and open the template in the editor.
         <h:form id="formDetalles">
             <p:panel id="idDetallesFactura" >
                 <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}" id="tablaDetallesFactura" style="width:100%">   
-                    <p:column headerText="Cantidad" style="text-align: left">
-                        <h:outputText value="#{detallesVenta.cantidad}" />
-                    </p:column>
+
                     <p:column headerText="Código" style="text-align: left">
                         <h:outputText value="#{detallesVenta.codigo}" />
                     </p:column>
