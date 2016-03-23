@@ -15,7 +15,7 @@ and open the template in the editor.
 
     <ui:define name="contenido" >
         <div style="text-align: left">         
-            <h:form>
+            <h:form target="_blank">
                 <p:panel header="Ordenes de Trabajo">
                     <p:dataTable 
                         value="#{gestionarOrdenTrabajoMB.ordenTrabajoList}"
@@ -73,8 +73,9 @@ and open the template in the editor.
                         </p:column>
 
                         <p:column headerText="Acciones" style="width: 180px;" >
+                            
                             <p:commandButton action="#{gestionarOrdenTrabajoMB.imprimir(orden)}" value="Imprimir" ajax="false" />
-
+                                                        
                             <p:commandButton style="background-image: none;background-color: coral" value="Anular" actionListener="#{gestionarOrdenTrabajoMB.anular(orden)}" update="@form" disabled="#{orden.estado eq 'anulado'?'true':'false'}" >
                                 <p:confirm header="Confirmar" message="Estas seguro que quieres anular la orden de trabajo !los cambios son irreversibles!?" icon="ui-icon-alert" />
                             </p:commandButton> 

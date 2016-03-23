@@ -217,6 +217,16 @@
             <from-outcome>ordenTrabajo</from-outcome>
             <to-view-id>/admin/ordenTrabajo/ordenTrabajo.xhtml</to-view-id>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>gestionarOrdenTrabajo</from-outcome>
+            <to-view-id>/admin/ordenTrabajo/gestionarOrdenTrabajo.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>verOrdenTrabajo</from-outcome>
+            <to-view-id>/admin/ordenTrabajo/verOrdenTrabajo.xhtml</to-view-id>
+        </navigation-case>
 
                 
     </navigation-rule>
