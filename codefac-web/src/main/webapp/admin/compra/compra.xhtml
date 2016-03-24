@@ -137,7 +137,7 @@ and open the template in the editor.
                             </p:overlayPanel>
 
                             <p:defaultCommand target="btnValidar" />
-                            <p:commandButton id="btnValidar" value="mas" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,:formDetalleCompra:panelAgregarProducto" style="visibility: hidden" />
+                            <p:commandButton id="btnValidar" value="mas" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:txtCodigoDetalle" style="visibility: hidden" />
                             <p:outputLabel id='lblNombreProducto' value="Producto: #{comprarMB.catalogo.nombre}" />
 
                         </p:panelGrid>

@@ -47,6 +47,8 @@ public class OrdenTrabajoServicio
     
     public void grabar(OrdenTrabajo ordenTrabajo)
     {
+        ordenTrabajo.setEstado("revision");
+                
         ordenTrabajoFacade.create(ordenTrabajo);
         
         Integer id=ordenTrabajo.getIdOrdenTrabajo();

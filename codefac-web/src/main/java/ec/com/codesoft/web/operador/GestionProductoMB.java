@@ -93,6 +93,7 @@ public class GestionProductoMB implements Serializable {
         
         catalagoProducto.setDescuento(new BigDecimal("0.00"));
         catalagoProducto.setDescuentoMayorista(new BigDecimal("0.00"));
+        catalagoProducto.setCosto(new BigDecimal("0.00"));
         
         System.out.println(catalagoProducto);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProducto').show()");
