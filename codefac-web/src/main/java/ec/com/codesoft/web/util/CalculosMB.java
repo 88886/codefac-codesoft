@@ -45,5 +45,14 @@ public class CalculosMB implements Serializable {
         }
         return new BigDecimal(0);
     }
+    
+    public BigDecimal redondeoInferior(BigDecimal valor) {
+        if(valor!=null)
+        {
+            BigDecimal respuesta=valor.setScale(4,RoundingMode.DOWN);
+            return respuesta;
+        }
+        return new BigDecimal(0);
+    }
 
 }

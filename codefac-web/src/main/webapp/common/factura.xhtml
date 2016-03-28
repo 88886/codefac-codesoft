@@ -216,7 +216,7 @@ and open the template in the editor.
                                      rowKey="#{ordenes.idOrdenTrabajo}"
                                      selection="#{facturaMB.ordenTrabajoSeleccionada}">
                             <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
-                                                                                                                :formDetalles:panelTotales" />  
+                                    :formDetalles:panelTotales" />  
                             <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden(event)}"/>
 
                             <p:column headerText="Código" filterBy="#{ordenes.idOrdenTrabajo}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
@@ -278,18 +278,25 @@ and open the template in the editor.
                         <h:outputText value="#{detallesVenta.nombre}" />
                     </p:column>
                     <p:column headerText="P. Unitario" style="text-align: left" id="descuentoIndividual">
-                        <h:outputText value="#{calculosMB.redondeoSuperior(detallesVenta.costo)}" />
+                        <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
                     </p:column>
                     <p:column headerText="Total" style="text-align: left" id="totalDescuento">
-                        <h:outputText value="#{calculosMB.redondeoSuperior(detallesVenta.total)}" />
+                        <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
                     </p:column>
-                    <p:column headerText="Descuento" style="width:60px">
+                    <p:column headerText="Descuento %" style="width:60px">
                         <p:selectOneMenu  value="#{detallesVenta.escogerDescuento}">
                             <f:selectItem itemLabel="No" itemValue="No" />
                             <f:selectItem itemLabel="Si" itemValue="Si" />
                             <p:ajax  event="change" listener="#{facturaMB.aplicarDescuentos(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
                         </p:selectOneMenu>
                     </p:column>
+
+                    <p:column headerText="Descuento Manual %" style="text-align: center" rendered="true"> 
+                        <p:inputText id="descuentoManual" style="width: 50%" value="#{facturaMB.descuentoManual}"  >
+                            <p:ajax event="blur" listener="#{facturaMB.aplicarDescuentosManual(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
+                        </p:inputText>   
+                    </p:column>
+
 
                     <p:column headerText="Acciones" style="text-align: left">
                         <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
