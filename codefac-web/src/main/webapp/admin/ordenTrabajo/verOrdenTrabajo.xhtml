@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <f:event listener="#{verVentaMB.preRender()}" type="preRenderView" />
+
+        <p:panel header="Venta" style="width: 70%;margin: 0 auto">
+            <h:form>
+                <p:panelGrid columns="4" style="width: 70%;margin: 0 auto" styleClass="panelNoBorder"  >
+                    <p:outputLabel value="Cédula/RUC:" />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.cedulaRuc}" />
+
+                    <p:outputLabel value="Codigo Documento" />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.codigoDocumento}" />
+
+                    <p:spacer height="30px;"/>
+                    <p:spacer height="30px;"/>
+                    <p:spacer height="30px;"/>
+                    <p:spacer height="30px;"/>
+
+                    <p:outputLabel value="Nombre: " />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.nombre}" />
+
+                    <p:outputLabel value="Teléfono:" />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.telefono}" />
+
+                    <p:outputLabel value="Celular: " />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.celular}" />
+
+                    <p:outputLabel value="Direccion:" />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.direccion}" />
+
+                    <p:outputLabel value="Correo: " />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.correo}" />
+
+                    <p:outputLabel value="Notas:" />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.notas}" />
+
+                    <p:outputLabel value="Tipo Venta: " />
+                    <p:inputText readonly="true" value="#{verVentaMB.venta.tipoVenta}" />
+
+
+                </p:panelGrid>
+
+                <p:spacer width="20px"/>
+
+                <p:dataTable
+                    value="#{verVentaMB.detalles}"
+                    var="detalle"
+
+                    >
+
+                    <p:column headerText="Codigo">
+                        <p:outputLabel value="#{detalle.codigo}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <p:outputLabel value="#{detalle.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Costo">
+                        <p:outputLabel value="#{detalle.costo}" />
+                    </p:column>
+
+                    <p:column headerText="Cantidad">
+                        <p:outputLabel value="#{detalle.cantidad}" />
+                    </p:column>
+
+                    <p:column headerText="Descuento">
+                        <p:outputLabel value="#{detalle.valorDescuento}" />
+                    </p:column>
+
+
+
+                    <p:column headerText="Subtotal">
+                        <p:outputLabel value="#{detalle.total}" />
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:panel header="Totales" style="text-align: center">
+                    <p:panelGrid columns="4" style="margin:  0 auto">
+
+                        <p:outputLabel value="Descuento:" />
+                        <p:outputLabel value="#{verVentaMB.venta.descuento}" />
+
+                        <p:outputLabel value="Total:" />
+                        <p:outputLabel value="#{verVentaMB.venta.total}" />
+                    </p:panelGrid>
+
+                    <p:spacer height="30px"/>
+
+                    <p:commandButton action="gestionarVenta" value="Regresar" style="margin:  0 auto" />
+
+                </p:panel>
+
+
+
+            </h:form>
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

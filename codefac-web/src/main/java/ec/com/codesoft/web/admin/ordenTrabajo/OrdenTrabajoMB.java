@@ -101,10 +101,13 @@ public class OrdenTrabajoMB implements Serializable {
     public void grabarOrdenTrabajo() {
 
         //Valida que existan detalles en la orden de trabajo
-        if (ordenTrabajo.getDetalleOrdenTrabajoList().size() == 0) {
+        if (ordenTrabajo.getDetalleOrdenTrabajoList().size() == 0) 
+        {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No existe items para grabar");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
-        } else {
+        } 
+        else 
+        {
             Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);
 
             ordenTrabajo.setUsuEmpleado(empleado);
@@ -113,7 +116,7 @@ public class OrdenTrabajoMB implements Serializable {
             ordenTrabajoServicio.grabar(ordenTrabajo);
             System.out.println("orden grabado ...");
             
-            //dlgGrabado
+            //dlgGrabados
             RequestContext.getCurrentInstance().execute("PF('dlgGrabado').show()");
             //generaPdf();
         }
@@ -197,6 +200,14 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
     }
 
+    public void eliminar(DetalleOrdenTrabajo detalle)
+    {
+        this.ordenTrabajo.getDetalleOrdenTrabajoList().remove(detalle);
+    }
+    
+    /**
+     * Verifica que exista un cliente en la base de datos
+     */
     public void validarCliente() {
         System.out.println("Validando cliente ...");
         System.out.println(ordenTrabajo.getCedulaRuc().getCedulaRuc());

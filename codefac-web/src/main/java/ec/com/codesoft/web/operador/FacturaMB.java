@@ -622,7 +622,8 @@ public class FacturaMB {
         //clientesLista = clienteServicio.obtenerTodos();
     }
 
-    public void onRowUnSelectCliente(SelectEvent event) {
+    public void onRowUnSelectCliente(SelectEvent event) 
+    {
         System.out.println("deseleccionando ...");
     }
 

@@ -53,6 +53,10 @@ and open the template in the editor.
                     <p:outputLabel value="#{catalogo.marca}"/>
                 </p:column>
 
+                <p:column headerText="Costo">
+                    <p:outputLabel value="#{catalogo.costo}"/>
+                </p:column>
+
                 <p:column headerText="Precio" style="width: 50px" >
                     <p:outputLabel value="#{calculosMB.redondeoSuperior(catalogo.precio)}"/>
                 </p:column>
@@ -142,6 +146,9 @@ and open the template in the editor.
                     <p:outputLabel value="Descuento Mayorista: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.descuentoMayorista}"/>
 
+                    <p:outputLabel value="Costo Referencial: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.costo}"/>
+
                     <p:outputLabel value="Ubicacion: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.ubicacion}"/>
 
@@ -209,6 +216,9 @@ and open the template in the editor.
 
                     <p:outputLabel value="Descuento Mayorista: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.descuentoMayorista}"/>
+
+                    <p:outputLabel value="Costo Referencial: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.costo}" style="width: 70px" />
 
                     <p:outputLabel value="Ubicacion: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>

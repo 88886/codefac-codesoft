@@ -5,14 +5,23 @@
  */
 package ec.com.codesoft.web.admin.ordenTrabajo;
 
+import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.modelo.servicios.OrdenTrabajoServicio;
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
+import ec.com.codesoft.web.reportes.ordenTrabajo.OrdenTrabajoDetalleReporte;
+import ec.com.codesoft.web.reportes.ordenTrabajo.OrdenTrabajoReporte;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -29,6 +38,10 @@ public class GestionarOrdenTrabajoMB implements Serializable
     private List<OrdenTrabajo> ordenTrabajoList;
     private List<OrdenTrabajo> ordenTrabajoFiltro;
     
+    private OrdenTrabajo ordenTrabajo;
+    
+    @EJB
+    private SistemaServicio sistemaServicio;
     
     @PostConstruct
     public void postCostruct()
@@ -38,7 +51,44 @@ public class GestionarOrdenTrabajoMB implements Serializable
     
     public void imprimir(OrdenTrabajo ordenTrabajo)
     {
-        
+        this.ordenTrabajo=ordenTrabajo;
+        generaPdf();
+    }
+    
+    public void generaPdf() {
+        System.out.println("generando pdf..");
+        OrdenTrabajoReporte orden = new OrdenTrabajoReporte(sistemaServicio.getConfiguracion().getPathreportes());
+        orden.setAbono(ordenTrabajo.getAdelanto().toString());
+        orden.setCedula(ordenTrabajo.getCedulaRuc().getCedulaRuc());
+        SimpleDateFormat formateador = new SimpleDateFormat("EEEE d MMMM HH:mm:ss");
+        orden.setFechaRecepcion(formateador.format(ordenTrabajo.getFechaEntrega()).toString());
+        orden.setMonto(ordenTrabajo.getTotal().toString());
+        orden.setNombre(ordenTrabajo.getCedulaRuc().getNombre());
+        orden.setObservacion(ordenTrabajo.getObservacion().toString());
+        orden.setOrdenTrabajo(ordenTrabajo.getIdOrdenTrabajo().toString());
+        orden.setSaldo(ordenTrabajo.getTotal().subtract(ordenTrabajo.getAdelanto()).toString());
+        orden.setTelefono(ordenTrabajo.getCedulaRuc().getTelefono());
+
+        List<DetalleOrdenTrabajo> lista = ordenTrabajo.getDetalleOrdenTrabajoList();
+        for (DetalleOrdenTrabajo detalle : lista) {
+            OrdenTrabajoDetalleReporte detalleReporte = new OrdenTrabajoDetalleReporte();
+            detalleReporte.setDescripcion(detalle.getDescripcion());
+            detalleReporte.setNombre(detalle.getEquipo());
+            detalleReporte.setPrecio(detalle.getPrecio().toString());
+            detalleReporte.setProblema(detalle.getProblema());
+            detalleReporte.setTrabajoRealizar(detalle.getTrabajoRealizar());
+            orden.getDetalles().add(detalleReporte);
+        }
+
+        try {
+            orden.exportarPDF();
+            System.out.println("pdf generado");
+        } catch (JRException ex) {
+            Logger.getLogger(OrdenTrabajoMB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(OrdenTrabajoMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     
     public void anular(OrdenTrabajo orden)
@@ -60,6 +110,14 @@ public class GestionarOrdenTrabajoMB implements Serializable
 
     public void setOrdenTrabajoFiltro(List<OrdenTrabajo> ordenTrabajoFiltro) {
         this.ordenTrabajoFiltro = ordenTrabajoFiltro;
+    }
+
+    public OrdenTrabajo getOrdenTrabajo() {
+        return ordenTrabajo;
+    }
+
+    public void setOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
+        this.ordenTrabajo = ordenTrabajo;
     }
     
     

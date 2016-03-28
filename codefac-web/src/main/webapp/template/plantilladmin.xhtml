@@ -13,11 +13,13 @@ and open the template in the editor.
     <h:head>
         <title>Codefac</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        
         <h:outputStylesheet library="css" name="estiloUsuario.css"/>
     </h:head>
     <h:body>
         <div id="cabecera">
             <p:graphicImage library="img" name="bannerCodefacPeque.jpg"  styleClass="imagenCabecera" />
+            <p:graphicImage library="img" name="bannerAdminstrador.png"  styleClass="imagenCabecera2" />
         </div >
         <div id="divSesionUsuario">
             <span>
@@ -31,14 +33,14 @@ and open the template in the editor.
             <h:form id="menu" >
                 <p:growl id="messages"/>
                 <p:menubar>
-                   
+
 
                     <p:submenu label="Clientes" icon="ui-icon-pencil">
                         <p:menuitem value="Gestionar" outcome="cliente"  icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Buscar" outcome="buscarCliente" icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Reportes" outcome="reporteCliente" icon="ui-icon-arrowreturnthick-1-e" />
                     </p:submenu>
-                    
+
                     <p:submenu label="Distribuidores" icon="ui-icon-pencil">
                         <p:menuitem value="Gestionar" outcome="distribuidor"  icon="ui-icon-arrowreturnthick-1-w" />
                     </p:submenu>
@@ -53,14 +55,20 @@ and open the template in the editor.
                     <p:submenu label="Compras" icon="ui-icon-pencil">
                         <p:menuitem value="Nuevo" outcome="compraAdmin"  icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Gestionar" outcome="gestionarCompra"  icon="ui-icon-arrowreturnthick-1-w" />
-                        
-                        
+
+
                     </p:submenu>
 
                     <p:submenu label="Ventas" icon="ui-icon-pencil">
                         <p:menuitem value="Nuevo" outcome="facturaAdmin"  icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Devolucion" outcome="notaCredito"  icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Gestionar" outcome="gestionarVenta"  icon="ui-icon-arrowreturnthick-1-w" />
+                    </p:submenu>
+
+                    <p:submenu label="Orden Trabajo" icon="ui-icon-pencil">
+                        <p:menuitem value="Nuevo" outcome="ordenTrabajo"  icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Gestionar" outcome="gestionarOrdenTrabajo"  icon="ui-icon-arrowreturnthick-1-w" />
+                        
                     </p:submenu>
 
                     <p:submenu label="Proforma" icon="ui-icon-pencil">

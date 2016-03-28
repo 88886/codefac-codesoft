@@ -337,6 +337,7 @@ public class comprarMB implements Serializable {
         catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
         if (catalogo != null) {
             System.out.println("El producto existe");
+            costoDetalle=catalogo.getCosto();
         } else {
             System.out.println("El producto no existe");
             RequestContext.getCurrentInstance().execute("PF('confirmarProducto').show()");
