@@ -35,7 +35,7 @@ and open the template in the editor.
                         </p:column>
 
                         <p:column filterBy="#{orden.cedulaRuc.nombre}" headerText="Nombres" style="width: 120px;" filterMatchMode="contains" >
-                            <p:outputLabel value="#{orden.cedulaRuc.nombre}"/>
+                            <p:outputLabel escape="false" value="#{orden.cedulaRuc.nombre}"/>
                         </p:column>
 
 
@@ -55,7 +55,7 @@ and open the template in the editor.
                             <p:outputLabel value="#{orden.estado}"/>
                         </p:column>
 
-                        <p:column headerText="Detalle">
+                        <p:column headerText="Détalle">
                             <p:outputLabel value="#{orden.toStringDetalle()}"/>
                         </p:column>
 

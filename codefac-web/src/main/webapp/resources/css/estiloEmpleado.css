@@ -155,3 +155,7 @@ h1 , h2
    background-image: none;
    background-color: white;
 }
+
+.top-aligned-columns td{
+    vertical-align: top;
+}

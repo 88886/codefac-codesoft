@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.model;
 
+import ec.com.codesoft.util.TiempoUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -48,6 +49,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "OrdenTrabajo.findByDiagnostico", query = "SELECT o FROM OrdenTrabajo o WHERE o.diagnostico = :diagnostico"),
     @NamedQuery(name = "OrdenTrabajo.findByDescuento", query = "SELECT o FROM OrdenTrabajo o WHERE o.descuento = :descuento")})
 public class OrdenTrabajo implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,7 +78,7 @@ public class OrdenTrabajo implements Serializable {
     private String diagnostico;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    @OneToMany(mappedBy = "idOrdenTrabajo",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "idOrdenTrabajo", cascade = CascadeType.ALL)
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
@@ -87,10 +89,9 @@ public class OrdenTrabajo implements Serializable {
     @JoinColumn(name = "USU_EMPLEADO", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario usuEmpleado;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenTrabajo")
     private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
-
 
     public OrdenTrabajo() {
     }
@@ -98,20 +99,57 @@ public class OrdenTrabajo implements Serializable {
     public OrdenTrabajo(Integer idOrdenTrabajo) {
         this.idOrdenTrabajo = idOrdenTrabajo;
     }
-    
+
     ///////////////METODOS AGREGADOS////////////////////////////////////
-    public String toStringDetalle()
-    {
-        String texto="";
-        for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) 
-        {
-            texto+=detalle.getProblema()+",";
+    public String toStringDetalle() {
+        String texto = "";
+        for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) {
+            texto += detalle.getProblema() + ",";
         }
         return texto;
     }
-    
-    /////////////////////////METODOS GET AND SET ///////////////////////
 
+    /**
+     * Calcula los dias entre la fecha de ingreso y de entrga
+     * @return 
+     */
+    public  int diferenciaDiasEntrega() 
+    {
+        return TiempoUtil.diferenciaEnDias(fechaEntrega,new Date());
+    }
+    
+    /**
+     * Tiempo de entrega
+     * @return 
+     */
+    public String tiempoEntrega()
+    {
+        Date fechaActual=new Date();
+        String tiempo="";
+        int dias= TiempoUtil.diferenciaEnDias(fechaEntrega,fechaActual);
+        int horas=TiempoUtil.diferenciaEnHoras(fechaEntrega,fechaActual);
+        int minutos=TiempoUtil.diferenciaEnMinutos(fechaEntrega, fechaActual);
+        
+        int horasRestantes=horas-dias*24;
+        int minutosRestantes=minutos-horas*60;
+        
+        //seteando a valores positivos
+        dias=Math.abs(dias);
+        horasRestantes=Math.abs(horasRestantes);
+        minutosRestantes=Math.abs(minutosRestantes);
+        
+        //if(dias==0)
+       // {
+       //     return "hoy ,"+horasRestantes+" horas " + minutosRestantes+" min";
+       // }
+        
+        return dias+" días "+horasRestantes+" horas " + minutosRestantes+" min";
+        
+    }
+    
+
+
+    /////////////////////////METODOS GET AND SET ///////////////////////
     public Integer getIdOrdenTrabajo() {
         return idOrdenTrabajo;
     }
@@ -225,8 +263,6 @@ public class OrdenTrabajo implements Serializable {
         this.detalleVentaOrdenTrabajoList = detalleVentaOrdenTrabajoList;
     }
 
-    
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -251,5 +287,5 @@ public class OrdenTrabajo implements Serializable {
     public String toString() {
         return "modelo.OrdenTrabajo[ idOrdenTrabajo=" + idOrdenTrabajo + " ]";
     }
-    
+
 }

@@ -26,86 +26,95 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @LocalBean
-public class OrdenTrabajoServicio 
-{
+public class OrdenTrabajoServicio {
+
     @EJB
-    private OrdenTrabajoFacade  ordenTrabajoFacade;
-    
+    private OrdenTrabajoFacade ordenTrabajoFacade;
+
     @EJB
     private DetalleOrdenTrabajoFacade detalleOrdenTrabajoFacade;
-    
+
     @EJB
     private UsuarioFacade usuarioFacade;
-    
+
     @EJB
     private ServiciosFacade servicios;
-    
+
     @EJB
     private CategoriaTrabajoFacade categoriaTrabajoFacade;
-    
-    
-    
-    public void grabar(OrdenTrabajo ordenTrabajo)
-    {
+
+    public void grabar(OrdenTrabajo ordenTrabajo) {
         ordenTrabajo.setEstado("revision");
-                
+
         ordenTrabajoFacade.create(ordenTrabajo);
-        
-        Integer id=ordenTrabajo.getIdOrdenTrabajo();
-        
-        List<DetalleOrdenTrabajo> lista=ordenTrabajo.getDetalleOrdenTrabajoList();
-        
-        for (DetalleOrdenTrabajo detalle : lista) 
-        {
+
+        Integer id = ordenTrabajo.getIdOrdenTrabajo();
+
+        List<DetalleOrdenTrabajo> lista = ordenTrabajo.getDetalleOrdenTrabajoList();
+
+        for (DetalleOrdenTrabajo detalle : lista) {
             detalle.setIdOrdenTrabajo(ordenTrabajo);
             detalleOrdenTrabajoFacade.edit(detalle);
         }
     }
-    
+
     /**
      * Obtiene todos los usuarios con el perfil de empleados
      */
-    public List<Usuario> obtenerEmpleados()
-    {
-        List<Usuario> empleados=usuarioFacade.getUsuariosPorPerfil("empleado");
+    public List<Usuario> obtenerEmpleados() {
+        List<Usuario> empleados = usuarioFacade.getUsuariosPorPerfil("empleado");
         return empleados;
     }
-    
-    
+
     /**
      * Metodo para anular la orden de trabajo
      */
-    public void anularOrdenTrabajo(OrdenTrabajo orden)
-    {
+    public void anularOrdenTrabajo(OrdenTrabajo orden) {
         orden.setEstado("anulado");
         ordenTrabajoFacade.edit(orden);
     }
-    
-        /**
-     * Obtener el usuario por el nick 
-     * @return 
+
+    /**
+     * Obtener el usuario por el nick
+     *
+     * @return
      */
-    public Usuario getUsuarioByNick(String nick)
-    {
+    public Usuario getUsuarioByNick(String nick) {
         return usuarioFacade.find(nick);
     }
-    
-    public List<Servicios> obtenerServicios()
-    {
+
+    public List<Servicios> obtenerServicios() {
         return servicios.findAll();
     }
-    
-    public Servicios obtenerServicioPorCodigo(Integer codigo)
-    {
+
+    public Servicios obtenerServicioPorCodigo(Integer codigo) {
         return servicios.find(codigo);
     }
-    
-    public CategoriaTrabajo obtenerCategoriaPorCodigo(Integer codigo)
-    {
+
+    public CategoriaTrabajo obtenerCategoriaPorCodigo(Integer codigo) {
         return categoriaTrabajoFacade.find(codigo);
     }
-    
-    public List<OrdenTrabajo> obtenerOrdenesTrabajo(){
+
+    public List<OrdenTrabajo> obtenerOrdenesTrabajo() {
         return ordenTrabajoFacade.findAll();
     }
+
+    /**
+     * Obtiene una lista de las ordenes de trabajo ordenadas por fecha de
+     * ingreso
+     *
+     * @return
+     */
+    public List<OrdenTrabajo> obtenerPorFechaIngreso(String orden) {
+        return ordenTrabajoFacade.getByDateEntry(orden);
+    }
+
+    public List<OrdenTrabajo> obtenerPorFechaSalida(String orden) {
+        return ordenTrabajoFacade.getByDateDeparture(orden);
+    }
+
+    public List<OrdenTrabajo> obtenerPorPrecio(String orden) {
+        return ordenTrabajoFacade.getByPrice(orden);
+    }
+
 }

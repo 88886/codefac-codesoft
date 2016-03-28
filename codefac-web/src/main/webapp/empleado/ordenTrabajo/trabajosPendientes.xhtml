@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaEmpleado.xhtml">
+
+
+    <ui:define name="contenido" >
+        <p:panel header="Trabajos Pendientes">
+
+            <h:form id="formPrincipal">                
+                <p:accordionPanel >
+                    <!-- panel que contiene los filtros aplicados a las ordenes de trabajo-->
+                    <p:tab title="filtros">
+                        <p:panelGrid columns="4" styleClass="panelNoBorder" >
+                            <p:outputLabel value="Ordenar por:"/>
+
+                            <p:selectOneMenu value="#{trabajosPendientesMB.tipoFiltro}"  style="width:200px">
+                                <f:selectItem itemLabel="Fecha de ingreso" itemValue="ingreso" />
+                                <f:selectItem itemLabel="Fecha de entrega" itemValue="entrega" />                                
+                                <f:selectItem itemLabel="Precio" itemValue="precio" />
+                                <p:ajax  event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
+                            </p:selectOneMenu>
+
+                            <p:selectOneMenu value="#{trabajosPendientesMB.tipoOrden}"  style="width:200px">
+                                <f:selectItem itemLabel="Menor al Mayor" itemValue="ASC" />
+                                <f:selectItem itemLabel="Mayor al Menor" itemValue="DESC" />
+                                <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
+                            </p:selectOneMenu>
+
+                            <p:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" />
+                        </p:panelGrid>
+                        <p:separator style="background-color: green;background-image: none" />
+                    </p:tab>
+                </p:accordionPanel>
+
+                <!-- Listado de las ordenes de trabajo -->
+                <ui:repeat id="repeatOrdenTrabajo" var="ordenTrabajo" value="#{trabajosPendientesMB.ordenTrabajoList}" >
+                    <p:panelGrid columns="4" styleClass="panelNoBorder top-aligned-columns" >
+
+
+                        <p:commandButton value="REPARAR" style="height: 100px" />                    
+                        <p:panel >
+                            <p:panelGrid columns="2" style="width: 300px">
+                                <p:outputLabel value="Orden No:"/>
+                                <p:outputLabel value="#{ordenTrabajo.idOrdenTrabajo}" style="font-weight: bold" />
+
+                                <p:outputLabel value="Cedula:"/>
+                                <p:outputLabel value="#{ordenTrabajo.cedulaRuc.cedulaRuc}" style="font-weight: bold" />
+
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{ordenTrabajo.cedulaRuc.nombre}" style="font-weight: bold" />
+
+                                <p:outputLabel value="Fecha Ingreso:"/>
+                                <p:outputLabel value="#{ordenTrabajo.fechaEmision}" style="font-weight: bold" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </p:outputLabel>
+
+                                <p:outputLabel value="Fecha Entrega:"/>
+                                <p:outputLabel value="#{ordenTrabajo.fechaEntrega}" style="font-weight: bold" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </p:outputLabel>
+
+                                <p:outputLabel value="Precio:"/>
+                                <p:outputLabel value="#{ordenTrabajo.total}" style="font-weight: bold" />
+
+                                
+                            </p:panelGrid>
+
+                            
+                            <p:panel style="background-image: none;background-color:#{ordenTrabajo.diferenciaDiasEntrega() == 0?'darkorange':ordenTrabajo.diferenciaDiasEntrega() > 0?'darkcyan':'red'}">
+                                <p:outputLabel value="#{ordenTrabajo.diferenciaDiasEntrega() >= 0 ? 'Tiempo Entrega:: ':'Tiempo Atraso: '}" style="color: white"/>
+                                <p:outputLabel value="#{ordenTrabajo.tiempoEntrega()}" style="font-weight: bold;color: white" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </p:outputLabel>
+                            </p:panel>
+                            
+                        </p:panel>
+                        <p:dataTable 
+                            value="#{ordenTrabajo.detalleOrdenTrabajoList}"
+                            var="detalle"
+                            >
+
+                            <p:column headerText="Equipo">
+                                <p:outputLabel value="#{detalle.equipo}" />
+                            </p:column>
+
+                            <p:column headerText="Descripcion">
+                                <p:outputLabel value="#{detalle.descripcion}" />
+                            </p:column>
+
+                            <p:column headerText="Problema">
+                                <p:outputLabel value="#{detalle.problema}" />
+                            </p:column>
+
+                            <p:column headerText="Trabajo Relizar">
+                                <p:outputLabel value="#{detalle.trabajoRealizar}" />
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:panelGrid>
+                    <p:separator />
+                </ui:repeat>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>
