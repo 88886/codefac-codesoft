@@ -68,6 +68,11 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>crearUsuario</from-outcome>
+            <to-view-id>/dialogs/Usuario/nuevoUsuario.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>crearCatalogoProducto</from-outcome>
             <to-view-id>/operador/crearCatalogoProducto.xhtml</to-view-id>
         </navigation-case>

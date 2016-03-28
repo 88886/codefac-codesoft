@@ -8,6 +8,7 @@ package ec.com.codesoft.model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -89,7 +90,7 @@ public class Usuario implements Serializable {
     private List<DetalleProductoGeneral> detalleProductoGeneralList;
     @OneToMany(mappedBy = "nick")
     private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
-    @OneToMany(mappedBy = "nick")
+    @OneToMany(mappedBy = "nick",cascade = CascadeType.ALL)
     private List<Perfil> perfilList;
     @OneToMany(mappedBy = "nick")
     private List<DetallesServicio> detallesServicioList;
@@ -310,6 +311,18 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "modelo.Usuario[ nick=" + nick + " ]";
+    }
+    
+    
+    //obtener Perfiles
+    
+    public String toStringPerfiles(){
+         String texto="";
+        for (Perfil perfil : perfilList) 
+        {
+            texto+=perfil.getTipo()+",";
+        }
+        return texto;
     }
 
 }

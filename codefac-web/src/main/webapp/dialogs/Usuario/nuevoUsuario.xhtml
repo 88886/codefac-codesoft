@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaDialog.xhtml">
+
+    <ui:define name="piePagina" >
+        <p:outputLabel value="Nuevo Usuario"/>
+    </ui:define>
+
+    <ui:define name="contenido" >
+        <h:form>
+            <p:panel style="text-align: center;" styleClass="menuPanel" >
+                <p:panelGrid columns="2" style="margin: 0 auto;text-align: left" styleClass="panelNoBorder">
+
+                    <p:outputLabel for="nombres" value="Nombre "/>
+                    <p:inputText id="nombres" value="#{crearUsuario.usuario.nombres}" />
+
+                    <p:outputLabel for="cedula" value="Cédula "/>
+                    <p:inputText id="cedula" value="#{crearUsuario.usuario.cedula}" />
+
+                    <p:outputLabel for="celular" value="Celular "/>
+                    <p:inputText id="celular" value="#{crearUsuario.usuario.celular}" />
+
+                    <p:outputLabel for="direccion" value="Dirección "/>
+                    <p:inputText id="direccion" value="#{crearUsuario.usuario.direccion}" />
+
+                    <p:outputLabel for="email" value="Mail "/>
+                    <p:inputText id="email" value="#{crearUsuario.usuario.email}" />
+
+                    <p:outputLabel for="cargo" value="Cargo "/>
+                    <p:inputText id="cargo" value="#{crearUsuario.usuario.cargo}" />
+
+                    <p:outputLabel for="nick" value="Nick: "/>
+                    <p:inputText id="nick" value="#{crearUsuario.usuario.nick}"/>
+                    
+
+                </p:panelGrid>
+
+                <p:spacer height="15px"/>
+
+                <div>
+                    <p:commandButton actionListener="#{crearUsuario.guardar()}" value="Grabar"/>
+                    <p:commandButton value="Cancelar" actionListener="#{crearUsuario.cancelar()}" ajax="false"/>
+                </div>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+
+</ui:composition>

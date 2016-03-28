@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <div style="text-align:center">
+            <h:form id="formPrincipal">
+                <p:panel id="panelUsuarios" header="Administrar Usuarios" style="width: 70%;text-align: left;margin: 0 auto;">
+
+                    <p:dataTable var="usuario" value="#{usuarioMB.usuarios}"
+                                 rows="10"
+                                 id="tablaUsuarios"
+                                 selectionMode="single" 
+                                 scrollable="true" 
+                                 scrollHeight="200"  
+                                 rowKey="#{usuario.nick}"
+                                 selection="#{usuarioMB.usuarioSeleccionado}">
+
+
+                        <f:facet name="header" >                               
+                            <p:commandButton id="btnNuevoCliente" process="tablaUsuarios" icon="ui-icon-plus" actionListener="#{usuarioMB.crearUsuario()}" style="width: 20px;height: 20px"/>  
+                        </f:facet>
+
+                        <p:column headerText="Nick" filterBy="#{usuario.nick}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                            <h:outputText value="#{usuario.nick}" />
+                        </p:column>
+
+                        <p:column headerText="Cédula" filterBy="#{usuario.cedula}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                            <h:outputText value="#{usuario.cedula}" />
+                        </p:column>
+                        <p:column headerText="Nombre" filterBy="#{usuario.nombres}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                            <h:outputText value="#{catalogo.nombre}" />
+                        </p:column>
+                        <p:column headerText="Cargo">
+                            <h:outputText value="#{usuario.cargo}" />
+                        </p:column>
+
+                        <p:column headerText="Perfiles">
+                            <h:outputText value="#{usuario.toStringPerfiles()}" />
+                        </p:column>
+                    </p:dataTable>
+
+                </p:panel>
+            </h:form>
+        </div>
+
+    </ui:define>
+
+
+</ui:composition>

@@ -115,4 +115,6 @@ public class Perfil implements Serializable {
         return "modelo.Perfil[ idPerfil=" + idPerfil + " ]";
     }
     
+   
+    
 }
