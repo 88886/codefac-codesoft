@@ -41,6 +41,11 @@ and open the template in the editor.
                     <p:outputLabel value="#{catalogo.codigoProducto}"/>
                 </p:column>
 
+                <p:column headerText="Codigo Distribuidor" filterBy="#{catalogo.codigoDistribuidor}" filterMatchMode="contains" style="width: 50px">
+                    <p:outputLabel value="#{catalogo.codigoDistribuidor}"/>
+                </p:column>
+
+
                 <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{gestionProductoMB.filterByName}" filterMatchMode="contains">
                     <p:outputLabel value="#{catalogo.nombre}"/>
                 </p:column>
@@ -53,8 +58,13 @@ and open the template in the editor.
                     <p:outputLabel value="#{catalogo.marca}"/>
                 </p:column>
 
-                <p:column headerText="Costo">
+                <p:column headerText="Costo" style="width: 100px">
                     <p:outputLabel value="#{catalogo.costo}"/>
+
+                </p:column>
+
+                <p:column style="width: 50px" >
+                    <p:commandButton icon="ui-icon-zoomin" actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" update=":formDialogProductoDistri" />
                 </p:column>
 
                 <p:column headerText="Precio" style="width: 50px" >
@@ -107,6 +117,9 @@ and open the template in the editor.
                     <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalagoProducto.codigoProducto}" required="">
                         <p:ajax event="blur" listener="#{gestionProductoMB.verificarExisteCatalogoProducto()}"  />
                     </p:inputText>
+
+                    <p:outputLabel value="Codigo Distribuidor: "/>
+                    <p:inputText value="#{gestionProductoMB.catalagoProducto.codigoDistribuidor}"/>
 
                     <p:outputLabel value="Nombre: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.nombre}"/>
@@ -179,6 +192,9 @@ and open the template in the editor.
                     <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
                     <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalogoSeleccionado.codigoProducto}" required=""/>
 
+                    <p:outputLabel value="Codigo Distribuidor: "/>
+                    <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.codigoDistribuidor}"/>
+
                     <p:outputLabel value="Nombre: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.nombre}"/>
 
@@ -241,6 +257,36 @@ and open the template in the editor.
                 </p:panelGrid>
             </h:form>
         </p:dialog>
+
+        <!-- Dialogo para mostrar los precios por distribuidor-->
+        <p:dialog id="idDialogProductoDistri" width="400px" modal="true" header="Precios por distribuidor" widgetVar="dialogProductoDistri" showEffect="explode" hideEffect="explode" >
+            <h:form id="formDialogProductoDistri">
+                <p:dataTable 
+                    value="#{gestionProductoMB.preciosProveedor}"
+                    var="producto"
+                    >
+
+                    <p:column headerText="distribuidor">
+                        <p:outputLabel value="#{producto.codigoCompra.ruc.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="precio">
+                        <p:outputLabel value="#{producto.costoIndividual}" />
+                    </p:column>
+
+                    <p:column headerText="Ultima Compra">
+                        <p:outputLabel value="#{producto.codigoCompra.fecha}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                        </p:outputLabel>
+                    </p:column>
+
+
+                </p:dataTable>
+            </h:form>
+
+        </p:dialog>
+
+
 
     </ui:define>
 </ui:composition>

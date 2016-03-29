@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.operador;
 
 import ec.com.codesoft.model.CatalagoProducto;
+import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.web.util.CalculosMB;
 import java.io.Serializable;
@@ -45,6 +46,8 @@ public class GestionProductoMB implements Serializable {
      */
     private List<CatalagoProducto> catalagoProductosFiltrados;
 
+    private List<ProductoGeneralCompra> preciosProveedor;
+    
     /**
      * Variable para poder crear un nuevo catalago
      */
@@ -265,6 +268,13 @@ public class GestionProductoMB implements Serializable {
             return false;
         }
     }
+    
+    public void mostrarPreciosDistribuidor(CatalagoProducto catalogo)
+    {
+         RequestContext.getCurrentInstance().execute("PF('dialogProductoDistri').show()");
+         preciosProveedor=catalogoServicio.listaPreciosProductosGCompra(catalogo.getCodigoProducto());
+         System.out.println("tam: "+preciosProveedor.size());
+    }
 
     //////////////////////METODOS GET Y SET ///////////////////
     public List<CatalagoProducto> getCatalagoProductos() {
@@ -321,6 +331,14 @@ public class GestionProductoMB implements Serializable {
 
     public void setCalculosMB(CalculosMB calculosMB) {
         this.calculosMB = calculosMB;
+    }
+
+    public List<ProductoGeneralCompra> getPreciosProveedor() {
+        return preciosProveedor;
+    }
+
+    public void setPreciosProveedor(List<ProductoGeneralCompra> preciosProveedor) {
+        this.preciosProveedor = preciosProveedor;
     }
     
     

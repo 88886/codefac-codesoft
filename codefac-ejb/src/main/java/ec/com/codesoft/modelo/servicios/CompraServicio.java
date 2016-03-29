@@ -150,6 +150,15 @@ public class CompraServicio {
     public void registrarProductoEspecifico(ProductoIndividualCompra productoEspecifico) {
 
         productoEspeFacade.create(productoEspecifico);
+    }    
+    
+    /**
+     * Obtiene las productos generales de las ultimas compras
+     * @return 
+     */
+    public List<ProductoGeneralCompra> getUltimosProductosComprados()
+    {
+        return productoGFacade.listaUltimosCostosProductoGeneral();
     }
 
 }

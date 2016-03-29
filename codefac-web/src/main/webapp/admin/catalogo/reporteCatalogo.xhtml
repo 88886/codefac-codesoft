@@ -69,7 +69,7 @@ and open the template in the editor.
                     />
                 <br/>
                 <p:spacer width="20px"/>
-                
+
                 <div style="text-align: center">
                     <h:commandLink>
                         <p:graphicImage height="100px" width="100px" name="/img/iconos/excel_icono.png" />
@@ -83,6 +83,18 @@ and open the template in the editor.
                 </div>
 
 
+            </p:fieldset>
+
+            <p:fieldset legend="Reporte Producto por Distribuidor" style="margin-bottom:20px">
+                <h:outputText
+                    value="En el siguiente reportes muestra un listado de los costos de los productos agrupados por distribuidor" 
+                    />
+
+                <div style="text-align: center">
+                    <h:commandLink actionListener="#{reporteCatalogoMB.reporteProductoPorDistribuidor()}" >
+                        <p:graphicImage height="100px" width="100px" name="/img/iconos/pdf_icono.png" />
+                    </h:commandLink>
+                </div>
             </p:fieldset>
         </h:form>
     </ui:define>

@@ -9,6 +9,7 @@ import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.modelo.facade.CatalagoProductoFacade;
+import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
 import java.util.List;
 import javax.ejb.EJB;
@@ -25,6 +26,9 @@ import javax.ejb.TransactionAttributeType;
 @Stateless
 public class CatalogoServicio {
 
+    @EJB
+    private ProductoGeneralCompraFacade productoGCFacade;
+    
     @EJB
     private CatalagoProductoFacade catalogoFacade;
 
@@ -90,6 +94,15 @@ public class CatalogoServicio {
         {
             return true;
         }
+    }
+    
+    /**
+     * Obtiene un listado de los productos generales por cada distribuidor
+     * @return 
+     */
+    public List<ProductoGeneralCompra> listaPreciosProductosGCompra(String codigo)
+    {
+        return productoGCFacade.listaCostosProductoGeneral(codigo);
     }
 
 }

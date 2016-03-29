@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -34,13 +33,14 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Compra.findAll", query = "SELECT c FROM Compra c")})
 public class Compra implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODIGO_COMPRA")
     private Integer codigoCompra;
-   // @Size(max = 64)
+    // @Size(max = 64)
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
     //@Size(max = 64)
@@ -52,13 +52,17 @@ public class Compra implements Serializable {
     @Column(name = "FECHA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    
+
+    @Column(name = "FECHA_INGRESO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaIngreso;
+
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    
+
     @Column(name = "IVA")
     private BigDecimal iva;
-    
+
     @JoinColumn(name = "RUC", referencedColumnName = "RUC")
     @ManyToOne
     private Distribuidor ruc;
@@ -68,32 +72,32 @@ public class Compra implements Serializable {
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
-    
-    @OneToMany(mappedBy = "codigoCompra",cascade = CascadeType.ALL,orphanRemoval = true)
+
+    @OneToMany(mappedBy = "codigoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductoIndividualCompra> productoIndividualCompraList;
-    
-    @OneToMany(mappedBy = "codigoCompra",cascade = CascadeType.ALL,orphanRemoval = true)
+
+    @OneToMany(mappedBy = "codigoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductoGeneralCompra> productoGeneralCompraList;
 
     public Compra() {
-      
+
     }
+
     public void llenarCampos() {
-        this.codigoCompra=0;
-        this.codigoDocumento="";
-        this.codigoPerido=null;
-        this.descuento=new BigDecimal("0.0f");
-        this.fecha=new Date();
-        this.nick=null;
-        this.ruc=null;
-        this.tipoDocumento="";
-        this.total=new BigDecimal("0.0f");
+        this.codigoCompra = 0;
+        this.codigoDocumento = "";
+        this.codigoPerido = null;
+        this.descuento = new BigDecimal("0.0f");
+        this.fecha = new Date();
+        this.nick = null;
+        this.ruc = null;
+        this.tipoDocumento = "";
+        this.total = new BigDecimal("0.0f");
     }
 
     public Compra(Integer codigoCompra) {
         this.codigoCompra = codigoCompra;
     }
-    
 
     public Integer getCodigoCompra() {
         return codigoCompra;
@@ -190,7 +194,14 @@ public class Compra implements Serializable {
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
-    
+
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
     
     
 
@@ -221,31 +232,29 @@ public class Compra implements Serializable {
 
     /**
      * Metodos aumentados
-     * @return 
+     *
+     * @return
      */
-    public String imprimirDetalle()
-    {
-        String cadena="";
-        
+    public String imprimirDetalle() {
+        String cadena = "";
+
         for (ProductoGeneralCompra producto : productoGeneralCompraList) {
-            cadena+=producto.getCodigoProducto().getNombre()+",";
+            cadena += producto.getCodigoProducto().getNombre() + ",";
         }
-        
+
         for (ProductoIndividualCompra producto : productoIndividualCompraList) {
-            cadena+=producto.getCodigoProducto().getNombre()+",";
+            cadena += producto.getCodigoProducto().getNombre() + ",";
         }
-        
+
         //verificar que existan detalles para recortar el ultimo digito
-        if(cadena.length()>3)
-        {
-            cadena=cadena.substring(0,cadena.length()-1);
+        if (cadena.length() > 3) {
+            cadena = cadena.substring(0, cadena.length() - 1);
         }
-        
+
         System.out.println(cadena.length());
-        
+
         return cadena;
-        
+
     }
-    
-    
+
 }

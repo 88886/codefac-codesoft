@@ -6,7 +6,9 @@
 package ec.com.codesoft.web.admin.catalogo;
 
 import ec.com.codesoft.model.CatalagoProducto;
+import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
+import ec.com.codesoft.modelo.servicios.CompraServicio;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,12 +30,33 @@ public class ReporteCatalogoMB implements Serializable
     
     private List<CatalagoProducto> listaCatalogo;
     
+    @EJB
+    private CompraServicio compraServicio;
+    
+    /**
+     * Variable para obtener el listado de las ultimas compras con los precios
+     */
+    private List<ProductoGeneralCompra> productoGeneralCompraList;
     
     
     @PostConstruct
     public void postConstruct()
     {
         listaCatalogo=catologoServicio.obtenerTodos();
+    }
+    
+    /**
+     * Genera el reporte de los productos por distribuidor
+     */
+    public void reporteProductoPorDistribuidor()
+    {
+        System.out.println("generando reporte por distribuidor");
+        productoGeneralCompraList=compraServicio.getUltimosProductosComprados();
+//        for (Object detalles : productoGeneralCompraList) 
+//        {
+//            System.out.println(detalles);
+        //}
+    //    System.out.println(productoGeneralCompraList.size());
     }
     
     /**

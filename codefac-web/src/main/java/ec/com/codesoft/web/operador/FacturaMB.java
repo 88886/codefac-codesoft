@@ -231,7 +231,7 @@ public class FacturaMB {
 
         //exclusivo para ordenes de Trabajo
         ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
-        detallesOrdenTrabajo=new ArrayList<DetalleVentaOrdenTrabajo>();
+        detallesOrdenTrabajo = new ArrayList<DetalleVentaOrdenTrabajo>();
 
     }
 
@@ -414,12 +414,16 @@ public class FacturaMB {
             subtotalRegistro = totalRegistro.multiply(ivaTotal);
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) {
-                iva = new BigDecimal("0.0");
-                //iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
-                System.out.println("total: " + total);
-                total = subtotal;
-                // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                iva = new BigDecimal("0.0");
+//                //iva = iva.setScale(2, BigDecimal.ROUND_UP);
+//                //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
+//                System.out.println("total: " + total);
+//                total = subtotal;
+//                // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                totalPagar = total;
+
+                iva = subtotal.multiply(ivaSubTotal);
+                total = subtotal.multiply(ivaTotal);
                 totalPagar = total;
             } else {
                 System.out.println("Else: " + total);
@@ -478,10 +482,13 @@ public class FacturaMB {
             subtotalRegistro = totalRegistro.multiply(ivaTotal);
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
-                iva = new BigDecimal("0.0");
-                // iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                total = subtotal;
-                // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                iva = new BigDecimal("0.0");
+//                // iva = iva.setScale(2, BigDecimal.ROUND_UP);
+//                total = subtotal;
+//                // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                totalPagar = total;
+                iva = subtotal.multiply(ivaSubTotal);
+                total = subtotal.multiply(ivaTotal);
                 totalPagar = total;
             } else {
                 iva = subtotal.multiply(ivaSubTotal);
@@ -622,8 +629,7 @@ public class FacturaMB {
         //clientesLista = clienteServicio.obtenerTodos();
     }
 
-    public void onRowUnSelectCliente(SelectEvent event) 
-    {
+    public void onRowUnSelectCliente(SelectEvent event) {
         System.out.println("deseleccionando ...");
     }
 
@@ -646,10 +652,13 @@ public class FacturaMB {
             subtotalRegistro = totalRegistro.multiply(ivaTotal);
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) {
-                iva = new BigDecimal("0.0");
-                //iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                total = subtotal;
+//                iva = new BigDecimal("0.0");
+//                //iva = iva.setScale(2, BigDecimal.ROUND_UP);
+//                total = subtotal;
                 // total = total.setScale(2, BigDecimal.ROUND_UP);
+                iva = subtotal.multiply(ivaSubTotal);
+                total = subtotal.multiply(ivaTotal);
+                // totalPagar = total;
             } else {
                 iva = subtotal.multiply(ivaSubTotal);
                 // iva = iva.setScale(2, BigDecimal.ROUND_UP);
@@ -687,10 +696,13 @@ public class FacturaMB {
                     subtotalRegistro = totalRegistro.multiply(ivaTotal);
                     subtotal = subtotal.add(totalRegistro);
                     if (tipoCliente.equals("C")) {
-                        iva = new BigDecimal("0.0");
-                        // iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                        total = subtotal;
-                        // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                        iva = new BigDecimal("0.0");
+//                        // iva = iva.setScale(2, BigDecimal.ROUND_UP);
+//                        total = subtotal;
+//                        // total = total.setScale(2, BigDecimal.ROUND_UP);
+                        iva = subtotal.multiply(ivaSubTotal);
+                        total = subtotal.multiply(ivaTotal);
+                        totalPagar = total;
                     } else {
                         iva = subtotal.multiply(ivaSubTotal);
                         //  iva = iva.setScale(2, BigDecimal.ROUND_UP);
@@ -841,16 +853,15 @@ public class FacturaMB {
                         subtotalRegistro = totalRegistro.multiply(ivaTotal);
                         subtotal = subtotal.add(totalRegistro);
                         if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
-                            iva = new BigDecimal("0.0");
-                            // iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                            total = subtotal;
-                            // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                            iva = new BigDecimal("0.0");
+//                            total = subtotal;
+//                            totalPagar = total;
+                            iva = subtotal.multiply(ivaSubTotal);
+                            total = subtotal.multiply(ivaTotal);
                             totalPagar = total;
                         } else {
                             iva = subtotal.multiply(ivaSubTotal);
-                            //  iva = iva.setScale(2, BigDecimal.ROUND_UP);
                             total = subtotal.multiply(ivaTotal);
-                            // total = total.setScale(2, BigDecimal.ROUND_UP);
                             totalPagar = total;
                         }
 
