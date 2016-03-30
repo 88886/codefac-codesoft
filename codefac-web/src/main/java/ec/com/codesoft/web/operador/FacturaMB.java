@@ -1376,34 +1376,34 @@ public class FacturaMB {
     }
 
     public void calcularDescuento() {
-//        BigDecimal descuentoPorcentaje = descuento.divide(new BigDecimal(100)).add(new BigDecimal(1));
-//        System.out.println("porcetaje " + descuentoPorcentaje);
-//        BigDecimal subTotalDescuento = subtotal.divide(descuentoPorcentaje, 2, BigDecimal.ROUND_FLOOR);
-//        System.out.println(subTotalDescuento);
-//
-//        // subTotalDescuento.setScale(2, BigDecimal.ROUND_UP);
-//        iva = subTotalDescuento.multiply(ivaSubTotal, MathContext.DECIMAL32);
-//        iva = iva.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
-//
-//        // iva.setScale(2, BigDecimal.ROUND_UP);
-//        total = subTotalDescuento.multiply(ivaTotal, MathContext.DECIMAL32);
-//        total = total.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
-//
-//        //total.setScale(2, BigDecimal.ROUND_UP);
-//        totalPagar = total;
-        if (descuento != null) {
-            if (descuento.equals("")) {
-                descuento=new BigDecimal("0.00");
-                cargarDetalles();
-            }
-        } else {
-            descuento=new BigDecimal("0.00");
-            cargarDetalles();
-        }
-        total = subtotal.subtract(descuento);
-        iva = subtotal.multiply(ivaSubTotal);
-        total = subtotal.multiply(ivaTotal);
+        BigDecimal descuentoPorcentaje = descuento.divide(new BigDecimal(100)).add(new BigDecimal(1));
+        System.out.println("porcetaje " + descuentoPorcentaje);
+        BigDecimal subTotalDescuento = subtotal.divide(descuentoPorcentaje, 2, BigDecimal.ROUND_FLOOR);
+        System.out.println(subTotalDescuento);
+
+        // subTotalDescuento.setScale(2, BigDecimal.ROUND_UP);
+        iva = subTotalDescuento.multiply(ivaSubTotal, MathContext.DECIMAL32);
+        iva = iva.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
+
+        // iva.setScale(2, BigDecimal.ROUND_UP);
+        total = subTotalDescuento.multiply(ivaTotal, MathContext.DECIMAL32);
+        total = total.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
+
+        //total.setScale(2, BigDecimal.ROUND_UP);
         totalPagar = total;
+//        if (descuento != null) {
+//            if (descuento.equals("")) {
+//                descuento=new BigDecimal("0.00");
+//                cargarDetalles();
+//            }
+//        } else {
+//            descuento=new BigDecimal("0.00");
+//            cargarDetalles();
+//        }
+//        total = subtotal.subtract(descuento);
+//        iva = subtotal.multiply(ivaSubTotal);
+//        total = subtotal.multiply(ivaTotal);
+//        totalPagar = total;
 
     }
 

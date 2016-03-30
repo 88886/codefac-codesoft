@@ -41,7 +41,7 @@ public class Cliente implements Serializable {
     @Size(max = 50)
     @Column(name = "APELLIDOS")
     private String apellidos;
-    @Size(max = 10)
+    @Size(max = 64)
     @Column(name = "TELEFONO")
     private String telefono;
     @Size(max = 50)
