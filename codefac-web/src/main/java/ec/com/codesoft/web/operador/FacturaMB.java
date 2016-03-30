@@ -139,6 +139,7 @@ public class FacturaMB {
     private Integer maxItemFactura;
     private Integer maxItemNota;
     private Integer maxItems;
+    private boolean mostrarDescuentoManual;
 
     //
     private BigDecimal descuentoManual;
@@ -174,7 +175,7 @@ public class FacturaMB {
     private OrdenTrabajoServicio ordenTrabajoServicio;
 
     //sesion 
-    @ManagedProperty(value = "#{SessionMB}")
+    @ManagedProperty(value = "#{sessionMB}")
     private SessionMB sesion;
 
     @PostConstruct
@@ -242,6 +243,17 @@ public class FacturaMB {
         //exclusivo para ordenes de Trabajo
         ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
         detallesOrdenTrabajo = new ArrayList<DetalleVentaOrdenTrabajo>();
+
+        //habilitarDEescuento Manual
+        System.out.println("Sesion" + sesion);
+//        System.out.println("Usuario Login "+sesion.getUsuarioLogin());
+//        System.out.println("PerfilBuscado "+ sesion.getPerfilBuscado().getTipo());
+//        
+        if (sesion.getPerfilBuscado().getTipo().equals("admin")) {
+            mostrarDescuentoManual = true;
+        } else {
+            mostrarDescuentoManual = false;
+        }
 
     }
 
@@ -371,6 +383,9 @@ public class FacturaMB {
                 System.out.println("Es igual el producto");
                 if (clienteEncontrado.getTipo().equals("Distribuidor")) {
                     if (detallesVentaRecibido.getEscogerDescuento().equals("Si")) {
+                        //poner si en los descuentos
+                        detallesVenta.get(i).setEscogerDescuento("Si");
+                        detallesVenta.get(i).setMostrarDescuentoManual(true);
                         for (int j = 0; j < detallesVenta.get(i).getDescuentos().size(); j++) {
                             if (detallesVenta.get(i).getDescuentos().get(j).getNombre().equals("dctoMayorista")) {
                                 //actualizar campos total-total pagar
@@ -385,12 +400,15 @@ public class FacturaMB {
                         }
 
                     } else {
+                        detallesVenta.get(i).setEscogerDescuento("No");
+                        detallesVenta.get(i).setMostrarDescuentoManual(false);
                         BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
                         totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoMayorista());
                         detallesVenta.get(i).setCosto(totalDetalleRegistro);
                         detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
                         detallesVenta.get(i).setValorDescuento(new BigDecimal("0.0"));
                         descuentoManual = new BigDecimal("0.00");
+
                     }
                 } else {
                     if (detallesVentaRecibido.getEscogerDescuento().equals("Si")) {
@@ -468,18 +486,18 @@ public class FacturaMB {
                 System.out.println("Es igual el producto");
                 if (clienteEncontrado.getTipo().equals("Distribuidor")) {
                     BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
-                    totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoMayorista().subtract(detallesVenta.get(i).getValorVerdaderoMayorista().multiply(descuentoManual.divide(new BigDecimal("100")))));//.setScale(2, BigDecimal.ROUND_UP);
+                    totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoMayorista().subtract(detallesVenta.get(i).getValorVerdaderoMayorista().multiply(detallesVenta.get(i).getValorDescuento().divide(new BigDecimal("100")))));//.setScale(2, BigDecimal.ROUND_UP);
                     detallesVenta.get(i).setCosto(totalDetalleRegistro);
                     detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
-                    detallesVenta.get(i).setValorDescuento(descuentoManual);
+                    detallesVenta.get(i).setValorDescuento(detallesVenta.get(i).getValorDescuento());
                     //campoDescuento que carga el valor
 
                 } else {
                     BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
-                    totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoPVP().subtract(detallesVenta.get(i).getValorVerdaderoPVP().multiply(descuentoManual.divide(new BigDecimal("100")))));//.setScale(2, BigDecimal.ROUND_UP);
+                    totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoPVP().subtract(detallesVenta.get(i).getValorVerdaderoPVP().multiply(detallesVenta.get(i).getValorDescuento().divide(new BigDecimal("100")))));//.setScale(2, BigDecimal.ROUND_UP);
                     detallesVenta.get(i).setCosto(totalDetalleRegistro);
                     detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
-                    detallesVenta.get(i).setValorDescuento(descuentoManual);
+                    detallesVenta.get(i).setValorDescuento(detallesVenta.get(i).getValorDescuento());
                 }
             }
         }
@@ -494,12 +512,14 @@ public class FacturaMB {
             subtotalRegistro = totalRegistro.multiply(ivaTotal);
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) {
-                iva = new BigDecimal("0.0");
-                //iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
-                System.out.println("total: " + total);
-                total = subtotal;
-                // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                iva = new BigDecimal("0.0");
+//                System.out.println("total: " + total);
+//                total = subtotal;
+//                totalPagar = total;
+                iva = subtotal.multiply(ivaSubTotal);
+                // iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                total = subtotal.multiply(ivaTotal);
+                //  total = total.setScale(2, BigDecimal.ROUND_UP);
                 totalPagar = total;
             } else {
                 System.out.println("Else: " + total);
@@ -881,10 +901,13 @@ public class FacturaMB {
                     subtotalRegistro = totalRegistro.multiply(ivaTotal);
                     subtotal = subtotal.add(totalRegistro);
                     if (tipoCliente.equals("C")) {
-                        iva = new BigDecimal("0.0");
-                        // iva = iva.setScale(2, BigDecimal.ROUND_UP);
+//                        iva = new BigDecimal("0.0");
+//                        total = subtotal;
+//                        totalPagar = total;
                         //BigDecimal subTotalTemp=subtotal.multiply(descuento.divide(new BigDecimal(100).add(new BigDecimal(1))));
-                        total = subtotal;
+                        iva = subtotal.multiply(ivaSubTotal);
+                        // iva = iva.setScale(2, BigDecimal.ROUND_UP);
+                        total = subtotal.multiply(ivaTotal);
                         //total = total.setScale(2, BigDecimal.ROUND_UP);
                         totalPagar = total;
                     } else {
@@ -1061,10 +1084,10 @@ public class FacturaMB {
 
                     venta.setDescuento(descuento);// descuento general
 
+                    facturaServicio.guardarFactura(venta);
+                    //guardarfactura Carlos reportes
                     venta.setDetalleProductoGeneralList(detallesGeneralVenta);
                     venta.setDetalleProductoIndividualList(detallesIndividualVenta);
-
-                    facturaServicio.guardarFactura(venta);
 
                     codigoFactura = venta.getCodigoFactura();
 
@@ -1117,6 +1140,7 @@ public class FacturaMB {
                             for (int j = 0; j < detallesGeneralVenta.size(); j++) {
                                 System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
                                 if (detallesVenta.get(i).getCodigo().equals(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto())) {
+                                    System.out.println("DetallesGVenta" + detallesVenta.get(i).getValorDescuento());
                                     detallesGeneralVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
                                     detallesGeneralVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());
                                 }
@@ -1924,4 +1948,13 @@ public class FacturaMB {
         this.descuentoManual = descuentoManual;
     }
 
+    public boolean getMostrarDescuentoManual() {
+        return mostrarDescuentoManual;
+    }
+
+    public void setMostrarDescuentoManual(boolean mostrarDescuentoManual) {
+        this.mostrarDescuentoManual = mostrarDescuentoManual;
+    }
+
+    //get y set del sesion 
 }

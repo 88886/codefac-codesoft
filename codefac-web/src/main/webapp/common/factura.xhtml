@@ -20,7 +20,7 @@ and open the template in the editor.
                     <h:panelGrid columns="5" style="margin-bottom:10px;margin-left:35%" cellpadding="8">
                         <p:outputLabel for="tipoCl" value="Tipo: " />
                         <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
-                            <f:selectItem itemLabel="Nota de Venta" itemValue="C" />
+                            <f:selectItem itemLabel="Nota de Entrega" itemValue="C" />
                             <f:selectItem itemLabel="Factura" itemValue="F" />
                         </p:selectOneRadio>
                         <p:ajax event="click" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
@@ -268,7 +268,7 @@ and open the template in the editor.
             <p:panel id="idDetallesFactura" >
                 <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}" id="tablaDetallesFactura" style="width:100%">   
 
-                    <p:column headerText="Cantidad" style="text-align: left">
+                    <p:column headerText="Cantidad" style="text-align: left;width:50px">
                         <h:outputText value="#{detallesVenta.cantidad}" />
                     </p:column>
                     <p:column headerText="Código" style="text-align: left">
@@ -277,10 +277,10 @@ and open the template in the editor.
                     <p:column headerText="Descripción" style="text-align: left">
                         <h:outputText value="#{detallesVenta.nombre}" />
                     </p:column>
-                    <p:column headerText="P. Unitario" style="text-align: left" id="descuentoIndividual">
+                    <p:column headerText="P. Unitario" style="text-align: left;width:50px" id="descuentoIndividual">
                         <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
                     </p:column>
-                    <p:column headerText="Total" style="text-align: left" id="totalDescuento">
+                    <p:column headerText="Total" style="text-align: left;width:50px" id="totalDescuento">
                         <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
                     </p:column>
                     <p:column headerText="Descuento %" style="width:60px">
@@ -291,14 +291,14 @@ and open the template in the editor.
                         </p:selectOneMenu>
                     </p:column>
 
-                    <p:column headerText="Descuento Manual %" style="text-align: center" rendered="true"> 
-                        <p:inputText id="descuentoManual" style="width: 50%" value="#{facturaMB.descuentoManual}"  >
+                    <p:column headerText="Descuento Manual %" style="text-align: center;width:50px" rendered="#{facturaMB.mostrarDescuentoManual}"> 
+                        <p:inputText id="descuentoManual" style="width:80%" value="#{detallesVenta.valorDescuento}" rendered="#{detallesVenta.mostrarDescuentoManual}">
                             <p:ajax event="blur" listener="#{facturaMB.aplicarDescuentosManual(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
                         </p:inputText>   
                     </p:column>
 
 
-                    <p:column headerText="Acciones" style="text-align: left">
+                    <p:column headerText="Acciones" style="text-align: left;width:70px">
                         <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
                     </p:column>
                 </p:dataTable>
@@ -308,7 +308,7 @@ and open the template in the editor.
                     <p:outputLabel  value="Subtotal:"/>
                     <p:inputText id="subTotal" value="#{calculosMB.redondeoSuperior(facturaMB.subtotal)}" readonly="true"/>
 
-                    <p:outputLabel  value="Descuento:"/>
+                    <p:outputLabel  value="Descuento % :"/>
                     <p:inputText id="txtDescuento" value="#{facturaMB.descuento}" readonly="false">
                         <p:ajax event="blur" listener="#{facturaMB.calcularDescuento()}" update="@form"/>
                     </p:inputText>
@@ -365,6 +365,7 @@ and open the template in the editor.
                 </p:dialog>
 
             </p:panelGrid>
+
         </h:form>
     </p:panel>
 
