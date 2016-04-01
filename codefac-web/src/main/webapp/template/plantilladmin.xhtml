@@ -13,7 +13,7 @@ and open the template in the editor.
     <h:head>
         <title>Codefac</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        
+
         <h:outputStylesheet library="css" name="estiloUsuario.css"/>
     </h:head>
     <h:body>
@@ -68,7 +68,7 @@ and open the template in the editor.
                     <p:submenu label="Orden Trabajo" icon="ui-icon-pencil">
                         <p:menuitem value="Nuevo" outcome="ordenTrabajo"  icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Gestionar" outcome="gestionarOrdenTrabajo"  icon="ui-icon-arrowreturnthick-1-w" />
-                        
+
                     </p:submenu>
 
                     <p:submenu label="Proforma" icon="ui-icon-pencil">
@@ -83,12 +83,15 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </div>
+
         <div id="contenido" class="panelContenido">
             <ui:insert name="contenido"/>
         </div>
+
         <div id="piepagina">
             <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
         </div>
+
 
     </h:body>
 </html>

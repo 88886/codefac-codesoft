@@ -11,6 +11,24 @@
         <p:panel id="basic" header="Inicio"  style="margin-bottom:20px;text-align: center">
             <img width="92%" height="12%" src="#{facesContext.externalContext.requestContextPath}/resources/img/bannerFacturacion.jpg" align="top"/>
             <h2>Sistema de Facturación </h2><h1>Compras y Ventas a un click de distancia  </h1>
+
         </p:panel>
+
+        <h:form >            
+            <p:dock position="bottom">
+                <p:menuitem value="Calculadora" icon="resources/img/menu/ico_calculadora.png"  url="#" style="color: #3f5da2"/>
+                <p:menuitem value="Notas" icon="resources/img/menu/ico_notas.png"  url="#" style="color: #3f5da2"/>
+                <p:menuitem value="Reloj" icon="resources/img/menu/ico_reloj.png"  url="#" style="color: #3f5da2"/>
+                <p:menuitem value="Email" icon="resources/img/menu/ico_email.png"  url="#" style="color: #3f5da2"/>
+                <p:menuitem value="Venta Diaria" icon="resources/img/menu/icono-venta.png"  url="#" style="color: #3f5da2"/>
+            </p:dock>   
+
+            <p:stack icon="resources/img/menu/icono-venta.png" expanded="true">
+                <p:menuitem value="Video" icon="resources/img/menu/ico_reloj.png" url="#"/>
+                <p:menuitem value="Email" icon="resources/img/menu/ico_email.png" url="#"/>
+                <p:menuitem value="Portfolio" icon="resources/img/menu/icono-venta.png" url="#"/>
+            </p:stack>
+        </h:form>
+
     </ui:define>
 </ui:composition>
