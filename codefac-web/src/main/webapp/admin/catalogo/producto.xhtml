@@ -67,11 +67,11 @@ and open the template in the editor.
                     <p:commandButton icon="ui-icon-zoomin" actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" update=":formDialogProductoDistri" />
                 </p:column>
 
-                <p:column headerText="Precio" style="width: 50px" >
+                <p:column headerText="PVP " style="width: 50px" >
                     <p:outputLabel value="#{calculosMB.redondeoSuperior(catalogo.precio)}"/>
                 </p:column>
 
-                <p:column headerText="Precio + IVA" style="width: 60px">
+                <p:column headerText="PVP + IVA" style="width: 60px">
                     <p:outputLabel value="#{calculosMB.incluirIva(catalogo.precio)}"/>
                 </p:column>
 
@@ -108,7 +108,7 @@ and open the template in the editor.
 
         </h:form>
 
-        <!-- Dialogo para poder mostar el formulario para poder grabar -->
+        <!-- Dialogo para poder mostrar el formulario para poder grabar -->
         <p:dialog id="idDialogProducto" modal="true" header="Agregar Catalogo producto" widgetVar="dialogNuevoProducto" showEffect="explode" hideEffect="explode" >
             <h:form>
                 <p:panelGrid columns="2" styleClass="panelNoBorder">
@@ -130,7 +130,7 @@ and open the template in the editor.
                     <p:outputLabel value="Marca: "/>
                     <p:inputText value="#{gestionProductoMB.catalagoProducto.marca}"/>
 
-                    <p:outputLabel value="Precio: "/>
+                    <p:outputLabel value="PVP: "/>
 
                     <p:panelGrid columns="2" style="width: 100%">
                         <p:inputText value="#{gestionProductoMB.catalagoProducto.precio}" style="width: 50px" />
@@ -176,6 +176,9 @@ and open the template in the editor.
 
                     <div>
                         <p:panelGrid columns="2">
+                            <p:commandButton style="display:none" id="dummyBtn"/>
+                            <p:defaultCommand target="dummyBtn" />
+                            
                             <p:commandButton value="Grabar" actionListener="#{gestionProductoMB.grabarCatalogo()}" update=":formTabla:tablaCatalogo" ajax="false" />                             
                             <p:commandButton value="Cancelar" actionListener="#{gestionProductoMB.cancelarGrabar()}" immediate="true" update=":formTabla:growl"  /> 
                         </p:panelGrid>
@@ -204,7 +207,7 @@ and open the template in the editor.
                     <p:outputLabel value="Marca: "/>
                     <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.marca}"/>
 
-                    <p:outputLabel value="Precio: "/>
+                    <p:outputLabel value="PVP: "/>
 
                     <p:panelGrid columns="2" style="width: 100%">
                         <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precio}" style="width: 50px" />

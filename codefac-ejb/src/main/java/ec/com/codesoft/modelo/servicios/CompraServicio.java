@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
+import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.Compra;
 import ec.com.codesoft.model.PeriodoContable;
 import ec.com.codesoft.model.ProductoGeneralCompra;
@@ -15,6 +16,8 @@ import ec.com.codesoft.modelo.facade.PeriodoContableFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
 import ec.com.codesoft.modelo.facade.ProductoIndividualCompraFacade;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -42,8 +45,12 @@ public class CompraServicio {
 
     @EJB
     private ProductoGeneralVentaFacade productoGeneralFacade;
+    
+    @EJB
+    private ProductoGeneralCompraFacade productoGeneralCompraFacade;
 
     public void insertar(Compra compra) {
+        compra.setFecha(new Date());
         this.compraFacade.create(compra);
         Integer codigo = compra.getCodigoCompra();
         List<ProductoGeneralCompra> detalle1 = compra.getProductoGeneralCompraList();
@@ -159,6 +166,25 @@ public class CompraServicio {
     public List<ProductoGeneralCompra> getUltimosProductosComprados()
     {
         return productoGFacade.listaUltimosCostosProductoGeneral();
+    }
+    
+    
+    /**
+     * Obtiene el ultimo costo por distribuidor enviado el codigo del catalago
+     * y el codigo del distribuidor
+     * @param idCatalogo
+     * @param rucDistribuidor
+     * @return 
+     */
+    public BigDecimal obtenerUltimoCostoDistribuidor(CatalagoProducto producto, String rucDistribuidor)
+    {
+        BigDecimal resultado=productoGeneralCompraFacade.getUltimoCostoProductoByDistribuidor(producto.getCodigoProducto(), rucDistribuidor);
+        //si el resultado es nulo envia el costo referencial
+        if(resultado==null)
+        {
+            resultado=producto.getCosto();
+        }
+        return resultado;
     }
 
 }

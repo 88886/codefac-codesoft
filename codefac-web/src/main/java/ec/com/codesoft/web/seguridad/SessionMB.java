@@ -49,7 +49,7 @@ public class SessionMB implements Serializable {
      * Referencia al objeto que se encuentra logueado en el sistema
      */
     private Usuario usuarioLogin;
-    
+
     /**
      * Objeto que contiene el perfil del usuario logueado
      */
@@ -78,35 +78,35 @@ public class SessionMB implements Serializable {
         if (usuarioAux != null) {
             //System.out.println("Usuario encontrado");
             //System.out.println(usuarioAux.getNick());
-            
+
             this.usuarioLogin = usuarioAux;
 
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("usuario", this.usuarioLogin);
-            
+
             System.out.println(perfilNombre);
             perfilBuscado = usuarioLogin.buscarPerfil(perfilNombre);
 
             //cuando no tiene permisos para entrar en el perfil
-            if (perfilBuscado == null) 
-            {
+            if (perfilBuscado == null) {
                 this.nick = "";
                 this.clave = "";
-                context.addMessage(null, new FacesMessage("No tiene permisos para acceder al perfil", "!Vuelva a intentar!"));                
+                context.addMessage(null, new FacesMessage("No tiene permisos para acceder al perfil", "!Vuelva a intentar!"));
                 return "login";
-            } else 
-            {
+            } else {
                 context.addMessage(null, new FacesMessage("Bienvenido al Sistema Codefac", "!Buen dia!"));
-                httpSession.setAttribute("perfil",this.perfilBuscado);
+                httpSession.setAttribute("perfil", this.perfilBuscado);
                 //cuando el perfil encontrado existe dirige a la pagina correspondiente
-                switch (perfilBuscado.getTipo()) 
-                {
+                switch (perfilBuscado.getTipo()) {
                     case "admin":
                         System.out.println("accediendo al administrador");
                         return "/admin/indexAdmin.xhtml";
 
                     case "operador":
                         return "/operador/index.xhtml";
+
+                    case "empleado":
+                        return "/empleado/indexEmpleado.xhtml";
                 }
 
             }
@@ -179,7 +179,5 @@ public class SessionMB implements Serializable {
     public void setPerfilBuscado(Perfil perfilBuscado) {
         this.perfilBuscado = perfilBuscado;
     }
-    
-    
 
 }

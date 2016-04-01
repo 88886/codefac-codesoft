@@ -113,7 +113,7 @@ public class comprarMB implements Serializable {
     public void postConstruct() {
         System.out.println("reiniciando ...");
 
-       // Map params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        // Map params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         // String id = (String) params.get("id");
         // System.out.println("compra" + id);
         // compra = compraServicio.findCompra(Integer.parseInt(id));
@@ -143,18 +143,16 @@ public class comprarMB implements Serializable {
     /**
      * Consulta un distribuidor de la base
      */
-    public void preRender() 
-    {
+    public void preRender() {
         System.out.println("Prerender ...");
         Map params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        
+
         String id = (String) params.get("id");
         System.out.println("-->" + id + "<--");
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
         this.compra.setIva(new BigDecimal("12"));
-        
-        
+
         if (id != null) {
             compra = compraServicio.findCompra(Integer.parseInt(id));
             cargarDatosEditar();
@@ -226,8 +224,8 @@ public class comprarMB implements Serializable {
         System.out.println(calculo);
         System.out.println(compra.getIva());
        // System.out.println(calculo);
-       // System.out.println(calculo);
-        
+        // System.out.println(calculo);
+
         compra.setTotal(calculo.multiply(compra.getIva().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
         compra.setTotal(compra.getTotal().divide(new BigDecimal(1), 2, RoundingMode.HALF_UP));
     }
@@ -271,23 +269,22 @@ public class comprarMB implements Serializable {
         List<ProductoGeneralCompra> detalleGeneral = new ArrayList<ProductoGeneralCompra>();
 
         System.out.println(detalleCompra.size());
-        
+
         for (DetalleCompraModelo detalle : detalleCompra) {
-            if (detalle.getCodigoGeneral()) 
-            {
+            if (detalle.getCodigoGeneral()) {
                 detalleGeneral.add(detalle.getProductoGeneral());
             } else {
                 detalleIndividual.add(detalle.getProductoIndividual());
             }
         }
-        
-        System.out.println(detalleGeneral.size()+"-"+detalleIndividual.size());
+
+        System.out.println(detalleGeneral.size() + "-" + detalleIndividual.size());
         System.out.println("comprando ....");
         System.out.println(compra);
-        
+
         compra.setProductoGeneralCompraList(detalleGeneral);
         compra.setProductoIndividualCompraList(detalleIndividual);
-        
+
         compraServicio.insertar(compra);
         //compraServicio.actualizar(compra);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevaCompra').show()");
@@ -328,7 +325,7 @@ public class comprarMB implements Serializable {
      */
     public void verificarProducto() {
         //codigoDetalle
-        this.visibleDetalleAgregar = true;
+
         cantidadDetalle = 1;
         costoDetalle = new BigDecimal("0");
 
@@ -337,7 +334,11 @@ public class comprarMB implements Serializable {
         catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
         if (catalogo != null) {
             System.out.println("El producto existe");
-            costoDetalle=catalogo.getCosto();
+
+            //obtiene el ultimo costo de la ultima compra por el distribuidor
+            costoDetalle = compraServicio.obtenerUltimoCostoDistribuidor(catalogo, compra.getRuc().getRuc());
+
+            this.visibleDetalleAgregar = true;
         } else {
             System.out.println("El producto no existe");
             RequestContext.getCurrentInstance().execute("PF('confirmarProducto').show()");
@@ -359,8 +360,7 @@ public class comprarMB implements Serializable {
         //detalleCompra=compraServicio.obtenerTodos();
         List<ProductoGeneralCompra> detalleGeneral = compra.getProductoGeneralCompraList();
 
-        for (ProductoGeneralCompra detalle : detalleGeneral) 
-        {
+        for (ProductoGeneralCompra detalle : detalleGeneral) {
             DetalleCompraModelo modelo = new DetalleCompraModelo(
                     detalle.getCodigoProducto().getCodigoProducto(),
                     detalle.getCodigoProducto().getNombre(),
@@ -369,7 +369,7 @@ public class comprarMB implements Serializable {
                     detalle.getCostoIndividual(),
                     detalle.getSubtotal(),
                     true);
-            
+
             System.out.println(modelo.toString());
 
             detalleCompra.add(modelo);
@@ -420,9 +420,12 @@ public class comprarMB implements Serializable {
     }
 
     public void recibirCatalogo(SelectEvent event) {
-        catalogo = (CatalagoProducto) event.getObject();
-        codigoDetalle = catalogo.getCodigoProducto();
-        System.out.println(catalogo);
+        CatalagoProducto catalogoAux = (CatalagoProducto) event.getObject();
+        if (catalogoAux != null) {
+            catalogo = (CatalagoProducto) event.getObject();
+            codigoDetalle = catalogo.getCodigoProducto();
+            System.out.println(catalogo);
+        }
     }
 
     public void imprimirCompra() {

@@ -5,44 +5,76 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core" 
-      xmlns:ui="http://java.sun.com/jsf/facelets" 
-      xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaDialog.xhtml">
 
-    <h:head>
-        <title>Nuevo Producto en el Catalogo</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <h:outputStylesheet library="css" name="estiloUsuario.css"/>
-    </h:head>
-    <h:body>
+    <ui:define name="piePagina" >
+        <p:outputLabel value="Nuevo Catalogo Producto"/>
+    </ui:define>
+
+    <ui:define name="contenido" >
         <h:form>
             <p:panel style="text-align: center;" styleClass="menuPanel" >
                 <p:panelGrid columns="2" style="margin: 0 auto;text-align: left" styleClass="panelNoBorder">
-                    <p:outputLabel value="Codigo: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.codigoProducto}" />
+
+                    <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
+                    <p:inputText id="txtCodigoCatalogo" value="#{crearProductoMB.catalogo.codigoProducto}" required="">
+                        <p:ajax event="blur" listener="#{crearProductoMB.verificarExisteCatalogoProducto()}"  />
+                    </p:inputText>
+
+                    <p:outputLabel value="Codigo Distribuidor: "/>
+                    <p:inputText value="#{crearProductoMB.catalogo.codigoDistribuidor}"/>
 
                     <p:outputLabel value="Nombre: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.nombre}" />
+                    <p:inputText value="#{crearProductoMB.catalogo.nombre}"/>
 
                     <p:outputLabel value="Descripcion: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.descripcion}" />
+                    <p:inputText value="#{crearProductoMB.catalogo.descripcion}"/>
 
                     <p:outputLabel value="Marca: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.marca}" />
+                    <p:inputText value="#{crearProductoMB.catalogo.marca}"/>
 
-                    <p:outputLabel value="Precio: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.precio}" />
+                    <p:outputLabel value="PVP: "/>
+
+                    <p:panelGrid columns="2" style="width: 100%">
+                        <p:inputText value="#{crearProductoMB.catalogo.precio}" style="width: 50px" />
+
+                        <p:selectOneMenu id="cmbIVAPrecio" value="#{crearProductoMB.ivaCosto}" >
+                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                            <f:selectItem itemLabel="- Iva " itemValue="-" />
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
 
                     <p:outputLabel value="Descuento: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.descuento}" />
+                    <p:inputText value="#{crearProductoMB.catalogo.descuento}"/>
+
+                    <p:outputLabel value="Precio Mayorista: "/>
+
+                    <p:panelGrid columns="2" style="width: 100%">
+                        <p:inputText value="#{crearProductoMB.catalogo.precioMayorista}" style="width: 50px" />
+
+                        <p:selectOneMenu id="cmbIVAMayorista" value="#{crearProductoMB.ivaMayorista}" >
+                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                            <f:selectItem itemLabel="- Iva " itemValue="-" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+
+                    <p:outputLabel value="Descuento Mayorista: "/>
+                    <p:inputText value="#{crearProductoMB.catalogo.descuentoMayorista}"/>
+
+                    <p:outputLabel value="Costo Referencial: "/>
+                    <p:inputText value="#{crearProductoMB.catalogo.costo}"/>
 
                     <p:outputLabel value="Ubicacion: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.ubicacion}" />
+                    <p:inputText value="#{crearProductoMB.catalogo.ubicacion}"/>
 
-                    <p:outputLabel value="Unidades: "/>
-                    <p:inputText value="#{crearProductoMB.catalogo.unidades}" />
+                    <p:outputLabel value="Unidad medida: "/>
+                    <p:inputText value="#{crearProductoMB.catalogo.unidades}"/>
 
                     <p:outputLabel value="Tipo: "/>
                     <p:selectOneMenu id="sexo" value="#{crearProductoMB.catalogo.tipoProducto}" >
@@ -55,11 +87,13 @@ and open the template in the editor.
                 <p:separator/>
 
                 <div>
+                    <p:commandButton style="display:none" id="dummyBtn"/>
+                    <p:defaultCommand target="dummyBtn" />
+
                     <p:commandButton actionListener="#{crearProductoMB.grabar()}" value="Grabar"/>
-                    <p:commandButton value="Cancelar"/>
+                    <p:commandButton actionListener="#{crearProductoMB.cancelar()}" value="Cancelar"/>
                 </div>
             </p:panel>
         </h:form>
-    </h:body>
-
-</html>
+    </ui:define>
+</ui:composition>

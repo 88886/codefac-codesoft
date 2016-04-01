@@ -14,6 +14,12 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
+        <p:dock position="bottom">
+            <p:menuitem value="Home"  icon="/resources/demo/images/dock/home.png" url="#"/>
+            <p:menuitem value="Music" icon="/resources/demo/images/dock/music.png" url="#"/>
+            <!-- more menuitems -->
+        </p:dock>
+        
         <p:panel header="Trabajos Pendientes">
 
             <h:form id="formPrincipal">                
@@ -47,7 +53,7 @@ and open the template in the editor.
                     <p:panelGrid columns="4" styleClass="panelNoBorder top-aligned-columns" >
 
 
-                        <p:commandButton value="REPARAR" style="height: 100px" />                    
+                        <p:commandButton value="REPARAR" style="height: 100px" actionListener="#{trabajosPendientesMB.reparacionRapida(ordenTrabajo)}" update=":formReparacionRapida" />                    
                         <p:panel >
                             <p:panelGrid columns="2" style="width: 300px">
                                 <p:outputLabel value="Orden No:"/>
@@ -72,17 +78,17 @@ and open the template in the editor.
                                 <p:outputLabel value="Precio:"/>
                                 <p:outputLabel value="#{ordenTrabajo.total}" style="font-weight: bold" />
 
-                                
+
                             </p:panelGrid>
 
-                            
+
                             <p:panel style="background-image: none;background-color:#{ordenTrabajo.diferenciaDiasEntrega() == 0?'darkorange':ordenTrabajo.diferenciaDiasEntrega() > 0?'darkcyan':'red'}">
                                 <p:outputLabel value="#{ordenTrabajo.diferenciaDiasEntrega() >= 0 ? 'Tiempo Entrega:: ':'Tiempo Atraso: '}" style="color: white"/>
                                 <p:outputLabel value="#{ordenTrabajo.tiempoEntrega()}" style="font-weight: bold;color: white" >
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </p:outputLabel>
                             </p:panel>
-                            
+
                         </p:panel>
                         <p:dataTable 
                             value="#{ordenTrabajo.detalleOrdenTrabajoList}"
@@ -109,8 +115,27 @@ and open the template in the editor.
 
                     </p:panelGrid>
                     <p:separator />
-                </ui:repeat>
+                </ui:repeat>                     
             </h:form>
+
+            <!-- Dialogo que me permite reparar la orden de trabajo-->
+            <p:dialog header="Reparacion Rapida" modal="true" widgetVar="dlgReparacion" showEffect="explode" hideEffect="explode" height="2s00">
+                <h:form id="formReparacionRapida">
+                    <p:panelGrid columns="2" styleClass="panelNoBorder">
+                        <p:outputLabel value="Diagnostico:"/>
+                        <p:inputTextarea value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.diagnostico}"/>
+
+                        <p:outputLabel value="Total:"/>
+                        <p:inputText value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.total}" />
+
+                        <h:outputText value="Enviar Correo:" />
+                        <p:selectBooleanCheckbox  />
+                    </p:panelGrid>
+                    <div style="text-align: center">
+                        <p:commandButton value="Terminar"/>
+                    </div>
+                </h:form>
+            </p:dialog>
         </p:panel>
     </ui:define>
 </ui:composition>
