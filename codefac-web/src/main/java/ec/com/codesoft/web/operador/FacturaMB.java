@@ -415,16 +415,20 @@ public class FacturaMB {
                         for (int j = 0; j < detallesVenta.get(i).getDescuentos().size(); j++) {
                             if (detallesVenta.get(i).getDescuentos().get(j).getNombre().equals("dctoPVP")) {
                                 //actualizar campos total-total pagar
+                                detallesVenta.get(i).setEscogerDescuento("Si");
+                                detallesVenta.get(i).setMostrarDescuentoManual(true);
                                 BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
                                 totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoPVP().subtract(detallesVenta.get(i).getValorVerdaderoPVP().multiply(detallesVenta.get(i).getDescuentos().get(j).getValor().divide(new BigDecimal("100")))));//.setScale(2, BigDecimal.ROUND_UP);
                                 detallesVenta.get(i).setCosto(totalDetalleRegistro);
                                 detallesVenta.get(i).setTotal(totalDetalleRegistro.multiply(new BigDecimal(detallesVenta.get(i).getCantidad())));//.setScale(2, BigDecimal.ROUND_UP));
                                 detallesVenta.get(i).setValorDescuento(detallesVenta.get(i).getDescuentos().get(j).getValor());
-
+                                descuentoManual = detallesVenta.get(i).getDescuentos().get(j).getValor();
                             }
                         }
 
                     } else {
+                        detallesVenta.get(i).setEscogerDescuento("No");
+                        detallesVenta.get(i).setMostrarDescuentoManual(false);
                         BigDecimal totalDetalleRegistro = new BigDecimal("0.0");
                         totalDetalleRegistro = (detallesVenta.get(i).getValorVerdaderoPVP());
                         detallesVenta.get(i).setCosto(totalDetalleRegistro);
