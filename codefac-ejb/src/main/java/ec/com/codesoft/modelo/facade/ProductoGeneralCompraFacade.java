@@ -7,6 +7,7 @@ package ec.com.codesoft.modelo.facade;
 
 import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.model.ProductoGeneralVenta;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -70,8 +71,7 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             }
 
             return lista;
-        } 
-        catch (NoResultException e) {
+        } catch (NoResultException e) {
             return null;
         }
     }
@@ -90,7 +90,7 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             //String queryString = "SELECT MAX(p.codigoCompra.fecha) FROM ProductoGeneralCompra p WHERE p.codigoProducto.codigoProducto='002' ";
             // String queryString2="SELECT p FROM ProductoGeneralCompra p WHERE p.codigoProducto.codigoProducto='002' AND p.codigoCompra.fecha=("+queryString+")";
             String queryString = "SELECT MAX(p.codigoCompra.fecha) FROM ProductoGeneralCompra p WHERE p.codigoProducto.codigoProducto=p2.codigoProducto.codigoProducto ";
-            String queryString2 = "SELECT p2 FROM ProductoGeneralCompra p2 WHERE p2.codigoCompra.fecha=(" + queryString + ")";
+            String queryString2 = "SELECT p2 FROM ProductoGeneralCompra p2 WHERE p2codigoCompra.fecha.=(" + queryString + ")";
 
             //String queryString2 = "SELECT p, MAX(p.codigoCompra.fecha) FROM ProductoGeneralCompra p JOIN v.vehicle ve GROUP BY ve ORDER BY MAX(v.validTill)";
             Query query = em.createQuery(queryString2);
@@ -125,6 +125,50 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             //List<ProductoGeneralCompra> productos = ( List<ProductoGeneralCompra>)lista.get(0);
             return null;
         } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+
+    /**
+     * Devuelve el ultimo costo del producto segun el distribuidor
+     *
+     * @return
+     */
+    public BigDecimal getUltimoCostoProductoByDistribuidor(String idProducto, String rucDistribuidor) {
+
+        try {
+            String queryString2 = "SELECT MAX(p.codigoCompra.fecha) FROM ProductoGeneralCompra p where p.codigoCompra.ruc.ruc=?2 AND p.codigoProducto.codigoProducto=?1  ";
+            String queryString = "SELECT p2 FROM ProductoGeneralCompra p2 where p2.codigoCompra.ruc.ruc=?2 AND p2.codigoProducto.codigoProducto=?1 AND p2.codigoCompra.fecha=("+queryString2+")";
+            //String queryString = "SELECT p.costoIndividual FROM ProductoGeneralCompra p WHERE p.codigoCompra.ruc=?1 AND p.codigoProducto.codigoProducto=?2";
+            
+            Query query = em.createQuery(queryString);
+            query.setParameter(2, rucDistribuidor);
+            query.setParameter(1, idProducto);
+            
+            
+
+           // BigDecimal costo = (BigDecimal) query.getSingleResult();
+            //System.out.println("costo: "+costo);
+           // System.out.println("fecha: "+query.getSingleResult());
+ //           List<Object> lista=query.getResultList();
+//            for (Object obj : lista) {
+//                System.out.println("fecha->"+obj);
+//            }
+            List<ProductoGeneralCompra> lista=(List<ProductoGeneralCompra>)query.getResultList();
+            //for (ProductoGeneralCompra item : lista) 
+           // {
+            //    System.out.println(item.getCodigoProducto().getNombre()+","+item.getCostoIndividual()+","+item.getCodigoCompra().getFecha());
+            //}
+            if(lista.size()==0)
+            {
+                return null;
+            }
+            return lista.get(0).getCostoIndividual();
+
+        } catch (NoResultException e) {
+            return null;
+        } catch (NullPointerException ex) {
             return null;
         }
 

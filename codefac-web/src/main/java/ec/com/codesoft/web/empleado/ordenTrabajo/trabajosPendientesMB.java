@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -36,6 +37,8 @@ public class trabajosPendientesMB implements Serializable {
      * Indica el tipo de ordenamiento que se va a realiza desendente o ascendete
      */
     private String tipoOrden;
+    
+    private OrdenTrabajo ordenTrabajoSeleccionados ;
 
     @PostConstruct
     public void postConstruct() {
@@ -66,6 +69,17 @@ public class trabajosPendientesMB implements Serializable {
 
         }
     }
+    
+    /**
+     * Contrala la reparacion rapida de la orden de trabajo
+     */
+    public void reparacionRapida(OrdenTrabajo orden)
+    {
+        System.out.println("reparacion rapida..");
+        RequestContext.getCurrentInstance().execute("PF('dlgReparacion').show()");
+        ordenTrabajoSeleccionados=orden;
+        
+    }
 
     //////////////////////////GET AND SET//////////////////////////////
     public List<OrdenTrabajo> getOrdenTrabajoList() {
@@ -91,5 +105,15 @@ public class trabajosPendientesMB implements Serializable {
     public void setTipoOrden(String tipoOrden) {
         this.tipoOrden = tipoOrden;
     }
+
+    public OrdenTrabajo getOrdenTrabajoSeleccionados() {
+        return ordenTrabajoSeleccionados;
+    }
+
+    public void setOrdenTrabajoSeleccionados(OrdenTrabajo ordenTrabajoSeleccionados) {
+        this.ordenTrabajoSeleccionados = ordenTrabajoSeleccionados;
+    }
+    
+    
 
 }
