@@ -17,7 +17,7 @@
                     <p:inputText id="usuario" required="true" value="#{sessionMB.nick}" />
                     <p:outputLabel for="clave" value="Clave:"/>
                     <p:password id="clave" required="true" value="#{sessionMB.clave}"   />
-                    
+
                     <p:outputLabel for="perfil" value="Perfil:"/>
                     <p:selectOneMenu id="perfil" value="#{sessionMB.perfilNombre}" style="width:100%">
                         <f:selectItem itemLabel="Seleccione el perfil" itemValue="" />
@@ -32,7 +32,19 @@
                     <p:commandButton value="Ingresar" action="#{sessionMB.iniciarSesion()}" update="growl" ajax="false" />
                 </div>               
 
+
+
             </p:panel>
+        </h:form>
+
+        <h:form>
+            <p:commandButton onclick="document.media.Play();" value="play" update="media"/>
+
+            <p:media id="media" value="#{sessionMB.urlSonido}" player="quicktime" style="visibility: hidden;">
+                <f:param name="autoPlay" value="true" />
+                <f:param name="enablejavascript" value="true"/>
+            </p:media>
+
         </h:form>
 
     </ui:define>

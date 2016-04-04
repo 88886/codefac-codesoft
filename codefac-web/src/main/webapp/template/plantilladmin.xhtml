@@ -33,8 +33,6 @@ and open the template in the editor.
             <h:form id="menu" >
                 <p:growl id="messages"/>
                 <p:menubar>
-
-
                     <p:submenu label="Clientes" icon="ui-icon-pencil">
                         <p:menuitem value="Gestionar" outcome="cliente"  icon="ui-icon-arrowreturnthick-1-w" />
                         <p:menuitem value="Buscar" outcome="buscarCliente" icon="ui-icon-arrowreturnthick-1-w" />
@@ -92,6 +90,62 @@ and open the template in the editor.
             <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
         </div>
 
+        <!-- SubMenu rapido -->
+        <h:form id="formMenu2" > 
+            <p:remoteCommand name="onload" action="#{menuRapidoAdminMB.verificarDialogosUtilidades()}" autoRun="true" />
+            <p:stack icon="#{resource['img:menu/ico_canasta.png']}">
+                <p:menuitem  value="Ayuda" icon="#{resource['img:menu/ico_codefac.png']}" url="#"  />                
+                <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{menuRapidoAdminMB.abrirCalculadora()}"/>
+                <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoAdminMB.abrirNota()}"/>
+            </p:stack>
+        </h:form>
+
+        <!-- Calculadora -->
+        <p:dialog 
+            position="10,10"
+            header="Calculadora" 
+            widgetVar="dlgCalculadora" 
+            minHeight="40" 
+            style="font-size:12px">
+            
+            <h:form>
+                <h:panelGrid columns="4" cellpadding="1" cellspacing="0"  >
+
+                    <f:facet name="header">
+                        <p:inputTextarea style="width: 140px;background-color:darkslategray ;color: white"/>
+                    </f:facet>
+
+                    <p:commandButton value="+" style="width: 35px" />
+                    <p:commandButton value="-" style="width: 35px" />
+                    <p:commandButton value="*" style="width: 35px" />
+                    <p:commandButton value="/" style="width: 35px" />
+
+                    <p:commandButton value="0" style="width: 35px" />
+                    <p:commandButton value="1" style="width: 35px"/>
+                    <p:commandButton value="2" style="width: 35px"/>
+                    <p:commandButton value="3" style="width: 35px"/>
+
+                    <p:commandButton value="4" style="width: 35px"/>
+                    <p:commandButton value="5" style="width: 35px"/>
+                    <p:commandButton value="6" style="width: 35px"/>
+                    <p:commandButton value="7" style="width: 35px"/>
+
+                    <p:commandButton value="8" style="width: 35px"/>
+                    <p:commandButton value="9" style="width: 35px"/>
+                    <p:commandButton value="." style="width: 35px"/>
+                    <p:commandButton value="=" style="width: 35px"/>
+
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        
+        <!-- Dialogo de las Notas Rapidas -->
+        <p:dialog  widgetVar="dlgNotas" minHeight="40" style="font-size:12px;background-color: #ffff99;background-image: none;padding: 0px;margin: 0px">
+            <h:form id="formNotas">
+                <p:inputTextarea rows="7"  style="background-color: #ffff99;color: black;margin: 0px;border: 0px;font-size: 11px"/>
+            </h:form>
+        </p:dialog>
 
     </h:body>
 </html>

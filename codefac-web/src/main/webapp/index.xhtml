@@ -5,7 +5,9 @@
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
-                template="/template/plantillaprincipal.xhtml">
+                template="/template/plantillaprincipal.xhtml"
+                xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+                xmlns:h5="http://java.sun.com/jsf/composite/ezcomp">
 
     <ui:define name="contenido">
         <p:panel id="basic" header="Inicio"  style="margin-bottom:20px;text-align: center">
@@ -14,20 +16,10 @@
 
         </p:panel>
 
-        <h:form >            
-            <p:dock position="bottom">
-                <p:menuitem value="Calculadora" icon="resources/img/menu/ico_calculadora.png"  url="#" style="color: #3f5da2"/>
-                <p:menuitem value="Notas" icon="resources/img/menu/ico_notas.png"  url="#" style="color: #3f5da2"/>
-                <p:menuitem value="Reloj" icon="resources/img/menu/ico_reloj.png"  url="#" style="color: #3f5da2"/>
-                <p:menuitem value="Email" icon="resources/img/menu/ico_email.png"  url="#" style="color: #3f5da2"/>
-                <p:menuitem value="Venta Diaria" icon="resources/img/menu/icono-venta.png"  url="#" style="color: #3f5da2"/>
-            </p:dock>   
-
-            <p:stack icon="resources/img/menu/icono-venta.png" expanded="true">
-                <p:menuitem value="Video" icon="resources/img/menu/ico_reloj.png" url="#"/>
-                <p:menuitem value="Email" icon="resources/img/menu/ico_email.png" url="#"/>
-                <p:menuitem value="Portfolio" icon="resources/img/menu/icono-venta.png" url="#"/>
-            </p:stack>
+        <h:form id="formId">
+            <h:inputHidden id="x" value="#{sessionMB.x}" />
+            <h:inputHidden id="y" value="#{sessionMB.y}" />
+            <h:commandButton value="enviar" onclick="getVars()" action="#{sessionMB.submit()}" />
         </h:form>
 
     </ui:define>
