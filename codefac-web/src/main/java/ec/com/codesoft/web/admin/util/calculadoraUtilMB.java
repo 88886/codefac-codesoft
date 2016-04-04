@@ -39,7 +39,7 @@ public class calculadoraUtilMB implements Serializable{
     
     public void handleMove(MoveEvent event)
     {
-        event.get
+        //event.get
     }
     
     ////////////////////////METODOS GET AND SET////////////////
