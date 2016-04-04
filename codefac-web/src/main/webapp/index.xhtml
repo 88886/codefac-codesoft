@@ -13,11 +13,19 @@
             <h2>Sistema de Facturación </h2><h1>Compras y Ventas a un click de distancia  </h1>
 
         </p:panel>
+        <h:form >       
+            <p:panel rendered="#{dockMB.mostrarNote}"> 
+                <div align="right">
+                    <p:panel id="handlepnl" header="Handle">
+                        <h:outputText value="I can only be dragged with my header." />
+                    </p:panel>
+                    <p:draggable for="handlepnl" handle=".ui-panel-titlebar" />
+                </div>
+            </p:panel>
 
-        <h:form >            
             <p:dock position="bottom">
                 <p:menuitem value="Calculadora" icon="resources/img/menu/ico_calculadora.png"  url="#" style="color: #3f5da2"/>
-                <p:menuitem value="Notas" icon="resources/img/menu/ico_notas.png"  url="#" style="color: #3f5da2"/>
+                <p:menuitem value="Notas" icon="resources/img/menu/ico_notas.png"  actionListener="#{dockMB.mostrarNotas()}"   style="color: #3f5da2" update="@form"/>
                 <p:menuitem value="Reloj" icon="resources/img/menu/ico_reloj.png"  url="#" style="color: #3f5da2"/>
                 <p:menuitem value="Email" icon="resources/img/menu/ico_email.png"  url="#" style="color: #3f5da2"/>
                 <p:menuitem value="Venta Diaria" icon="resources/img/menu/icono-venta.png"  url="#" style="color: #3f5da2"/>
