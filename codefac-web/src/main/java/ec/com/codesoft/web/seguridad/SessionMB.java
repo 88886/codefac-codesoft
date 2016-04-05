@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transaction;
 import javax.websocket.Session;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -55,11 +56,16 @@ public class SessionMB implements Serializable {
      */
     private Perfil perfilBuscado;
 
+    private String urlSonido = "http://api.voicerss.org/?key=3edcc88b461e4b94a0473bc28382ba91&src=Recuerda%20que%20tienes%20que%20enviar%20el%20trabajo%20a%20las%203&hl=es-mx";
+
     private Session session;
     private Transaction transaccion;
 
     @EJB
     private SeguridadServicio seguridadServicio;
+
+    private int x=12;
+    private int y=10;
 
     public SessionMB() {
         HttpSession miSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -132,6 +138,20 @@ public class SessionMB implements Serializable {
         return "/login.xhtml";
     }
 
+    public void cambiarSonido() {
+        //urlSonido = "http://api.voicerss.org/?key=3edcc88b461e4b94a0473bc28382ba91&src=no podemos ver el partido de barcelona &hl=es-mx";
+        RequestContext.getCurrentInstance().execute("alert('que mas ve')");
+    }
+
+    public void cambiarSonido2() {
+        urlSonido = "http://api.voicerss.org/?key=3edcc88b461e4b94a0473bc28382ba91&src=ya estamos viendo el partido de barcelona &hl=es-mx";
+    }
+
+    public void submit() {
+        System.out.println("x:");
+        System.out.println("y:");
+    }
+
     public Usuario getUsuarioLogin() {
         return usuarioLogin;
     }
@@ -179,5 +199,31 @@ public class SessionMB implements Serializable {
     public void setPerfilBuscado(Perfil perfilBuscado) {
         this.perfilBuscado = perfilBuscado;
     }
+
+    public String getUrlSonido() {
+        return urlSonido;
+    }
+
+    public void setUrlSonido(String urlSonido) {
+        this.urlSonido = urlSonido;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    
 
 }

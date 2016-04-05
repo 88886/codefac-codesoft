@@ -154,3 +154,14 @@ h1 , h2
    background-image: none;
    background-color: white;
 }
+
+.ui-panelgrid td 
+{
+    padding: 22px 25px ;
+}
+
+.user{
+    background-image: url("#{request.contextPath}/resources/img/logo.jpg");
+    height:16px;
+    width:16px;
+}
