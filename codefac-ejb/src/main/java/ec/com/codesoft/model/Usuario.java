@@ -76,6 +76,9 @@ public class Usuario implements Serializable {
     @Size(max = 16)
     @Column(name = "ESTADO")
     private String estado;
+    @Column(name = "NOTAS")
+    private String notas;
+
     @OneToMany(mappedBy = "nick")
     private List<Compra> compraList;
     @OneToMany(mappedBy = "nick")
@@ -90,14 +93,12 @@ public class Usuario implements Serializable {
     private List<DetalleProductoGeneral> detalleProductoGeneralList;
     @OneToMany(mappedBy = "nick")
     private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
-    @OneToMany(mappedBy = "nick",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "nick", cascade = CascadeType.ALL)
     private List<Perfil> perfilList;
     @OneToMany(mappedBy = "nick")
     private List<DetallesServicio> detallesServicioList;
     @OneToMany(mappedBy = "usuarioPermiso")
     private List<Venta> ventaList1;
-    
-    
 
     public Usuario() {
     }
@@ -196,8 +197,6 @@ public class Usuario implements Serializable {
     public void setCedula(String cedula) {
         this.cedula = cedula;
     }
-    
-    
 
     @XmlTransient
     public List<Compra> getCompraList() {
@@ -288,6 +287,16 @@ public class Usuario implements Serializable {
         this.ventaList1 = ventaList1;
     }
 
+    public String getNotas() {
+        return notas;
+    }
+
+    public void setNotas(String notas) {
+        this.notas = notas;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -312,15 +321,12 @@ public class Usuario implements Serializable {
     public String toString() {
         return "modelo.Usuario[ nick=" + nick + " ]";
     }
-    
-    
+
     //obtener Perfiles
-    
-    public String toStringPerfiles(){
-         String texto="";
-        for (Perfil perfil : perfilList) 
-        {
-            texto+=perfil.getTipo()+",";
+    public String toStringPerfiles() {
+        String texto = "";
+        for (Perfil perfil : perfilList) {
+            texto += perfil.getTipo() + ",";
         }
         return texto;
     }
