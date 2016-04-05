@@ -22,13 +22,20 @@ public class UsuarioServicio {
     
     @EJB
     private UsuarioFacade usuarioFacade;
-    
-    
-    public List<Usuario> devolverUsuarios(){
+        
+    public List<Usuario> devolverUsuarios()
+    {
         return usuarioFacade.findAll();
     }
     
-    public void insertarUsuario(Usuario usuario){
+    public void insertarUsuario(Usuario usuario)
+    {
         usuarioFacade.create(usuario);
     }
+    public void editar(Usuario usuario)
+    {
+        usuarioFacade.edit(usuario);
+    }
+    
+    
  }
