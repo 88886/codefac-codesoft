@@ -15,6 +15,15 @@
             <h2>Sistema de Facturación </h2><h1>Compras y Ventas a un click de distancia  </h1>
 
         </p:panel>
+        <h:form >       
+            <p:panel rendered="#{dockMB.mostrarNote}"> 
+                <div align="right">
+                    <p:panel id="handlepnl" header="Handle">
+                        <h:outputText value="I can only be dragged with my header." />
+                    </p:panel>
+                    <p:draggable for="handlepnl" handle=".ui-panel-titlebar" />
+                </div>
+            </p:panel>
 
         <h:form id="formId">
             <h:inputHidden id="x" value="#{sessionMB.x}" />

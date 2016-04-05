@@ -8,12 +8,8 @@
                 template="../template/plantillaOperador.xhtml">
 
     <ui:define name="contenido">
-        <h:form id="formDock"> 
-            <p:dock position="bottom" >
-                <p:menuitem value="Calculadora" icon="/resources/img/imgDock/notas.png" url="#" />
-                <p:menuitem value="Nota s" icon="/resources/img/imgDock/notas.png" url="#"/>
-                <!-- more menuitems -->
-            </p:dock>
+        <h:form>
+            <p:commandButton value="probar" actionListener="#{comprarMB.imprimirCompra()}"/>
         </h:form>
     </ui:define>
 </ui:composition>
