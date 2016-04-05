@@ -92,15 +92,15 @@ and open the template in the editor.
 
         <!--metodo que verifica si esta abierto la calculadora-->
         <h:form id="formInit">
-            <p:remoteCommand name="onload" actionListener="#{menuRapidoAdminMB.iniciarWidget()}" autoRun="true" />            
+            <p:remoteCommand name="onload" actionListener="#{stackAdminMB.iniciarWidget()}" autoRun="true" />            
         </h:form>
 
         <!-- SubMenu rapido -->
         <h:form id="formMenu2" > 
             <p:stack id="idMenuRapido" icon="#{resource['img:menu/ico_canasta.png']}" expanded="false" closeSpeed="80" openSpeed="80">
                 <p:menuitem  value="Ayuda" icon="#{resource['img:menu/ico_codefac.png']}" url="#"  />                
-                <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{menuRapidoAdminMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
-                <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoAdminMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido" />
+                <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
+                <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido" />
             </p:stack>
         </h:form>
 

@@ -1,0 +1,79 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ec.com.codesoft.web.admin.util;
+
+import ec.com.codesoft.web.widget.CommonWidGet;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+
+/**
+ *
+ * @author carlo
+ */
+@ManagedBean
+@SessionScoped
+public class StackAdminMB implements Serializable {
+    private List<CommonWidGet> listaWidGet;
+
+    @ManagedProperty(value = "#{calcuUtilMB}")
+    private CalcuUtilMB calcuUtilMB;
+
+    @ManagedProperty(value = "#{notaUtilMB}")
+    private NotaUtilMB notaUtilMB;
+
+    @PostConstruct
+    public void postConstruct() {
+        listaWidGet = new ArrayList<CommonWidGet>();
+       
+        listaWidGet.add(notaUtilMB);
+        listaWidGet.add(calcuUtilMB);
+    }
+
+    /**
+     * Me permite abrir los WidGet que se encuentren abiertos
+     */
+    public void iniciarWidget() {
+        for (CommonWidGet widGet : listaWidGet) {
+            widGet.initDialogo();
+        }
+    }
+
+    public void abrirWidget(String textWidGet) {
+        for (CommonWidGet widGet : listaWidGet) {
+            if (widGet.getNameVar().equals(textWidGet)) {
+                listaWidGet.remove(widGet);
+                listaWidGet.add(widGet);
+                widGet.abrirDialogo();
+            }
+        }
+    }
+    
+    
+    ///////////////////////METODOS GET AND SET/////////////////////
+
+    public CalcuUtilMB getCalcuUtilMB() {
+        return calcuUtilMB;
+    }
+
+    public void setCalcuUtilMB(CalcuUtilMB calcuUtilMB) {
+        this.calcuUtilMB = calcuUtilMB;
+    }
+
+    public NotaUtilMB getNotaUtilMB() {
+        return notaUtilMB;
+    }
+
+    public void setNotaUtilMB(NotaUtilMB notaUtilMB) {
+        this.notaUtilMB = notaUtilMB;
+    }
+    
+}

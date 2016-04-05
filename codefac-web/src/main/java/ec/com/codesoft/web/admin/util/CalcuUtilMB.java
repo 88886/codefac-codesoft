@@ -31,6 +31,7 @@ public class CalcuUtilMB extends CommonWidGet implements Serializable {
     public void postConstuct() {
         setX(8);
         setY(120);
+        
         setNameVar("dlgCalculadora");
 
     }
