@@ -58,20 +58,76 @@ and open the template in the editor.
             <p:outputLabel value="Codefac © 2016 Todos los Derechos reservados por Codesoft "/>
         </div>
 
+        <!--metodo que verifica si esta abierto la calculadora-->
+        <h:form id="formInit">
+            <p:remoteCommand name="onload" actionListener="#{menuRapidoOperadorMB.iniciarWidget()}" autoRun="true" />            
+        </h:form>
         <!-- SubMenu rapido -->
         <h:form id="formMenu2" > 
-            <p:remoteCommand name="onload" action="#{menuRapidoAdminMB.verificarDialogosUtilidades()}" autoRun="true" />
-            <p:stack icon="#{resource['img:menu/ico_canasta.png']}">
+            <p:stack id="idMenuRapido" icon="#{resource['img:menu/ico_canasta.png']}">
                 <p:menuitem  value="Ayuda" icon="#{resource['img:menu/ico_codefac.png']}" url="#"  />                
-                <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{menuRapidoAdminMB.abrirCalculadora()}"/>
-                <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoOperadorMB.abrirNota()}"/>
-                <p:menuitem value="Ventas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoOperadorMB.abrirVentas()}"/>
+                <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{menuRapidoOperadorMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
+                <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoOperadorMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido"/>
+                <p:menuitem value="Ventas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoOperadorMB.abrirWidget('dlgDetalles')}" update=":formMenu2:idMenuRapido"/>
             </p:stack>
         </h:form>
+
+
+        <!-- Calculadora -->
+        <p:dialog 
+            position="#{calcuUtilMB.x},#{calcuUtilMB.y}"
+            header="Calculadora" 
+            widgetVar="dlgCalculadora" 
+            minHeight="40" 
+            style="font-size:12px">
+
+            <p:ajax event="close"  listener="#{calcuUtilMB.handleClose}" />
+            <p:ajax event="move"   listener="#{calcuUtilMB.handleMove}" />
+
+
+            <h:form>
+                <h:panelGrid columns="4" cellpadding="1" cellspacing="0"  >
+                    <f:facet name="header">
+                        <p:inputTextarea style="width: 140px;background-color:darkslategray ;color: white" value="#{calcuUtilMB.textoCalculadora}"  />
+                    </f:facet>
+
+                    <p:commandButton actionListener="#{calcuUtilMB.abrirDialogo()}" value="+" style="width: 35px" />
+                    <p:commandButton value="-" style="width: 35px" />
+                    <p:commandButton value="*" style="width: 35px" />
+                    <p:commandButton value="/" style="width: 35px" />
+
+                    <p:commandButton value="0" style="width: 35px" />
+                    <p:commandButton value="1" style="width: 35px"/>
+                    <p:commandButton value="2" style="width: 35px"/>
+                    <p:commandButton value="3" style="width: 35px"/>
+
+                    <p:commandButton value="4" style="width: 35px"/>
+                    <p:commandButton value="5" style="width: 35px"/>
+                    <p:commandButton value="6" style="width: 35px"/>
+                    <p:commandButton value="7" style="width: 35px"/>
+
+                    <p:commandButton value="8" style="width: 35px"/>
+                    <p:commandButton value="9" style="width: 35px"/>
+                    <p:commandButton value="." style="width: 35px"/>
+                    <p:commandButton value="=" style="width: 35px"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
         <!-- Dialogo de las Notas Rapidas -->
-        <p:dialog  widgetVar="dlgNotas" minHeight="40" style="font-size:12px;background-color: #ffff99;background-image: none;padding: 0px;margin: 0px">
+        <p:dialog  
+            position="#{notaUtilMB.x},#{notaUtilMB.y}"
+            widgetVar="dlgNotas" 
+            minHeight="40" 
+            style="font-size:12px;background-color: #ffff99;background-image: none;padding: 0px;margin: 0px">
+
+            <p:ajax event="close"  listener="#{notaUtilMB.handleClose}" />
+            <p:ajax event="move"   listener="#{notaUtilMB.handleMove}" />
             <h:form id="formNotas">
-                <p:inputTextarea rows="7"  style="background-color: #ffff99;color: black;margin: 0px;border: 0px;font-size: 11px"/>
+                <p:inputTextarea  rows="7" value="#{notaUtilMB.sesion.usuarioLogin.notas}"  style="background-color: #ffff99;color: black;margin: 0px;border: 0px;font-size: 11px">
+                    <p:ajax event="blur" listener="#{notaUtilMB.grabarNota}"/>
+                </p:inputTextarea> 
             </h:form>
         </p:dialog>
 
@@ -107,18 +163,20 @@ and open the template in the editor.
                 </p:panelGrid>
             </h:form>
             <h:form id="formGeneralV">
-                <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" modal="true" height="auto">
+                <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" height="auto">
                     <p:panelGrid columns="4" >
                         <p:outputLabel  value="Stock : #{ventasDiariasMB.stock}"/>
                         <p:inputText id="cantidadP" value="#{ventasDiariasMB.cantidadComprar}" required="true" />
                         <p:commandButton  icon="ui-icon-plusthick" 
-                                          actionListener="#{ventasDiariasMB.venta()}" ajax="true" update=":formGeneralV"/>
+                                          actionListener="#{ventasDiariasMB.venta()}" ajax="true" update=":formGeneralV,:formDetallesV,:formDetallesVentas:idDetallesFactura,:formDetallesVentas:panelTotales"/>
                         <p:outputLabel value="#{ventasDiariasMB.msjStock}" style="color: darkred"/>
+                        
+                      
                     </p:panelGrid>
                 </p:dialog>
             </h:form>
             <h:form id="formEspecificoV">
-                <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" modal="true" height="auto">
+                <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" height="auto">
                     <p:panelGrid columns="5" >
                         <p:outputLabel  value="Stock : #{ventasDiariasMB.stock}"/>
                         <p:outputLabel  value="Código Único : "/>
@@ -134,6 +192,7 @@ and open the template in the editor.
 
 
         <!-- Dialogo de los Detalles -->
+
         <p:dialog widgetVar="dlgDetalles"
                   position="#{ventasDiariasMB.x},#{ventasDiariasMB.y}"
                   minHeight="30" 
@@ -143,29 +202,90 @@ and open the template in the editor.
             <p:ajax event="close"  listener="#{ventasDiariasMB.handleClose}" />
             <p:ajax event="move"   listener="#{ventasDiariasMB.handleMove}" />
             <h:form id="formDetallesV">
-                <p:panelGrid columns="2" styleClass="panelNoBorder">
-
-                    <p:panelGrid columns="2">
+                <h:panelGrid columns="2" styleClass="panelNoBorder" cellpadding="0" cellspacing="1" style="background-color: white">
+                    <h:panelGrid columns="2" cellpadding="1" cellspacing="0">
                         <f:facet name="header">
-                            <img width="50px" height="50px" src="#{facesContext.externalContext.requestContextPath}/resources/img/imgDialog/venta.png" align="top" onclick="PF('dlgVentas').show();"/>
+                            <p:commandButton icon="ui-icon-plusthick" style="width: 100%;height: 35px" onclick="PF('dlgVentas').show();"  />
                         </f:facet>
-                        <p:button icon="ui-icon-newwin"/>
-                        <p:button icon="ui-icon-refresh"/>
-                        
-                    </p:panelGrid>
-                    <p:panelGrid  id="panelTotalesV" columns="2" style="font-size: 10px" styleClass="panelNoBorder">
-                        <p:outputLabel  value="Subtotal:"/>
-                        <p:outputLabel id="subTotal" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" style="width: 50%"/>
-                        <p:outputLabel  value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
-                        <p:outputLabel id="iva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}"  style="width: 50%"/>
-                        <p:outputLabel  value="Total + Iva : "/>
-                        <p:outputLabel id="totalIva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}"  style="width: 50%"/>
-                    </p:panelGrid>
 
-                </p:panelGrid>
+                        <p:commandButton icon="ui-icon-clipboard" style="background-image: none;background-color: #009966;height: 30px"/>
+                        <p:commandButton icon="ui-icon-search" style="background-image: none;background-color: tomato;height: 30px" onclick="PF('dlgDetallesVentasDiarias').show();" />
+
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="1" style="font-size: 12px;width: 100%" >
+                        <f:facet name="header">
+                            <p:outputLabel value="Total Venta:" />    
+                        </f:facet>
+
+
+                        <p:inputText value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)} $" style="font-weight: bold;color: #ffffff;background-color: tomato;width: 83px;text-align: center"/>                    
+
+
+                        <f:facet name="footer">
+                            <p:outputLabel value="Items: " style="color: #485798;font-weight: bold"/> 
+                            <p:inputText value="#{ventasDiariasMB.detallesVenta.size()}" style="background-color: #485798; color: #ffffff;font-weight: bold;width: 30px;height: 10px;text-align: center" />
+                        </f:facet> 
+
+                    </h:panelGrid>
+
+
+                </h:panelGrid>
+            </h:form>
+        </p:dialog >
+
+
+        <!--dialgo detalles de ventas diarias -->
+        <p:dialog widgetVar="dlgDetallesVentasDiarias"
+                  minHeight="30" 
+                  width="700px"
+                  style="font-size:12px;background-color: white;background-image: none;padding: 0px;margin: 0px" 
+                  header="Detalles Ventas Diarias">
+            <h:form id="formDetallesVentas">
+                <p:panel id="idDetallesFactura" >
+                    <p:dataTable var="detallesVenta" 
+                                 value="#{ventasDiariasMB.detallesVenta}" 
+                                 id="tablaDetallesFactura" 
+                                 scrollable="true" 
+                                 scrollHeight="150"> 
+
+                        <p:column headerText="Cantidad" style="text-align: left;width:50px">
+                            <h:outputText value="#{detallesVenta.cantidad}" />
+                        </p:column>
+                        <p:column headerText="Código" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.codigo}" />
+                        </p:column>
+                        <p:column headerText="Descripción" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.nombre}" />
+                        </p:column>
+                        <p:column headerText="P. Unitario" style="text-align: left;width:50px" id="descuentoIndividual">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
+                        </p:column>
+                        <p:column headerText="Total" style="text-align: left;width:50px" id="totalDescuento">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:spacer/>
+
+                    <p:panelGrid  id="panelTotales" columns="2" style="margin-left:60%">
+                        <p:outputLabel  value="Subtotal:"/>
+                        <p:inputText id="subTotal" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" readonly="true"/>
+
+                        <p:outputLabel  value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
+                        <p:inputText id="iva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}" readonly="true"/>
+
+                        <p:outputLabel  value="Total + Iva : "/>
+                        <p:inputText id="totalIva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}" readonly="true"/>
+
+
+                        <p:outputLabel  value="Total a Pagar : "/>
+                        <p:inputText id="totalPagar" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.totalPagar)}" readonly="true"/>
+                    </p:panelGrid>
+                </p:panel>
+
             </h:form>
         </p:dialog>
-
 
 
     </h:body>
