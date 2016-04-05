@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    
+        <h:form id="formCompraV">
+                <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;font-size: 10px">
+                        <p:dataTable var="catalogo" value="#{ventasDiariasMB.catalogosLista}"
+                                     rows="10"
+                                     selectionMode="single" 
+                                     scrollable="true" 
+                                     scrollHeight="100"  
+                                     rowKey="#{catalogo.codigoProducto}"
+                                     selection="#{ventasDiariasMB.catalogoSeleccionado}">
+                            <p:ajax event="rowSelect" listener="#{ventasDiariasMB.onRowSelect(event)}" update=":formGeneralV:dlgInformacion,:formEspecificoV:dlgInformacionE"/>
+                            <p:ajax event="rowUnselect" listener="#{ventasDiariasMB.onRowUnSelect(event)}"/>
+
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                <h:outputText value="#{catalogo.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <h:outputText value="#{catalogo.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{catalogo.precio}" />
+                            </p:column>
+                        </p:dataTable>
+                </p:panelGrid>
+        </h:form>
+    <h:form id="formGeneralV">
+            <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" modal="true" height="auto">
+                <p:panelGrid columns="4" >
+                    <p:outputLabel  value="Stock : #{ventasDiariasMB.stock}"/>
+                    <p:inputText id="cantidadP" value="#{ventasDiariasMB.cantidadComprar}" required="true" />
+                    <p:commandButton  icon="ui-icon-plusthick" 
+                                      actionListener="#{ventasDiariasMB.venta()}" ajax="true" update=":formGeneralV"/>
+                    <p:outputLabel value="#{ventasDiariasMB.msjStock}" style="color: darkred"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        <h:form id="formEspecificoV">
+            <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" modal="true" height="auto">
+                <p:panelGrid columns="5" >
+                    <p:outputLabel  value="Stock : #{ventasDiariasMB.stock}"/>
+                    <p:outputLabel  value="Código Único : "/>
+                    <p:inputText id="codPEspec" value="#{ventasDiariasMB.codPEspe}" required="true" requiredMessage="Campo Necesario" />
+                    <p:commandButton  icon="ui-icon-plusthick" 
+                                      actionListener="#{ventasDiariasMB.venta()}" ajax="false" />
+                    <p:outputLabel  value="#{ventasDiariasMB.msjCodUnico}" style="color: darkred"/>
+                    <p:message for="codPEspec" />
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+    
+</ui:composition>
