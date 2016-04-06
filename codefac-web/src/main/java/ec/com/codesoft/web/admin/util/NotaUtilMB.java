@@ -17,6 +17,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.AjaxBehaviorEvent;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -64,6 +65,7 @@ public class NotaUtilMB extends CommonWidGet implements Serializable {
      */
     public void grabarNota(AjaxBehaviorEvent event) {
         System.out.println("editando la nota");
+        RequestContext.getCurrentInstance().execute("PF('dlgVentas').show()");
         usuarioServicio.editar(sesion.getUsuarioLogin());
     }
 

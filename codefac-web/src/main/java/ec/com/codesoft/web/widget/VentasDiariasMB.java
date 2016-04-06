@@ -54,6 +54,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -67,7 +68,7 @@ import org.primefaces.event.SelectEvent;
  * @author Suco
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
     private boolean estadoDialogo;
@@ -188,6 +189,9 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         estadoDialogoGeneral = false;
         msjCliente = "";
         clienteEncontrado = new Cliente();
+        clienteEncontrado.setCedulaRuc("9999999999");
+        clienteEncontrado.setTipo("PVP");
+        
         mostrarPanel = false;
         cantidadComprar = 1;
         mostrarInformacion = false;
@@ -246,25 +250,12 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
         //exclusivo para ordenes de Trabajo
         ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
-        detallesOrdenTrabajo = new ArrayList<DetalleVentaOrdenTrabajo>();
-
-        //habilitarDEescuento Manual
-        System.out.println("Sesion" + sesion);
-//        System.out.println("Usuario Login "+sesion.getUsuarioLogin());
-//        System.out.println("PerfilBuscado "+ sesion.getPerfilBuscado().getTipo());
-//        
-//        if (sesion.getPerfilBuscado().getTipo().equals("admin")) {
-//            mostrarDescuentoManual = true;
-//        } else {
-//            mostrarDescuentoManual = false;
-//        }
-        
-        
+        detallesOrdenTrabajo = new ArrayList<DetalleVentaOrdenTrabajo>(); 
         //position del widget
         
-        setX(8);
-        setY(500);
-        setNameVar("dlgNotas");
+        setX(0);
+        setY(557);
+        setNameVar("dlgDetalles");
         
 
     }
@@ -273,37 +264,8 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         System.out.println("Pruebar");
     }
 
-    public void calcularlInteres() {
-        System.err.println("Calcular Interes");
-        for (int i = 0; i < bancos.size(); i++) {
-            if (bancos.get(i).getNombre().equals(nombreBanco)) {
-                for (int j = 0; j < bancos.get(i).getInteresesList().size(); j++) {
-                    if (bancos.get(i).getInteresesList().get(j).getMeses() == mesSeleccionado) {
-
-                        estadoInteres = true;
-                        campoInteres = bancos.get(i).getInteresesList().get(j).getValor();
-                        interesTarjeta = (total.multiply(campoInteres.divide(new BigDecimal("100"))));
-                        totalPagar = total.add(interesTarjeta);
-                        System.err.println("Total " + total + "  Interes" + interesTarjeta);
-                        //interesTarjeta = interesTarjeta.setScale(2, BigDecimal.ROUND_UP);
-                        //totalPagar = totalPagar.setScale(2, BigDecimal.ROUND_UP);
-                    }
-                }
-            }
-        }
-    }
-
-    public void devolverBancoNombre() {
-
-        bancoBuscar = facturaServicio.devolverInteresBanco(nombreBanco);
-        intereses = bancoBuscar.getInteresesList();
-        campoInteres = new BigDecimal("0.0");
-//        System.err.println(nombreBanco);
-//        System.out.println(mesSeleccionado);
-//        calcularlInteres();
-
-    }
-
+    
+    
     public void verificarDialogo() {
         System.out.println("VeriE");
         if (estadoDialogo) {
@@ -328,61 +290,8 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         estadoDialogoGeneral = false;
     }
 
-    public void buscarCliente() {
-
-        System.out.println("Buscar");
-        clienteEncontrado = clienteServicio.buscarCliente(cedCliente);
-        if (clienteEncontrado == null) {
-            System.out.println("NNEncontrado");
-            msjCliente = "";//cliente no encontrado
-            //mostrarPanel = false;
-
-            System.out.println("abriendo nuevo panel...");
-            Map<String, Object> options = new HashMap<String, Object>();
-            options.put("modal", true);
-
-            Map<String, List<String>> params = new HashMap<String, List<String>>();
-            List<String> values = new ArrayList<String>();
-
-            values.add(cedCliente);
-            params.put("cedula", values);
-            //options.put("width", 640);
-            //options.put("height", 340);
-            // options.put("contentWidth", "100%");
-            // options.put("contentHeight", "100%");
-            //options.put("headerElement", "customheader");
-            //RequestContext.getCurrentInstance().execute("PF('confirmarDistribuidor').hide()");
-            RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
-
-        } else {
-
-            System.out.println("Encontrado");
-            msjCliente = "Cliente Encontrado";
-            if (clienteEncontrado.getTipo().equals("Distribuidor")) {
-                cliMayorista = " --> Distribuidor";
-            } else {
-                cliMayorista = "";
-            }
-
-            //mostrarCompra = true;
-            // mostrarPanel = true;
-            //tabCompra = true;
-        }
-    }
-
-    public void recibirDatos(SelectEvent event) {
-        clienteEncontrado = ((Cliente) event.getObject());
-        if (clienteEncontrado.getTipo().equals("Distribuidor")) {
-            msjCliente = "Cliente Encontrado";
-            cliMayorista = " --> Distribuidor";
-        } else {
-            cliMayorista = "";
-        }
-        cedCliente = clienteEncontrado.getCedulaRuc();
-
-        //System.out.println("dato recibido");
-        //System.out.println(compra.getRuc());
-    }
+   
+  
 
     public void cargarDetalles() {
 
@@ -445,64 +354,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         }
     }
 
-    public void onRowSelectOrden(SelectEvent event) {
-
-        System.out.println("Venta Orden");
-
-        if (detallesVenta.size() > maxItems - 1) {
-
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia...!", "Número Máximo de Detalles Alcanzado..!");
-            RequestContext.getCurrentInstance().showMessageInDialog(message);
-        } else {
-            DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
-            totalRegistro = ordenTrabajoSeleccionada.getTotal();
-            subtotalRegistro = totalRegistro.multiply(ivaTotal);
-            subtotal = subtotal.add(totalRegistro);
-            if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
-//                iva = new BigDecimal("0.0");
-//                // iva = iva.setScale(2, BigDecimal.ROUND_UP);
-//                total = subtotal;
-//                // total = total.setScale(2, BigDecimal.ROUND_UP);
-//                totalPagar = total;
-                iva = subtotal.multiply(ivaSubTotal);
-                total = subtotal.multiply(ivaTotal);
-                totalPagar = total;
-            } else {
-                iva = subtotal.multiply(ivaSubTotal);
-                //  iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                total = subtotal.multiply(ivaTotal);
-                // total = total.setScale(2, BigDecimal.ROUND_UP);
-                totalPagar = total;
-            }
-
-            DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
-                    ordenTrabajoSeleccionada.toStringDetalle(),
-                    ordenTrabajoSeleccionada.getTotal(), totalRegistro);
-
-            Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
-            Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
-            Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
-            //System.out.println(catalogoSeleccionado.getDescuento());
-            Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
-            List<Descuentos> descuentos = new ArrayList<Descuentos>();
-            descuentos.add(precioMayorista);
-            descuentos.add(precioDescuento);
-            descuentos.add(dcto);
-            descuentos.add(dctoMayorista);
-            detalles.setValorVerdaderoMayorista(ordenTrabajoSeleccionada.getTotal());
-            detalles.setValorVerdaderoPVP(ordenTrabajoSeleccionada.getTotal());
-            detalles.setDescuentos(descuentos);
-            detalles.setPrecioSeleccionado("PVP");
-            detalles.setEscogerDescuento("No");
-            detalles.setTipoDetalle("Orden Trabajo");
-            detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
-            detallesVenta.add(detalles);
-            System.out.println("Detallles: " + detallesVenta);
-        }
-    }
-
-    public void onRowUnSelectOrden(SelectEvent event) {
-    }
+    
 
     public void onRowSelect(SelectEvent event) {
 
@@ -533,8 +385,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                 stock = productoGeneral.getCantidadDisponible() - numDetalles;
                 Map<String, Object> options = new HashMap<String, Object>();
                 options.put("modal", true);
-                RequestContext.getCurrentInstance().openDialog("infProducto", options, null);
-                        //execute("PF('infProducto').show()");
+                RequestContext.getCurrentInstance().execute("PF('infProducto').show()");
                 estadoDialogoGeneral = true;
 
                 //mostrarPanel = false;
@@ -562,49 +413,12 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
     }
 
-    public void escojerTipoCLiente() {
-        System.out.println(tipoCliente);
-        if (tipoCliente.equals("F")) {
-            //obtiene el ultimo codigo de la factura
-            codigoDocumento = facturaServicio.getCodigoFactura("Factura");
-            maxItems = maxItemFactura;
-
-//            System.out.println(tipoCliente);
-//            todoPanel = true;
-//            cedCliente = "";
-//            clienteEncontrado.setNombre("");
-        } else {
-            //obtiene el ultimo codigo de las notas
-            codigoDocumento = facturaServicio.getCodigoFactura("Nota");
-            maxItems = maxItemNota;
-
-            System.out.println("CF" + tipoCliente);
-            clienteEncontrado.setNombre("Consumidor Final");
-            clienteEncontrado.setTipo("PVP");
-            cedCliente = "9999999999";
-            ///clienteEncontrado = clienteServicio.buscarCliente(cedCliente);
-
-            clienteEncontrado.setCedulaRuc("9999999999");
-            todoPanel = true;
-        }
-    }
+    
 
     public void venta() {
         System.out.println(cantidadComprar + "--" + stock);
-       // if (cantidadComprar > stock) {
-        //     msjStock = "No existe suficiente Stock";
-        //     System.out.println("No hay stock");
-
-        //} else {
-        //System.out.println("tamanio "+ detallesVenta.size());
-        if (detallesVenta.size() > maxItems - 1) {
-//            cerrarDialogo();
-//            cerrarDialogoG();
-            estadoDialogo = false;
-            estadoDialogoGeneral = false;
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia...!", "Número Máximo de Detalles Alcanzado..!");
-            RequestContext.getCurrentInstance().showMessageInDialog(message);
-        } else {
+       
+     
             if (tipoCliente == "" || tipoCliente == null) {
                 FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -766,15 +580,11 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                 }
 
             }
-        }
+        
         // }
     }
 
-    public String cancelar() {
-        System.out.println("Cancelando");
-        return "factura";
-    }
-
+   
     ////////////////////METODOS GET Y SET /////////////////////
     public boolean getEstadoDialogo() {
         return estadoDialogo;
