@@ -109,45 +109,50 @@ public class OrdenTrabajo implements Serializable {
         return texto;
     }
 
+    public String toStringEquipos() {
+        String texto = "";
+        for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) {
+            texto += detalle.getEquipo()+ ",";
+        }
+        return texto;
+    }
+
     /**
      * Calcula los dias entre la fecha de ingreso y de entrga
-     * @return 
+     *
+     * @return
      */
-    public  int diferenciaDiasEntrega() 
-    {
-        return TiempoUtil.diferenciaEnDias(fechaEntrega,new Date());
+    public int diferenciaDiasEntrega() {
+        return TiempoUtil.diferenciaEnDias(fechaEntrega, new Date());
     }
-    
+
     /**
      * Tiempo de entrega
-     * @return 
+     *
+     * @return
      */
-    public String tiempoEntrega()
-    {
-        Date fechaActual=new Date();
-        String tiempo="";
-        int dias= TiempoUtil.diferenciaEnDias(fechaEntrega,fechaActual);
-        int horas=TiempoUtil.diferenciaEnHoras(fechaEntrega,fechaActual);
-        int minutos=TiempoUtil.diferenciaEnMinutos(fechaEntrega, fechaActual);
-        
-        int horasRestantes=horas-dias*24;
-        int minutosRestantes=minutos-horas*60;
-        
-        //seteando a valores positivos
-        dias=Math.abs(dias);
-        horasRestantes=Math.abs(horasRestantes);
-        minutosRestantes=Math.abs(minutosRestantes);
-        
-        //if(dias==0)
-       // {
-       //     return "hoy ,"+horasRestantes+" horas " + minutosRestantes+" min";
-       // }
-        
-        return dias+" días "+horasRestantes+" horas " + minutosRestantes+" min";
-        
-    }
-    
+    public String tiempoEntrega() {
+        Date fechaActual = new Date();
+        String tiempo = "";
+        int dias = TiempoUtil.diferenciaEnDias(fechaEntrega, fechaActual);
+        int horas = TiempoUtil.diferenciaEnHoras(fechaEntrega, fechaActual);
+        int minutos = TiempoUtil.diferenciaEnMinutos(fechaEntrega, fechaActual);
 
+        int horasRestantes = horas - dias * 24;
+        int minutosRestantes = minutos - horas * 60;
+
+        //seteando a valores positivos
+        dias = Math.abs(dias);
+        horasRestantes = Math.abs(horasRestantes);
+        minutosRestantes = Math.abs(minutosRestantes);
+
+        //if(dias==0)
+        // {
+        //     return "hoy ,"+horasRestantes+" horas " + minutosRestantes+" min";
+        // }
+        return dias + " días " + horasRestantes + " horas " + minutosRestantes + " min";
+
+    }
 
     /////////////////////////METODOS GET AND SET ///////////////////////
     public Integer getIdOrdenTrabajo() {

@@ -14,11 +14,6 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        <p:dock position="bottom">
-            <p:menuitem value="Home"  icon="/resources/demo/images/dock/home.png" url="#"/>
-            <p:menuitem value="Music" icon="/resources/demo/images/dock/music.png" url="#"/>
-            <!-- more menuitems -->
-        </p:dock>
         
         <p:panel header="Trabajos Pendientes">
 
@@ -122,6 +117,7 @@ and open the template in the editor.
             <p:dialog header="Reparacion Rapida" modal="true" widgetVar="dlgReparacion" showEffect="explode" hideEffect="explode" height="2s00">
                 <h:form id="formReparacionRapida">
                     <p:panelGrid columns="2" styleClass="panelNoBorder">
+                        
                         <p:outputLabel value="Diagnostico:"/>
                         <p:inputTextarea value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.diagnostico}"/>
 
@@ -132,7 +128,7 @@ and open the template in the editor.
                         <p:selectBooleanCheckbox  />
                     </p:panelGrid>
                     <div style="text-align: center">
-                        <p:commandButton value="Terminar"/>
+                        <p:commandButton actionListener="#{trabajosPendientesMB.grabarOrdenTrabajo()}" value="Terminar"/>
                     </div>
                 </h:form>
             </p:dialog>
