@@ -55,6 +55,7 @@ public class menuRapidoOperadorMB  implements Serializable{
         }
     }
 
+    //abre los widgets
     public void abrirWidget(String textWidGet) {
         for (CommonWidGet widGet : listaWidGet) {
             if (widGet.getNameVar().equals(textWidGet)) {
@@ -64,6 +65,9 @@ public class menuRapidoOperadorMB  implements Serializable{
             }
         }
     }
+    
+    
+    
     
     
     ///////////////////////METODOS GET AND SET/////////////////////
