@@ -22,6 +22,7 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class StackAdminMB implements Serializable {
+
     private List<CommonWidGet> listaWidGet;
 
     @ManagedProperty(value = "#{calcuUtilMB}")
@@ -30,12 +31,16 @@ public class StackAdminMB implements Serializable {
     @ManagedProperty(value = "#{notaUtilMB}")
     private NotaUtilMB notaUtilMB;
 
+    @ManagedProperty(value = "#{calendarioUtilMB}")
+    private CalendarioUtilMB calendarioUtilMB;
+
     @PostConstruct
     public void postConstruct() {
         listaWidGet = new ArrayList<CommonWidGet>();
-       
+
         listaWidGet.add(notaUtilMB);
         listaWidGet.add(calcuUtilMB);
+        listaWidGet.add(calendarioUtilMB);
     }
 
     /**
@@ -56,10 +61,8 @@ public class StackAdminMB implements Serializable {
             }
         }
     }
-    
-    
-    ///////////////////////METODOS GET AND SET/////////////////////
 
+    ///////////////////////METODOS GET AND SET/////////////////////
     public CalcuUtilMB getCalcuUtilMB() {
         return calcuUtilMB;
     }
@@ -74,6 +77,14 @@ public class StackAdminMB implements Serializable {
 
     public void setNotaUtilMB(NotaUtilMB notaUtilMB) {
         this.notaUtilMB = notaUtilMB;
+    }
+
+    public CalendarioUtilMB getCalendarioUtilMB() {
+        return calendarioUtilMB;
+    }
+
+    public void setCalendarioUtilMB(CalendarioUtilMB calendarioUtilMB) {
+        this.calendarioUtilMB = calendarioUtilMB;
     }
     
 }

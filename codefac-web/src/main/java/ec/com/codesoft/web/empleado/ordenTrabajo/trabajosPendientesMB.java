@@ -7,6 +7,7 @@ package ec.com.codesoft.web.empleado.ordenTrabajo;
 
 import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.modelo.servicios.OrdenTrabajoServicio;
+import ec.com.codesoft.web.util.CorreoMB;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -37,48 +38,60 @@ public class trabajosPendientesMB implements Serializable {
      * Indica el tipo de ordenamiento que se va a realiza desendente o ascendete
      */
     private String tipoOrden;
-    
-    private OrdenTrabajo ordenTrabajoSeleccionados ;
+
+    private OrdenTrabajo ordenTrabajoSeleccionados;
 
     @PostConstruct
     public void postConstruct() {
         ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso("ASC");
         System.out.println(ordenTrabajoList.size());
-        tipoFiltro="ingreso";
-        tipoOrden="ASC";
+        tipoFiltro = "ingreso";
+        tipoOrden = "ASC";
     }
 
     /**
      * Realiza el filtro por un campo y realiza el ordenamiento
      */
-    public void filtrar() 
-    {
-        System.out.println("tipo:"+tipoFiltro);
+    public void filtrar() {
+        System.out.println("tipo:" + tipoFiltro);
         switch (tipoFiltro) {
             case "entrega":
-                ordenTrabajoList=ordenTrabajoServicio.obtenerPorFechaSalida(tipoOrden);
+                ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaSalida(tipoOrden);
                 break;
 
             case "ingreso":
-                ordenTrabajoList=ordenTrabajoServicio.obtenerPorFechaIngreso(tipoOrden);
+                ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso(tipoOrden);
                 break;
-                
+
             case "precio":
-                ordenTrabajoList=ordenTrabajoServicio.obtenerPorPrecio(tipoOrden);
+                ordenTrabajoList = ordenTrabajoServicio.obtenerPorPrecio(tipoOrden);
                 break;
 
         }
     }
-    
+
     /**
      * Contrala la reparacion rapida de la orden de trabajo
      */
-    public void reparacionRapida(OrdenTrabajo orden)
-    {
+    public void reparacionRapida(OrdenTrabajo orden) {
         System.out.println("reparacion rapida..");
         RequestContext.getCurrentInstance().execute("PF('dlgReparacion').show()");
-        ordenTrabajoSeleccionados=orden;
-        
+        ordenTrabajoSeleccionados = orden;
+
+    }
+
+    /**
+     * Cambiar el estado de la orden de trabajo
+     */
+    public void grabarOrdenTrabajo() {
+        ordenTrabajoServicio.editar(ordenTrabajoSeleccionados);
+        System.out.println("enviando correo ...");
+        CorreoMB correo = new CorreoMB();
+        correo.EnviarCorreoSinArchivoAdjunto(""
+                + "carlosmast2302@gmail.com", ""
+                        + "Codesoft", ""
+                                + "Codefac le informa que su trabajo con orden No: "+ordenTrabajoSeleccionados.getIdOrdenTrabajo()+"("+ordenTrabajoSeleccionados.toStringEquipos()+") se encuentra listo "
+                                + "<br> Diagnostico:"+ordenTrabajoSeleccionados.getDiagnostico()+"<br> Costo: "+ordenTrabajoSeleccionados.getTotal());
     }
 
     //////////////////////////GET AND SET//////////////////////////////
@@ -113,7 +126,5 @@ public class trabajosPendientesMB implements Serializable {
     public void setOrdenTrabajoSeleccionados(OrdenTrabajo ordenTrabajoSeleccionados) {
         this.ordenTrabajoSeleccionados = ordenTrabajoSeleccionados;
     }
-    
-    
 
 }

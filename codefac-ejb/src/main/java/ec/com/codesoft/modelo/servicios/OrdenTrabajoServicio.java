@@ -82,6 +82,13 @@ public class OrdenTrabajoServicio {
     public Usuario getUsuarioByNick(String nick) {
         return usuarioFacade.find(nick);
     }
+    
+    public void editar(OrdenTrabajo ordenTrabajo)
+    {
+        ordenTrabajoFacade.edit(ordenTrabajo);
+    }
+    
+    ////////////////////////////////// GET AND SET //////////////////////
 
     public List<Servicios> obtenerServicios() {
         return servicios.findAll();

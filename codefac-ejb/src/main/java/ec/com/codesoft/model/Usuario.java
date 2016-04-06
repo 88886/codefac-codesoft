@@ -99,6 +99,8 @@ public class Usuario implements Serializable {
     private List<DetallesServicio> detallesServicioList;
     @OneToMany(mappedBy = "usuarioPermiso")
     private List<Venta> ventaList1;
+    @OneToMany(mappedBy = "nick")
+    private List<Recordatorio> recordatorioList;
 
     public Usuario() {
     }
@@ -293,6 +295,14 @@ public class Usuario implements Serializable {
 
     public void setNotas(String notas) {
         this.notas = notas;
+    }
+
+    public List<Recordatorio> getRecordatorioList() {
+        return recordatorioList;
+    }
+
+    public void setRecordatorioList(List<Recordatorio> recordatorioList) {
+        this.recordatorioList = recordatorioList;
     }
     
     
