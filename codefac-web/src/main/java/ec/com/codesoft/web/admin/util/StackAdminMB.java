@@ -9,6 +9,7 @@ import ec.com.codesoft.web.widget.CommonWidGet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -23,7 +24,7 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class StackAdminMB implements Serializable {
 
-    private List<CommonWidGet> listaWidGet;
+    private CopyOnWriteArrayList<CommonWidGet> listaWidGet;
 
     @ManagedProperty(value = "#{calcuUtilMB}")
     private CalcuUtilMB calcuUtilMB;
@@ -36,7 +37,7 @@ public class StackAdminMB implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        listaWidGet = new ArrayList<CommonWidGet>();
+        listaWidGet = new CopyOnWriteArrayList<CommonWidGet>();
 
         listaWidGet.add(notaUtilMB);
         listaWidGet.add(calcuUtilMB);

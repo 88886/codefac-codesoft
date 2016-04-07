@@ -16,6 +16,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import org.primefaces.context.RequestContext;
 
@@ -63,9 +64,9 @@ public class NotaUtilMB extends CommonWidGet implements Serializable {
     /**
      * Graba la nota en el disco
      */
-    public void grabarNota(AjaxBehaviorEvent event) {
+    public void grabarNota() 
+    {
         System.out.println("editando la nota");
-        RequestContext.getCurrentInstance().execute("PF('dlgVentas').show()");
         usuarioServicio.editar(sesion.getUsuarioLogin());
     }
 
