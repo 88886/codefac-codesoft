@@ -19,8 +19,7 @@
                     <p:password id="clave" required="true" value="#{sessionMB.clave}"   />
 
                     <p:outputLabel for="perfil" value="Perfil:"/>
-                    <p:selectOneMenu id="perfil" value="#{sessionMB.perfilNombre}" style="width:100%">
-                        <f:selectItem itemLabel="Seleccione el perfil" itemValue="" />
+                    <p:selectOneMenu id="perfil" value="#{sessionMB.perfilNombre}" style="width:180px">
                         <f:selectItem itemLabel="Operador" itemValue="operador" />
                         <f:selectItem itemLabel="Empleado" itemValue="empleado" />
                         <f:selectItem itemLabel="Administrador" itemValue="admin" />
@@ -39,14 +38,14 @@
 
 
         <h:form>
-            <p:commandButton onclick="document.media.Play();" value="play" update="media"/>
+            <p:commandButton onclick="document.media.Play();" value="play" update="media" rendered="false"/>
 
             <p:media id="media" value="#{sessionMB.urlSonido}" player="quicktime" style="visibility: hidden;">
                 <f:param name="autoPlay" value="true" />
                 <f:param name="enablejavascript" value="true"/>
             </p:media>
 
-        </h:form>
+        </h:form> 
         
        
     </ui:define>
