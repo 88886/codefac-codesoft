@@ -38,6 +38,7 @@
 
 
         <h:form>
+            
             <p:commandButton onclick="document.media.Play();" value="play" update="media" rendered="false"/>
 
             <p:media id="media" value="#{sessionMB.urlSonido}" player="quicktime" style="visibility: hidden;">
@@ -46,6 +47,7 @@
             </p:media>
 
         </h:form> 
-               
+        
+       
     </ui:define>
 </ui:composition>
