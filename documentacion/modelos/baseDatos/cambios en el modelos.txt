@@ -1,2 +1,8 @@
 Agregado precio mayorista
 Agregado precio por caja
+
+//////////////// 12 de abril del 2016 ////////////////
+-> agregar el codigo unico autoincremental en la tabla de "producto individual compra"
+-> agregar un campo llamado reingreso con el tipo de dato entero
+
+

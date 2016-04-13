@@ -20,19 +20,17 @@ and open the template in the editor.
 
                     <p:spacer width="15px"/>
 
-                    <p:panelGrid columns="5" style="margin: 0 auto" styleClass="panelNoBorder" >
+                    <p:panelGrid columns="6" style="margin: 0 auto" styleClass="panelNoBorder" >
 
                         <p:outputLabel value="CI/RUC: " />
 
                         <p:inputText 
                             id="txtCedulaRuc" 
                             value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.cedulaRuc}" 
-                            onkeypress="if (event.keyCode == 13) {
-                                        test();
-                                        return false;
-                                    }"
+                            onkeypress="return validarEnter(event,'test');"
                             required="false" />
 
+                        <!-- Verifica si el cliente existe o no -->
                         <p:remoteCommand 
                             process="@this,
                             :formPrincipal:txtCedulaRuc,
@@ -42,7 +40,8 @@ and open the template in the editor.
                             :formPrincipal:txtObservaciones" 
                             name="test" actionListener="#{ordenTrabajoMB.validarCliente()}" update="@form"/>
 
-
+                        
+                        <!-- Boton que abre un dialogo para buscar el cliente -->
                         <p:commandButton partialSubmit="true" 
                                          process="
                                          @this,

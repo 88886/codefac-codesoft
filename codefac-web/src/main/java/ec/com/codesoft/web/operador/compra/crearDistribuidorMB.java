@@ -38,10 +38,10 @@ public class crearDistribuidorMB implements Serializable {
 
     @PostConstruct
     public void postConstruc() {
-        distribuidor=new Distribuidor();
+        distribuidor = new Distribuidor();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String ruc=request.getParameter("ruc");
+        String ruc = request.getParameter("ruc");
         distribuidor.setRuc(ruc);
     }
 
@@ -49,7 +49,14 @@ public class crearDistribuidorMB implements Serializable {
         System.out.println("grabando distribuidor ...");
         //System.out.println(distribuidor);
         distribuidorServicio.insertar(distribuidor);
-        RequestContext.getCurrentInstance().closeDialog(distribuidor);        
+        RequestContext.getCurrentInstance().closeDialog(distribuidor);
+    }
+
+    public void cancelar() {
+        System.out.println("cancelando grabar distribuidor ...");
+        //System.out.println(distribuidor);
+        
+        RequestContext.getCurrentInstance().closeDialog(null);
     }
 
     public Distribuidor getDistribuidor() {

@@ -41,6 +41,11 @@ public class gestionarCompraMB implements Serializable
      */
     private List<Compra> listaCompras;
     
+    /**
+     * Lista de las de las compras para guardar los filtros
+     */
+    private List<Compra> listaComprasFilter;
+    
     
     @PostConstruct
     public void postConstruct()
@@ -96,6 +101,16 @@ public class gestionarCompraMB implements Serializable
     public void setCompraSeleccionado(Compra compraSeleccionado) {
         this.compraSeleccionado = compraSeleccionado;
     }
+
+    public List<Compra> getListaComprasFilter() {
+        return listaComprasFilter;
+    }
+
+    public void setListaComprasFilter(List<Compra> listaComprasFilter) {
+        this.listaComprasFilter = listaComprasFilter;
+    }
+    
+    
     
     
 }

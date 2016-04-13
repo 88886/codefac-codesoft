@@ -109,9 +109,9 @@ public class GestionProductoMB implements Serializable {
         //catalagoProducto = new CatalagoProducto();
         System.out.println(catalogoSeleccionado);
         //catalogoSeleccionado.setPrecio(catalogoSeleccionado.getPrecio().multiply(new BigDecimal("1.12")).setScale(0,RoundingMode.UP));
-        catalogoSeleccionado.setPrecio(calculosMB.incluirIva(catalogoSeleccionado.getPrecio()));
+        //catalogoSeleccionado.setPrecio(calculosMB.incluirIva(catalogoSeleccionado.getPrecio()));
         //catalogoSeleccionado.setPrecioMayorista(catalogoSeleccionado.getPrecioMayorista().multiply(new BigDecimal("1.12")).setScale(0,RoundingMode.UP));
-        catalogoSeleccionado.setPrecioMayorista(calculosMB.incluirIva(catalogoSeleccionado.getPrecioMayorista()));
+        //catalogoSeleccionado.setPrecioMayorista(calculosMB.incluirIva(catalogoSeleccionado.getPrecioMayorista()));
         
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').show()");
         dialogoEditAbierto = true;

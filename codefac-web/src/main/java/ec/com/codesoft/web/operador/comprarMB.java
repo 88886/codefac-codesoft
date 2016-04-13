@@ -123,7 +123,11 @@ public class comprarMB implements Serializable {
         this.detalleCompra = new ArrayList<DetalleCompraModelo>();
         this.cantidadDetalle = 0;
         this.costoDetalle = new BigDecimal(0);
-        this.compra.setRuc(new Distribuidor());
+        
+        Distribuidor distribuidorVacio=new Distribuidor();
+        distribuidorVacio.setRuc("");
+        this.compra.setRuc(distribuidorVacio);
+        
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
         this.compra.setIva(new BigDecimal("12"));
@@ -223,7 +227,7 @@ public class comprarMB implements Serializable {
         //System.out.println(calculo);
         System.out.println(calculo);
         System.out.println(compra.getIva());
-       // System.out.println(calculo);
+        // System.out.println(calculo);
         // System.out.println(calculo);
 
         compra.setTotal(calculo.multiply(compra.getIva().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
@@ -237,27 +241,34 @@ public class comprarMB implements Serializable {
 
         System.out.println(catalogo);
 
-        ProductoIndividualCompra detalleIndividual = new ProductoIndividualCompra();
-        //detalleIndividual.setCantidad(cantidadDetalle);
-        detalleIndividual.setCosto(costoDetalle);
-        detalleIndividual.setCodigoProducto(catalogo);
-        detalleIndividual.setCodigoUnico(codigoEspecificoDetalle);
+        //Verificar que no exista el codigo del producto individual
+        if (!compraServicio.existenciaProductoIndividual(catalogo.getCodigoProducto(),codigoEspecificoDetalle)) 
+        {
+            ProductoIndividualCompra detalleIndividual = new ProductoIndividualCompra();
+            //detalleIndividual.setCantidad(cantidadDetalle);
+            detalleIndividual.setCosto(costoDetalle);
+            detalleIndividual.setCodigoProducto(catalogo);
+            detalleIndividual.setCodigoUnico(codigoEspecificoDetalle);
 
-        DetalleCompraModelo detalle = new DetalleCompraModelo(detalleIndividual);
-        detalleCompra.add(detalle);
+            DetalleCompraModelo detalle = new DetalleCompraModelo(detalleIndividual);
+            detalleCompra.add(detalle);
 
-        //limpiar ventana para agregar mas detalles
-        contadorIngresoDetalleEspecifico--;
-        //RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
-        codigoEspecificoDetalle = "";
+            //limpiar ventana para agregar mas detalles
+            contadorIngresoDetalleEspecifico--;
+            //RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
+            codigoEspecificoDetalle = "";
 
-        sumaTotalCompra = sumaTotalCompra.add(detalle.getSubtotal());
-        actualizarValoresTotales();
-        if (contadorIngresoDetalleEspecifico == 0) {
-            RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
+            sumaTotalCompra = sumaTotalCompra.add(detalle.getSubtotal());
+            actualizarValoresTotales();
+            if (contadorIngresoDetalleEspecifico == 0) {
+                RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
 
+            }
+
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "El codigo especifico ya existe");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
         }
-
     }
 
     /**
@@ -313,7 +324,11 @@ public class comprarMB implements Serializable {
     }
 
     public void recibirDatos(SelectEvent event) {
-        compra.setRuc((Distribuidor) event.getObject());
+        Distribuidor distribuidorAux = (Distribuidor) event.getObject();
+        if (distribuidorAux != null) {
+            compra.setRuc(distribuidorAux);
+        }
+
         System.out.println("dato recibido");
         System.out.println(compra.getRuc());
     }
@@ -324,26 +339,31 @@ public class comprarMB implements Serializable {
      * @param ae
      */
     public void verificarProducto() {
-        //codigoDetalle
+        //validacion para saber si selecciono un distribuidor
+        if (compra.getRuc().getRuc().equals("")) 
+        {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No se encuentra seleccionado un distribuidor para agregar productos");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        } 
+        //procede a agregar los detalles cuando ya esta escogido el distribuidor
+        else 
+        {           
+            cantidadDetalle = 1;
+            costoDetalle = new BigDecimal("0");
 
-        cantidadDetalle = 1;
-        costoDetalle = new BigDecimal("0");
+            System.out.println(compra);
+            System.out.println("Total" + total);
+            catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
+            if (catalogo != null) {
+                System.out.println("El producto existe");
+                costoDetalle = compraServicio.obtenerUltimoCostoDistribuidor(catalogo, compra.getRuc().getRuc());
+                this.visibleDetalleAgregar = true;
+            } else {
+                System.out.println("El producto no existe");
+                RequestContext.getCurrentInstance().execute("PF('confirmarProducto').show()");
+                //confirmarProducto
 
-        System.out.println(compra);
-        System.out.println("Total" + total);
-        catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
-        if (catalogo != null) {
-            System.out.println("El producto existe");
-
-            //obtiene el ultimo costo de la ultima compra por el distribuidor
-            costoDetalle = compraServicio.obtenerUltimoCostoDistribuidor(catalogo, compra.getRuc().getRuc());
-
-            this.visibleDetalleAgregar = true;
-        } else {
-            System.out.println("El producto no existe");
-            RequestContext.getCurrentInstance().execute("PF('confirmarProducto').show()");
-            //confirmarProducto
-
+            }
         }
 
     }

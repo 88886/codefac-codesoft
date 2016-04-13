@@ -12,41 +12,56 @@
 
             <!-- tabla que muestra el contenido de las compras -->
             <p:dataTable
-                
+                filteredValue="#{gestionarCompraMB.listaComprasFilter}"
                 value="#{gestionarCompraMB.listaCompras}"
                 var="compra"
-                
+
                 >
 
-                <p:column headerText="Codigo">
+                <p:column headerText="Codigo" style="width: 60px" filterBy="#{compra.codigoCompra}" filterMatchMode="contains">
                     <p:outputLabel value="#{compra.codigoCompra}"/>
                 </p:column>
 
-                <p:column headerText="Cod Documento">
+                <p:column headerText="Cod Documento" style="width: 100px" filterBy="#{compra.codigoDocumento}" filterMatchMode="contains">
                     <p:outputLabel value="#{compra.codigoDocumento}"/>
                 </p:column>
+
+                <p:column headerText="Cedula" style="width: 80px" filterBy="#{compra.ruc.ruc}" filterMatchMode="contains">
+                    <p:outputLabel value="#{compra.ruc.ruc}"/>
+                </p:column>
+
+                <p:column headerText="Distribuidor" style="width: 100px" filterBy="#{compra.ruc.nombre}" filterMatchMode="contains">
+                    <p:outputLabel value="#{compra.ruc.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Fecha" style="width: 130px">
+                    <p:outputLabel value="#{compra.fecha}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </p:outputLabel>
+                </p:column>
+
 
                 <p:column headerText="Detalle">
                     <p:outputLabel value="#{compra.imprimirDetalle()}"/>
                 </p:column>
 
-                <p:column headerText="Total">
+                <p:column headerText="Total" style="width: 50px">
                     <p:outputLabel value="#{compra.total}"/>
                 </p:column>
 
-                <p:column headerText="Descuento">
+                <p:column headerText="Descuento" style="width: 50px">
                     <p:outputLabel value="#{compra.descuento}"/>
                 </p:column>
 
-                <p:column headerText="Acciones">
+                <p:column headerText="Acciones" style="width: 180px">
                     <p:commandButton value="Ver" action="#{gestionarCompraMB.abrirDialogEditar(compra)}"  >
                         <f:param name="id" value="#{compra.codigoCompra}" />
                     </p:commandButton> 
-                    
+
                     <p:commandButton value="Eliminar" actionListener="#{gestionarCompraMB.eliminar(compra)}" update="">
                         <p:confirm header="Confirmacion" message="Esta seguro que quiere eliminar?" icon="ui-icon-alert" />
                     </p:commandButton>
-                    
+
                 </p:column>
 
             </p:dataTable>

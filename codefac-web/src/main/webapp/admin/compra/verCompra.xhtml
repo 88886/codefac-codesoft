@@ -15,7 +15,7 @@ and open the template in the editor.
 
     <ui:define name="contenido" >
         <f:event listener="#{comprarMB.preRender()}" type="preRenderView" />
-        
+
         <div style="text-align:center">
             <p:panel header="Ver Compra"  style="width: 60%;margin: 0 auto" styleClass="customTitleBar" >
 
@@ -64,16 +64,16 @@ and open the template in the editor.
                         <!-- Datos del distribuidor para mostrar	 -->
                         <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%">
                             <p:outputLabel value="Nombre: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.nombre}" />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}" style="font-weight: bold" />
 
                             <p:outputLabel value="Direccion: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.direccion}" />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.direccion}" style="font-weight: bold" />
 
                             <p:outputLabel value="Telefono: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.telefono}" />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.telefono}" style="font-weight: bold" />
 
                             <p:outputLabel value="Email: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.correo}" />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}" style="font-weight: bold" />
 
                         </p:panelGrid>
 
@@ -83,7 +83,7 @@ and open the template in the editor.
                         <p:panel >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="No Documento: "/>
-                                <p:inputText value="#{comprarMB.compra.codigoDocumento}" readonly="true" />
+                                <p:outputLabel value="#{comprarMB.compra.codigoDocumento}" style="font-weight: bold" />
                             </p:panelGrid>
 
                         </p:panel>
@@ -96,8 +96,8 @@ and open the template in the editor.
                 <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder" visible="false">
                     <h:form id="formBuscarProducto">
                         <!-- Cargar los datos por defecto para editar  -->              
-                        
-                        
+
+
                         <p:panelGrid columns="5" style="margin: 0 auto;height: 100%">
 
                             <p:outputLabel value="Codigo General:  "/>
@@ -169,7 +169,7 @@ and open the template in the editor.
 
                     <!-- Tabla que muestra el detalle de la compra -->
                     <p:dataTable id="tableDetalle" value="#{comprarMB.detalleCompra}" var="detalle">
-                        <p:column headerText="Codigo">
+                        <p:column headerText="Codigo" >
                             <h:outputText value="#{detalle.codigo}" />
                         </p:column>
 
@@ -209,22 +209,17 @@ and open the template in the editor.
                         <p:panel id="panelTotales" style="width: 250px;float: right"  styleClass="panelNoBorder">
                             <p:panelGrid columns="2" style="text-align: left">
                                 <p:outputLabel value="Subtotal: "  />
-                                <p:inputText value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" readonly="true" >
-                                    
-                                </p:inputText>
+                                <p:outputLabel value="#{comprarMB.sumaTotalCompra}" style="width: 80px;font-weight: bold" />
 
                                 <p:outputLabel value="Descuento: "/>
-                                <p:inputText value="#{comprarMB.compra.descuento}" style="width: 80px;" readonly="true" >
-                                    
-                                </p:inputText>
+                                <p:outputLabel value="#{comprarMB.compra.descuento}" style="width: 80px;font-weight: bold" />
 
                                 <p:outputLabel value="Iva: "/>
-                                <p:inputText value="#{comprarMB.compra.iva}" style="width: 80px;" readonly="true" >
-                                    
-                                </p:inputText> 
+                                <p:outputLabel value="#{comprarMB.compra.iva}" style="width: 80px;font-weight: bold" />
 
                                 <p:outputLabel id="txtTotalCompra" value="Total: " />
-                                <p:inputText id="total" value="#{comprarMB.compra.total}" style="width: 80px;" readonly="true" />
+                                <p:outputLabel id="total" value="#{comprarMB.compra.total}" style="width: 80px;font-weight: bold" />
+                                
                             </p:panelGrid>
                         </p:panel>
                     </div>
