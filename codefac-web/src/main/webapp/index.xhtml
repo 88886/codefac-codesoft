@@ -10,12 +10,13 @@
                 xmlns:h5="http://java.sun.com/jsf/composite/ezcomp">
 
     <ui:define name="contenido">
+        
         <p:panel id="basic" header="Inicio"  style="margin-bottom:20px;text-align: center">
             <img width="92%" height="12%" src="#{facesContext.externalContext.requestContextPath}/resources/img/bannerFacturacion.jpg" align="top"/>
             <h2>Sistema de Facturación </h2><h1>Compras y Ventas a un click de distancia  </h1>
 
         </p:panel>
-        <h:form >       
+        <h:form>       
             <p:panel rendered="#{dockMB.mostrarNote}"> 
                 <div align="right">
                     <p:panel id="handlepnl" header="Handle">
@@ -24,11 +25,11 @@
                     <p:draggable for="handlepnl" handle=".ui-panel-titlebar" />
                 </div>
             </p:panel>
-
+        </h:form>
         <h:form id="formId">
             <h:inputHidden id="x" value="#{sessionMB.x}" />
             <h:inputHidden id="y" value="#{sessionMB.y}" />
-            <h:commandButton value="enviar" onclick="getVars()" action="#{sessionMB.submit()}" />
+            <h:commandButton value="enviar" onclick="getVars()" action="#{sessionMB.submit()}" style="visibility: hidden" />
         </h:form>
 
     </ui:define>

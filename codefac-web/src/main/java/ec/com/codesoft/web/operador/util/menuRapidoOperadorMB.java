@@ -44,12 +44,15 @@ public class menuRapidoOperadorMB  implements Serializable{
         listaWidGet.add(notaUtilMB);
         listaWidGet.add(calcuUtilMB);
         listaWidGet.add(ventasDiariasMB);
+       
+       
     }
 
     /**
      * Me permite abrir los WidGet que se encuentren abiertos
      */
     public void iniciarWidget() {
+         ventasDiariasMB.inicializar();
         for (CommonWidGet widGet : listaWidGet) {
             widGet.initDialogo();
         }

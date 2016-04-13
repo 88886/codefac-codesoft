@@ -85,6 +85,16 @@ public class FacturaServicio {
             detalleIndividualFacade.create(detalles.get(i));
         }
     }
+    
+    /**
+     * Insertar detalleIndividual Venta Diaria
+     */
+     public void insertarDetalleProductoIndividual(DetalleProductoIndividual detalle) {
+
+        
+            detalleIndividualFacade.create(detalle);
+        
+    }
 
     public void insertarDetallesFacturaProductoGeneral(List<DetalleProductoGeneral> detalles) {
 
@@ -92,6 +102,22 @@ public class FacturaServicio {
             detalleGeneralFacade.create(detalles.get(i));
         }
     }
+    
+    /**
+     * Insertar detalleIndividual Venta Diaria
+     */
+    public void insertarDetalleFacturaProductoGeneral(DetalleProductoGeneral detalle) {
+
+
+            detalleGeneralFacade.create(detalle);
+        
+    }
+    
+    public void editarVentaDiaria(Venta venta){
+        ventaFacade.edit(venta);
+    }
+    
+    
     
     public void insertarDetallesVentaOrdenTrabajo(List<DetalleVentaOrdenTrabajo> detalles) {
 
@@ -229,5 +255,19 @@ public class FacturaServicio {
     } 
     public Banco devolverInteresBanco(String nombre){
         return bancofacade.findInteresesBanco(nombre);
+    }
+    
+    
+    public Venta devolverDetallesVentasDiarias(String fecha){
+        
+        return ventaFacade.findFacturaVentasDiariasFecha(fecha);
+    }
+    
+    public List<DetalleProductoGeneral> devolverVentaDiariaDetallesGeneral(int cod){
+        return ventaFacade.findFDetalleGeneralVentasDiariasCod(cod);
+    }
+    
+    public List<DetalleProductoIndividual> devolverVentaDiariaDetallesIndividual(int cod){
+        return ventaFacade.findFDetalleIndividualVentasDiariasCod(cod);
     }
 }

@@ -1,0 +1,8 @@
+create table 
+RECORDATORIO ( ID_RECORDATORIO int not null auto_increment, NICK varchar(64),
+CONTENIDO varchar(2048), FECHA_CREADO datetime, FECHA_RECORDAR datetime, 
+ESTADO varchar(12), INTERVALO_RECORDAR int, primary key (ID_RECORDATORIO) );
+
+alter table RECORDATORIO add
+ constraint FK_REFERENCE_55 foreign key (NICK) 
+references USUARIO (NICK) on delete restrict on update restrict;

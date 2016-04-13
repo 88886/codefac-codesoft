@@ -39,7 +39,7 @@
 
 
         <h:form>
-            <p:commandButton onclick="document.media.Play();" value="play" update="media"/>
+            <p:commandButton onclick="document.media.Play();" value="play" update="media" style="visibility: hidden"/>
 
             <p:media id="media" value="#{sessionMB.urlSonido}" player="quicktime" style="visibility: hidden;">
                 <f:param name="autoPlay" value="true" />
