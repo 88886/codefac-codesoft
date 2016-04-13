@@ -23,21 +23,38 @@ and open the template in the editor.
                     <p:panelGrid columns="5" style="margin: 0 auto" styleClass="panelNoBorder" >
 
                         <p:outputLabel value="CI/RUC: " />
-                        <p:inputText id="txtCedulaRuc" value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.cedulaRuc}" required="false" />
 
-                        <!-- Botonones para buscar y crear un nuevo cliente -->
-                        <p:commandButton partialSubmit="true" process="@this,:formPrincipal:txtCedulaRuc"                                          
-                                         id="btnValidarCliente" icon="ui-icon-plus" actionListener="#{ordenTrabajoMB.validarCliente()}" update="@form" >
-                            <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form" />
-                        </p:commandButton> 
+                        <p:inputText 
+                            id="txtCedulaRuc" 
+                            value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.cedulaRuc}" 
+                            onkeypress="if (event.keyCode == 13) {
+                                        test();
+                                        return false;
+                                    }"
+                            required="false" />
 
-                        <p:commandButton partialSubmit="true" process="
+                        <p:remoteCommand 
+                            process="@this,
+                            :formPrincipal:txtCedulaRuc,
+                            :formPrincipal:txtTotal,
+                            :formPrincipal:datetime
+                            :formPrincipal:txtAdelanto
+                            :formPrincipal:txtObservaciones" 
+                            name="test" actionListener="#{ordenTrabajoMB.validarCliente()}" update="@form"/>
+
+
+                        <p:commandButton partialSubmit="true" 
+                                         process="
                                          @this,
                                          :formPrincipal:txtTotal,
                                          :formPrincipal:datetime
                                          :formPrincipal:txtAdelanto
                                          :formPrincipal:txtObservaciones
-                                         "  id="btnBuscarCliente" value="B U S C A R "  actionListener="#{ordenTrabajoMB.buscarClienteDlg()}"  >
+                                         "  
+                                         id="btnBuscarCliente" 
+                                         value="B U S C A R "  
+                                         actionListener="#{ordenTrabajoMB.buscarClienteDlg()}"  >
+
                             <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form" />
                         </p:commandButton>
 
@@ -50,16 +67,16 @@ and open the template in the editor.
                     <p:panel header="Datos del Cliente" styleClass="greenColoredPanel panelNoBorder" >
                         <p:panelGrid columns="4" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Nombres:" />
-                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.nombre}" />
+                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.nombre}" style="font-weight: bold" />
 
                             <p:outputLabel value="Telefono:" />
-                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.telefono}" />
+                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.telefono}" style="font-weight: bold" />
 
                             <p:outputLabel value="Direccion:" />
-                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.direccion}" />
+                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.direccion}" style="font-weight: bold" />
 
                             <p:outputLabel value="Correo:" />
-                            <p:inputText value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.correo}" />                        
+                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.correo}" style="font-weight: bold" />                        
 
                         </p:panelGrid>
                     </p:panel>
@@ -68,17 +85,21 @@ and open the template in the editor.
                     <p:panel id="panelTrabajo" header="Datos del Trabajo" styleClass="panelNoBorder greenColoredPanel">
                         <p:panelGrid columns="6" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Fecha Entrega:" />
-                            <p:calendar  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" />
+                            <p:calendar onkeypress="return noProcesar(event);"  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" />
 
                             <p:outputLabel value="Total" />
-                            <p:inputText id="txtTotal" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.total}" />
+                            <p:inputText 
+                                onkeypress="return noProcesar(event);"
+                                id="txtTotal" 
+                                style="width: 50px" 
+                                value="#{ordenTrabajoMB.ordenTrabajo.total}" />
 
                             <p:outputLabel value="Adelanto" />
-                            <p:inputText id="txtAdelanto" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.adelanto}" />
+                            <p:inputText onkeypress="return noProcesar(event);" id="txtAdelanto" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.adelanto}" />
 
                             <p:outputLabel value="Responsable"  />
 
-                            <p:selectOneMenu id="cmbEmpleado" value="#{ordenTrabajoMB.nickEmpleadoSeleccionado}" required="true" >
+                            <p:selectOneMenu id="cmbEmpleado" value="#{ordenTrabajoMB.nickEmpleadoSeleccionado}" required="true"  >
                                 <f:selectItem itemLabel="Asigne el empleado" itemValue="" />
                                 <f:selectItems itemValue="#{empleado.nick}"  itemLabel="#{empleado.nick}" var="empleado" value="#{ordenTrabajoMB.empleados}" />                                
                             </p:selectOneMenu>
@@ -122,7 +143,8 @@ and open the template in the editor.
                         </p:column>                    
 
                         <p:column headerText="Acciones" style="width: 50px">
-                            <p:commandButton partialSubmit="true" process="@this" icon="ui-icon-closethick" actionListener="#{ordenTrabajoMB.eliminar(detalle)}" style="background-image: none;background-color: coral" update="@form" >
+                            <p:commandButton partialSubmit="true" process="@this" icon="ui-icon-closethick" actionListener="#{ordenTrabajoMB.eliminar(detalle)}" style="background-image: none;background-color: coral" 
+                                             update=":formPrincipal:txtTotal,:formPrincipal:tablaDetalle" >
                                 <p:confirm header="Confirmar" message="Quieres quitar el detalle?" icon="ui-icon-alert" />
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-pencil" />
@@ -143,6 +165,8 @@ and open the template in the editor.
                         <p:commandButton immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
                     </p:panelGrid>
                 </p:panel>
+
+
             </h:form>
 
             <!-- Dialogo para agregar los equipos al items -->
@@ -214,5 +238,8 @@ and open the template in the editor.
                 </p:confirmDialog>
             </h:form>
         </div>
+
+
+
     </ui:define>
 </ui:composition>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Codefac</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="estiloMensajes.css"/>
+
+    </h:head>
+    <h:body>
+        <h:form id="form1" >            
+
+            <p:inputText 
+                value="#{statusBean.name}"
+                id="txtKey" 
+                required="true" 
+                onkeypress="if (event.keyCode == 13) {
+                            test();
+                            return false;
+                        }"
+                />
+
+            <p:message for="txtKey" display="icon"/>
+
+            <p:inputText id="txtNombre" required="true" />
+            
+
+            <p:commandButton partialSubmit="true" process=":form2" value="validar" action="index" ajax="false"/>
+
+            <p:remoteCommand  process="@this,:form1:txtKey" name="test" actionListener="#{statusBean.test}"/>
+
+        </h:form>
+
+        <p:spacer width="100px" />
+
+        <h:form id="form2">
+            <p:inputText id="txtkey2" required="true" />
+        </h:form>
+
+    </h:body>
+</html>

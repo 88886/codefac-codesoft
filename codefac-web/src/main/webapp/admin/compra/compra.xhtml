@@ -19,13 +19,14 @@ and open the template in the editor.
             <p:panel header="Nueva Compra"  style="width: 60%;margin: 0 auto" styleClass="customTitleBar" > 
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formDetalleDistribuidor">
+                    <p:commandButton action="index" value="validar" ajax="false" />
                     <!-- Ecabezado para buscar el ruc del distribuidos-->
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
                             <p:panelGrid columns="4" >
 
                                 <p:outputLabel  value=" RUC :" />
-                                <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" />
+                                <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" required="true" />
 
                                 <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
                                 <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
@@ -62,18 +63,18 @@ and open the template in the editor.
                         <p:spacer height="15px" />
 
                         <!-- Datos del distribuidor para mostrar	 -->
-                        <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%">
-                            <p:outputLabel value="Nombre: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.nombre}" />
+                        <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%;text-align: left">
+                            <p:outputLabel value="Nombre: " />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}" style="font-weight: bold" />
 
                             <p:outputLabel value="Direccion: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.direccion}" />
+                            <p:outputLabel value="#{comprarMB.compra.ruc.direccion}" style="font-weight: bold" />
 
                             <p:outputLabel value="Telefono: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.telefono}" />
+                            <p:outputLabel value="#{comprarMB.compra.ruc.telefono}" style="font-weight: bold" />
 
                             <p:outputLabel value="Email: "/>
-                            <p:inputText readonly="true" value="#{comprarMB.compra.ruc.correo}" />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}" style="font-weight: bold" />
 
                         </p:panelGrid>
 
@@ -151,6 +152,7 @@ and open the template in the editor.
 
                 <p:separator/>
 
+                <!-- Formulario para agregar el detalle de la comprar -->
                 <h:form id="formDetalleCompra">
                     <p:panel id="panelAgregarProducto"  style="text-align: center" styleClass="panelNoBorder" visible="#{comprarMB.visibleDetalleAgregar}">
 
@@ -236,8 +238,8 @@ and open the template in the editor.
                 <h:form >
                     <p:panel style="font-size: 14px;text-align: center" styleClass="panelNoBorder">
                         <p:panelGrid columns="2" style="margin: 0 auto">
-                            <p:commandButton partialSubmit="true" process="@this,:formDetalleDistribuidor" value="Comprar" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  >
-                                <p:confirm header="Confirmar" message="Quieres grabar la compra?" icon="ui-icon-alert" />                                
+                            <p:commandButton partialSubmit="true" process="@this,:formDetalleDistribuidor" value="Comprar" ajax="false" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  >
+                                
                             </p:commandButton>
                             <p:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar">                                
                             </p:commandButton>
@@ -293,14 +295,14 @@ and open the template in the editor.
                     </h:form>
                 </p:dialog>
 
-                <!-- Dialogo que muestra un mensaje de confirmacion para crear un nuevo catalogo de proucto -->
+                <!-- Dialogo que muestra un mensaje de confirmacion para crear un nuevo catalogo del producto -->
 
                 <p:dialog header="Agregar Producto en el Catalogo"  widgetVar="confirmarProducto" modal="true">
                     <h:form>
                         <h2>El Producto no existe en el catologo</h2>
                         <p:commandButton onclick="PF('confirmarProducto').hide();" value="Aceptar"/>
                         <p:commandButton actionListener="#{comprarMB.crearNuevoCatalogo()}"  style="background-image: none;background-color: forestgreen" value="Crear Producto">
-                            <p:ajax event="dialogReturn" listener="#{comprarMB.recibirCatalogo}" update=":formDetalleCompra,:formBuscarProducto" />
+                            <p:ajax event="dialogReturn" listener="#{comprarMB.recibirCatalogo}" update=":formBuscarProducto:lblNombreProducto" />
                         </p:commandButton>                        
 
 

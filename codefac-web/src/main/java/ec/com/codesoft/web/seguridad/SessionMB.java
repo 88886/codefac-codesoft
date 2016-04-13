@@ -56,7 +56,7 @@ public class SessionMB implements Serializable {
      */
     private Perfil perfilBuscado;
 
-    private String urlSonido = "http://api.voicerss.org/?key=3edcc88b461e4b94a0473bc28382ba91&src=Suco Bienvenido muack &hl=es-mx";
+    private String urlSonido = "http://api.voicerss.org/?key=3edcc88b461e4b94a0473bc28382ba91&src=Bienvenido a Codefac &hl=es-mx";
 
     private Session session;
     private Transaction transaccion;

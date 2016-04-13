@@ -15,12 +15,14 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
         <h:outputStylesheet library="css" name="estiloUsuario.css"/>
+        <h:outputScript name="validacionesJS.js" library="js" target="form"/>
     </h:head>
     <h:body>
         <div id="cabecera">
             <p:graphicImage library="img" name="bannerCodefacPeque.jpg"  styleClass="imagenCabecera" />
             <p:graphicImage library="img" name="bannerAdminstrador.png"  styleClass="imagenCabecera2" />
         </div >
+
         <div id="divSesionUsuario">
             <span>
                 Sesión iniciada por:
@@ -99,10 +101,10 @@ and open the template in the editor.
         <h:form id="formMenu2" > 
             <p:stack id="idMenuRapido" icon="#{resource['img:menu/ico_canasta.png']}" expanded="false" closeSpeed="80" openSpeed="80">
                 <p:menuitem  value="Ayuda" icon="#{resource['img:menu/ico_codefac.png']}" url="#"  />                
-                <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
-                <p:menuitem value="Recordatorio" icon="#{resource['img:menu/ico_recordatorio.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
                 <p:menuitem value="Calendario" icon="#{resource['img:menu/ico_calendario.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgCalendario')}" update=":formMenu2:idMenuRapido"/>
                 <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido" />
+                <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
+
             </p:stack>
         </h:form>
 
@@ -147,25 +149,6 @@ and open the template in the editor.
             </h:form>
         </p:dialog>
 
-
-        <!-- Dialogo de las Notas Rapidas -->
-        <p:dialog  
-            header="Notas"
-            position="#{notaUtilMB.x},#{notaUtilMB.y}"
-            widgetVar="dlgNotas" 
-            minHeight="40" 
-            style="font-size:12px;background-color: #ffff99;background-image: none;padding: 0px;margin: 0px">
-
-            <p:ajax event="close"  listener="#{notaUtilMB.handleClose}" />
-            <p:ajax event="move"   listener="#{notaUtilMB.handleMove}" />
-            <h:form id="formNotas">
-                <p:inputTextarea  rows="7" value="#{notaUtilMB.sesion.usuarioLogin.notas}"  style="background-color: #ffff99;color: black;margin: 0px;border: 0px;font-size: 11px">
-                    <p:ajax event="blur" listener="#{notaUtilMB.grabarNota}"/>
-                </p:inputTextarea> 
-            </h:form>
-        </p:dialog>
-
-
         <!-- Dialogo del calendario -->
         <p:dialog  
             position="#{calendarioUtilMB.x},#{calendarioUtilMB.y}"
@@ -180,20 +163,32 @@ and open the template in the editor.
             <h:form id="idCalendario">
                 <p:calendar id="inline" mode="inline" style="border: 0px;width: 100px" />
             </h:form>
-
-
-            <!-- Dialogo para los recordatorio-->
-            <p:dialog                  
-                position="#{calendarioUtilMB.x},#{calendarioUtilMB.y}"
-                widgetVar="dlgRecordatorio" 
-                width="245"
-                height="187"
-                style="font-size:12px;background-color: #ffffff;background-image: none;padding: 0px;margin: 0px">
-
-
-
-            </p:dialog>
         </p:dialog>
+
+        <!-- Dialogo de las Notas Rapidas -->
+        <p:dialog  
+            header="Notas"
+            position="#{notaUtilMB.x},#{notaUtilMB.y}"
+            widgetVar="dlgNotas" 
+            minHeight="40" 
+            style="font-size:12px;background-color: #ffff99;background-image: none;padding: 0px;margin: 0px">
+
+            <p:ajax event="move"   listener="#{notaUtilMB.handleMove}" />
+            <p:ajax event="close"  listener="#{notaUtilMB.handleClose}" />
+
+            <h:form id="formNotaDialogo" onsubmit="return false;">
+                <p:inputTextarea id="txtInput"
+                                 rows="7"
+                        value="#{notaUtilMB.sesion.usuarioLogin.notas}" 
+                        style="background-color: #ffff99;color: black;margin: 0px;border: 0px;font-size: 11px">
+                    
+                    <p:ajax event="blur" listener="#{notaUtilMB.grabarNota}"/>
+                    
+                </p:inputTextarea>
+            </h:form>
+
+        </p:dialog>
+
 
     </h:body>
 </html>

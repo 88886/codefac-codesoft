@@ -86,6 +86,7 @@ public class OrdenTrabajoMB implements Serializable {
         ordenTrabajo.setTotal(new BigDecimal("0.00"));
         ordenTrabajo.setCedulaRuc(new Cliente());
         ordenTrabajo.setAdelanto(new BigDecimal("0.00"));
+        ordenTrabajo.setFechaEntrega(new Date());
         // ordenTrabajo.setDetalleOrdenTrabajo(new ArrayList<DetalleOrdenTrabajo>());
         ordenTrabajo.setDetalleOrdenTrabajoList(new ArrayList<DetalleOrdenTrabajo>());
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
@@ -93,6 +94,7 @@ public class OrdenTrabajoMB implements Serializable {
         empleados = ordenTrabajoServicio.obtenerEmpleados();
         servicios = ordenTrabajoServicio.obtenerServicios();
         categorias = new ArrayList<CategoriaTrabajo>();
+        this.total=new BigDecimal("0.00");
     }
 
     /**
@@ -203,6 +205,8 @@ public class OrdenTrabajoMB implements Serializable {
     public void eliminar(DetalleOrdenTrabajo detalle)
     {
         this.ordenTrabajo.getDetalleOrdenTrabajoList().remove(detalle);
+        this.ordenTrabajo.setTotal(this.ordenTrabajo.getTotal().subtract(detalle.getPrecio()));
+        //System.out.println("total="+total);
     }
     
     /**
@@ -256,7 +260,8 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajo.setProblema(categoria.getDescripcion());
         detalleOrdenTrabajo.setTrabajoRealizar(categoria.getTrabajoRealizar());
         System.out.println("cargando categorias ..." + categoria.getPrecio());
-    }
+    }    
+    
 
     public void seleccionarEmpleado(Usuario usuario) {
         System.out.println("se llamo al usuario");
