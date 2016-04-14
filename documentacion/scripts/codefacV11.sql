@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     06/04/2016 6:00:30                           */
+/* Created on:     12/04/2016 10:18:02                          */
 /*==============================================================*/
 
 
@@ -328,9 +328,9 @@ create table DETALLE_PRODUCTO_GENERAL
 create table DETALLE_PRODUCTO_INDIVIDUAL
 (
    CODIGO_DETALLE_INDIVIDUAL int not null auto_increment,
-   CODIGO_UNICO         varchar(64),
    CODIGO_FACTURA       int,
    NICK                 varchar(64),
+   ID_PRODUCTO_INDIVIDUAL_COMPRA int,
    SUBTOTAL             decimal(8,2),
    DESCUENTO            decimal(8,2),
    PRECIO_INDIVIDUAL    decimal(8,2),
@@ -519,6 +519,7 @@ create table PRODUCTO_GENERAL_VENTA
 /*==============================================================*/
 create table PRODUCTO_INDIVIDUAL_COMPRA
 (
+   ID_PRODUCTO_INDIVIDUAL_COMPRA int not null auto_increment,
    CODIGO_UNICO         varchar(64) not null,
    CODIGO_COMPRA        int,
    CODIGO_PRODUCTO      varchar(64),
@@ -528,7 +529,8 @@ create table PRODUCTO_INDIVIDUAL_COMPRA
    UBICACION            varchar(16),
    RESERVADO_TEMPORAL_COMPRA bool,
    FECHA_RESERVA_TEMPORAL datetime,
-   primary key (CODIGO_UNICO)
+   REINGRESO            int,
+   primary key (ID_PRODUCTO_INDIVIDUAL_COMPRA)
 );
 
 /*==============================================================*/
@@ -672,14 +674,14 @@ alter table DETALLE_PRODUCTO_GENERAL add constraint FK_REFERENCE_14 foreign key 
 alter table DETALLE_PRODUCTO_GENERAL add constraint FK_REFERENCE_51 foreign key (NICK)
       references USUARIO (NICK) on delete restrict on update restrict;
 
-alter table DETALLE_PRODUCTO_INDIVIDUAL add constraint FK_REFERENCE_12 foreign key (CODIGO_UNICO)
-      references PRODUCTO_INDIVIDUAL_COMPRA (CODIGO_UNICO) on delete restrict on update restrict;
-
 alter table DETALLE_PRODUCTO_INDIVIDUAL add constraint FK_REFERENCE_16 foreign key (CODIGO_FACTURA)
       references VENTA (CODIGO_FACTURA) on delete restrict on update restrict;
 
 alter table DETALLE_PRODUCTO_INDIVIDUAL add constraint FK_REFERENCE_50 foreign key (NICK)
       references USUARIO (NICK) on delete restrict on update restrict;
+
+alter table DETALLE_PRODUCTO_INDIVIDUAL add constraint FK_REFERENCE_56 foreign key (ID_PRODUCTO_INDIVIDUAL_COMPRA)
+      references PRODUCTO_INDIVIDUAL_COMPRA (ID_PRODUCTO_INDIVIDUAL_COMPRA) on delete restrict on update restrict;
 
 alter table DETALLE_PRODUCTO_ORDEN_TRABAJO add constraint FK_REFERENCE_38 foreign key (ID_DETALLE_ORDEN_TRABAJO)
       references DETALLE_ORDEN_TRABAJO (ID_DETALLE_ORDEN_TRABAJO) on delete restrict on update restrict;

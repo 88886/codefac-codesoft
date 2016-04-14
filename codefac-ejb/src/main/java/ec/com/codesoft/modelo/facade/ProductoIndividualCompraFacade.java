@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.modelo.facade;
 
-import ec.com.codesoft.model.Distribuidor;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -67,6 +66,28 @@ public class ProductoIndividualCompraFacade extends AbstractFacade<ProductoIndiv
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    /**
+     * Comprueba si existe un producto individual ingresado
+     */
+    public ProductoIndividualCompra checkExistence(String codigoGeneral, String codigoIndividual) {
+
+        try {
+            String queryString = "SELECT p FROM ProductoIndividualCompra p where p.codigoProducto.codigoProducto=?1 and p.codigoUnico=?2 ";
+            //System.out.println(queryString+","+codigoGeneral+","+codigoIndividual);
+            Query query = em.createQuery(queryString);
+            query.setParameter(1, codigoGeneral);
+            query.setParameter(2, codigoIndividual);
+           
+
+            ProductoIndividualCompra productoIndividualCompra = (ProductoIndividualCompra) query.getSingleResult();
+            return productoIndividualCompra;
+        } catch (NoResultException e) 
+        {
+            return null;
+        }
+
     }
 
 }

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
@@ -14,6 +13,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,14 +36,22 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "ProductoIndividualCompra.findAll", query = "SELECT p FROM ProductoIndividualCompra p")})
 public class ProductoIndividualCompra implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L
+            ;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "ID_PRODUCTO_INDIVIDUAL_COMPRA")
+    private Integer idProductoIndividualCompra;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "CODIGO_UNICO")
     private String codigoUnico;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    
+// @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "COSTO")
     private BigDecimal costo;
     @Size(max = 16)
@@ -61,11 +70,11 @@ public class ProductoIndividualCompra implements Serializable {
     private Date fechaReservaTemporal;
     @OneToMany(mappedBy = "codigoUnico")
     private List<DetalleProductoIndividual> detalleProductoIndividualList;
-    
+
     @JoinColumn(name = "CODIGO_COMPRA", referencedColumnName = "CODIGO_COMPRA")
-    @ManyToOne()    
+    @ManyToOne()
     private Compra codigoCompra;
-    
+
     @JoinColumn(name = "CODIGO_PRODUCTO", referencedColumnName = "CODIGO_PRODUCTO")
     @ManyToOne
     private CatalagoProducto codigoProducto;
@@ -181,5 +190,5 @@ public class ProductoIndividualCompra implements Serializable {
     public String toString() {
         return "ec.com.codesoft.model.ProductoIndividualCompra[ codigoUnico=" + codigoUnico + " ]";
     }
-    
+
 }

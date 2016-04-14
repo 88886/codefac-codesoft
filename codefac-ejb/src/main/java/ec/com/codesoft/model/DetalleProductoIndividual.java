@@ -59,6 +59,10 @@ public class DetalleProductoIndividual implements Serializable {
     @ManyToOne
     private Usuario nick;
 
+    @JoinColumn(name = "ID_PRODUCTO_INDIVIDUAL_COMPRA", referencedColumnName = "ID_PRODUCTO_INDIVIDUAL_COMPRA")
+    @ManyToOne
+    private ProductoIndividualCompra productoIndividualCompra;
+
     public DetalleProductoIndividual() {
     }
 
@@ -120,6 +124,14 @@ public class DetalleProductoIndividual implements Serializable {
 
     public void setNick(Usuario nick) {
         this.nick = nick;
+    }
+
+    public ProductoIndividualCompra getProductoIndividualCompra() {
+        return productoIndividualCompra;
+    }
+
+    public void setProductoIndividualCompra(ProductoIndividualCompra productoIndividualCompra) {
+        this.productoIndividualCompra = productoIndividualCompra;
     }
     
     

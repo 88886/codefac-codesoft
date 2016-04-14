@@ -131,7 +131,7 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
     }
 
     /**
-     * Devuelve el ultimo costo del producto segun el distribuidor
+     * Devuelve el ultimo costo de los producto generales segun el distribuidor
      *
      * @return
      */
@@ -139,31 +139,60 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
 
         try {
             String queryString2 = "SELECT MAX(p.codigoCompra.fecha) FROM ProductoGeneralCompra p where p.codigoCompra.ruc.ruc=?2 AND p.codigoProducto.codigoProducto=?1  ";
-            String queryString = "SELECT p2 FROM ProductoGeneralCompra p2 where p2.codigoCompra.ruc.ruc=?2 AND p2.codigoProducto.codigoProducto=?1 AND p2.codigoCompra.fecha=("+queryString2+")";
+            String queryString = "SELECT p2 FROM ProductoGeneralCompra p2 where p2.codigoCompra.ruc.ruc=?2 AND p2.codigoProducto.codigoProducto=?1 AND p2.codigoCompra.fecha=(" + queryString2 + ")";
             //String queryString = "SELECT p.costoIndividual FROM ProductoGeneralCompra p WHERE p.codigoCompra.ruc=?1 AND p.codigoProducto.codigoProducto=?2";
-            
+
             Query query = em.createQuery(queryString);
             query.setParameter(2, rucDistribuidor);
             query.setParameter(1, idProducto);
-            
-            
 
-           // BigDecimal costo = (BigDecimal) query.getSingleResult();
+            // BigDecimal costo = (BigDecimal) query.getSingleResult();
             //System.out.println("costo: "+costo);
-           // System.out.println("fecha: "+query.getSingleResult());
- //           List<Object> lista=query.getResultList();
+            // System.out.println("fecha: "+query.getSingleResult());
+            //           List<Object> lista=query.getResultList();
 //            for (Object obj : lista) {
 //                System.out.println("fecha->"+obj);
 //            }
-            List<ProductoGeneralCompra> lista=(List<ProductoGeneralCompra>)query.getResultList();
+            List<ProductoGeneralCompra> lista = (List<ProductoGeneralCompra>) query.getResultList();
             //for (ProductoGeneralCompra item : lista) 
-           // {
+            // {
             //    System.out.println(item.getCodigoProducto().getNombre()+","+item.getCostoIndividual()+","+item.getCodigoCompra().getFecha());
             //}
-            if(lista.size()==0)
-            {
+            if (lista.size() == 0) {
                 return null;
             }
+            return lista.get(0).getCostoIndividual();
+
+        } catch (NoResultException e) {
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+
+    }
+
+    /**
+     * Obtiene el costo del ultimo producto especifico segun el distribuidor
+     *
+     * @param idProducto
+     * @param rucDistribuidor
+     * @return
+     */
+    public BigDecimal getUltimoCostoProductoEspecifico(String idProducto, String rucDistribuidor) {
+        try {
+            String queryString2 = "SELECT MAX(p.codigoCompra.fecha) FROM ProductoIndividualCompra p where p.codigoCompra.ruc.ruc=?2 AND p.codigoProducto.codigoProducto=?1  ";
+            String queryString = "SELECT p2 FROM ProductoIndividualCompra p2 where p2.codigoCompra.ruc.ruc=?2 AND p2.codigoProducto.codigoProducto=?1 AND p2.codigoCompra.fecha=(" + queryString2 + ")";
+
+            Query query = em.createQuery(queryString);
+            query.setParameter(2, rucDistribuidor);
+            query.setParameter(1, idProducto);
+
+            List<ProductoGeneralCompra> lista = (List<ProductoGeneralCompra>) query.getResultList();
+
+            if (lista.size() == 0) {
+                return null;
+            }
+
             return lista.get(0).getCostoIndividual();
 
         } catch (NoResultException e) {

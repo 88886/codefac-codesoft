@@ -86,7 +86,7 @@ public class CompraServicio {
      */
     public List<Compra> obtenerTodos()
     {
-        return compraFacade.findAll();
+        return compraFacade.findOrderDesc();
     }
     
     public void consultar()
@@ -99,6 +99,10 @@ public class CompraServicio {
         return compraFacade.find(codigo);
     }
 
+    /**
+     * Actualiza la compra con nuevos valores
+     * @param compra 
+     */
     public void actualizar(Compra compra) 
     {
         this.compraFacade.create(compra);
@@ -178,7 +182,17 @@ public class CompraServicio {
      */
     public BigDecimal obtenerUltimoCostoDistribuidor(CatalagoProducto producto, String rucDistribuidor)
     {
-        BigDecimal resultado=productoGeneralCompraFacade.getUltimoCostoProductoByDistribuidor(producto.getCodigoProducto(), rucDistribuidor);
+        BigDecimal resultado;
+        if(producto.getTipoProducto().equals('G'))
+        {
+            resultado=productoGeneralCompraFacade.getUltimoCostoProductoByDistribuidor(producto.getCodigoProducto(), rucDistribuidor);
+        }
+        else
+        {
+            resultado=productoGeneralCompraFacade.getUltimoCostoProductoEspecifico(producto.getCodigoDistribuidor(), rucDistribuidor);
+        }
+                
+        
         //si el resultado es nulo envia el costo referencial
         if(resultado==null)
         {
@@ -186,5 +200,27 @@ public class CompraServicio {
         }
         return resultado;
     }
+    
+    /**
+     * Busca si existe el producto individual con el codigo
+     * @return 
+     */
+    public boolean existenciaProductoIndividual(String codigoGeneral, String codigoIndividual)
+    {
+        ProductoIndividualCompra producto= productoEspeFacade.checkExistence(codigoGeneral,codigoIndividual);
+        if(producto!=null)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    
+    
+    public boolean getStockProductosGeneral(String codigoCatalogo)
+    {
+        return true;
+    }
+    
 
 }

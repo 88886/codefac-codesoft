@@ -14,21 +14,25 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        
+
         <div style="text-align:center">
             <p:panel header="Nueva Compra"  style="width: 60%;margin: 0 auto" styleClass="customTitleBar" > 
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formDetalleDistribuidor">
-                    <p:commandButton action="index" value="validar" ajax="false" />
+
                     <!-- Ecabezado para buscar el ruc del distribuidos-->
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder">
                         <div style="text-align: left">
                             <p:panelGrid columns="4" >
 
                                 <p:outputLabel  value=" RUC :" />
-                                <p:inputText id="txtRuc" value="#{comprarMB.compra.ruc.ruc}" required="true" />
+                                <p:inputText 
+                                    id="txtRuc" 
+                                    onkeypress="return validarEnter(event, 'buscarDistribuidorJS');"  
+                                    value="#{comprarMB.compra.ruc.ruc}" 
+                                    required="true" />
 
-                                <p:commandButton id="btnBuscarDistribuidor" value="validar" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra"/>
+                                <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
                                 <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
                                 <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
                                     <p:dataTable value="#{comprarMB.listaDistribuidores}" 
@@ -55,8 +59,6 @@ and open the template in the editor.
                                 </p:overlayPanel>
 
                             </p:panelGrid>
-                            <!--Selecciona cual va a ser el focus por defecto del formulario-->
-                            <p:defaultCommand target="btnBuscarDistribuidor" />
 
                         </div>
 
@@ -84,11 +86,11 @@ and open the template in the editor.
                         <p:panel >
                             <p:panelGrid columns="4">
                                 <p:outputLabel value="No Documento: "/>
-                                <p:inputText value="#{comprarMB.compra.codigoDocumento}" />
-                                
+                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.compra.codigoDocumento}" />
+
                                 <p:outputLabel value="Fecha Compra:" />
-                                <p:calendar  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" />
-                                
+                                <p:calendar   id="datetime" onkeypress="return noProcesar(event);"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" />
+
                             </p:panelGrid>
 
                         </p:panel>
@@ -103,50 +105,62 @@ and open the template in the editor.
                         <p:panelGrid columns="5" style="margin: 0 auto;height: 100%">
 
                             <p:outputLabel value="Codigo General:  "/>
-                            <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoDetalle}" />
+                            <p:inputText 
+                                id="txtCodigoDetalle" 
+                                onkeypress="return validarEnter(event, 'btnValidar');" 
+                                value="#{comprarMB.codigoDetalle}" />
+
                             <p:commandButton id="btnEncontrarCatalogo" icon="ui-icon-search" />
-
-                            <!-- dialogo para buscar los productos de los catalogos -->
-                            <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
-                                <p:dataTable 
-                                    rows="10"
-                                    value="#{comprarMB.listaCatalogos}" 
-                                    var="catalogo"
-                                    selectionMode="single" 
-                                    rowKey="#{catalogo.codigoProducto}"
-                                    selection="#{comprarMB.catalogoProductoSeleccionado}" >
-
-                                    <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto"/>
-                                    <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
-
-                                    <p:column headerText="codigo" filterBy="#{catalogo.codigoProducto}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" >
-                                        <p:outputLabel value="#{catalogo.codigoProducto}"/>
-                                    </p:column>
-
-                                    <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
-                                        <p:outputLabel value="#{catalogo.nombre}"/>
-                                    </p:column>
-
-                                    <p:column headerText="descripcion">
-                                        <p:outputLabel value="#{catalogo.descripcion}"/>
-                                    </p:column>
-
-                                    <p:column headerText="marca">
-                                        <p:outputLabel value="#{catalogo.marca}"/>
-                                    </p:column>
-
-                                    <p:column headerText="precio">
-                                        <p:outputLabel value="#{catalogo.precio}"/>
-                                    </p:column>                                    
-
-                                </p:dataTable>
-                            </p:overlayPanel>
-
-                            <p:defaultCommand target="btnValidar" />
-                            <p:commandButton id="btnValidar" value="mas" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:txtCodigoDetalle" style="visibility: hidden" />
-                            <p:outputLabel id='lblNombreProducto' value="Producto: #{comprarMB.catalogo.nombre}" />
-
+                            <p:remoteCommand name="btnValidar" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:txtCodigoDetalle"/>
+                            
                         </p:panelGrid>
+                        
+                        <p:separator/>
+
+                        <p:panelGrid columns="4" style="width: 100%">
+
+                            <p:outputLabel value="Nombre:"/>
+                            <p:outputLabel id='lblNombreProducto' value="#{comprarMB.catalogo.nombre}" style="font-weight: bold" />
+
+                            <p:outputLabel value="Tipo:"/>
+                            <p:outputLabel id='lblTipoProducto' value="#{comprarMB.catalogo.tipoProducto}" style="font-weight: bold" />
+                        </p:panelGrid>
+
+                        <!-- dialogo para buscar los productos de los catalogos -->
+                        <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
+                            <p:dataTable 
+                                rows="10"
+                                value="#{comprarMB.listaCatalogos}" 
+                                var="catalogo"
+                                selectionMode="single" 
+                                rowKey="#{catalogo.codigoProducto}"
+                                selection="#{comprarMB.catalogoProductoSeleccionado}" >
+
+                                <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto"/>
+                                <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
+
+                                <p:column headerText="codigo" filterBy="#{catalogo.codigoProducto}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" >
+                                    <p:outputLabel value="#{catalogo.codigoProducto}"/>
+                                </p:column>
+
+                                <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
+                                    <p:outputLabel value="#{catalogo.nombre}"/>
+                                </p:column>
+
+                                <p:column headerText="descripcion">
+                                    <p:outputLabel value="#{catalogo.descripcion}"/>
+                                </p:column>
+
+                                <p:column headerText="marca">
+                                    <p:outputLabel value="#{catalogo.marca}"/>
+                                </p:column>
+
+                                <p:column headerText="precio">
+                                    <p:outputLabel value="#{catalogo.precio}"/>
+                                </p:column>                                    
+
+                            </p:dataTable>
+                        </p:overlayPanel>
                     </h:form>
                 </p:panel>
 
@@ -213,22 +227,22 @@ and open the template in the editor.
                         <p:panel id="panelTotales" style="width: 250px;float: right"  styleClass="panelNoBorder">
                             <p:panelGrid columns="2" style="text-align: left">
                                 <p:outputLabel value="Subtotal: "  />
-                                <p:inputText value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
+                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
                                 <p:outputLabel value="Descuento: "/>
-                                <p:inputText value="#{comprarMB.compra.descuento}" style="width: 80px;" >
+                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.compra.descuento}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
                                 <p:outputLabel value="Iva: "/>
-                                <p:inputText value="#{comprarMB.compra.iva}" style="width: 80px;" >
+                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText> 
 
                                 <p:outputLabel id="txtTotalCompra" value="Total: "/>
-                                <p:inputText id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
+                                <p:inputText onkeypress="return noProcesar(event);" id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
                             </p:panelGrid>
                         </p:panel>
                     </div>
@@ -239,7 +253,7 @@ and open the template in the editor.
                     <p:panel style="font-size: 14px;text-align: center" styleClass="panelNoBorder">
                         <p:panelGrid columns="2" style="margin: 0 auto">
                             <p:commandButton partialSubmit="true" process="@this,:formDetalleDistribuidor" value="Comprar" ajax="false" style="background-image: none;background-color: darkgreen" actionListener="#{comprarMB.ejecutarCompra()}"  >
-                                
+
                             </p:commandButton>
                             <p:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar">                                
                             </p:commandButton>
@@ -310,7 +324,7 @@ and open the template in the editor.
                 </p:dialog>
 
                 <!-- Dialogo de confirmacion para grabar -->
-                
+
             </p:panel>  
 
         </div>
