@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h:form>
+            <p:panelGrid columns="2">
+                <p:outputLabel value="Seleccione el distribuidor: " />
+
+            </p:panelGrid>
+
+            <p:dataTable
+                value="#{reporteCatalogoPorDistribuidorMB.listModeloDatos}"
+                var="modelo"
+                >
+
+                <p:column headerText="Codigo1">
+                    <p:outputLabel value="#{modelo.catalogoModeloList[0].codigo}" />
+                </p:column>
+
+                <p:column headerText="Nombre1">
+                    <p:outputLabel value="#{modelo.catalogoModeloList[0].nombre}" />
+                </p:column>
+
+                <p:column headerText="Codigo2">
+                    <p:outputLabel value="#{modelo.catalogoModeloList[1].codigo}" />
+                </p:column>
+
+                <p:column headerText="Nombre2">
+                    <p:outputLabel value="#{modelo.catalogoModeloList[1].nombre}" />
+                </p:column>
+
+
+
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

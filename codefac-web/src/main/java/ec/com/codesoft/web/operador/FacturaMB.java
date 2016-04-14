@@ -1111,6 +1111,7 @@ public class FacturaMB {
                         }
                     }
 
+                    //guardar los detalles de las facturas
                     if (detallesIndividualVenta != null) {
                         for (int i = 0; i < detallesIndividualVenta.size(); i++) {
 

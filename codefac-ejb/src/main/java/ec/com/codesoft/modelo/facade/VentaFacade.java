@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.modelo.facade;
 
+import ec.com.codesoft.model.DetalleProductoGeneral;
+import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.Venta;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -99,6 +101,49 @@ public class VentaFacade extends AbstractFacade<Venta> {
         } catch (NoResultException e) {
             return null;
         }
+    }
+    
+    
+    public Venta findFacturaVentasDiariasFecha(String fecha) {
+        try {
+            String queryString = "SELECT v FROM Venta v where v.fecha like '%"+fecha+"%' and v.estado='Diaria'";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            Venta intereses = (Venta) query.getSingleResult();
+          //  System.out.println("facade"+intereses);
+            return intereses;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+    
+    public List<DetalleProductoGeneral> findFDetalleGeneralVentasDiariasCod(int cod) {
+        try {
+            String queryString = "SELECT g FROM DetalleProductoGeneral g where g.codigoFactura.codigoFactura='"+cod+"'";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            List<DetalleProductoGeneral> detalles =(List<DetalleProductoGeneral>) query.getResultList();
+          //  System.out.println("facade"+intereses);
+            return detalles;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+    
+    public List<DetalleProductoIndividual> findFDetalleIndividualVentasDiariasCod(int cod) {
+        try {
+            String queryString = "SELECT g FROM DetalleProductoIndividual g where g.codigoFactura.codigoFactura='"+cod+"'";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            List<DetalleProductoIndividual> detalles =(List<DetalleProductoIndividual>) query.getResultList();
+          //  System.out.println("facade"+intereses);
+            return detalles;
+        } catch (NoResultException e) {
+            return null;
+        }
+
     }
 
 }
