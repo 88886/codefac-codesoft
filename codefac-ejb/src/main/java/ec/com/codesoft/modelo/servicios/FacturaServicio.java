@@ -146,7 +146,7 @@ public class FacturaServicio {
         
         for (DetalleProductoIndividual detalle : listaEspecifico) 
         {
-            ProductoIndividualCompra productoIndividual=detalle.getCodigoUnico();
+            ProductoIndividualCompra productoIndividual=detalle.getProductoIndividualCompra();
             productoIndividualFacade.edit(productoIndividual);
             
         }

@@ -73,8 +73,8 @@ public class VerVentaMB implements Serializable {
         for (DetalleProductoIndividual detalle : listaIndividual) {
             detalles.add(new DetallesVenta(
                     1,
-                    detalle.getCodigoUnico().getCodigoProducto().getCodigoProducto(),
-                    detalle.getCodigoUnico().getCodigoProducto().getNombre(),
+                    detalle.getProductoIndividualCompra().getCodigoProducto().getCodigoProducto(),
+                    detalle.getProductoIndividualCompra().getCodigoProducto().getNombre(),
                     detalle.getPrecioIndividual(),
                     detalle.getSubtotal(),
                     detalle.getDescuento()));

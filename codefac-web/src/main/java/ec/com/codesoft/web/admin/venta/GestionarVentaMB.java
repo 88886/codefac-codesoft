@@ -78,9 +78,9 @@ public class GestionarVentaMB implements Serializable {
         for (DetalleProductoIndividual detalle : listaIndividual) {
             detallesVenta.add(new DetallesVenta(
                     1,
-                    detalle.getCodigoUnico().getCodigoProducto().getCodigoProducto(),
-                    detalle.getCodigoUnico().getCodigoProducto().getNombre(),
-                    detalle.getCodigoUnico().getCodigoProducto().getPrecio(),
+                    detalle.getProductoIndividualCompra().getCodigoProducto().getCodigoProducto(),
+                    detalle.getProductoIndividualCompra().getCodigoProducto().getNombre(),
+                    detalle.getProductoIndividualCompra().getCodigoProducto().getPrecio(),
                     detalle.getSubtotal()));
         }
     }

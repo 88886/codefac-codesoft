@@ -847,7 +847,7 @@ public class FacturaMB {
                     detallesVenta.add(detalles);
                     catalogoSeleccionado = new CatalagoProducto();
                     DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                    detalle.setCodigoUnico(detalleIndividual);
+                    detalle.setProductoIndividualCompra(detalleIndividual);
                     detalle.setSubtotal(subtotalRegistro);
                     detallesIndividualVenta.add(detalle);
                     //det
@@ -1026,7 +1026,7 @@ public class FacturaMB {
                         detallesVenta.add(detalles);
                         catalogoSeleccionado = new CatalagoProducto();
                         DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                        detalle.setCodigoUnico(detalleIndividual);
+                        detalle.setProductoIndividualCompra(detalleIndividual);
                         detalle.setSubtotal(subtotalRegistro);
                         detalle.setPrecioIndividual(detalles.getCosto());
                         detallesIndividualVenta.add(detalle);
@@ -1120,7 +1120,7 @@ public class FacturaMB {
                         for (int i = 0; i < detallesVenta.size(); i++) {
                             //System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesIndividualVenta.get(i).getCodigoUnico());
                             for (int j = 0; j < detallesIndividualVenta.size(); j++) {
-                                if (detallesVenta.get(i).getCodigo().equals(detallesIndividualVenta.get(j).getCodigoUnico().getCodigoUnico())) {
+                                if (detallesVenta.get(i).getCodigo().equals(detallesIndividualVenta.get(j).getProductoIndividualCompra().getCodigoUnico())) {
                                     detallesIndividualVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
                                     detallesIndividualVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());
                                 }
@@ -1129,7 +1129,7 @@ public class FacturaMB {
                         facturaServicio.insertarDetalleProductoIndividual(detallesIndividualVenta);
                         for (int i = 0; i < detallesIndividualVenta.size(); i++) {
                             prodIndividual = new ProductoIndividualCompra();
-                            prodIndividual = facturaServicio.devolverProductoIndividual(detallesIndividualVenta.get(i).getCodigoUnico().getCodigoUnico());
+                            prodIndividual = facturaServicio.devolverProductoIndividual(detallesIndividualVenta.get(i).getProductoIndividualCompra().getCodigoUnico());
                             prodIndividual.setEstadoProceso("Vendido");
                             facturaServicio.actulizarStocIndividual(prodIndividual);
 
