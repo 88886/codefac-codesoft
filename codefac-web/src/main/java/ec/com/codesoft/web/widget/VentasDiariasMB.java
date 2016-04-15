@@ -263,7 +263,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
             ventaDiaria = new Venta();
         } else {
             List<DetalleProductoGeneral> productosGeneral = facturaServicio.devolverVentaDiariaDetallesGeneral(ventaDiaria.getCodigoFactura());
-            //List<DetalleProductoIndividual> productosIndivudual = facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
+            List<DetalleProductoIndividual> productosIndivudual = facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
             System.out.println("Items " + productosGeneral.size());
             //System.out.println("Items " + productosIndivudual.size());
             
@@ -282,19 +282,19 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                 detalle.setCodigoDetallGeneral(0);
                 detallesGeneralVenta.add(detalle);
             }
-//            for (int i = 0; i < productosIndivudual.size(); i++) {
-//                DetallesVenta detalles = new DetallesVenta();
-//                detalles.setCantidad(1);
-//                detalles.setCodigo(productosIndivudual.get(i).getCodigoUnico().getCodigoUnico());
-//                detalles.setCosto(productosIndivudual.get(i).getPrecioIndividual());
-//                detalles.setTotal(productosIndivudual.get(i).getSubtotal());
-//                detallesVenta.add(detalles);
-//                DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-//                detalle.setCodigoUnico(detalleIndividual);
-//                detalle.setSubtotal(subtotalRegistro);
-//                detalle.setPrecioIndividual(detalles.getCosto());
-//                detallesIndividualVenta.add(detalle);
-//            }
+            for (int i = 0; i < productosIndivudual.size(); i++) {
+                DetallesVenta detalles = new DetallesVenta();
+                detalles.setCantidad(1);
+                detalles.setCodigo(productosIndivudual.get(i).getCodigoUnico().getCodigoUnico());
+                detalles.setCosto(productosIndivudual.get(i).getPrecioIndividual());
+                detalles.setTotal(productosIndivudual.get(i).getSubtotal());
+                detallesVenta.add(detalles);
+                DetalleProductoIndividual detalle = new DetalleProductoIndividual();
+                detalle.setCodigoUnico(detalleIndividual);
+                detalle.setSubtotal(subtotalRegistro);
+                detalle.setPrecioIndividual(detalles.getCosto());
+                detallesIndividualVenta.add(detalle);
+            }
             cargarDetalles();
 
         }
@@ -627,7 +627,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         ventaDiaria.setDescuento(new BigDecimal("0.0"));
         facturaServicio.editarVentaDiaria(ventaDiaria);
         detallesGeneralVenta=facturaServicio.devolverVentaDiariaDetallesGeneral(ventaDiaria.getCodigoFactura());
-        //detallesIndividualVenta=facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
+        detallesIndividualVenta=facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
         ventaDiaria.setDetalleProductoGeneralList(detallesGeneralVenta);
         ventaDiaria.setDetalleProductoIndividualList(detallesIndividualVenta);
        
