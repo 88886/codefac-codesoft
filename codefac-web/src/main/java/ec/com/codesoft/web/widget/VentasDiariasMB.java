@@ -596,7 +596,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                     detallesVenta.add(detalles);
                     catalogoSeleccionado = new CatalagoProducto();
                     DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                    detalle.setCodigoUnico(detalleIndividual);
+                    detalle.setProductoIndividualCompra(detalleIndividual);
                     detalle.setSubtotal(subtotalRegistro);
                     detalle.setPrecioIndividual(detalles.getCosto());
                     detalle.setCodigoFactura(ventaDiaria);

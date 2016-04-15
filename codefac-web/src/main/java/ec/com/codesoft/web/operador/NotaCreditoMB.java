@@ -126,8 +126,8 @@ public class NotaCreditoMB implements Serializable {
             //agregando los datos al detalle visual
             detalleVenta.add(new DetallesVenta(
                     1,
-                    detalle.getCodigoUnico().getCodigoProducto().getCodigoProducto(),
-                    detalle.getCodigoUnico().getCodigoProducto().getNombre(),
+                    detalle.getProductoIndividualCompra().getCodigoProducto().getCodigoProducto(),
+                    detalle.getProductoIndividualCompra().getCodigoProducto().getNombre(),
                     detalle.getSubtotal(),
                     detalle.getSubtotal()));
         }
