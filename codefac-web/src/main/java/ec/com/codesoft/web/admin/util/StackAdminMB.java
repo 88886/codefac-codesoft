@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.admin.util;
 
 import ec.com.codesoft.web.widget.CommonWidGet;
+import ec.com.codesoft.web.widget.VentasDiariasMB;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,9 @@ public class StackAdminMB implements Serializable {
 
     @ManagedProperty(value = "#{calendarioUtilMB}")
     private CalendarioUtilMB calendarioUtilMB;
+    
+    @ManagedProperty(value = "#{ventasDiariasMB}")
+    private VentasDiariasMB ventasDiariasMB;
 
     @PostConstruct
     public void postConstruct() {
@@ -42,6 +46,7 @@ public class StackAdminMB implements Serializable {
         listaWidGet.add(notaUtilMB);
         listaWidGet.add(calcuUtilMB);
         listaWidGet.add(calendarioUtilMB);
+        listaWidGet.add(ventasDiariasMB);
     }
 
     /**
@@ -87,5 +92,14 @@ public class StackAdminMB implements Serializable {
     public void setCalendarioUtilMB(CalendarioUtilMB calendarioUtilMB) {
         this.calendarioUtilMB = calendarioUtilMB;
     }
+
+    public VentasDiariasMB getVentasDiariasMB() {
+        return ventasDiariasMB;
+    }
+
+    public void setVentasDiariasMB(VentasDiariasMB ventasDiariasMB) {
+        this.ventasDiariasMB = ventasDiariasMB;
+    }
+    
     
 }

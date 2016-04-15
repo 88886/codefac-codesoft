@@ -53,6 +53,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.xml.soap.Detail;
 import net.sf.jasperreports.engine.JRException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -235,7 +236,6 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         tipoPrecio = "PVP";
 
         //devolver todos los bancos
-        
         ivaMostrar = sistemaServicio.getConfiguracion().getIva();
         ivaSubTotal = (sistemaServicio.getConfiguracion().getIva()).divide(new BigDecimal("100"));
         ivaTotal = ivaSubTotal.add(new BigDecimal("1"));
@@ -266,7 +266,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
             List<DetalleProductoIndividual> productosIndivudual = facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
             System.out.println("Items " + productosGeneral.size());
             //System.out.println("Items " + productosIndivudual.size());
-            
+
             codFactura = ventaDiaria.getCodigoFactura();// codigo de la factura
             for (int i = 0; i < productosGeneral.size(); i++) {
                 DetallesVenta detalles = new DetallesVenta();
@@ -388,7 +388,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                 mostrarInformacion = true;
                 System.out.println(stock);
             }
-           
+
         }
     }
 
@@ -614,72 +614,66 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
          * Guardar Detalles de Facturas
          */
     }
-    
+
     /**
-     * 
+     *
      * guarda la factura de las ventas diarias
      */
-    
-    public void facturar(){
-    
+    public void facturar() {
+
         ventaDiaria.setEstado("Facturado Diaria");
         ventaDiaria.setTotal(totalPagar);
         ventaDiaria.setDescuento(new BigDecimal("0.0"));
         facturaServicio.editarVentaDiaria(ventaDiaria);
-        detallesGeneralVenta=facturaServicio.devolverVentaDiariaDetallesGeneral(ventaDiaria.getCodigoFactura());
-        detallesIndividualVenta=facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
+        detallesGeneralVenta = facturaServicio.devolverVentaDiariaDetallesGeneral(ventaDiaria.getCodigoFactura());
+        detallesIndividualVenta = facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
         ventaDiaria.setDetalleProductoGeneralList(detallesGeneralVenta);
         ventaDiaria.setDetalleProductoIndividualList(detallesIndividualVenta);
-       
+
         FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
-                        facturaReporte.setCodigoFactura(ventaDiaria.getCodigoFactura() + "");
-                        facturaReporte.setDireccion(clienteEncontrado.getDireccion());
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                        facturaReporte.setTelefono(clienteEncontrado.getTelefono());
+        facturaReporte.setCodigoFactura(ventaDiaria.getCodigoFactura() + "");
+        facturaReporte.setDireccion(clienteEncontrado.getDireccion());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        facturaReporte.setTelefono(clienteEncontrado.getTelefono());
 
-                        facturaReporte.setRuc(cedCliente);
-                        facturaReporte.setFechaaFactura(sdf.format(ventaDiaria.getFecha()));
-                        facturaReporte.setFormaPago("Efectivo");
-                        facturaReporte.setIvaTotal(iva);
-                        facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
-                        facturaReporte.setNota(" ");
-                        facturaReporte.setSubtotal(subtotal);
+        facturaReporte.setRuc(cedCliente);
+        facturaReporte.setFechaaFactura(sdf.format(ventaDiaria.getFecha()));
+        facturaReporte.setFormaPago("Efectivo");
+        facturaReporte.setIvaTotal(iva);
+        facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
+        facturaReporte.setNota(" ");
+        facturaReporte.setSubtotal(subtotal);
 
-                        //System.out.println(subtotal);
-                        facturaReporte.setTotal(total);
-                        for (DetallesVenta detalle : detallesVenta) {
-                            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
-                            detallesFactura.setCantidad(detalle.getCantidad() + "");
-                            detallesFactura.setCodigo(detalle.getCodigo());
-                            detallesFactura.setDescripcion(detalle.getNombre());
-                            detallesFactura.setDescuento("0");
-                            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
-                            detallesFactura.setTotal(detalle.getTotal().toString());
-                            if (facturaReporte != null) {
-                                facturaReporte.agregarDetalle(detallesFactura);
-                            }
-                        }
+        //System.out.println(subtotal);
+        facturaReporte.setTotal(total);
+        for (DetallesVenta detalle : detallesVenta) {
+            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+            detallesFactura.setCantidad(detalle.getCantidad() + "");
+            detallesFactura.setCodigo(detalle.getCodigo());
+            detallesFactura.setDescripcion(detalle.getNombre());
+            detallesFactura.setDescuento("0");
+            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+            detallesFactura.setTotal(detalle.getTotal().toString());
+            if (facturaReporte != null) {
+                facturaReporte.agregarDetalle(detallesFactura);
+            }
+        }
 
-                        try {
-                            facturaReporte.exportarPDF();
+        try {
+            facturaReporte.exportarPDF();
                             //detallesFactura.setCantidad(1);
-                            //factura.agregarDetalle(detallesFactura);
-                            //factura.exportarPDF();
-                        } catch (JRException ex) {
-                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-        
-        
-        
-        Map<String, Object> options = new HashMap<String, Object>();
-                options.put("modal", true);
-                RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
-                RequestContext.getCurrentInstance().execute("PF('ok').show()");
-                
-        
-        
+            //factura.agregarDetalle(detallesFactura);
+            //factura.exportarPDF();
+        } catch (JRException ex) {
+            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
+        RequestContext.getCurrentInstance().execute("PF('ok').show()");
+        detallesVenta = new ArrayList< DetallesVenta>();
+
     }
 
     ////////////////////METODOS GET Y SET /////////////////////
@@ -1179,7 +1173,5 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
     public void setVentaDiaria(Venta ventaDiaria) {
         this.ventaDiaria = ventaDiaria;
     }
-    
-    
 
 }

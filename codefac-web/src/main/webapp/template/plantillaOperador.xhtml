@@ -67,7 +67,7 @@ and open the template in the editor.
             <p:stack id="idMenuRapido" icon="#{resource['img:menu/ico_canasta.png']}">
                 <p:menuitem  value="Ayuda" icon="#{resource['img:menu/ico_codefac.png']}" url="#"  />                
                 <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{menuRapidoOperadorMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
-                <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoOperadorMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido"/>
+                <p:menuitem value="Notas" icon="#{resource['img:menu/nota.png']}" actionListener="#{menuRapidoOperadorMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido"/>
                 <p:menuitem value="Ventas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{menuRapidoOperadorMB.abrirWidget('dlgDetalles')}" update=":formMenu2:idMenuRapido"/>
             </p:stack>
         </h:form>
@@ -354,7 +354,7 @@ and open the template in the editor.
         <!-- Dialogo de confirmacion para grabar o cancelar-->
         <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
             <h:form style="margin: 0 auto">
-                <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" />
+                <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
                 <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
             </h:form>
         </p:dialog>

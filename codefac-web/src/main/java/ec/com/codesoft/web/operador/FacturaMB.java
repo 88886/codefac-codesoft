@@ -323,24 +323,9 @@ public class FacturaMB {
         if (clienteEncontrado == null) {
             System.out.println("NNEncontrado");
             msjCliente = "";//cliente no encontrado
-            //mostrarPanel = false;
-
-            System.out.println("abriendo nuevo panel...");
-            Map<String, Object> options = new HashMap<String, Object>();
-            options.put("modal", true);
-
-            Map<String, List<String>> params = new HashMap<String, List<String>>();
-            List<String> values = new ArrayList<String>();
-
-            values.add(cedCliente);
-            params.put("cedula", values);
-            //options.put("width", 640);
-            //options.put("height", 340);
-            // options.put("contentWidth", "100%");
-            // options.put("contentHeight", "100%");
-            //options.put("headerElement", "customheader");
-            //RequestContext.getCurrentInstance().execute("PF('confirmarDistribuidor').hide()");
-            RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
+            //abrir panel crearCLiente
+            RequestContext.getCurrentInstance().execute("PF('confirmarCliente').show()");
+            
 
         } else {
 
@@ -356,6 +341,31 @@ public class FacturaMB {
             // mostrarPanel = true;
             //tabCompra = true;
         }
+    }
+
+    /**
+     * Funcion para crear cliente si no existe
+     */
+    public void crearCliente() {
+        
+        RequestContext.getCurrentInstance().execute("PF('confirmarCliente').hide()");
+        System.out.println("abriendo nuevo panel...");
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        List<String> values = new ArrayList<String>();
+
+        values.add(cedCliente);
+        params.put("cedula", values);
+        //options.put("width", 640);
+        //options.put("height", 340);
+        // options.put("contentWidth", "100%");
+        // options.put("contentHeight", "100%");
+        //options.put("headerElement", "customheader");
+        //RequestContext.getCurrentInstance().execute("PF('confirmarDistribuidor').hide()");
+        RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
+
     }
 
     public void recibirDatos(SelectEvent event) {

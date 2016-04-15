@@ -102,9 +102,9 @@ and open the template in the editor.
             <p:stack id="idMenuRapido" icon="#{resource['img:menu/ico_canasta.png']}" expanded="false" closeSpeed="80" openSpeed="80">
                 <p:menuitem  value="Ayuda" icon="#{resource['img:menu/ico_codefac.png']}" url="#"  />                
                 <p:menuitem value="Calendario" icon="#{resource['img:menu/ico_calendario.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgCalendario')}" update=":formMenu2:idMenuRapido"/>
-                <p:menuitem value="Notas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido" />
+                <p:menuitem value="Notas" icon="#{resource['img:menu/nota.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgNotas')}" update=":formMenu2:idMenuRapido" />
                 <p:menuitem value="Calculadora" icon="#{resource['img:menu/ico_calculadora.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgCalculadora')}" update=":formMenu2:idMenuRapido"/>
-
+                <p:menuitem value="Ventas" icon="#{resource['img:menu/ico_notas.png']}" actionListener="#{stackAdminMB.abrirWidget('dlgDetalles')}" update=":formMenu2:idMenuRapido"/>
             </p:stack>
         </h:form>
 
@@ -189,6 +189,240 @@ and open the template in the editor.
 
         </p:dialog>
 
+        
+        <!-- Dialogo de las Ventas -->
+        <p:dialog  widgetVar="dlgVentas"
+                   minHeight="40"
+                   width="300px" 
+                   style="font-size:12px;background-color: #ffff99;background-image: none;padding: 0px;margin: 0px" 
+                   header="Ventas Diarias">
+            <h:form id="formCompraV">
+                <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;font-size: 10px">
+                    <p:dataTable var="catalogo" value="#{ventasDiariasMB.catalogosLista}"
+                                 rows="10"
+                                 selectionMode="single" 
+                                 scrollable="true" 
+                                 scrollHeight="100"  
+                                 rowKey="#{catalogo.codigoProducto}"
+                                 selection="#{ventasDiariasMB.catalogoSeleccionado}">
+                        <p:ajax event="rowSelect" listener="#{ventasDiariasMB.onRowSelect(event)}" update=":formGeneralV,:formEspecificoV"/>
+                        <p:ajax event="rowUnselect" listener="#{ventasDiariasMB.onRowUnSelect(event)}"/>
+
+                        <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                            <h:outputText value="#{catalogo.codigoProducto}" />
+                        </p:column>
+                        <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                            <h:outputText value="#{catalogo.nombre}" />
+                        </p:column>
+                        <p:column headerText="Precio">
+                            <h:outputText value="#{catalogo.precio}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panelGrid>
+            </h:form>
+
+            <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" height="auto">
+                <h:form id="formGeneralV">
+                    <h:panelGrid columns="5" styleClass="panelNoBorder" >
+                        <p:outputLabel  value="Stock : #{ventasDiariasMB.stock}"/>
+                        <p:inputText id="cantidadP" value="#{ventasDiariasMB.cantidadComprar}" required="true" />
+                        <p:commandButton  icon="ui-icon-plusthick" 
+                                          actionListener="#{ventasDiariasMB.venta()}" ajax="true" update=":formGeneralV,:formDetallesV,:formDetallesVentas:idDetallesFactura,:formDetallesVentasFactura:idDetallesFacturaFactura,:formDetallesVentas:panelTotales"/>
+                        <p:outputLabel value="#{ventasDiariasMB.msjStock}" style="color: darkred"/>
+                        <p:commandButton icon="ui-icon-close" onclick="PF('dlgInformacion').hide()" style="background-image: none;background-color: indianred" />
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog>
+
+
+
+            <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" height="auto">
+                <h:form id="formEspecificoV">
+                    <h:panelGrid columns="6" styleClass="panelNoBorder" >
+                        <p:outputLabel  value="Código Único : "/>
+                        <p:inputText id="codPEspec" value="#{ventasDiariasMB.codPEspe}" required="true"/>
+                        <p:commandButton  icon="ui-icon-plusthick" 
+                                          actionListener="#{ventasDiariasMB.venta()}" ajax="false" />
+                        <p:outputLabel  value="#{ventasDiariasMB.msjCodUnico}" style="color: darkred"/>
+                        <p:message for="codPEspec" />
+                        <p:commandButton icon="ui-icon-close" onclick="PF('dlgInformacionE').hide()" />
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog>
+        </p:dialog>
+
+
+        <!-- Dialogo de los Detalles -->
+
+        <p:dialog widgetVar="dlgDetalles"
+                  position="#{ventasDiariasMB.x},#{ventasDiariasMB.y}"
+                  minHeight="30" 
+                  width="200px" 
+                  style="font-size:12px;background-color: white;background-image: none;padding: 0px;margin: 0px" 
+                  header="Ventas Diarias">
+            <p:ajax event="close"  listener="#{ventasDiariasMB.handleClose}" />
+            <p:ajax event="move"   listener="#{ventasDiariasMB.handleMove}" />
+            <h:form id="formDetallesV">
+                <h:panelGrid columns="2" styleClass="panelNoBorder" cellpadding="0" cellspacing="1" style="background-color: white">
+                    <h:panelGrid columns="2" cellpadding="1" cellspacing="0">
+                        <f:facet name="header">
+                            <p:commandButton icon="ui-icon-plusthick" style="width: 100%;height: 35px" onclick="PF('dlgVentas').show();"  />
+                        </f:facet>
+
+                        <p:commandButton icon="ui-icon-clipboard" style="background-image: none;background-color: #009966;height: 30px" onclick="PF('dlgDetallesVentasDiariasFactura').show();"/>
+                        <p:commandButton icon="ui-icon-search" style="background-image: none;background-color: tomato;height: 30px" onclick="PF('dlgDetallesVentasDiarias').show();" />
+
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="1" style="font-size: 12px;width: 100%" >
+                        <f:facet name="header">
+                            <p:outputLabel value="Total Venta:" />    
+                        </f:facet>
+
+
+                        <p:inputText value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)} $" style="font-weight: bold;color: #ffffff;background-color: tomato;width: 83px;text-align: center"/>                    
+
+
+                        <f:facet name="footer">
+                            <p:outputLabel value="Items: " style="color: #485798;font-weight: bold"/> 
+                            <p:inputText value="#{ventasDiariasMB.detallesVenta.size()}" style="background-color: #485798; color: #ffffff;font-weight: bold;width: 30px;height: 10px;text-align: center" />
+                        </f:facet> 
+
+                    </h:panelGrid>
+
+
+                </h:panelGrid>
+            </h:form>
+        </p:dialog >
+
+
+        <!--dialgo detalles de ventas diarias -->
+        <p:dialog widgetVar="dlgDetallesVentasDiarias"
+                  minHeight="30" 
+                  width="700px"
+                  style="font-size:12px;background-color: white;background-image: none;padding: 0px;margin: 0px" 
+                  header="Detalles Ventas Diarias">
+            <h:form id="formDetallesVentas">
+                <p:panel id="idDetallesFactura" >
+                    <p:dataTable var="detallesVenta" 
+                                 value="#{ventasDiariasMB.detallesVenta}" 
+                                 id="tablaDetallesFactura" 
+                                 scrollable="true" 
+                                 scrollHeight="150"> 
+
+                        <p:column headerText="Cantidad" style="text-align: left;width:50px">
+                            <h:outputText value="#{detallesVenta.cantidad}" />
+                        </p:column>
+                        <p:column headerText="Código" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.codigo}" />
+                        </p:column>
+                        <p:column headerText="Descripción" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.nombre}" />
+                        </p:column>
+                        <p:column headerText="P. Unitario" style="text-align: left;width:50px" id="descuentoIndividual">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
+                        </p:column>
+                        <p:column headerText="Total" style="text-align: left;width:50px" id="totalDescuento">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:spacer/>
+
+                    <h:panelGrid  id="panelTotales" columns="2" style="margin-left:60%;" styleClass="panelNoBorder">
+                        <p:outputLabel  value="Subtotal:"/>
+                        <h:outputText id="subTotal" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" />
+
+                        <p:outputLabel  value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
+                        <h:outputText id="iva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}" />
+
+                        <p:outputLabel  value="Total + Iva : "/>
+                        <h:outputText id="totalIva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}"/>
+
+
+                        <p:outputLabel  value="Total a Pagar : "/>
+                        <h:outputText id="totalPagar" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.totalPagar)}"/>
+                    </h:panelGrid>
+                </p:panel>
+
+            </h:form>
+        </p:dialog>
+
+
+
+
+
+        <!--dialgo facturar  ventas diarias -->
+        <p:dialog widgetVar="dlgDetallesVentasDiariasFactura"
+                  minHeight="30" 
+                  width="700px"
+                  style="font-size:12px;background-color: white;background-image: none;padding: 0px;margin: 0px" 
+                  header="Detalles Ventas Diarias">
+            <h:form id="formDetallesVentasFactura">
+                <p:panel id="idDetallesFacturaFactura" >
+                    <p:dataTable var="detallesVenta" 
+                                 value="#{ventasDiariasMB.detallesVenta}" 
+                                 id="tablaDetallesFactura" 
+                                 scrollable="true" 
+                                 scrollHeight="150"> 
+
+                        <p:column headerText="Cantidad" style="text-align: left;width:50px">
+                            <h:outputText value="#{detallesVenta.cantidad}" />
+                        </p:column>
+                        <p:column headerText="Código" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.codigo}" />
+                        </p:column>
+                        <p:column headerText="Descripción" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.nombre}" />
+                        </p:column>
+                        <p:column headerText="P. Unitario" style="text-align: left;width:50px" id="descuentoIndividual">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
+                        </p:column>
+                        <p:column headerText="Total" style="text-align: left;width:50px" id="totalDescuento">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:spacer/>
+
+                    <h:panelGrid  id="panelTotalesFactura" columns="2" style="margin-left:60%;" styleClass="panelNoBorder">
+                        <p:outputLabel  value="Subtotal:"/>
+                        <h:outputText id="subTotalFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" />
+
+                        <p:outputLabel  value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
+                        <h:outputText id="ivaFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}" />
+
+                        <p:outputLabel  value="Total + Iva : "/>
+                        <h:outputText id="totalIvaFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}"/>
+
+
+                        <p:outputLabel  value="Total a Pagar : "/>
+                        <h:outputText id="totalPagarFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.totalPagar)}"/>
+                    </h:panelGrid>
+                </p:panel>
+
+
+                <p:panelGrid columns="3" style="margin: 0 auto;">
+                    <p:commandButton  partialSubmit="true" value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
+                    <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" onclick="PF('dlgDetallesVentasDiariasFactura').hide()" ajax="false"/>                    
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialogo de confirmacion para grabar o cancelar-->
+        <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
+            <h:form style="margin: 0 auto">
+                <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
+                <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Facturado" widgetVar="ok" modal="true" >
+            <h:form style="margin: 0 auto">
+                <p:outputLabel value="Factura Completa" />
+                <p:commandButton onclick="PF('ok').hide();" value="Aceptar" style="background-image: none;background-color: brown"/>
+            </h:form>
+        </p:dialog>
 
     </h:body>
 </html>
