@@ -291,7 +291,7 @@ and open the template in the editor.
 
                             <div>
                                 <p:commandButton value="Aceptar" actionListener="#{comprarMB.agregarProductoEspecifico()}" update=":formDetalleCompra,txtCodigoDetalle,focus,:formTotales" />
-                                <p:commandButton value="Salir"  />
+                                <p:commandButton value="Salir" onclick="PF('dlgProductoGeneral').hide();" />
                             </div>
                         </p:panel>
                     </h:form>

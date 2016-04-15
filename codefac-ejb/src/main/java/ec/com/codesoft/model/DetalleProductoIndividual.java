@@ -48,9 +48,6 @@ public class DetalleProductoIndividual implements Serializable {
     @Column(name = "PRECIO_INDIVIDUAL")
     private BigDecimal precioIndividual;
 
-    @JoinColumn(name = "CODIGO_UNICO", referencedColumnName = "CODIGO_UNICO")
-    @ManyToOne
-    private ProductoIndividualCompra codigoUnico;
     @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
     @ManyToOne
     private Venta codigoFactura;
@@ -86,13 +83,6 @@ public class DetalleProductoIndividual implements Serializable {
         this.subtotal = subtotal;
     }
 
-    public ProductoIndividualCompra getCodigoUnico() {
-        return codigoUnico;
-    }
-
-    public void setCodigoUnico(ProductoIndividualCompra codigoUnico) {
-        this.codigoUnico = codigoUnico;
-    }
 
     public Venta getCodigoFactura() {
         return codigoFactura;

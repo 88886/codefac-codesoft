@@ -310,7 +310,7 @@ public class Venta implements Serializable {
 
         List<DetalleProductoIndividual> listaIndividual = detalleProductoIndividualList;
         for (DetalleProductoIndividual detalle : listaIndividual) {
-            cadena = cadena + detalle.getCodigoUnico().getCodigoProducto().getNombre() + ",";
+            cadena = cadena + detalle.getProductoIndividualCompra().getCodigoProducto().getNombre() + ",";
         }
 
         if (cadena.length() > 3) {
