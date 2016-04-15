@@ -285,12 +285,12 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
             for (int i = 0; i < productosIndivudual.size(); i++) {
                 DetallesVenta detalles = new DetallesVenta();
                 detalles.setCantidad(1);
-                detalles.setCodigo(productosIndivudual.get(i).getCodigoUnico().getCodigoUnico());
+                detalles.setCodigo(productosIndivudual.get(i).getProductoIndividualCompra().getCodigoUnico());
                 detalles.setCosto(productosIndivudual.get(i).getPrecioIndividual());
                 detalles.setTotal(productosIndivudual.get(i).getSubtotal());
                 detallesVenta.add(detalles);
                 DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                detalle.setCodigoUnico(detalleIndividual);
+                detalle.setProductoIndividualCompra(detalleIndividual);
                 detalle.setSubtotal(subtotalRegistro);
                 detalle.setPrecioIndividual(detalles.getCosto());
                 detallesIndividualVenta.add(detalle);
