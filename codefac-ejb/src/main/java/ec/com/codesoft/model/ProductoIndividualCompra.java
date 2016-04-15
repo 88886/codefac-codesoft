@@ -37,8 +37,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ProductoIndividualCompra.findAll", query = "SELECT p FROM ProductoIndividualCompra p")})
 public class ProductoIndividualCompra implements Serializable {
 
-    private static final long serialVersionUID = 1L
-            ;
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -68,7 +68,7 @@ public class ProductoIndividualCompra implements Serializable {
     @Column(name = "FECHA_RESERVA_TEMPORAL")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaReservaTemporal;
-    @OneToMany(mappedBy = "codigoUnico")
+    @OneToMany(mappedBy = "idProductoIndividualCompra")
     private List<DetalleProductoIndividual> detalleProductoIndividualList;
 
     @JoinColumn(name = "CODIGO_COMPRA", referencedColumnName = "CODIGO_COMPRA")

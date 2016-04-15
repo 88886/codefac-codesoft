@@ -34,8 +34,7 @@ public class DetalleProductoIndividual implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Basic(optional = false)
-    //@NotNull
+    @Basic(optional = false)
     @Column(name = "CODIGO_DETALLE_INDIVIDUAL")
     private Integer codigoDetalleIndividual;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -58,7 +57,7 @@ public class DetalleProductoIndividual implements Serializable {
 
     @JoinColumn(name = "ID_PRODUCTO_INDIVIDUAL_COMPRA", referencedColumnName = "ID_PRODUCTO_INDIVIDUAL_COMPRA")
     @ManyToOne
-    private ProductoIndividualCompra productoIndividualCompra;
+    private ProductoIndividualCompra idProductoIndividualCompra;
 
     public DetalleProductoIndividual() {
     }
@@ -117,11 +116,11 @@ public class DetalleProductoIndividual implements Serializable {
     }
 
     public ProductoIndividualCompra getProductoIndividualCompra() {
-        return productoIndividualCompra;
+        return idProductoIndividualCompra;
     }
 
     public void setProductoIndividualCompra(ProductoIndividualCompra productoIndividualCompra) {
-        this.productoIndividualCompra = productoIndividualCompra;
+        this.idProductoIndividualCompra = productoIndividualCompra;
     }
     
     
