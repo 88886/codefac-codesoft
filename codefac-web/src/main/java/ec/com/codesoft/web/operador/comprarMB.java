@@ -123,11 +123,11 @@ public class comprarMB implements Serializable {
         this.detalleCompra = new ArrayList<DetalleCompraModelo>();
         this.cantidadDetalle = 0;
         this.costoDetalle = new BigDecimal(0);
-        
-        Distribuidor distribuidorVacio=new Distribuidor();
+
+        Distribuidor distribuidorVacio = new Distribuidor();
         distribuidorVacio.setRuc("");
         this.compra.setRuc(distribuidorVacio);
-        
+
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
         this.compra.setIva(new BigDecimal("12"));
@@ -162,6 +162,21 @@ public class comprarMB implements Serializable {
             cargarDatosEditar();
         }
 
+    }
+
+    /**
+     * Funcion que abre el dialogo para cambiar de precio
+     */
+    public void abrirDialogoCambiarPrecio() {
+        System.out.println("abriendo dialogo editar ...");
+        RequestContext.getCurrentInstance().execute("PF('widCambiarPrecio').show()");
+        //dialogEditPrecio
+    }
+
+    public void editarPrecio() {
+        System.out.println("editando el precio del producto ...");
+        catalogoServicio.actualizar(catalogo);
+        RequestContext.getCurrentInstance().execute("PF('widCambiarPrecio').hide()");
     }
 
     public void consultarDistribuidor() {
@@ -241,28 +256,49 @@ public class comprarMB implements Serializable {
 
         System.out.println(catalogo);
 
-        //Verificar que no exista el codigo del producto individual
-        if (!compraServicio.existenciaProductoIndividual(catalogo.getCodigoProducto(),codigoEspecificoDetalle)) 
-        {
-            ProductoIndividualCompra detalleIndividual = new ProductoIndividualCompra();
-            //detalleIndividual.setCantidad(cantidadDetalle);
-            detalleIndividual.setCosto(costoDetalle);
-            detalleIndividual.setCodigoProducto(catalogo);
-            detalleIndividual.setCodigoUnico(codigoEspecificoDetalle);
+        //Verificar que no exista el codigo del producto individual en la base de datos
+        if (!compraServicio.existenciaProductoIndividual(catalogo.getCodigoProducto(), codigoEspecificoDetalle)) {
 
-            DetalleCompraModelo detalle = new DetalleCompraModelo(detalleIndividual);
-            detalleCompra.add(detalle);
+            //Verifica que no exista el mismo codigo individual ingresado
+            boolean prodInvidualRepetido = false;
+            for (DetalleCompraModelo detalle : detalleCompra) {
+                if (!detalle.getCodigoGeneral()) {
+                    if (detalle.getProductoIndividual().getCodigoUnico().equals(codigoEspecificoDetalle) && detalle.getProductoIndividual().getCodigoProducto().getCodigoProducto().equals(catalogo.getCodigoProducto())) {
+                        prodInvidualRepetido = true;
+                    }
+                }
+            }
 
-            //limpiar ventana para agregar mas detalles
-            contadorIngresoDetalleEspecifico--;
-            //RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
-            codigoEspecificoDetalle = "";
+            //Si el producto individual no existe procede a grabar
+            if (!prodInvidualRepetido) {
 
-            sumaTotalCompra = sumaTotalCompra.add(detalle.getSubtotal());
-            actualizarValoresTotales();
-            if (contadorIngresoDetalleEspecifico == 0) {
-                RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
+                ProductoIndividualCompra detalleIndividual = new ProductoIndividualCompra();
+                //detalleIndividual.setCantidad(cantidadDetalle);
+                detalleIndividual.setCosto(costoDetalle);
+                detalleIndividual.setCodigoProducto(catalogo);
+                detalleIndividual.setCodigoUnico(codigoEspecificoDetalle);
 
+                DetalleCompraModelo detalle = new DetalleCompraModelo(detalleIndividual);
+                detalleCompra.add(detalle);
+
+                //limpiar ventana para agregar mas detalles
+                contadorIngresoDetalleEspecifico--;
+
+                codigoEspecificoDetalle = "";
+
+                sumaTotalCompra = sumaTotalCompra.add(detalle.getSubtotal());
+                actualizarValoresTotales();
+
+                //verifica que ya se hayan ingresado todos los productos
+                if (contadorIngresoDetalleEspecifico == 0) {
+                    RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
+
+                }
+            } 
+            else 
+            {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "El codigo especifico ya se agrego");
+                RequestContext.getCurrentInstance().showMessageInDialog(message);
             }
 
         } else {
@@ -340,14 +376,11 @@ public class comprarMB implements Serializable {
      */
     public void verificarProducto() {
         //validacion para saber si selecciono un distribuidor
-        if (compra.getRuc().getRuc().equals("")) 
-        {
+        if (compra.getRuc().getRuc().equals("")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No se encuentra seleccionado un distribuidor para agregar productos");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
-        } 
-        //procede a agregar los detalles cuando ya esta escogido el distribuidor
-        else 
-        {           
+        } //procede a agregar los detalles cuando ya esta escogido el distribuidor
+        else {
             cantidadDetalle = 1;
             costoDetalle = new BigDecimal("0");
 
@@ -477,7 +510,7 @@ public class comprarMB implements Serializable {
         //FacesMessage msg = new FacesMessage("Catalogo Seleccionado", ((CatalagoProducto) event.getObject()).getCodigoProducto());
         //FacesContext.getCurrentInstance().addMessage(null, msg);
         codigoDetalle = ((CatalagoProducto) (event.getObject())).getCodigoProducto();
-        visibleDetalleAgregar = true;
+        //visibleDetalleAgregar = true;
         // System.out.println("ocultando panel ...");
         RequestContext.getCurrentInstance().execute("PF('widgetVarCatalogo').hide()");
         System.out.println(codigoDetalle);

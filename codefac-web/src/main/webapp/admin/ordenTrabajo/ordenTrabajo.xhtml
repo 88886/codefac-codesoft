@@ -27,7 +27,7 @@ and open the template in the editor.
                         <p:inputText 
                             id="txtCedulaRuc" 
                             value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.cedulaRuc}" 
-                            onkeypress="return validarEnter(event,'test');"
+                            onkeypress="return validarEnter(event, 'test');"
                             required="false" />
 
                         <!-- Verifica si el cliente existe o no -->
@@ -40,7 +40,7 @@ and open the template in the editor.
                             :formPrincipal:txtObservaciones" 
                             name="test" actionListener="#{ordenTrabajoMB.validarCliente()}" update="@form"/>
 
-                        
+
                         <!-- Boton que abre un dialogo para buscar el cliente -->
                         <p:commandButton partialSubmit="true" 
                                          process="
