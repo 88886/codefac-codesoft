@@ -129,7 +129,7 @@ and open the template in the editor.
                                 <p:outputLabel value="PVP:" style="width: 100px"/>
                                 <p:commandButton icon="ui-icon-pencil" actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" style="background-image: none;background-color: chocolate" update="@form,:dialogEditPrecio" />
                             </p:panelGrid>
-                            <p:outputLabel id='lblPVP' value="#{comprarMB.catalogo.precio}" style="font-weight: bold" />
+                            <p:outputLabel id='lblPVP' value="#{calculosMB.incluirIva(comprarMB.catalogo.precio)}" style="font-weight: bold" />
 
 
                         </p:panelGrid>
