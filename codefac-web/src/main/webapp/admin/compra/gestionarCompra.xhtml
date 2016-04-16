@@ -33,8 +33,14 @@
                 <p:column headerText="Distribuidor" style="width: 100px" filterBy="#{compra.ruc.nombre}" filterMatchMode="contains">
                     <p:outputLabel value="#{compra.ruc.nombre}"/>
                 </p:column>
+                
+                <p:column headerText="Fecha Ingreso" style="width: 120px">
+                    <p:outputLabel value="#{compra.fechaIngreso}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </p:outputLabel>
+                </p:column>
 
-                <p:column headerText="Fecha" style="width: 130px">
+                <p:column headerText="Fecha Compra" style="width: 120px">
                     <p:outputLabel value="#{compra.fecha}">
                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                     </p:outputLabel>

@@ -18,10 +18,12 @@ import javax.faces.bean.ViewScoped;
 public class StatusBean implements Serializable
 {
     private String name;
+    private String otroAtributo;
     
     public void test()
     {
         System.out.println("metodo enter presionado... "+name);
+        System.out.println("otro atributo... "+otroAtributo);
     }
 
     public String getName() {
@@ -31,6 +33,15 @@ public class StatusBean implements Serializable
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getOtroAtributo() {
+        return otroAtributo;
+    }
+
+    public void setOtroAtributo(String otroAtributo) {
+        this.otroAtributo = otroAtributo;
+    }
+    
     
     
 }

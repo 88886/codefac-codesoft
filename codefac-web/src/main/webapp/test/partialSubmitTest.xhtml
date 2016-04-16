@@ -36,14 +36,14 @@ and open the template in the editor.
 
             <p:commandButton partialSubmit="true" process=":form2" value="validar" action="index" ajax="false"/>
 
-            <p:remoteCommand  process="@this,:form1:txtKey" name="test" actionListener="#{statusBean.test}"/>
+            <p:remoteCommand partialSubmit="true"  process="@this,:form1:txtKey,:form2:txtkey2" name="test" actionListener="#{statusBean.test}"/>
 
         </h:form>
 
         <p:spacer width="100px" />
 
         <h:form id="form2">
-            <p:inputText id="txtkey2" required="true" />
+            <p:inputText id="txtkey2" required="true" value="#{statusBean.otroAtributo}" />
         </h:form>
 
     </h:body>

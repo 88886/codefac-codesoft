@@ -227,7 +227,7 @@ public class Compra implements Serializable {
 
     @Override
     public String toString() {
-        return "Compra{" + "codigoCompra=" + codigoCompra + ", codigoDocumento=" + codigoDocumento + ", tipoDocumento=" + tipoDocumento + ", total=" + total + ", fecha=" + fecha + ", descuento=" + descuento + ", ruc=" + ruc + ", codigoPerido=" + codigoPerido + ", nick=" + nick + ", productoIndividualCompraList=" + productoIndividualCompraList + ", productoGeneralCompraList=" + productoGeneralCompraList + '}';
+        return "Compra{" + "codigoCompra=" + codigoCompra + ", codigoDocumento=" + codigoDocumento + ", tipoDocumento=" + tipoDocumento + ", total=" + total + ", fecha=" + fecha + "fecha ingreso: "+fechaIngreso +", descuento=" + descuento + ", ruc=" + ruc + ", codigoPerido=" + codigoPerido + ", nick=" + nick + ", productoIndividualCompraList=" + productoIndividualCompraList + ", productoGeneralCompraList=" + productoGeneralCompraList + '}';
     }
 
     /**

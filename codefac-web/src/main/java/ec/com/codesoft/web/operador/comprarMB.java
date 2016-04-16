@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,7 +128,7 @@ public class comprarMB implements Serializable {
         Distribuidor distribuidorVacio = new Distribuidor();
         distribuidorVacio.setRuc("");
         this.compra.setRuc(distribuidorVacio);
-
+        this.compra.setFechaIngreso(new Date());
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
         this.compra.setIva(new BigDecimal("12"));
@@ -294,9 +295,7 @@ public class comprarMB implements Serializable {
                     RequestContext.getCurrentInstance().execute("PF('dlgProductoGeneral').hide()");
 
                 }
-            } 
-            else 
-            {
+            } else {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "El codigo especifico ya se agrego");
                 RequestContext.getCurrentInstance().showMessageInDialog(message);
             }
@@ -312,29 +311,44 @@ public class comprarMB implements Serializable {
      */
     public void ejecutarCompra() {
 
-        List<ProductoIndividualCompra> detalleIndividual = new ArrayList<ProductoIndividualCompra>();
-        List<ProductoGeneralCompra> detalleGeneral = new ArrayList<ProductoGeneralCompra>();
+        //validar que este seleccionado un distribuidor
+        //System.out.println("->"+compra.getRuc()+"<--");
+        if (compra.getRuc().getRuc().equals("")) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No existen un distribuidor para realizar la compra");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        } else {
+            //validar que existan Items para comprar
+            if (detalleCompra.size() > 0) {
 
-        System.out.println(detalleCompra.size());
+                List<ProductoIndividualCompra> detalleIndividual = new ArrayList<ProductoIndividualCompra>();
+                List<ProductoGeneralCompra> detalleGeneral = new ArrayList<ProductoGeneralCompra>();
 
-        for (DetalleCompraModelo detalle : detalleCompra) {
-            if (detalle.getCodigoGeneral()) {
-                detalleGeneral.add(detalle.getProductoGeneral());
+                System.out.println(detalleCompra.size());
+
+                for (DetalleCompraModelo detalle : detalleCompra) {
+                    if (detalle.getCodigoGeneral()) {
+                        detalleGeneral.add(detalle.getProductoGeneral());
+                    } else {
+                        detalleIndividual.add(detalle.getProductoIndividual());
+                    }
+                }
+
+                System.out.println(detalleGeneral.size() + "-" + detalleIndividual.size());
+                System.out.println("comprando ....");
+                System.out.println(compra);
+                System.out.println("fecha ingreso: " + compra.getFechaIngreso());
+
+                compra.setProductoGeneralCompraList(detalleGeneral);
+                compra.setProductoIndividualCompraList(detalleIndividual);
+
+                compraServicio.insertar(compra);
+                //compraServicio.actualizar(compra);
+                RequestContext.getCurrentInstance().execute("PF('dialogNuevaCompra').show()");
             } else {
-                detalleIndividual.add(detalle.getProductoIndividual());
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No existen items para realizar la compra");
+                RequestContext.getCurrentInstance().showMessageInDialog(message);
             }
         }
-
-        System.out.println(detalleGeneral.size() + "-" + detalleIndividual.size());
-        System.out.println("comprando ....");
-        System.out.println(compra);
-
-        compra.setProductoGeneralCompraList(detalleGeneral);
-        compra.setProductoIndividualCompraList(detalleIndividual);
-
-        compraServicio.insertar(compra);
-        //compraServicio.actualizar(compra);
-        RequestContext.getCurrentInstance().execute("PF('dialogNuevaCompra').show()");
         //dialogNuevaCompra
     }
 

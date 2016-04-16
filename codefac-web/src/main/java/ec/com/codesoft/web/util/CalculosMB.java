@@ -26,30 +26,35 @@ public class CalculosMB implements Serializable {
      * @return
      */
     public BigDecimal incluirIva(BigDecimal valor) {
-        BigDecimal respuesta = valor.multiply(new BigDecimal("1.12"));
-        respuesta = respuesta.setScale(2, BigDecimal.ROUND_UP);
-
-        return respuesta;
+        if (valor != null) {
+            BigDecimal respuesta = valor.multiply(new BigDecimal("1.12"));
+            respuesta = respuesta.setScale(2, BigDecimal.ROUND_UP);
+            return respuesta;
+        }
+        else
+        {
+            return null;
+        }
+        
+        
     }
 
     /**
-     * 
+     *
      * @param valor
-     * @return 
+     * @return
      */
     public BigDecimal redondeoSuperior(BigDecimal valor) {
-        if(valor!=null)
-        {
-            BigDecimal respuesta=valor.setScale(2,RoundingMode.UP);
+        if (valor != null) {
+            BigDecimal respuesta = valor.setScale(2, RoundingMode.UP);
             return respuesta;
         }
         return new BigDecimal(0);
     }
-    
+
     public BigDecimal redondeoInferior(BigDecimal valor) {
-        if(valor!=null)
-        {
-            BigDecimal respuesta=valor.setScale(4,RoundingMode.DOWN);
+        if (valor != null) {
+            BigDecimal respuesta = valor.setScale(4, RoundingMode.DOWN);
             return respuesta;
         }
         return new BigDecimal(0);
