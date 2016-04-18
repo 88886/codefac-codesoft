@@ -35,7 +35,7 @@ and open the template in the editor.
             <p:accordionPanel id="infDistr" styleClass="panelNoBorder" rendered="true">
                 <p:tab title="Información Cliente"> 
                     <p:panelGrid columns="8" style="margin: 0 auto;" >
-                        <p:commandButton id="btnBuscarCli" value="B U S C A R " type="button"  />
+                        <p:commandButton id="btnBuscarCli" value="B U S C A R " type="button" title="Buscar un Cliente en la Base de Datos" />
 
                         <p:overlayPanel widgetVar="overLayBuscarCliente" id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
                             <p:dataTable var="cliente" 
@@ -71,7 +71,8 @@ and open the template in the editor.
 
                         <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" />
                     </p:panelGrid>
-                    <p:spacer/>
+                    <p:spacer style="background-image: none;background-color: #009966"/>
+                    <p:separator/>
                     <p:panelGrid columns="4" id="panelGridDistr" style="width: 100%">
                         <p:outputLabel value=" "/>
                         <p:outputLabel value=" "/>
@@ -100,7 +101,7 @@ and open the template in the editor.
                         <p:outputLabel id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;font-weight: bold" />
 
                         <p:outputLabel  value="Tipo Venta" />
-                        <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}">
+                        <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}" title="Escojer el tipo de Pago">
                             <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
                             <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
                             <f:selectItem itemLabel="Credito" itemValue="Credito" />
@@ -159,7 +160,7 @@ and open the template in the editor.
         <h:form id="formCompra">
             <p:panel id="idAgregar" style="width:100%;" visible="true" header="Tipo de Detalle">
                 <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;margin-left: 5%">
-                    <p:commandButton id="btnAgregarProd" value="P R O D U C T O S " type="button"  />
+                    <p:commandButton id="btnAgregarProd" value="P R O D U C T O S " type="button" title="Agregar Productos a la Factura"  />
                     <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
                                      rows="10"
@@ -183,7 +184,7 @@ and open the template in the editor.
                         </p:dataTable>
                     </p:overlayPanel>
 
-                    <p:commandButton id="btnAgregarOrden" value="S E R V I C I O S" type="button"  />
+                    <p:commandButton id="btnAgregarOrden" value="S E R V I C I O S" type="button"  title="Agregar Servicio a la Factura" />
                     <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
                                      rows="10"
@@ -207,7 +208,7 @@ and open the template in the editor.
                         </p:dataTable>
                     </p:overlayPanel>
 
-                    <p:commandButton id="btnAgregarServicio" value="O. T R A B A J O" type="button" />
+                    <p:commandButton id="btnAgregarServicio" value="O. T R A B A J O" type="button" title="Agregar Ordenes de Trabajo a la Factura" />
                     <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
                                      rows="10"
@@ -349,9 +350,6 @@ and open the template in the editor.
 
 
                 <p:commandButton  partialSubmit="true" process="@this,:form" value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
-
-                <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" action="factura" ajax="false"/>
-
                 <p:commandButton value="N U E V O" style="background-image: none;background-color: chartreuse" action="factura" ajax="false"/>
 
 
@@ -389,5 +387,8 @@ and open the template in the editor.
 
         </h:form>
     </p:dialog>
+    
+    <!--Textos en botones -->
+    
 
 </ui:composition>

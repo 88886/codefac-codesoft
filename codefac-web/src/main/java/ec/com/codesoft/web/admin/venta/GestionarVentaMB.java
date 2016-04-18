@@ -58,6 +58,10 @@ public class GestionarVentaMB implements Serializable {
     @PostConstruct
     public void postConstruc() {
         ventas = facturaServicio.obtenerVentas();
+        for(int i=0;i<ventas.size();i++){
+            ventas.get(i).setDetalleProductoGeneralList(facturaServicio.devolverVentaDiariaDetallesGeneral(ventas.get(i).getCodigoFactura()));
+            ventas.get(i).setDetalleProductoIndividualList(facturaServicio.devolverVentaDiariaDetallesIndividual(ventas.get(i).getCodigoFactura()));
+        }
     }
     
     public void cargarDetalles()
@@ -74,7 +78,7 @@ public class GestionarVentaMB implements Serializable {
                     detalle.getSubtotal()));
         }
 
-        List<DetalleProductoIndividual> listaIndividual = venta.getDetalleProductoIndividualList();
+        List<DetalleProductoIndividual> listaIndividual =venta.getDetalleProductoIndividualList();
         for (DetalleProductoIndividual detalle : listaIndividual) {
             detallesVenta.add(new DetallesVenta(
                     1,
