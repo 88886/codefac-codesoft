@@ -298,8 +298,9 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
             cargarDetalles();
 
         }
-        //caragr detalles
+        //inicializar total
 
+        //caragr detalles
         //position del widget
         setX(0);
         setY(557);
@@ -525,9 +526,16 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                 detalle.setCodigoDetallGeneral(0);
                 detalle.setPrecioIndividual(detalles.getCosto());
                 detalle.setCodigoFactura(ventaDiaria);
-                detallesGeneralVenta.add(detalle); //guardo los detalles 
-                //ventaDiaria.getDetalleProductoGeneralList().add(detalle);
+                detallesGeneralVenta.add(detalle);
+                //guardo los detalles 
                 facturaServicio.insertarDetalleFacturaProductoGeneral(detalle);
+                //actualizamos stock de producto general
+                prodGeneral = new ProductoGeneralVenta();
+                prodGeneral = facturaServicio.devolverStockGeneral(catalogoSeleccionado.getCodigoProducto());
+                Integer cantidadStock = 0;
+                cantidadStock = prodGeneral.getCantidadDisponible() - cantidadComprar;
+                prodGeneral.setCantidadDisponible(cantidadStock);
+                facturaServicio.actulizarStockGeneral(prodGeneral);
 
                 System.out.println("Inserto detalle General");
 
@@ -661,7 +669,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
         try {
             facturaReporte.exportarPDF();
-                            //detallesFactura.setCantidad(1);
+            //detallesFactura.setCantidad(1);
             //factura.agregarDetalle(detallesFactura);
             //factura.exportarPDF();
         } catch (JRException ex) {
@@ -673,7 +681,8 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
         RequestContext.getCurrentInstance().execute("PF('ok').show()");
         detallesVenta = new ArrayList< DetallesVenta>();
-
+        total = new BigDecimal("0.0");
+        totalPagar = new BigDecimal("0.0");
     }
 
     ////////////////////METODOS GET Y SET /////////////////////

@@ -20,36 +20,36 @@ and open the template in the editor.
             <h:form>
                 <p:panelGrid columns="4" style="width: 70%;margin: 0 auto" styleClass="panelNoBorder"  >
                     <p:outputLabel value="Cédula/RUC:" />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.cedulaRuc}" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.cedulaRuc}" />
 
                     <p:outputLabel value="Codigo Documento" />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.codigoDocumento}" />
+                    <p:outputLabel value="#{verVentaMB.venta.codigoDocumento}" />
 
                     <p:spacer height="30px;"/>
                     <p:spacer height="30px;"/>
                     <p:spacer height="30px;"/>
                     <p:spacer height="30px;"/>
 
-                    <p:outputLabel value="Nombre: " />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.nombre}" />
+                    <p:outputLabel value="Nombre: "  />
+                    <p:outputLabel  value="#{verVentaMB.venta.cedulaRuc.nombre}" style="font-weight: bold" />
 
                     <p:outputLabel value="Teléfono:" />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.telefono}" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.telefono}" style="font-weight: bold"/>
 
                     <p:outputLabel value="Celular: " />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.celular}" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.celular}"style="font-weight: bold" />
 
                     <p:outputLabel value="Direccion:" />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.direccion}" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.direccion}"style="font-weight: bold" />
 
                     <p:outputLabel value="Correo: " />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.correo}" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.correo}"style="font-weight: bold" />
 
                     <p:outputLabel value="Notas:" />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.cedulaRuc.notas}" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.notas}" style="font-weight: bold"/>
 
                     <p:outputLabel value="Tipo Venta: " />
-                    <p:inputText readonly="true" value="#{verVentaMB.venta.tipoVenta}" />
+                    <p:outputLabel value="#{verVentaMB.venta.tipoDocumento}" style="font-weight: bold"/>
 
 
                 </p:panelGrid>

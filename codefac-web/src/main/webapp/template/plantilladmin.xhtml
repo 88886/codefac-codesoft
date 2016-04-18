@@ -403,14 +403,14 @@ and open the template in the editor.
 
 
                 <p:panelGrid columns="3" style="margin: 0 auto;">
-                    <p:commandButton  partialSubmit="true" value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
+                    <p:commandButton  partialSubmit="true" value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFacturaVentas').show();" />
                     <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" onclick="PF('dlgDetallesVentasDiariasFactura').hide()" ajax="false"/>                    
                 </p:panelGrid>
             </h:form>
         </p:dialog>
 
         <!-- Dialogo de confirmacion para grabar o cancelar-->
-        <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
+        <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFacturaVentas" modal="true" >
             <h:form style="margin: 0 auto">
                 <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
                 <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
