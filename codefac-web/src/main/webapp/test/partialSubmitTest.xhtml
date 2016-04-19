@@ -17,9 +17,11 @@ and open the template in the editor.
 
     </h:head>
     <h:body>
+        <p:tooltip style="font-size: 15px;color: red"  showEffect="clip" hideEffect="explode" />
         <h:form id="form1" >            
 
             <p:inputText 
+                title="ingrese el codigo"
                 value="#{statusBean.name}"
                 id="txtKey" 
                 required="true" 
@@ -31,19 +33,21 @@ and open the template in the editor.
 
             <p:message for="txtKey" display="icon"/>
 
-            <p:inputText id="txtNombre" required="true" />
+            <p:inputText id="txtNombre" required="true" title="ingrese el nombre" />
             
 
             <p:commandButton partialSubmit="true" process=":form2" value="validar" action="index" ajax="false"/>
 
             <p:remoteCommand partialSubmit="true"  process="@this,:form1:txtKey,:form2:txtkey2" name="test" actionListener="#{statusBean.test}"/>
 
+            
+            
         </h:form>
 
         <p:spacer width="100px" />
 
         <h:form id="form2">
-            <p:inputText id="txtkey2" required="true" value="#{statusBean.otroAtributo}" />
+            <p:inputText id="txtkey2" required="true" value="#{statusBean.otroAtributo}" title="ingrese otra cosa" />
         </h:form>
 
     </h:body>

@@ -34,6 +34,8 @@ and open the template in the editor.
 
                                 <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
                                 <p:commandButton id="btnEncontrarDitribuidor" icon="ui-icon-search" />
+                                <p:tooltip style="font-size: 11px" id="toolTipGrow" for=":formDetalleDistribuidor:btnEncontrarDitribuidor" value="Buscar distribuidores"
+                                           showEffect="clip" hideEffect="explode" />
                                 <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
                                     <p:dataTable value="#{comprarMB.listaDistribuidores}" 
                                                  rows="10"
@@ -89,7 +91,7 @@ and open the template in the editor.
                                 <p:inputText id="txtNumeroDocumento" onkeypress="return noProcesar(event);" value="#{comprarMB.compra.codigoDocumento}" />
 
                                 <p:outputLabel value="Fecha Compra:" />
-                                <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="MM/dd/yyyy HH:mm:ss" value="#{comprarMB.compra.fechaIngreso}" />
+                                <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="MM/dd/yyyy HH:mm:ss" value="#{comprarMB.compra.fechaIngreso}" title="Fecha cuando se realizo la compra" />
 
                             </p:panelGrid>
 
@@ -111,6 +113,10 @@ and open the template in the editor.
                                 value="#{comprarMB.codigoDetalle}" />
 
                             <p:commandButton id="btnEncontrarCatalogo" icon="ui-icon-search" />
+
+                            <p:tooltip style="font-size: 11px" id="toolTipGrow" for="btnEncontrarCatalogo" value="Buscar Productos"
+                                       showEffect="clip" hideEffect="explode" />
+
                             <p:remoteCommand name="btnValidar" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,lblTipoProducto,lblPVP,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:txtCodigoDetalle"/>
 
                         </p:panelGrid>
@@ -127,9 +133,12 @@ and open the template in the editor.
 
                             <p:panelGrid columnClasses="2">
                                 <p:outputLabel value="PVP:" style="width: 100px"/>
-                                <p:commandButton icon="ui-icon-pencil" actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" style="background-image: none;background-color: chocolate" update="@form,:dialogEditPrecio" />
+                                <p:commandButton id="btnCambiarPrecio" icon="ui-icon-pencil" actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" style="background-image: none;background-color: chocolate" update="@form,:dialogEditPrecio" title="Cambiar el precio del producto" />
                             </p:panelGrid>
                             <p:outputLabel id='lblPVP' value="#{calculosMB.incluirIva(comprarMB.catalogo.precio)}" style="font-weight: bold" />
+
+                            <p:tooltip style="font-size: 11px" id="toolTipGrow3" for=":formBuscarProducto:btnCambiarPrecio" value="Cambiar el precio de Venta al publico"
+                                       showEffect="clip" hideEffect="explode" />
 
 
                         </p:panelGrid>
@@ -178,15 +187,20 @@ and open the template in the editor.
                 <h:form id="formDetalleCompra">
                     <p:panel id="panelAgregarProducto"  style="text-align: center" styleClass="panelNoBorder" visible="#{comprarMB.visibleDetalleAgregar}">
 
-                        <p:panelGrid columns="7" style="margin: 0 auto;height: 100%">
+                        <p:panelGrid id="panelGridDetalle" columns="7" style="margin: 0 auto;height: 100%">
 
                             <p:outputLabel value="Cantidad:"/>
-                            <p:inputText value="#{comprarMB.cantidadDetalle}" style="width: 50px;" />
+                            <p:inputText required="true" id="txtCantidadDetalle" value="#{comprarMB.cantidadDetalle}" style="width: 50px;" >
+                                <p:clientValidator event="keyup"/>
+                            </p:inputText>
+
+                            <p:message for="txtCantidadDetalle" display="icon" />
 
                             <p:outputLabel value="Costo:"/>
-                            <p:inputText value="#{comprarMB.costoDetalle}" style="width: 70px;" />
+                            <p:inputText id="txtCostoDetalle" value="#{comprarMB.costoDetalle}" style="width: 70px;" required="true" />
+                            <p:message for="txtCostoDetalle" display="icon" />
 
-                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="@form,:formDetalleCompra,:formTotales" />
+                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="@form,:formDetalleCompra,:formTotales,:formDetalleCompra:panelGridDetalle" />
 
                         </p:panelGrid>
 
@@ -297,15 +311,16 @@ and open the template in the editor.
                     <h:form id="formAgregarProductoEspecifico">
                         <p:focus id="focus" for="txtCodigoDetalle"/>
                         <p:panel styleClass="panelNoBorder">
-                            <p:panelGrid columns="2">
+                            <p:panelGrid columns="3">
                                 <p:outputLabel  value="Ingrese el codigo Especifico:"/>
-                                <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoEspecificoDetalle}" />
+                                <p:inputText id="txtCodigoDetalle" value="#{comprarMB.codigoEspecificoDetalle}" required="true" requiredMessage="El codigo unico es necesario" />
+                                <p:message for="txtCodigoDetalle" display="icon" /> 
                             </p:panelGrid>
 
                             <p:spacer height="15px" />
 
                             <div>
-                                <p:commandButton value="Aceptar" actionListener="#{comprarMB.agregarProductoEspecifico()}" update=":formDetalleCompra,txtCodigoDetalle,focus,:formTotales" />
+                                <p:commandButton value="Aceptar" process="@this,txtCodigoDetalle" actionListener="#{comprarMB.agregarProductoEspecifico()}" update=":formDetalleCompra,txtCodigoDetalle,focus,:formTotales,:formAgregarProductoEspecifico" />
                                 <p:commandButton value="Salir" onclick="PF('dlgProductoGeneral').hide();" />
                             </div>
                         </p:panel>
@@ -341,22 +356,32 @@ and open the template in the editor.
                 <!-- Dialogo para cambiar el precio de un catalago -->
                 <p:dialog id="dialogEditPrecio" header="Cambiar el precio del producto"  widgetVar="widCambiarPrecio" modal="true">
                     <h:form>
-                        <p>Porfavor ingrese el precio del producto:</p>
+                        <p style="font-weight: bold">Porfavor ingrese el precio del producto:</p>
 
-                        <p:panelGrid columns="2">
+                        <p:panelGrid columns="2" styleClass="panelNoBorder" style="text-align: left">
                             <p:outputLabel value="Nombre:  " />
-                            <p:outputLabel value="#{comprarMB.catalogo.nombre}" />
-
+                            <p:outputLabel value="#{comprarMB.catalogo.nombre}" style="font-weight: bold" />
                             <p:outputLabel value="Precio:  " />
-                            <p:inputText value="#{comprarMB.catalogo.precio}" />
+
+
+                            <p:panelGrid columns="2" >
+                                <p:inputText id="txtCambiarPrecio" value="#{comprarMB.cambiarCosto}" style="width: 80px;" />
+                                <p:selectOneMenu id="cmbIVAPrecio" value="#{comprarMB.ivaCosto}" >
+                                    <p:ajax listener="#{comprarMB.cambiarPrecioEditar()}" update="txtCambiarPrecio" />
+                                    <f:selectItem itemLabel="+ Iva" itemValue="+" />                            
+                                    <f:selectItem itemLabel="- Iva " itemValue="-" />                                    
+                                </p:selectOneMenu>
+                            </p:panelGrid>
 
                         </p:panelGrid>
 
                         <p:spacer width="50px"/>
 
-                        <p:commandButton onclick="PF('widCambiarPrecio').hide();" value="Cancelar"/>
-                        <p:commandButton actionListener="#{comprarMB.editarPrecio()}" value="Editar"  style="background-image: none;background-color: forestgreen"/>
 
+                        <p:commandButton actionListener="#{comprarMB.editarPrecio()}" value="Editar"  style="background-image: none;background-color: forestgreen" update=":formBuscarProducto:lblPVP">
+                             <p:confirm header="Confirmar" message="Estas seguro que quieres editar el PVP?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:commandButton onclick="PF('widCambiarPrecio').hide();" value="Cancelar"/>
 
                     </h:form>
                 </p:dialog>
@@ -365,7 +390,9 @@ and open the template in the editor.
 
             </p:panel>  
 
+
         </div>
+
 
 
     </ui:define>

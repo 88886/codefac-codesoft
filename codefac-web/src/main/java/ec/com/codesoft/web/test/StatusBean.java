@@ -25,6 +25,8 @@ public class StatusBean implements Serializable
         System.out.println("metodo enter presionado... "+name);
         System.out.println("otro atributo... "+otroAtributo);
     }
+    
+    
 
     public String getName() {
         return name;

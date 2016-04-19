@@ -86,7 +86,7 @@ and open the template in the editor.
         <h:form id="formDialogo">
             <!-- Dialogo para grabar un nuevo cliente -->
             <p:dialog  id="dlgCliente" header="Administracion Cliente" widgetVar="nuevoCliente" modal="true" height="auto">
-                <p:panelGrid columns="3" id="panelGrid">   
+                <p:panelGrid columns="3" id="panelGrid" styleClass="panelNoBorder">   
                     <p:outputLabel for="cliCedula" value="Cédula:" />
 
                     <p:inputText id="cliCedula" value="#{clienteMB.cliente.cedulaRuc}" required="true" requiredMessage="Cedula necesario">
@@ -96,8 +96,11 @@ and open the template in the editor.
                     <p:message for="cliCedula" />                  
 
                     <p:outputLabel for="cliNombre" value="Nombre:" />
-                    <p:inputText id="cliNombre" value="#{clienteMB.cliente.nombre}" required="true" requiredMessage="Nombre necesario"/>
-                    <p:message for="cliNombre" />                                
+                    <p:inputText id="cliNombre" value="#{clienteMB.cliente.nombre}" required="true" requiredMessage="Nombre necesario">
+                        <f:validateLength minimum="2" />
+                        <p:ajax update="msgCliNombre" event="keyup" />
+                    </p:inputText>
+                    <p:message id="msgCliNombre" for="cliNombre" />                                
 
                     <p:outputLabel for="cliTelefono" value="Telefono:" />
                     <p:inputText id="cliTelefono" value="#{clienteMB.cliente.telefono}" required="true" requiredMessage="Telefono necesario"/>

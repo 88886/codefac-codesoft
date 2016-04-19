@@ -6,7 +6,6 @@
 package ec.com.codesoft.web.operador;
 
 import ec.com.codesoft.model.CatalagoProducto;
-import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.Compra;
 import ec.com.codesoft.model.Distribuidor;
 import ec.com.codesoft.model.ProductoGeneralCompra;
@@ -15,8 +14,6 @@ import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.modelo.servicios.CompraServicio;
 import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
 import ec.com.codesoft.modelo.servicios.ProductoGeneralCompraServicio;
-import ec.com.codesoft.web.admin.gestionarCompraMB;
-import ec.com.codesoft.web.operador.compra.CompraRequestMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,12 +26,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import javax.validation.constraints.Digits;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -57,7 +51,16 @@ public class comprarMB implements Serializable {
      */
     private String codigoDetalle;
     private Integer cantidadDetalle;
+
+    /**
+     * Variable temporal para modificar el precio de venta final del producto
+     * cargado
+     */
+    private BigDecimal cambiarCosto;
+
+    @Digits(integer = 8, fraction = 3)
     private BigDecimal costoDetalle;
+
     private boolean visibleDetalleAgregar;
 
     /**
@@ -67,6 +70,11 @@ public class comprarMB implements Serializable {
 
     private String total;
     private String nombre = "";
+
+    /**
+     * Variable para saber cual es la opcion que esocogio para ingresar el costo
+     */
+    private String ivaCosto;
 
     /**
      * variable para almacenar el codigo especifico a almacenar
@@ -166,17 +174,50 @@ public class comprarMB implements Serializable {
     }
 
     /**
-     * Funcion que abre el dialogo para cambiar de precio
+     * Funcion que me permite editar el precio al momento de editar
      */
+    public void cambiarPrecioEditar() 
+    {
+        if (ivaCosto.equals("+")) 
+        {
+            cambiarCosto=cambiarCosto.multiply(new BigDecimal("1.12"));
+            cambiarCosto=cambiarCosto.setScale(3,RoundingMode.UP);
+        }
+        else
+        {
+            cambiarCosto=cambiarCosto.divide(new BigDecimal("1.12"),3,RoundingMode.UP);
+        }
+    }
+        /**
+         * Funcion que abre el dialogo para cambiar de precio
+         */
     public void abrirDialogoCambiarPrecio() {
         System.out.println("abriendo dialogo editar ...");
+
+        cambiarCosto = new BigDecimal(catalogo.getPrecio().toString());
+        System.out.println("aumentado el iva al costo del producto");
+        cambiarCosto = cambiarCosto.multiply(new BigDecimal("1.12"));
+        cambiarCosto=cambiarCosto.setScale(3,RoundingMode.UP);
+
         RequestContext.getCurrentInstance().execute("PF('widCambiarPrecio').show()");
         //dialogEditPrecio
     }
 
-    public void editarPrecio() {
+    public void editarPrecio() 
+    {
         System.out.println("editando el precio del producto ...");
-        catalogoServicio.actualizar(catalogo);
+        if (ivaCosto.equals("+")) 
+        {
+            catalogo.setPrecio(cambiarCosto.divide(new BigDecimal("1.12"),4,RoundingMode.DOWN));
+            catalogoServicio.actualizar(catalogo);
+        }
+        else
+        {
+            catalogoServicio.actualizar(catalogo);
+        }        
+        
+        System.out.println("-->"+catalogo.getPrecio());       
+        
         RequestContext.getCurrentInstance().execute("PF('widCambiarPrecio').hide()");
     }
 
@@ -397,13 +438,14 @@ public class comprarMB implements Serializable {
         else {
             cantidadDetalle = 1;
             costoDetalle = new BigDecimal("0");
-
+            costoDetalle = costoDetalle.setScale(3, RoundingMode.DOWN);
             System.out.println(compra);
             System.out.println("Total" + total);
             catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
             if (catalogo != null) {
                 System.out.println("El producto existe");
                 costoDetalle = compraServicio.obtenerUltimoCostoDistribuidor(catalogo, compra.getRuc().getRuc());
+                costoDetalle = costoDetalle.setScale(3, RoundingMode.DOWN);
                 this.visibleDetalleAgregar = true;
             } else {
                 System.out.println("El producto no existe");
@@ -661,6 +703,22 @@ public class comprarMB implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public BigDecimal getCambiarCosto() {
+        return cambiarCosto;
+    }
+
+    public void setCambiarCosto(BigDecimal cambiarCosto) {
+        this.cambiarCosto = cambiarCosto;
+    }
+
+    public String getIvaCosto() {
+        return ivaCosto;
+    }
+
+    public void setIvaCosto(String ivaCosto) {
+        this.ivaCosto = ivaCosto;
     }
 
 }

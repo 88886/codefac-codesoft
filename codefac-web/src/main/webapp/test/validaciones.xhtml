@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Codefac</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="estiloMensajes.css"/>
+
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:panel header="Validate">
+                <h:panelGrid columns="4" cellpadding="5">
+                    <h:outputLabel for="text" value="Text: (Change)" />
+                    <p:inputText id="text" value="#{validationView.text}" required="true">
+                        <f:validateLength minimum="2" maximum="5" />
+                        <p:clientValidator />
+                    </p:inputText>
+                    <p:message for="text" display="icon" />
+                    <h:outputText value="#{validationView.text}" />
+
+                    <h:outputLabel for="integer" value="Integer: (Keyup)" />
+                    <p:inputText id="integer" value="#{validationView.integer}">
+                        <p:clientValidator event="keyup"/>
+                    </p:inputText>
+                    <p:message for="integer" display="icon" />
+                    <h:outputText value="#{validationView.integer}" />
+                </h:panelGrid>
+
+                <p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" />
+            </p:panel>
+        </h:form>
+
+    </h:body>
+</html>

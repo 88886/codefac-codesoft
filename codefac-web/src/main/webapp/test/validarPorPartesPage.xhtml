@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Codefac</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="estiloMensajes.css"/>
+
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <p:panelGrid columns="3" id="panelId">
+                <p:outputLabel value="codigo:"/>
+                <p:inputText id="txtCodigo" required="true" value="#{statusBean.name}" validatorMessage="El codigo no puede ser vacio" />
+                <p:message for="txtCodigo"  />
+
+                <p:outputLabel value="nombre:"/>
+                <p:inputText id="txtNombre" required="true" value="#{statusBean.otroAtributo}" requiredMessage="El campo es necesario"/>
+                <p:message for="txtNombre"  />
+
+
+            </p:panelGrid>
+            
+            <p:commandButton value="Partial" update="panelId" process="txtCodigo txtNombre" validateClient="true" icon="ui-icon-check" style="margin-right:10px"/>
+            
+        </h:form>
+
+    </h:body>
+</html>
