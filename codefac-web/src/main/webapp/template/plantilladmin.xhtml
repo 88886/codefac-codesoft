@@ -108,7 +108,7 @@ and open the template in the editor.
             </p:stack>
         </h:form>
 
-        <!-- Calculadora -->
+        <!-- Dialogo de la  Calculadora -->
         <p:dialog 
             position="#{calcuUtilMB.x},#{calcuUtilMB.y}"
             header="Calculadora" 
@@ -123,28 +123,39 @@ and open the template in the editor.
             <h:form>
                 <h:panelGrid columns="4" cellpadding="1" cellspacing="0"  >
                     <f:facet name="header">
-                        <p:inputTextarea style="width: 140px;background-color:darkslategray ;color: white" value="#{calcuUtilMB.textoCalculadora}"  />
+                        <h:panelGrid columns="1" cellpadding="0" cellspacing="0" style="border: 0;padding: 0;margin: 0">
+                            <p:inputTextarea 
+                                id="txtAreaExpresionCalcu"
+                                rows="2"
+                                onkeypress="return validarEnter(event, 'evaluarCalcuJS');"
+                                style="width: 140px;background-color:darkslategray ;color: white" 
+                                value="#{calcuUtilMB.textoCalculadora}" >                               
+                            </p:inputTextarea>
+                            
+                            <p:remoteCommand name="evaluarCalcuJS" actionListener="#{calcuUtilMB.evaluar()}" update="idResultadoCalcu" />
+                            <p:inputText id="idResultadoCalcu" style="width: 140px;background-color:darkslategray ;color: white;text-align: right" value="#{calcuUtilMB.resultado}" />
+                        </h:panelGrid>
                     </f:facet>
 
-                    <p:commandButton actionListener="#{calcuUtilMB.abrirDialogo()}" value="+" style="width: 35px" />
-                    <p:commandButton value="-" style="width: 35px" />
-                    <p:commandButton value="*" style="width: 35px" />
-                    <p:commandButton value="/" style="width: 35px" />
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('+')}" value="+" style="width: 35px" update="txtAreaExpresionCalcu" />
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('-')}" value="-" style="width: 35px" update="txtAreaExpresionCalcu" />
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('*')}" value="*" style="width: 35px" update="txtAreaExpresionCalcu" />
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('/')}" value="/" style="width: 35px" update="txtAreaExpresionCalcu" />
 
-                    <p:commandButton value="0" style="width: 35px" />
-                    <p:commandButton value="1" style="width: 35px"/>
-                    <p:commandButton value="2" style="width: 35px"/>
-                    <p:commandButton value="3" style="width: 35px"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('0')}" value="0" style="width: 35px" update="txtAreaExpresionCalcu" />
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('1')}" value="1" style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('2')}" value="2" style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('3')}" value="3" style="width: 35px" update="txtAreaExpresionCalcu"/>
 
-                    <p:commandButton value="4" style="width: 35px"/>
-                    <p:commandButton value="5" style="width: 35px"/>
-                    <p:commandButton value="6" style="width: 35px"/>
-                    <p:commandButton value="7" style="width: 35px"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('4')}" value="4" style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('5')}" value="5" style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('6')}" value="6" style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('7')}" value="7" style="width: 35px" update="txtAreaExpresionCalcu"/>
 
-                    <p:commandButton value="8" style="width: 35px"/>
-                    <p:commandButton value="9" style="width: 35px"/>
-                    <p:commandButton value="." style="width: 35px"/>
-                    <p:commandButton value="=" style="width: 35px"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('8')}" value="8" style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('9')}" value="9" style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.presionarTecla('.')}" value="." style="width: 35px" update="txtAreaExpresionCalcu"/>
+                    <p:commandButton actionListener="#{calcuUtilMB.evaluar()}" value="=" style="width: 35px" update="idResultadoCalcu,txtAreaExpresionCalcu"/>
                 </h:panelGrid>
             </h:form>
         </p:dialog>
@@ -179,17 +190,17 @@ and open the template in the editor.
             <h:form id="formNotaDialogo" onsubmit="return false;">
                 <p:inputTextarea id="txtInput"
                                  rows="7"
-                        value="#{notaUtilMB.sesion.usuarioLogin.notas}" 
-                        style="background-color: #ffff99;color: black;margin: 0px;border: 0px;font-size: 11px">
-                    
+                                 value="#{notaUtilMB.sesion.usuarioLogin.notas}" 
+                                 style="background-color: #ffff99;color: black;margin: 0px;border: 0px;font-size: 11px">
+
                     <p:ajax event="blur" listener="#{notaUtilMB.grabarNota}"/>
-                    
+
                 </p:inputTextarea>
             </h:form>
 
         </p:dialog>
 
-        
+
         <!-- Dialogo de las Ventas -->
         <p:dialog  widgetVar="dlgVentas"
                    minHeight="40"
@@ -416,7 +427,7 @@ and open the template in the editor.
                 <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
             </h:form>
         </p:dialog>
-        
+
         <p:dialog header="Facturado" widgetVar="ok" modal="true" >
             <h:form style="margin: 0 auto">
                 <p:outputLabel value="Factura Completa" />
