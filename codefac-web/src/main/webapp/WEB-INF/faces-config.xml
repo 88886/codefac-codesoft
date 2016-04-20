@@ -242,6 +242,11 @@
             <from-outcome>trabajosPendientes</from-outcome>
             <to-view-id>/empleado/ordenTrabajo/trabajosPendientes.xhtml</to-view-id>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>reporteVenta</from-outcome>
+            <to-view-id>/admin/venta/reporte/reporteVenta.xhtml</to-view-id>
+        </navigation-case>
 
                 
     </navigation-rule>

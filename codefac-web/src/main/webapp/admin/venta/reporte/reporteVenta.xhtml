@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h:form>
+            <p:panel id="panelVentas" style="z-index: 0" header="R E P O R T E -- V E N T A S  --> #{reporteVenta.devolverFechaActual()}">
+                <p:spacer/>
+                <p:dataTable
+                    style="height: 100%"
+                    id="tablaVentas"
+                    var="venta" 
+                    value="#{reporteVenta.ventas}"
+                    scrollable="true" 
+                    rowKey="#{venta.codigoFactura}"
+                    widgetVar="tableVenta">
+
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar por todos los campos: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('tableVenta').filter()" style="width:150px" placeholder="Ingrese el texto:"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Código Factura " filterBy="#{venta.codigoFactura}" filterMatchMode="contains" >
+                        <h:outputText value="#{venta.codigoFactura}" />
+                    </p:column>
+                    <p:column headerText="Cliente " filterBy="#{venta.cedulaRuc.nombre}" filterFunction="#{clienteMB.filterByName}" filterMatchMode="contains" style="width:350px" >
+                        <h:outputText value="#{venta.cedulaRuc.nombre}"   />
+                    </p:column>
+                    <p:column headerText="Hora " >
+                        <h:outputText value="#{venta.fecha.hours} : #{venta.fecha.minutes}" />
+                    </p:column>
+                    <p:column headerText="Tipo " >
+                        <h:outputText value="#{venta.tipoDocumento}" />
+                    </p:column>
+
+                    <p:column headerText="Total " >
+                        <h:outputText value="#{calculosMB.redondeoSuperior(venta.total)}" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:spacer/>
+            <p:separator/>
+            <p:spacer/>
+            <p:panel style="width: 70%;text-align: left;margin: 0 auto;" >
+                <p:chart type="line" model="#{reporteVenta.lineModel}" style="height:300px;"/>
+
+            </p:panel>
+        </h:form>     
+    </ui:define>
+
+</ui:composition>
