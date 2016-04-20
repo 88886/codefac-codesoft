@@ -111,8 +111,9 @@ and open the template in the editor.
                                 id="txtCodigoDetalle" 
                                 onkeypress="return validarEnter(event, 'btnValidar');" 
                                 value="#{comprarMB.codigoDetalle}" />
-
-                            <p:commandButton id="btnEncontrarCatalogo" icon="ui-icon-search" />
+                            
+                            
+                            <p:commandButton oncomplete="PF('widgetVarCatalogo').loadContents()" id="btnEncontrarCatalogo" icon="ui-icon-search" />
 
                             <p:tooltip style="font-size: 11px" id="toolTipGrow" for="btnEncontrarCatalogo" value="Buscar Productos"
                                        showEffect="clip" hideEffect="explode" />
@@ -140,44 +141,9 @@ and open the template in the editor.
                             <p:tooltip style="font-size: 11px" id="toolTipGrow3" for=":formBuscarProducto:btnCambiarPrecio" value="Cambiar el precio de Venta al publico"
                                        showEffect="clip" hideEffect="explode" />
 
-
                         </p:panelGrid>
 
-                        <!-- dialogo para buscar los productos de los catalogos -->
-                        <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for="btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
-                            <p:dataTable 
-                                rows="10"
-                                value="#{comprarMB.listaCatalogos}" 
-                                var="catalogo"
-                                selectionMode="single" 
-                                rowKey="#{catalogo.codigoProducto}"
-                                selection="#{comprarMB.catalogoProductoSeleccionado}" >
 
-                                <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto,:formBuscarProducto:lblTipoProducto,:formBuscarProducto:lblPVP"/>
-                                <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
-
-                                <p:column headerText="codigo" filterBy="#{catalogo.codigoProducto}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" >
-                                    <p:outputLabel value="#{catalogo.codigoProducto}"/>
-                                </p:column>
-
-                                <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
-                                    <p:outputLabel value="#{catalogo.nombre}"/>
-                                </p:column>
-
-                                <p:column headerText="descripcion">
-                                    <p:outputLabel value="#{catalogo.descripcion}"/>
-                                </p:column>
-
-                                <p:column headerText="marca">
-                                    <p:outputLabel value="#{catalogo.marca}"/>
-                                </p:column>
-
-                                <p:column headerText="precio">
-                                    <p:outputLabel value="#{catalogo.precio}"/>
-                                </p:column>                                    
-
-                            </p:dataTable>
-                        </p:overlayPanel>
                     </h:form>
                 </p:panel>
 
@@ -378,15 +344,53 @@ and open the template in the editor.
                         <p:spacer width="50px"/>
 
 
-                        <p:commandButton actionListener="#{comprarMB.editarPrecio()}" value="Editar"  style="background-image: none;background-color: forestgreen" update=":formBuscarProducto:lblPVP">
-                             <p:confirm header="Confirmar" message="Estas seguro que quieres editar el PVP?" icon="ui-icon-alert" />
+                        <p:commandButton actionListener="#{comprarMB.editarPrecio()}" value="Editar"  style="background-image: none;background-color: forestgreen" update=":formBuscarProducto:lblPVP,:overlayCatalogoID,:formDialgBuscarProductos">
+                            <p:confirm header="Confirmar" message="Estas seguro que quieres editar el PVP?" icon="ui-icon-alert" />
                         </p:commandButton>
-                        <p:commandButton onclick="PF('widCambiarPrecio').hide();" value="Cancelar"/>
+                        <p:commandButton onclick="PF('widCambiarPrecio').hide();" value="Cancelar" update=":overlayCatalogoID,:formDialgBuscarProductos" />
 
                     </h:form>
                 </p:dialog>
 
                 <!-- Dialogo de confirmacion para grabar -->
+
+                <!-- dialogo para buscar los productos de los catalogos -->
+                <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for=":formBuscarProducto:btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
+                    <h:form id="formDialgBuscarProductos">
+                        <p:dataTable 
+                            rows="10"
+                            value="#{comprarMB.listaCatalogos}" 
+                            var="catalogo"
+                            selectionMode="single" 
+                            rowKey="#{catalogo.codigoProducto}"
+                            selection="#{comprarMB.catalogoProductoSeleccionado}" >
+
+                            <p:ajax event="rowSelect" listener="#{comprarMB.onRowSelect}" update=":formBuscarProducto:txtCodigoDetalle,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:lblNombreProducto,:formBuscarProducto:lblTipoProducto,:formBuscarProducto:lblPVP"/>
+                            <!--<p:ajax event="rowUnselect" listener="#{comprarMB.onRowUnSelect}"/>-->
+
+                            <p:column headerText="codigo" filterBy="#{catalogo.codigoProducto}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" >
+                                <p:outputLabel value="#{catalogo.codigoProducto}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{catalogo.nombre}"  filterFunction="#{filtroMB.filterByName}"  filterMatchMode="contains" headerText="nombre">
+                                <p:outputLabel value="#{catalogo.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="descripcion">
+                                <p:outputLabel value="#{catalogo.descripcion}"/>
+                            </p:column>
+
+                            <p:column headerText="marca">
+                                <p:outputLabel value="#{catalogo.marca}"/>
+                            </p:column>
+
+                            <p:column headerText="precio">
+                                <p:outputLabel value="#{catalogo.precio}"/>
+                            </p:column>                                    
+
+                        </p:dataTable>
+                    </h:form>
+                </p:overlayPanel>
 
             </p:panel>  
 
