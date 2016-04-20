@@ -270,4 +270,10 @@ public class FacturaServicio {
     public List<DetalleProductoIndividual> devolverVentaDiariaDetallesIndividual(int cod){
         return ventaFacade.findFDetalleIndividualVentasDiariasCod(cod);
     }
+    
+    
+    public List<Venta> devolverVentasIntervalo(String fecha1, String fecha2){
+        
+        return ventaFacade.findVentasIntervalo(fecha1, fecha2);
+    }
 }

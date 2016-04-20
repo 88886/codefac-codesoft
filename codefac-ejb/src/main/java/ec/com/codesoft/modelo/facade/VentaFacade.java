@@ -40,25 +40,26 @@ public class VentaFacade extends AbstractFacade<Venta> {
      *
      * @return
      */
-    
     public Integer getCodigoUltimaFactura() {
         try {
             String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Factura' ";
             Query query = em.createQuery(queryString);
             //System.out.println(query.getSingleResult());
             Integer numero = Integer.parseInt(query.getSingleResult().toString());
-            
+
             return numero;
         } catch (NoResultException e) {
             return null;
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             return 0;
         }
 
     }
+
     /**
      * Obtiene el numero de documento de la ultima nota de entrega vendidad
-     * @return 
+     *
+     * @return
      */
 
     public Integer getCodigoUltimaNota() {
@@ -69,7 +70,7 @@ public class VentaFacade extends AbstractFacade<Venta> {
             return numero;
         } catch (NoResultException e) {
             return null;
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             return 0;
         }
 
@@ -102,48 +103,61 @@ public class VentaFacade extends AbstractFacade<Venta> {
             return null;
         }
     }
-    
-    
+
     public Venta findFacturaVentasDiariasFecha(String fecha) {
         try {
-            String queryString = "SELECT v FROM Venta v where v.fecha like '%"+fecha+"%' and v.estado='Diaria'";
+            String queryString = "SELECT v FROM Venta v where v.fecha like '%" + fecha + "%' and v.estado='Diaria'";
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
             Venta intereses = (Venta) query.getSingleResult();
-          //  System.out.println("facade"+intereses);
+            //  System.out.println("facade"+intereses);
             return intereses;
         } catch (NoResultException e) {
             return null;
         }
 
     }
-    
+
     public List<DetalleProductoGeneral> findFDetalleGeneralVentasDiariasCod(int cod) {
         try {
-            String queryString = "SELECT g FROM DetalleProductoGeneral g where g.codigoFactura.codigoFactura='"+cod+"'";
+            String queryString = "SELECT g FROM DetalleProductoGeneral g where g.codigoFactura.codigoFactura='" + cod + "'";
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
-            List<DetalleProductoGeneral> detalles =(List<DetalleProductoGeneral>) query.getResultList();
-          //  System.out.println("facade"+intereses);
+            List<DetalleProductoGeneral> detalles = (List<DetalleProductoGeneral>) query.getResultList();
+            //  System.out.println("facade"+intereses);
             return detalles;
         } catch (NoResultException e) {
             return null;
         }
 
     }
-    
+
     public List<DetalleProductoIndividual> findFDetalleIndividualVentasDiariasCod(int cod) {
         try {
-            String queryString = "SELECT g FROM DetalleProductoIndividual g where g.codigoFactura.codigoFactura='"+cod+"'";
+            String queryString = "SELECT g FROM DetalleProductoIndividual g where g.codigoFactura.codigoFactura='" + cod + "'";
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
-            List<DetalleProductoIndividual> detalles =(List<DetalleProductoIndividual>) query.getResultList();
-          //  System.out.println("facade"+intereses);
+            List<DetalleProductoIndividual> detalles = (List<DetalleProductoIndividual>) query.getResultList();
+            //  System.out.println("facade"+intereses);
             return detalles;
         } catch (NoResultException e) {
             return null;
         }
 
+    }
+
+    public List<Venta> findVentasIntervalo(String fecha1, String fecha2) {
+
+        try {
+            String queryString = "SELECT  v FROM Venta v WHERE v.fecha like '%" + fecha1 + "%'";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            List<Venta> ventas = (List<Venta>) query.getResultList();
+            //  System.out.println("facade"+intereses);
+            return ventas;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 }
