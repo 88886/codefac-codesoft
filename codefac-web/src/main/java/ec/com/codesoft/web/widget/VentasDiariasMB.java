@@ -678,11 +678,15 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
             Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
-        RequestContext.getCurrentInstance().execute("PF('ok').show()");
+//        RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
+//        RequestContext.getCurrentInstance().execute("PF('ok').show()");
         detallesVenta = new ArrayList< DetallesVenta>();
         total = new BigDecimal("0.0");
         totalPagar = new BigDecimal("0.0");
+    }
+    
+    public void imprimirFactura(){
+        
     }
 
     ////////////////////METODOS GET Y SET /////////////////////

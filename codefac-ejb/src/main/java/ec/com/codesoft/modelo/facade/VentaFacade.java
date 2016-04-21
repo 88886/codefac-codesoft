@@ -5,8 +5,10 @@
  */
 package ec.com.codesoft.modelo.facade;
 
+import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
+import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
 import ec.com.codesoft.model.Venta;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -138,6 +140,20 @@ public class VentaFacade extends AbstractFacade<Venta> {
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
             List<DetalleProductoIndividual> detalles = (List<DetalleProductoIndividual>) query.getResultList();
+            //  System.out.println("facade"+intereses);
+            return detalles;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+    
+     public List<DetalleVentaOrdenTrabajo> findFDetalleOrdenTrabajoCod(int cod) {
+        try {
+            String queryString = "SELECT g FROM DetalleVentaOrdenTrabajo g where g.codigoFactura.codigoFactura='" + cod + "'";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1, codP);
+            List<DetalleVentaOrdenTrabajo> detalles = (List<DetalleVentaOrdenTrabajo>) query.getResultList();
             //  System.out.println("facade"+intereses);
             return detalles;
         } catch (NoResultException e) {

@@ -7,6 +7,7 @@ package ec.com.codesoft.web.admin.venta;
 
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
+import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.modelo.servicios.SistemaServicio;
@@ -61,6 +62,7 @@ public class GestionarVentaMB implements Serializable {
         for(int i=0;i<ventas.size();i++){
             ventas.get(i).setDetalleProductoGeneralList(facturaServicio.devolverVentaDiariaDetallesGeneral(ventas.get(i).getCodigoFactura()));
             ventas.get(i).setDetalleProductoIndividualList(facturaServicio.devolverVentaDiariaDetallesIndividual(ventas.get(i).getCodigoFactura()));
+            ventas.get(i).setDetalleVentaOrdenTrabajoList(facturaServicio.devolverVentaDiariaDetallesOrdenTrabajo(ventas.get(i).getCodigoFactura()));
         }
     }
     
@@ -86,6 +88,16 @@ public class GestionarVentaMB implements Serializable {
                     detalle.getProductoIndividualCompra().getCodigoProducto().getNombre(),
                     detalle.getProductoIndividualCompra().getCodigoProducto().getPrecio(),
                     detalle.getSubtotal()));
+        }
+        
+         List<DetalleVentaOrdenTrabajo> listaDetallesOrden =venta.getDetalleVentaOrdenTrabajoList();
+        for (DetalleVentaOrdenTrabajo detalle : listaDetallesOrden) {
+            detallesVenta.add(new DetallesVenta(
+                    1,
+                    detalle.getIdOrdenTrabajo().getIdOrdenTrabajo().toString(),
+                    detalle.getIdOrdenTrabajo().getEstado(),
+                    detalle.getIdOrdenTrabajo().getTotal(),
+                    detalle.getIdOrdenTrabajo().getTotal()));
         }
     }
 

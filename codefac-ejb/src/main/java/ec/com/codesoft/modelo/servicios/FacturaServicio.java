@@ -6,6 +6,7 @@
 package ec.com.codesoft.modelo.servicios;
 
 import ec.com.codesoft.model.Banco;
+import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
@@ -269,6 +270,10 @@ public class FacturaServicio {
     
     public List<DetalleProductoIndividual> devolverVentaDiariaDetallesIndividual(int cod){
         return ventaFacade.findFDetalleIndividualVentasDiariasCod(cod);
+    }
+    
+     public List<DetalleVentaOrdenTrabajo> devolverVentaDiariaDetallesOrdenTrabajo(int cod){
+        return ventaFacade.findFDetalleOrdenTrabajoCod(cod);
     }
     
     

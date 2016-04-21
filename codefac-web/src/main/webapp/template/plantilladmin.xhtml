@@ -72,10 +72,10 @@ and open the template in the editor.
                     <p:submenu label="Proforma" icon="ui-icon-pencil">
                         <p:menuitem value="Nueva" outcome="proformaAdmn"  icon="ui-icon-arrowreturnthick-1-e" />
                     </p:submenu>
-                    
-                     <p:submenu label="Reportes" icon="ui-icon-note">
+
+                    <p:submenu label="Reportes" icon="ui-icon-note">
                         <p:menuitem value="Ventas Diarias" outcome="reporteVenta"  icon="ui-icon-arrowreturnthick-1-e" />
-                        
+
                     </p:submenu>
 
 
@@ -425,10 +425,14 @@ and open the template in the editor.
 
         <!-- Dialogo de confirmacion para grabar o cancelar-->
         <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFacturaVentas" modal="true" >
-            <h:form style="margin: 0 auto">
-                <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
-                <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
-            </h:form>
+            <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
+                <h:form style="margin: 0 auto" target="_blank">
+                    <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();PF('dlgDetallesVentasDiariasFactura').hide()" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
+                </h:form>
+                <h:form>
+                    <p:commandButton onclick="PF('confirmarFacturaVentas').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
+                </h:form>
+            </p:panelGrid>
         </p:dialog>
 
         <p:dialog header="Facturado" widgetVar="ok" modal="true" >

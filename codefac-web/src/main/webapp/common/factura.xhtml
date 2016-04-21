@@ -354,28 +354,20 @@ and open the template in the editor.
 
 
                 <!-- Dialogo de confirmacion para grabar o cancelar-->
-
-                <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
-                    <p:panelGrid columns="3">
-                        <h:form style="margin: 0 auto" target="_blank">
-                            <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange " actionListener="#{facturaMB.facturar()}" action="factura" ajax="false" />
-                        </h:form>
-
-                        <h:form>
-                            <p:commandButton  value="Nuevo" style="background-image: none;background-color: chartreuse " action="factura" ajax="false" />
-                        </h:form>
-                        <h:form>
-                            <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
-                        </h:form>
-                    </p:panelGrid>
-                </p:dialog>
-
             </p:panelGrid>
 
         </h:form>
 
     </p:panel>
 
+    <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
+        <p:panelGrid columns="3">
+            <h:form style="margin: 0 auto">
+                <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange "  actionListener="#{facturaMB.facturar()}" ajax="false" />
+                <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
+            </h:form>
+        </p:panelGrid>
+    </p:dialog>
     <!-- Dialogo de confirmacion para agregar un nuevo Cliente -->
     <p:dialog header="Agregar Cliente" widgetVar="confirmarCliente" modal="true">
         <h:form>
@@ -384,11 +376,23 @@ and open the template in the editor.
             <p:commandButton actionListener="#{facturaMB.crearCliente()}"  style="background-image: none;background-color: forestgreen" value="Crear Cliente">
                 <p:ajax event="dialogReturn" listener="#{facturaMB.recibirDatos}" update=":form" />
             </p:commandButton>                        
-
         </h:form>
     </p:dialog>
-    
+
+    <p:dialog header="Factura Completa " modal="true" widgetVar="dlgImprimir" showEffect="explode" hideEffect="bounce" height="100">
+        <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
+            <h:outputText value="Que desea hacer?" />
+            <h:form target="_blank">                        
+                <p:commandButton ajax="false" value="Imprimir" action="#{facturaMB.imprimirFactura()}" />
+            </h:form>
+            <h:form>
+                <p:commandButton ajax="false" value="Nuevo" action="factura">                            
+                </p:commandButton>
+            </h:form>
+        </p:panelGrid>
+    </p:dialog>
+
     <!--Textos en botones -->
-    
+
 
 </ui:composition>
