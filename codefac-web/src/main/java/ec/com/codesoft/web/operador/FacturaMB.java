@@ -141,6 +141,7 @@ public class FacturaMB {
     private Integer maxItems;
     private boolean mostrarDescuentoManual;
 
+    private Venta ventaImprimir; //venta q se facturara
     //
     private BigDecimal descuentoManual;
 
@@ -325,7 +326,6 @@ public class FacturaMB {
             msjCliente = "";//cliente no encontrado
             //abrir panel crearCLiente
             RequestContext.getCurrentInstance().execute("PF('confirmarCliente').show()");
-            
 
         } else {
 
@@ -347,7 +347,7 @@ public class FacturaMB {
      * Funcion para crear cliente si no existe
      */
     public void crearCliente() {
-        
+
         RequestContext.getCurrentInstance().execute("PF('confirmarCliente').hide()");
         System.out.println("abriendo nuevo panel...");
         Map<String, Object> options = new HashMap<String, Object>();
@@ -1199,94 +1199,101 @@ public class FacturaMB {
                     //System.out.println("detalleG: "+detallesGeneralVenta);
                     //System.out.println("detalleI: "+detallesIndividualVenta);
                     System.out.println("Facturado");
-                    FacesMessage msg = new FacesMessage("Factura Completa");
-                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                    ///FacesMessage msg = new FacesMessage("Factura Completa");
+                    //FacesContext.getCurrentInstance().addMessage(null, msg);
                     // return "factura";
 
-                    if (tipoCliente.equals("C")) {
-
-                        NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
-                        notaVenta.setDireccion(clienteEncontrado.getDireccion());
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                        notaVenta.setFechaFactura(sdf.format(venta.getFecha()));
-                        notaVenta.setFechaaFactura(sdf.format(venta.getFecha()));
-                        notaVenta.setFormaPago(devolverTipoPago());
-                        notaVenta.setNombreCliente(clienteEncontrado.getNombre());
-                        notaVenta.setTelefono(clienteEncontrado.getTelefono());
-                        notaVenta.setTotal(total);
-
-                        for (DetallesVenta detalle : detallesVenta) {
-                            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
-                            detallesFactura.setCantidad(detalle.getCantidad() + "");
-                            detallesFactura.setCodigo(detalle.getCodigo());
-                            detallesFactura.setDescripcion(detalle.getNombre());
-                            detallesFactura.setDescuento(detalle.getValorDescuento().toString());
-                            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
-                            detallesFactura.setTotal(detalle.getTotal().toString());
-                            if (notaVenta != null) {
-                                notaVenta.agregarDetalle(detallesFactura);
-                            }
-                        }
-
-                        try {
-                            notaVenta.exportarPDF();
-                            //detallesFactura.setCantidad(1);
-                            //factura.agregarDetalle(detallesFactura);
-                            //factura.exportarPDF();
-                        } catch (JRException ex) {
-                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    } else {
-                        FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
-                        facturaReporte.setCodigoFactura(venta.getCodigoFactura() + "");
-                        facturaReporte.setDireccion(clienteEncontrado.getDireccion());
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                        facturaReporte.setTelefono(clienteEncontrado.getTelefono());
-
-                        facturaReporte.setRuc(cedCliente);
-                        facturaReporte.setFechaaFactura(sdf.format(venta.getFecha()));
-                        facturaReporte.setFormaPago(devolverTipoPago());
-                        facturaReporte.setIvaTotal(iva);
-                        facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
-                        facturaReporte.setNota(" ");
-                        facturaReporte.setSubtotal(subtotal);
-
-                        //System.out.println(subtotal);
-                        facturaReporte.setTotal(total);
-                        for (DetallesVenta detalle : detallesVenta) {
-                            FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
-                            detallesFactura.setCantidad(detalle.getCantidad() + "");
-                            detallesFactura.setCodigo(detalle.getCodigo());
-                            detallesFactura.setDescripcion(detalle.getNombre());
-                            detallesFactura.setDescuento(detalle.getValorDescuento().toString());
-                            detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
-                            detallesFactura.setTotal(detalle.getTotal().toString());
-                            if (facturaReporte != null) {
-                                facturaReporte.agregarDetalle(detallesFactura);
-                            }
-                        }
-
-                        try {
-                            facturaReporte.exportarPDF();
-                            //detallesFactura.setCantidad(1);
-                            //factura.agregarDetalle(detallesFactura);
-                            //factura.exportarPDF();
-                        } catch (JRException ex) {
-                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
+                    //dlgImprimir
+                    RequestContext.getCurrentInstance().execute("PF('dlgImprimir').show()");
+                    ventaImprimir = venta;
                 }
 
             }
+
         }
 
         //return null;
+    }
+
+    public void imprimirFactura() {
+        if (tipoCliente.equals("C")) {
+
+            NotaVentaModeloReporte notaVenta = new NotaVentaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
+            notaVenta.setDireccion(clienteEncontrado.getDireccion());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            notaVenta.setFechaFactura(sdf.format(ventaImprimir.getFecha()));
+            notaVenta.setFechaaFactura(sdf.format(ventaImprimir.getFecha()));
+            notaVenta.setFormaPago(devolverTipoPago());
+            notaVenta.setNombreCliente(clienteEncontrado.getNombre());
+            notaVenta.setTelefono(clienteEncontrado.getTelefono());
+            notaVenta.setTotal(total);
+
+            for (DetallesVenta detalle : detallesVenta) {
+                FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+                detallesFactura.setCantidad(detalle.getCantidad() + "");
+                detallesFactura.setCodigo(detalle.getCodigo());
+                detallesFactura.setDescripcion(detalle.getNombre());
+                detallesFactura.setDescuento(detalle.getValorDescuento().toString());
+                detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+                detallesFactura.setTotal(detalle.getTotal().toString());
+                if (notaVenta != null) {
+                    notaVenta.agregarDetalle(detallesFactura);
+                }
+            }
+
+            try {
+                notaVenta.exportarPDF();
+                            //detallesFactura.setCantidad(1);
+                //factura.agregarDetalle(detallesFactura);
+                //factura.exportarPDF();
+            } catch (JRException ex) {
+                Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            FacturaModeloReporte facturaReporte = new FacturaModeloReporte(sistemaServicio.getConfiguracion().getPathreportes());
+            facturaReporte.setCodigoFactura(ventaImprimir.getCodigoFactura() + "");
+            facturaReporte.setDireccion(clienteEncontrado.getDireccion());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            facturaReporte.setTelefono(clienteEncontrado.getTelefono());
+
+            facturaReporte.setRuc(cedCliente);
+            facturaReporte.setFechaaFactura(sdf.format(ventaImprimir.getFecha()));
+            facturaReporte.setFormaPago(devolverTipoPago());
+            facturaReporte.setIvaTotal(iva);
+            facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
+            facturaReporte.setNota(" ");
+            facturaReporte.setSubtotal(subtotal);
+
+            //System.out.println(subtotal);
+            facturaReporte.setTotal(total);
+            for (DetallesVenta detalle : detallesVenta) {
+                FacturaDetalleModeloReporte detallesFactura = new FacturaDetalleModeloReporte();
+                detallesFactura.setCantidad(detalle.getCantidad() + "");
+                detallesFactura.setCodigo(detalle.getCodigo());
+                detallesFactura.setDescripcion(detalle.getNombre());
+                detallesFactura.setDescuento(detalle.getValorDescuento().toString());
+                detallesFactura.setPrecioUnitario(detalle.getCosto().toString());
+                detallesFactura.setTotal(detalle.getTotal().toString());
+                if (facturaReporte != null) {
+                    facturaReporte.agregarDetalle(detallesFactura);
+                }
+            }
+
+            try {
+                facturaReporte.exportarPDF();
+                            //detallesFactura.setCantidad(1);
+                //factura.agregarDetalle(detallesFactura);
+                //factura.exportarPDF();
+            } catch (JRException ex) {
+                Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
     }
 
     public String devolverTipoPago() {
@@ -1402,6 +1409,8 @@ public class FacturaMB {
         iva = subtotal.multiply(ivaSubTotal);
         //iva = iva.setScale(2, BigDecimal.ROUND_UP);
         total = subtotal.multiply(ivaTotal);
+        totalPagar = total;
+        cargarDetalles();
         //total = total.setScale(2, BigDecimal.ROUND_UP);
 
     }
