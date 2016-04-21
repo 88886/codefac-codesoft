@@ -14,14 +14,14 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        
+
         <p:panel header="Trabajos Pendientes">
 
             <h:form id="formPrincipal">                
                 <p:accordionPanel >
                     <!-- panel que contiene los filtros aplicados a las ordenes de trabajo-->
                     <p:tab title="filtros">
-                        <p:panelGrid columns="4" styleClass="panelNoBorder" >
+                        <p:panelGrid columns="6" styleClass="panelNoBorder" >
                             <p:outputLabel value="Ordenar por:"/>
 
                             <p:selectOneMenu value="#{trabajosPendientesMB.tipoFiltro}"  style="width:200px">
@@ -34,6 +34,13 @@ and open the template in the editor.
                             <p:selectOneMenu value="#{trabajosPendientesMB.tipoOrden}"  style="width:200px">
                                 <f:selectItem itemLabel="Menor al Mayor" itemValue="ASC" />
                                 <f:selectItem itemLabel="Mayor al Menor" itemValue="DESC" />
+                                <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
+                            </p:selectOneMenu>
+
+                            <!--  -->
+                            <p:selectOneMenu value="#{trabajosPendientesMB.tipoEstado}"  style="width:100px">
+                                <f:selectItem itemLabel="Revision" itemValue="revision" />
+                                <f:selectItem itemLabel="Reparados" itemValue="reparado" />
                                 <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
                             </p:selectOneMenu>
 
@@ -116,22 +123,54 @@ and open the template in the editor.
             <!-- Dialogo que me permite reparar la orden de trabajo-->
             <p:dialog header="Reparacion Rapida" modal="true" widgetVar="dlgReparacion" showEffect="explode" hideEffect="explode" height="2s00">
                 <h:form id="formReparacionRapida">
-                    <p:panelGrid columns="2" styleClass="panelNoBorder">
-                        
+                    <p:messages autoUpdate="true"/>
+                    <p:panelGrid columns="3" styleClass="panelNoBorder">
+
                         <p:outputLabel value="Diagnostico:"/>
-                        <p:inputTextarea value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.diagnostico}"/>
+                        <p:inputTextarea 
+                            required="true"
+                            id="txtDiagnostico"
+                            title="Diagostico del problema resulto por el tecnico"
+                            value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.diagnostico}">
+
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtDiagnostico" display="icon" />
 
                         <p:outputLabel value="Total:"/>
-                        <p:inputText value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.total}" />
+                        <p:inputText 
+                            title="Costo total de la reparacion"
+                            required="true"
+                            id="txtTotal" 
+                            value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.total}" >
+
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtTotal" display="icon" />
+
+                        <p:outputLabel value="Destinatario:" />
+                        <p:outputLabel value="#{trabajosPendientesMB.ordenTrabajoSeleccionados.cedulaRuc.correo}" style="font-weight: bold" />
+                        <p:spacer/>
 
                         <h:outputText value="Enviar Correo:" />
-                        <p:selectBooleanCheckbox  />
+                        <p:selectBooleanCheckbox value="#{trabajosPendientesMB.confirmarCorreo}"  />
                     </p:panelGrid>
+
                     <div style="text-align: center">
-                        <p:commandButton actionListener="#{trabajosPendientesMB.grabarOrdenTrabajo()}" value="Terminar"/>
+                        <p:commandButton actionListener="#{trabajosPendientesMB.grabarOrdenTrabajo()}" value="Terminar">
+                            <p:confirm header="Confirmar" message="Esta seguro que quiere reparar?" icon="ui-icon-alert" />
+                        </p:commandButton>
                     </div>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
                 </h:form>
             </p:dialog>
+
+
         </p:panel>
     </ui:define>
 </ui:composition>

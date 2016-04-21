@@ -33,11 +33,11 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo> {
         return em;
     }
 
-    public List<OrdenTrabajo> getByDateEntry(String orden) {
+    public List<OrdenTrabajo> getByDateEntry(String orden,String estado) {
         try {
             String queryString = "SELECT o FROM OrdenTrabajo o where o.estado=?1 order by o.fechaEmision "+orden;
             Query query = em.createQuery(queryString);
-            query.setParameter(1, "revision");
+            query.setParameter(1,estado);
            
             List<OrdenTrabajo> ordenTrabajoList = (List<OrdenTrabajo>) query.getResultList();
             //System.out.println(orden);
@@ -53,11 +53,11 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo> {
      *
      * @return
      */
-    public List<OrdenTrabajo> getByDateDeparture(String orden) {
+    public List<OrdenTrabajo> getByDateDeparture(String orden,String estado) {
         try {
             String queryString = "SELECT o FROM OrdenTrabajo o where o.estado=?1 order by o.fechaEntrega "+orden;
             Query query = em.createQuery(queryString);
-            query.setParameter(1, "revision");
+            query.setParameter(1,estado);
             
             System.out.println(query);
 
@@ -70,18 +70,19 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo> {
 
     }
 
-    public List<OrdenTrabajo> getByPrice(String orden) {
+    public List<OrdenTrabajo> getByPrice(String orden,String estado) {
         try {
             String queryString = "SELECT o FROM OrdenTrabajo o where o.estado=?1 order by o.total "+orden;
             Query query = em.createQuery(queryString);
-            query.setParameter(1, "revision");
+            query.setParameter(1,estado);
             
             System.out.println(query);
 
             List<OrdenTrabajo> ordenTrabajoList = (List<OrdenTrabajo>) query.getResultList();
 
             return ordenTrabajoList;
-        } catch (NoResultException e) {
+        } catch (NoResultException e) 
+        {
             return null;
         }
 

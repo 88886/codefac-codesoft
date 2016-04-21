@@ -7,12 +7,14 @@ package ec.com.codesoft.web.empleado.ordenTrabajo;
 
 import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.modelo.servicios.OrdenTrabajoServicio;
+import ec.com.codesoft.web.seguridad.SistemaMB;
 import ec.com.codesoft.web.util.CorreoMB;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 
@@ -29,6 +31,9 @@ public class trabajosPendientesMB implements Serializable {
 
     private List<OrdenTrabajo> ordenTrabajoList;
 
+    @ManagedProperty(value = "#{sistemaMB}")
+    private SistemaMB sistemaMB;
+
     /**
      * Variable para saber el tipo de campo por filtrar ejemplo: por fecha
      * ingreso, fecha salida, precios
@@ -39,11 +44,22 @@ public class trabajosPendientesMB implements Serializable {
      */
     private String tipoOrden;
 
+    /**
+     * Variable para saber el estado de la compra
+     */
+    private String tipoEstado;
+    
+    /**
+     * Variable para confirmar el envio de correo
+     */
+    private boolean confirmarCorreo;
+
     private OrdenTrabajo ordenTrabajoSeleccionados;
 
     @PostConstruct
     public void postConstruct() {
-        ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso("ASC");
+        tipoEstado="revision";
+        ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso("ASC",tipoEstado);
         System.out.println(ordenTrabajoList.size());
         tipoFiltro = "ingreso";
         tipoOrden = "ASC";
@@ -56,15 +72,15 @@ public class trabajosPendientesMB implements Serializable {
         System.out.println("tipo:" + tipoFiltro);
         switch (tipoFiltro) {
             case "entrega":
-                ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaSalida(tipoOrden);
+                ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaSalida(tipoOrden,tipoEstado);
                 break;
 
             case "ingreso":
-                ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso(tipoOrden);
+                ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso(tipoOrden,tipoEstado);
                 break;
 
             case "precio":
-                ordenTrabajoList = ordenTrabajoServicio.obtenerPorPrecio(tipoOrden);
+                ordenTrabajoList = ordenTrabajoServicio.obtenerPorPrecio(tipoOrden,tipoEstado);
                 break;
 
         }
@@ -83,18 +99,36 @@ public class trabajosPendientesMB implements Serializable {
     /**
      * Cambiar el estado de la orden de trabajo
      */
-    public void grabarOrdenTrabajo() {
+    public void grabarOrdenTrabajo() 
+    {
+        ordenTrabajoSeleccionados.setEstado("reparado");
         ordenTrabajoServicio.editar(ordenTrabajoSeleccionados);
-        System.out.println("enviando correo ...");
-        CorreoMB correo = new CorreoMB();
-        correo.EnviarCorreoSinArchivoAdjunto(""
-                + "carlosmast2302@gmail.com", ""
-                        + "Codesoft", ""
-                                + "Codefac le informa que su trabajo con orden No: "+ordenTrabajoSeleccionados.getIdOrdenTrabajo()+"("+ordenTrabajoSeleccionados.toStringEquipos()+") se encuentra listo "
-                                + "<br> Diagnostico:"+ordenTrabajoSeleccionados.getDiagnostico()+"<br> Costo: "+ordenTrabajoSeleccionados.getTotal());
+        
+        if (confirmarCorreo) 
+        {
+            System.out.println("enviando correo ...");
+            System.out.println(sistemaMB.getConfiguracion());
+            CorreoMB correo = new CorreoMB(sistemaMB.getConfiguracion().getEmailServicioTecnico(), sistemaMB.getConfiguracion().getClaveEmailServicioTecnico());
+            correo.EnviarCorreoSinArchivoAdjunto(""
+                    + ordenTrabajoSeleccionados.getCedulaRuc().getCorreo(), ""
+                    + "Codesoft", ""
+                    + "Codefac le informa que su trabajo con orden No: " + ordenTrabajoSeleccionados.getIdOrdenTrabajo() + "(" + ordenTrabajoSeleccionados.toStringEquipos() + ") se encuentra listo "
+                    + "<br> Diagnostico:" + ordenTrabajoSeleccionados.getDiagnostico() + "<br> Costo: " + ordenTrabajoSeleccionados.getTotal());
+        }
+        RequestContext.getCurrentInstance().execute("PF('dlgReparacion').hide()");
+        //dlgReparacion
+
     }
 
     //////////////////////////GET AND SET//////////////////////////////
+    public SistemaMB getSistemaMB() {
+        return sistemaMB;
+    }
+
+    public void setSistemaMB(SistemaMB sistemaMB) {
+        this.sistemaMB = sistemaMB;
+    }
+
     public List<OrdenTrabajo> getOrdenTrabajoList() {
         return ordenTrabajoList;
     }
@@ -126,5 +160,23 @@ public class trabajosPendientesMB implements Serializable {
     public void setOrdenTrabajoSeleccionados(OrdenTrabajo ordenTrabajoSeleccionados) {
         this.ordenTrabajoSeleccionados = ordenTrabajoSeleccionados;
     }
+
+    public boolean isConfirmarCorreo() {
+        return confirmarCorreo;
+    }
+
+    public void setConfirmarCorreo(boolean confirmarCorreo) {
+        this.confirmarCorreo = confirmarCorreo;
+    }
+
+    public String getTipoEstado() {
+        return tipoEstado;
+    }
+
+    public void setTipoEstado(String tipoEstado) {
+        this.tipoEstado = tipoEstado;
+    }
+    
+    
 
 }

@@ -8,6 +8,7 @@ package ec.com.codesoft.web.util;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.ejb.Asynchronous;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -22,27 +23,27 @@ import javax.mail.internet.MimeMultipart;
  *
  * @author carlo
  */
-public class CorreoMB 
+public class CorreoMB
 {
-    private String Username;
+    private String username;
+    private String clave;
+    
+    /**
+     * Hilo que me permite controlar el envio del correo
+     */
+    //private Thread hilo;
 
-    public CorreoMB() 
-    {
-
-        Username = "carlosmast2302@gmail.com";
+    public CorreoMB(String nick,String clave) 
+    {        
+        this.username = nick;
+        this.clave=clave;
+        System.out.println(username+" "+this.clave);
+        //this.hilo=new Thread(this);
     }
 
+    @Asynchronous
     public void EnviarCorreoSinArchivoAdjunto(String To, String Subject, String TextoCorreo) {
-        //Ejemplo de envio
-        //To: "aledennis.93@gmail.com"
-        //Subject: "Titulo correo"
-        //TextoCorreo: "Esto es una prueba"
 
-        //Si se necesita que tenga formato el texto
-        //Cambiar message.setText(TextoCorreo);
-        //por
-        //message.setContent(TextoCorreo,"text/html" );
-        //el texto debe venir en html: "<h1>El mensaje de nuestro primer correo HTML</h1>"
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -50,13 +51,13 @@ public class CorreoMB
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        SmtpAuthenticator authentication = new SmtpAuthenticator();
+        SmtpAuthenticator authentication = new SmtpAuthenticator(username,clave);
         Session session = Session.getInstance(props, authentication);
 
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(Username));
+            message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(To));
             message.setSubject(Subject);
@@ -86,7 +87,7 @@ public class CorreoMB
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        SmtpAuthenticator authentication = new SmtpAuthenticator();
+        SmtpAuthenticator authentication = new SmtpAuthenticator(username,clave);
         Session session = Session.getInstance(props, authentication);
 
         try {
@@ -110,7 +111,7 @@ public class CorreoMB
             // Se compone el correo, dando to, from, subject y el
             // contenido.
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(Username));
+            message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(To));
             message.setSubject(Subject);
@@ -124,4 +125,10 @@ public class CorreoMB
             throw new RuntimeException(e);
         }
     }
+
+    //@Override
+    //public void run() 
+    //{
+        
+    //}
 }

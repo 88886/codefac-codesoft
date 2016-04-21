@@ -112,16 +112,19 @@ public class OrdenTrabajoServicio {
      *
      * @return
      */
-    public List<OrdenTrabajo> obtenerPorFechaIngreso(String orden) {
-        return ordenTrabajoFacade.getByDateEntry(orden);
+    public List<OrdenTrabajo> obtenerPorFechaIngreso(String orden,String estado) 
+    {
+        return ordenTrabajoFacade.getByDateEntry(orden,estado);
     }
 
-    public List<OrdenTrabajo> obtenerPorFechaSalida(String orden) {
-        return ordenTrabajoFacade.getByDateDeparture(orden);
+    public List<OrdenTrabajo> obtenerPorFechaSalida(String orden,String estado) 
+    {
+        return ordenTrabajoFacade.getByDateDeparture(orden,estado);
     }
 
-    public List<OrdenTrabajo> obtenerPorPrecio(String orden) {
-        return ordenTrabajoFacade.getByPrice(orden);
+    public List<OrdenTrabajo> obtenerPorPrecio(String orden,String estado) 
+    {
+        return ordenTrabajoFacade.getByPrice(orden,estado);
     }
 
 }

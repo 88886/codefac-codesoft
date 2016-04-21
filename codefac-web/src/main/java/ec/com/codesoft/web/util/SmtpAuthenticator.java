@@ -17,12 +17,20 @@ public class SmtpAuthenticator extends Authenticator {
     private String Username;
     private String PassWord;
     
-    public SmtpAuthenticator() {
+//    public SmtpAuthenticator() {
+//
+//        super();
+//        Username = "carlosmast2302@gmail.com";
+//        PassWord = "angelicaespe";
+//    }
 
+    public SmtpAuthenticator(String Username, String PassWord) {
         super();
-        Username = "carlosmast2302@gmail.com";
-        PassWord = "angelicaespe";
+        this.Username = Username;
+        this.PassWord = PassWord;
     }
+    
+    
 
     @Override
     public PasswordAuthentication getPasswordAuthentication() {

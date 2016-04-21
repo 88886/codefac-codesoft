@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.model;
 
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
@@ -36,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Configuracion.findByMaxItemNota", query = "SELECT c FROM Configuracion c WHERE c.maxItemNota = :maxItemNota"),
     @NamedQuery(name = "Configuracion.findByMaxItemOrdenTrabajo", query = "SELECT c FROM Configuracion c WHERE c.maxItemOrdenTrabajo = :maxItemOrdenTrabajo")})
 public class Configuracion implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +55,12 @@ public class Configuracion implements Serializable {
     @Column(name = "MAX_ITEM_ORDEN_TRABAJO")
     private Integer maxItemOrdenTrabajo;
 
+    @Column(name = "EMAIL_SERVICIO_TECNICO")
+    private String emailServicioTecnico;
+
+    @Column(name = "CLAVE_EMAIL_SERVICIO_TECNICO")
+    private String claveEmailServicioTecnico;
+    
     public Configuracion() {
     }
 
@@ -110,6 +116,25 @@ public class Configuracion implements Serializable {
         this.maxItemOrdenTrabajo = maxItemOrdenTrabajo;
     }
 
+    public String getEmailServicioTecnico() {
+        return emailServicioTecnico;
+    }
+
+    public void setEmailServicioTecnico(String emailServicioTecnico) {
+        this.emailServicioTecnico = emailServicioTecnico;
+    }
+
+    public String getClaveEmailServicioTecnico() {
+        return claveEmailServicioTecnico;
+    }
+
+    public void setClaveEmailServicioTecnico(String claveEmailServicioTecnico) {
+        this.claveEmailServicioTecnico = claveEmailServicioTecnico;
+    }
+
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -134,5 +159,5 @@ public class Configuracion implements Serializable {
     public String toString() {
         return "modelo.Configuracion[ idConfiguracion=" + idConfiguracion + " ]";
     }
-    
+
 }

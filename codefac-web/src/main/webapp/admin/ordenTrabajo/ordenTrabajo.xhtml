@@ -82,19 +82,41 @@ and open the template in the editor.
 
                     <!-- Panel con los datos del trabajo a realizar -->
                     <p:panel id="panelTrabajo" header="Datos del Trabajo" styleClass="panelNoBorder greenColoredPanel">
-                        <p:panelGrid columns="6" style="margin: 0 auto;width: 90%" >
+                        <p:messages autoUpdate="true" id="mensajeGeneral"/>
+                        <p:panelGrid id="panelDatosOrdenTrabajo" columns="9" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Fecha Entrega:" />
-                            <p:calendar onkeypress="return noProcesar(event);"  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" />
-
+                            <p:calendar title="Fecha de Entrega del mantenimiento" onkeypress="return noProcesar(event);"  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" >
+                                <p:clientValidator event="keyup"/>
+                            </p:calendar>
+                            
+                            <p:message for="datetime" display="icon" />
+                            
                             <p:outputLabel value="Total" />
                             <p:inputText 
+                                required="true"
+                                title="Total del mantenimiento"
                                 onkeypress="return noProcesar(event);"
                                 id="txtTotal" 
                                 style="width: 50px" 
-                                value="#{ordenTrabajoMB.ordenTrabajo.total}" />
+                                value="#{ordenTrabajoMB.ordenTrabajo.total}" >
+
+                                <p:clientValidator event="keyup"/>
+                            </p:inputText>
+
+                            <p:message for="txtTotal" display="icon" />
 
                             <p:outputLabel value="Adelanto" />
-                            <p:inputText onkeypress="return noProcesar(event);" id="txtAdelanto" style="width: 50px" value="#{ordenTrabajoMB.ordenTrabajo.adelanto}" />
+                            <p:inputText 
+                                required="true"
+                                title="Abono por mantenimiento" 
+                                onkeypress="return noProcesar(event);" 
+                                id="txtAdelanto" 
+                                style="width: 50px" 
+                                value="#{ordenTrabajoMB.ordenTrabajo.adelanto}" >
+                                <p:clientValidator event="keyup"/>
+                            </p:inputText>
+                            <p:message for="txtAdelanto" display="icon" />
+
 
                             <p:outputLabel value="Responsable"  />
 
@@ -157,8 +179,17 @@ and open the template in the editor.
                     </p:panelGrid>
 
                     <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
-                        <p:commandButton ajax="false" value=" Grabar " actionListener="#{ordenTrabajoMB.grabarOrdenTrabajo()}" >
+                        <p:commandButton 
+                            ajax="true"
+                            process="@this,txtTotal,txtAdelanto"  
+                            validateClient="true"
+                            value=" Grabar F " 
+                            actionListener="#{ordenTrabajoMB.grabarOrdenTrabajo()}" 
+                            update="panelDatosOrdenTrabajo,mensajeGeneral" >
+                            
 
+                            <p:confirm header="Confirmar" message="Esta seguro que quiere grabar la orden de trabajo?" icon="ui-icon-alert" />
+                            
                         </p:commandButton>
                         <p:commandButton value=" Cancelar "/>
                         <p:commandButton immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
@@ -229,9 +260,17 @@ and open the template in the editor.
                     </h:form>
                 </p:panelGrid>
             </p:dialog>
+            
 
-            <h:form>
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+
+
+            <h:form >
+                <p:confirmDialog 
+                    global="true" 
+                    showEffect="fade" 
+                    hideEffect="fade" 
+                    style="font-size: 12px">
+                    
                     <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                 </p:confirmDialog>
