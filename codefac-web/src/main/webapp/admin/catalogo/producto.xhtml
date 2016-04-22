@@ -135,9 +135,10 @@ and open the template in the editor.
                     <p:panelGrid columns="2" style="width: 100%">
                         <p:inputText value="#{gestionProductoMB.catalagoProducto.precio}" style="width: 50px" />
 
-                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" >
-                            <f:selectItem itemLabel="- Iva " itemValue="-" />
-                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;" >
+                            <p:ajax listener="#{gestionProductoMB.cambiarPrecioEditar()}" update="txtCambiarPrecio" />
+                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                            <f:selectItem itemLabel="con Iva" itemValue="+" />
                         </p:selectOneMenu>
 
                     </p:panelGrid>
@@ -150,9 +151,9 @@ and open the template in the editor.
                     <p:panelGrid columns="2" style="width: 100%">
                         <p:inputText value="#{gestionProductoMB.catalagoProducto.precioMayorista}" style="width: 50px" />
 
-                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" >
-                            <f:selectItem itemLabel="- Iva " itemValue="-" />
-                            <f:selectItem itemLabel="+ Iva" itemValue="+" />
+                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" style="font-weight: 11px;" >
+                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                            <f:selectItem itemLabel="con Iva" itemValue="+" />
                         </p:selectOneMenu>
                     </p:panelGrid>
 
@@ -212,9 +213,9 @@ and open the template in the editor.
                     <p:panelGrid columns="2" style="width: 100%">
                         <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precio}" style="width: 50px" />
 
-                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" title="(- Iva) sin IVA , (+ IVA) incluido iva " >
-                            <f:selectItem itemLabel="- Iva " itemValue="-" />
-                            <f:selectItem itemLabel="+ Iva" itemValue="+" />                            
+                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;"  title="(- Iva) sin IVA , (+ IVA) incluido iva " >
+                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                            <f:selectItem itemLabel="con Iva" itemValue="+" />                            
                         </p:selectOneMenu>
 
                     </p:panelGrid>
@@ -227,9 +228,9 @@ and open the template in the editor.
                     <p:panelGrid columns="2" style="width: 100%">
                         <p:inputText value="#{gestionProductoMB.catalogoSeleccionado.precioMayorista}" style="width: 50px" />
 
-                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" >
-                            <f:selectItem itemLabel="- Iva " itemValue="-" />
-                            <f:selectItem itemLabel="+ Iva" itemValue="+" />                            
+                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" style="font-weight: 11px;" >
+                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                            <f:selectItem itemLabel="con Iva" itemValue="+" />                            
                         </p:selectOneMenu>
                     </p:panelGrid>
 

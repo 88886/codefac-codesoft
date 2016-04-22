@@ -333,9 +333,9 @@ and open the template in the editor.
                             <p:panelGrid columns="2" >
                                 <p:inputText id="txtCambiarPrecio" value="#{comprarMB.cambiarCosto}" style="width: 80px;" />
                                 <p:selectOneMenu id="cmbIVAPrecio" value="#{comprarMB.ivaCosto}" >
-                                    <p:ajax listener="#{comprarMB.cambiarPrecioEditar()}" update="txtCambiarPrecio" />
-                                    <f:selectItem itemLabel="+ Iva" itemValue="+" />                            
-                                    <f:selectItem itemLabel="- Iva " itemValue="-" />                                    
+                                    
+                                    <f:selectItem itemLabel="con Iva" itemValue="+" />                            
+                                    <f:selectItem itemLabel="sin Iva " itemValue="-" />                                    
                                 </p:selectOneMenu>
                             </p:panelGrid>
 

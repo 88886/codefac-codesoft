@@ -46,9 +46,9 @@ public class VentaFacade extends AbstractFacade<Venta> {
         try {
             String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Factura' ";
             Query query = em.createQuery(queryString);
-            //System.out.println(query.getSingleResult());
+            
             Integer numero = Integer.parseInt(query.getSingleResult().toString());
-
+            //System.out.println("num: "+numero);
             return numero;
         } catch (NoResultException e) {
             return null;
