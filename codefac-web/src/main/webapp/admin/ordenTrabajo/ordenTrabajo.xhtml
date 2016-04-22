@@ -181,9 +181,9 @@ and open the template in the editor.
                     <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
                         <p:commandButton 
                             ajax="true"
-                            process="@this,txtTotal,txtAdelanto"  
+                            process="@this,txtTotal,txtAdelanto,cmbEmpleado,datetime"  
                             validateClient="true"
-                            value=" Grabar F " 
+                            value=" Grabar" 
                             actionListener="#{ordenTrabajoMB.grabarOrdenTrabajo()}" 
                             update="panelDatosOrdenTrabajo,mensajeGeneral" >
                             

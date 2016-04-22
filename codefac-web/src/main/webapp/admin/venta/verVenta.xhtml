@@ -19,17 +19,16 @@ and open the template in the editor.
         <p:panel header="Venta" style="width: 70%;margin: 0 auto">
             <h:form>
                 <p:panelGrid columns="4" style="width: 70%;margin: 0 auto" styleClass="panelNoBorder"  >
-                    <p:outputLabel value="Cédula/RUC:" />
+                    <p:outputLabel value="Cédula/RUC:" style="font-weight: bold" />
                     <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.cedulaRuc}" />
 
-                    <p:outputLabel value="Codigo Documento" />
+                    <p:outputLabel value="Codigo Documento" style="font-weight: bold" />
                     <p:outputLabel value="#{verVentaMB.venta.codigoDocumento}" />
+                </p:panelGrid>
+                
+                <p:separator/>
 
-                    <p:spacer height="30px;"/>
-                    <p:spacer height="30px;"/>
-                    <p:spacer height="30px;"/>
-                    <p:spacer height="30px;"/>
-
+                <p:panelGrid columns="4" style="width: 70%;margin: 0 auto" styleClass="panelNoBorder"  >
                     <p:outputLabel value="Nombre: "  />
                     <p:outputLabel  value="#{verVentaMB.venta.cedulaRuc.nombre}" style="font-weight: bold" />
 
@@ -37,13 +36,13 @@ and open the template in the editor.
                     <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.telefono}" style="font-weight: bold"/>
 
                     <p:outputLabel value="Celular: " />
-                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.celular}"style="font-weight: bold" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.celular}" style="font-weight: bold" />
 
                     <p:outputLabel value="Direccion:" />
-                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.direccion}"style="font-weight: bold" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.direccion}" style="font-weight: bold" />
 
                     <p:outputLabel value="Correo: " />
-                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.correo}"style="font-weight: bold" />
+                    <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.correo}" style="font-weight: bold" />
 
                     <p:outputLabel value="Notas:" />
                     <p:outputLabel value="#{verVentaMB.venta.cedulaRuc.notas}" style="font-weight: bold"/>
