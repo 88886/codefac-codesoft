@@ -157,10 +157,16 @@ and open the template in the editor.
                     </p:panelGrid>
 
                     <div style="text-align: center">
-                        <p:commandButton actionListener="#{trabajosPendientesMB.grabarOrdenTrabajo()}" value="Terminar">
+                        <p:commandButton 
+                            onstart="PF('statusEnvioCorreo').show()" 
+                            onsuccess="PF('statusEnvioCorreo').hide()"
+                            actionListener="#{trabajosPendientesMB.grabarOrdenTrabajo()}" 
+                            value="Terminar">
+
                             <p:confirm header="Confirmar" message="Esta seguro que quiere reparar?" icon="ui-icon-alert" />
                         </p:commandButton>
                     </div>
+
 
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                         <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
@@ -170,7 +176,13 @@ and open the template in the editor.
                 </h:form>
             </p:dialog>
 
-
+            <!-- Dialago para mostrar la espera del envio del correo  -->
+            <p:dialog widgetVar="statusEnvioCorreo" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:panelGrid columns="2" styleClass="panelNoBorder">
+                    <p:graphicImage library="img"  name="/util/waitIcon.gif" />
+                    <p:outputLabel value="enviando correo ..." />
+                </p:panelGrid>
+            </p:dialog>
         </p:panel>
     </ui:define>
 </ui:composition>

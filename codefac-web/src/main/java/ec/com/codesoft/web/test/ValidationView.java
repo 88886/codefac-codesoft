@@ -6,6 +6,8 @@
 package ec.com.codesoft.web.test;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.bean.ViewScoped;
 import javax.validation.constraints.Max;
@@ -19,6 +21,16 @@ public class ValidationView {
     private String text;
     private Integer integer;
  
+    public void time()
+    {        
+        System.out.println("iniciando tiempo espera ...");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ValidationView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public String getText() {
         return text;
     }
