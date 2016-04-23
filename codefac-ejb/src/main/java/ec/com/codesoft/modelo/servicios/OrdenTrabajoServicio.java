@@ -92,6 +92,7 @@ public class OrdenTrabajoServicio {
 
     public List<Servicios> obtenerServicios() {
         return servicios.findAll();
+        //return ordenTrabajoFacade.findAllDesc()
     }
 
     public Servicios obtenerServicioPorCodigo(Integer codigo) {
@@ -103,7 +104,7 @@ public class OrdenTrabajoServicio {
     }
 
     public List<OrdenTrabajo> obtenerOrdenesTrabajo() {
-        return ordenTrabajoFacade.findAll();
+        return ordenTrabajoFacade.findAllDesc();
     }
 
     /**

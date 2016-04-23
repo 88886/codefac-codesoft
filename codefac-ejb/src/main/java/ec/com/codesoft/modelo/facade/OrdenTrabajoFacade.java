@@ -87,6 +87,21 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo> {
         }
 
     }
+    
+    public List<OrdenTrabajo> findAllDesc()
+    {
+         try {
+            String queryString = "SELECT o FROM OrdenTrabajo o order by o.idOrdenTrabajo DESC";
+            Query query = em.createQuery(queryString);
+            //query.setParameter(1,estado);
+           
+            List<OrdenTrabajo> ordenTrabajoList = (List<OrdenTrabajo>) query.getResultList();
+            //System.out.println(orden);
+            return ordenTrabajoList;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
     //getByPrice
 }

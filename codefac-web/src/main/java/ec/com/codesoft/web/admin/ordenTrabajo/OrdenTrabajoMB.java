@@ -51,6 +51,11 @@ public class OrdenTrabajoMB implements Serializable {
     private OrdenTrabajo ordenTrabajo;
 
     /**
+     * Orden de trabajo para editar
+     */
+    private DetalleOrdenTrabajo detalleOrdenTrabajoEditar;
+
+    /**
      * Lista de servicios para facturar
      */
     private List<Servicios> servicios;
@@ -94,7 +99,7 @@ public class OrdenTrabajoMB implements Serializable {
         empleados = ordenTrabajoServicio.obtenerEmpleados();
         servicios = ordenTrabajoServicio.obtenerServicios();
         categorias = new ArrayList<CategoriaTrabajo>();
-        this.total=new BigDecimal("0.00");
+        this.total = new BigDecimal("0.00");
     }
 
     /**
@@ -103,13 +108,10 @@ public class OrdenTrabajoMB implements Serializable {
     public void grabarOrdenTrabajo() {
 
         //Valida que existan detalles en la orden de trabajo
-        if (ordenTrabajo.getDetalleOrdenTrabajoList().size() == 0) 
-        {
+        if (ordenTrabajo.getDetalleOrdenTrabajoList().size() == 0) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No existe items para grabar");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
-        } 
-        else 
-        {
+        } else {
             Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);
 
             ordenTrabajo.setUsuEmpleado(empleado);
@@ -117,11 +119,21 @@ public class OrdenTrabajoMB implements Serializable {
 
             ordenTrabajoServicio.grabar(ordenTrabajo);
             System.out.println("orden grabado ...");
-            
+
             //dlgGrabados
             RequestContext.getCurrentInstance().execute("PF('dlgGrabado').show()");
             //generaPdf();
         }
+    }
+
+    /**
+     * Abre el dialogo que me permite realizar la edicion
+     */
+    public void abrirDialogoEditar(DetalleOrdenTrabajo detalle) {
+        detalleOrdenTrabajoEditar = detalle;
+        System.out.println("abriendo dialogo de la edicion ...");
+        RequestContext.getCurrentInstance().execute("PF('dlgDetalleEdit').show()");
+
     }
 
     public void generaPdf() {
@@ -202,13 +214,12 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
     }
 
-    public void eliminar(DetalleOrdenTrabajo detalle)
-    {
+    public void eliminar(DetalleOrdenTrabajo detalle) {
         this.ordenTrabajo.getDetalleOrdenTrabajoList().remove(detalle);
         this.ordenTrabajo.setTotal(this.ordenTrabajo.getTotal().subtract(detalle.getPrecio()));
         //System.out.println("total="+total);
     }
-    
+
     /**
      * Verifica que exista un cliente en la base de datos
      */
@@ -219,18 +230,26 @@ public class OrdenTrabajoMB implements Serializable {
         if (clienteBuscado != null) {
             ordenTrabajo.setCedulaRuc(clienteBuscado);
         } else {
-            Map<String, Object> options = new HashMap<String, Object>();
-            options.put("modal", true);
-            options.put("height", 300);
-
-            Map<String, List<String>> params = new HashMap<String, List<String>>();
-            List<String> values = new ArrayList<String>();
-
-            values.add(ordenTrabajo.getCedulaRuc().getCedulaRuc());
-            params.put("cedula", values);
-
-            RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
+            RequestContext.getCurrentInstance().execute("PF('confirmarCliente').show()");
         }
+    }
+
+    public void crearNuevoCliente() {
+        System.out.println("abriendo nuevo distribuidor ...");
+        
+        RequestContext.getCurrentInstance().execute("PF('confirmarCliente').hide()");
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+        options.put("height", 300);
+
+        Map<String, List<String>> params = new HashMap<String, List<String>>();
+        List<String> values = new ArrayList<String>();
+
+        values.add(ordenTrabajo.getCedulaRuc().getCedulaRuc());
+        params.put("cedula", values);
+
+        RequestContext.getCurrentInstance().openDialog("crearCliente", options, params);
+
     }
 
     public void onClientChosen(SelectEvent event) {
@@ -260,8 +279,7 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajo.setProblema(categoria.getDescripcion());
         detalleOrdenTrabajo.setTrabajoRealizar(categoria.getTrabajoRealizar());
         System.out.println("cargando categorias ..." + categoria.getPrecio());
-    }    
-    
+    }
 
     public void seleccionarEmpleado(Usuario usuario) {
         System.out.println("se llamo al usuario");
@@ -339,6 +357,14 @@ public class OrdenTrabajoMB implements Serializable {
 
     public void setIdCategoriaSeleccionado(String idCategoriaSeleccionado) {
         this.idCategoriaSeleccionado = idCategoriaSeleccionado;
+    }
+
+    public DetalleOrdenTrabajo getDetalleOrdenTrabajoEditar() {
+        return detalleOrdenTrabajoEditar;
+    }
+
+    public void setDetalleOrdenTrabajoEditar(DetalleOrdenTrabajo detalleOrdenTrabajoEditar) {
+        this.detalleOrdenTrabajoEditar = detalleOrdenTrabajoEditar;
     }
 
 }

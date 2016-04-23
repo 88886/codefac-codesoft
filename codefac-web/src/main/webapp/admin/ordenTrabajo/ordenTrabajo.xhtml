@@ -38,7 +38,11 @@ and open the template in the editor.
                             :formPrincipal:datetime
                             :formPrincipal:txtAdelanto
                             :formPrincipal:txtObservaciones" 
-                            name="test" actionListener="#{ordenTrabajoMB.validarCliente()}" update="@form"/>
+                            name="test" 
+                            actionListener="#{ordenTrabajoMB.validarCliente()}" 
+                            update="@form,panelGridDatosCliente">
+
+                        </p:remoteCommand>
 
 
                         <!-- Boton que abre un dialogo para buscar el cliente -->
@@ -54,7 +58,7 @@ and open the template in the editor.
                                          value="B U S C A R "  
                                          actionListener="#{ordenTrabajoMB.buscarClienteDlg()}"  >
 
-                            <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form" />
+                            <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form,panelGridDatosCliente" />
                         </p:commandButton>
 
                     </p:panelGrid>
@@ -64,18 +68,18 @@ and open the template in the editor.
 
                     <!-- Panel con los datos del cliente -->
                     <p:panel header="Datos del Cliente" styleClass="greenColoredPanel panelNoBorder" >
-                        <p:panelGrid columns="4" style="margin: 0 auto;width: 90%" >
+                        <p:panelGrid id="panelGridDatosCliente" columns="4" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Nombres:" />
-                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.nombre}" style="font-weight: bold" />
+                            <p:outputLabel id="txtNombres" value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.nombre}" style="font-weight: bold" />
 
                             <p:outputLabel value="Telefono:" />
-                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.telefono}" style="font-weight: bold" />
+                            <p:outputLabel id="txtTelefono" value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.telefono}" style="font-weight: bold" />
 
                             <p:outputLabel value="Direccion:" />
-                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.direccion}" style="font-weight: bold" />
+                            <p:outputLabel id="txtDireccion" value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.direccion}" style="font-weight: bold" />
 
                             <p:outputLabel value="Correo:" />
-                            <p:outputLabel value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.correo}" style="font-weight: bold" />                        
+                            <p:outputLabel id="txtCorreo" value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.correo}" style="font-weight: bold" />                        
 
                         </p:panelGrid>
                     </p:panel>
@@ -88,9 +92,9 @@ and open the template in the editor.
                             <p:calendar title="Fecha de Entrega del mantenimiento" onkeypress="return noProcesar(event);"  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" >
                                 <p:clientValidator event="keyup"/>
                             </p:calendar>
-                            
+
                             <p:message for="datetime" display="icon" />
-                            
+
                             <p:outputLabel value="Total" />
                             <p:inputText 
                                 required="true"
@@ -168,7 +172,11 @@ and open the template in the editor.
                                              update=":formPrincipal:txtTotal,:formPrincipal:tablaDetalle" >
                                 <p:confirm header="Confirmar" message="Quieres quitar el detalle?" icon="ui-icon-alert" />
                             </p:commandButton>
-                            <p:commandButton icon="ui-icon-pencil" />
+                            <p:commandButton immediate="true" 
+                                             icon="ui-icon-pencil" 
+                                             actionListener="#{ordenTrabajoMB.abrirDialogoEditar(detalle)}"
+                                             update=":formDialogoDetalleEdit" />
+
                         </p:column>
 
                     </p:dataTable>
@@ -186,10 +194,10 @@ and open the template in the editor.
                             value=" Grabar" 
                             actionListener="#{ordenTrabajoMB.grabarOrdenTrabajo()}" 
                             update="panelDatosOrdenTrabajo,mensajeGeneral" >
-                            
+
 
                             <p:confirm header="Confirmar" message="Esta seguro que quiere grabar la orden de trabajo?" icon="ui-icon-alert" />
-                            
+
                         </p:commandButton>
                         <p:commandButton value=" Cancelar "/>
                         <p:commandButton immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
@@ -202,7 +210,8 @@ and open the template in the editor.
             <!-- Dialogo para agregar los equipos al items -->
             <p:dialog header="Agregar Detalle" widgetVar="dlgDetalle" showEffect="explode" hideEffect="explode"  modal="true">
                 <h:form id="formDialogoDetalle" >
-                    <p:panelGrid columns="2" styleClass="panelNoBorder">
+                    <p:messages autoUpdate="true" id="mensajeGeneral2"/>
+                    <p:panelGrid id="panelDetalleAgregar" columns="3" styleClass="panelNoBorder">
 
                         <p:outputLabel value="Servicios: " />
 
@@ -211,6 +220,8 @@ and open the template in the editor.
                             <f:selectItems itemValue="#{servicio.codigoServicio}"  itemLabel="#{servicio.nombre}" var="servicio" value="#{ordenTrabajoMB.servicios}" />                                
                             <p:ajax event="change" listener="#{ordenTrabajoMB.cargarCategoriasServicios()}" update=":formDialogoDetalle:cmbCategoria"/>
                         </p:selectOneMenu>
+                        <p:spacer/>
+
 
 
                         <p:outputLabel value="Categoria: " />
@@ -220,29 +231,102 @@ and open the template in the editor.
                             <f:selectItems itemValue="#{categoria.idCategoriaTrabajo}"  itemLabel="#{categoria.nombre}" var="categoria" value="#{ordenTrabajoMB.categorias}" />                                
                             <p:ajax event="change" listener="#{ordenTrabajoMB.cargarDatosCategoria()}" update=":formDialogoDetalle:txtPrecio,:formDialogoDetalle:txtTrabajoRealizar,:formDialogoDetalle:txtProblema" />
                         </p:selectOneMenu>
+                        <p:spacer/>
 
 
                         <p:outputLabel value="Nombre: " />
-                        <p:inputText value="#{ordenTrabajoMB.detalleOrdenTrabajo.equipo}" />
+                        <p:inputText id="txtEquipo" value="#{ordenTrabajoMB.detalleOrdenTrabajo.equipo}" required="true" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtEquipo" display="icon" />
 
                         <p:outputLabel value="Descripcion: " />
-                        <p:inputTextarea value="#{ordenTrabajoMB.detalleOrdenTrabajo.descripcion}" />
+                        <p:inputTextarea id="txtDescripcion" value="#{ordenTrabajoMB.detalleOrdenTrabajo.descripcion}" />
+                        <p:message for="txtDescripcion" display="icon" />
 
                         <p:outputLabel value="Problema: " />
-                        <p:inputTextarea id="txtProblema" value="#{ordenTrabajoMB.detalleOrdenTrabajo.problema}" />
+                        <p:inputTextarea id="txtProblema" value="#{ordenTrabajoMB.detalleOrdenTrabajo.problema}" required="true" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtProblema" display="icon" />
 
                         <p:outputLabel value="Trabajo Realizar: " />
                         <p:inputTextarea id="txtTrabajoRealizar" value="#{ordenTrabajoMB.detalleOrdenTrabajo.trabajoRealizar}" />
+                        <p:message for="txtTrabajoRealizar" display="icon" />
 
                         <p:outputLabel value="Precio: " />
-                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" style="width: 80px" />
-
+                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" style="width: 80px" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtPrecio" display="icon" />
 
 
                     </p:panelGrid>
                     <p:spacer height="10px"/>
                     <div style="text-align: center">
-                        <p:commandButton  partialSubmit="true" process=":formDialogoDetalle,:formPrincipal:txtTotal" value="Agregar" actionListener="#{ordenTrabajoMB.agregarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal" />
+                        <p:commandButton validateClient="true"  partialSubmit="true" process=":formDialogoDetalle,:formPrincipal:txtTotal" value="Agregar" actionListener="#{ordenTrabajoMB.agregarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregar,mensajeGeneral2" />
+                    </div>
+                </h:form>
+            </p:dialog>
+
+            <!-- Dialogo para editar los equipos al items -->
+            <p:dialog header="Editar Detalle" widgetVar="dlgDetalleEdit" showEffect="explode" hideEffect="explode"  modal="true">
+                <h:form id="formDialogoDetalleEdit" >
+                    <p:messages autoUpdate="true" id="mensajeGeneral2Edit"/>
+                    <p:panelGrid id="panelDetalleAgregarEdit" columns="3" styleClass="panelNoBorder">
+
+                        <p:outputLabel value="Servicios: " />
+
+                        <p:selectOneMenu id="cmbServicios" value="#{ordenTrabajoMB.idServicioSeleccionado}" >
+                            <f:selectItem itemLabel="Escoja el servicio" itemValue="" />
+                            <f:selectItems itemValue="#{servicio.codigoServicio}"  itemLabel="#{servicio.nombre}" var="servicio" value="#{ordenTrabajoMB.servicios}" />                                
+                            <p:ajax event="change" listener="#{ordenTrabajoMB.cargarCategoriasServicios()}" update=":formDialogoDetalle:cmbCategoria"/>
+                        </p:selectOneMenu>
+                        <p:spacer/>
+
+
+
+                        <p:outputLabel value="Categoria: " />
+
+                        <p:selectOneMenu id="cmbCategoria" value="#{ordenTrabajoMB.idCategoriaSeleccionado}" >
+                            <f:selectItem itemLabel="Escoja la Categoria: " itemValue="" />
+                            <f:selectItems itemValue="#{categoria.idCategoriaTrabajo}"  itemLabel="#{categoria.nombre}" var="categoria" value="#{ordenTrabajoMB.categorias}" />                                
+                            <p:ajax event="change" listener="#{ordenTrabajoMB.cargarDatosCategoria()}" update=":formDialogoDetalle:txtPrecio,:formDialogoDetalle:txtTrabajoRealizar,:formDialogoDetalle:txtProblema" />
+                        </p:selectOneMenu>
+                        <p:spacer/>
+
+
+                        <p:outputLabel value="Nombre: " />
+                        <p:inputText id="txtEquipo" value="#{ordenTrabajoMB.detalleOrdenTrabajoEditar.equipo}" required="true" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtEquipo" display="icon" />
+
+                        <p:outputLabel value="Descripcion: " />
+                        <p:inputTextarea id="txtDescripcion" value="#{ordenTrabajoMB.detalleOrdenTrabajoEditar.descripcion}" />
+                        <p:message for="txtDescripcion" display="icon" />
+
+                        <p:outputLabel value="Problema: " />
+                        <p:inputTextarea id="txtProblema" value="#{ordenTrabajoMB.detalleOrdenTrabajoEditar.problema}" required="true" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtProblema" display="icon" />
+
+                        <p:outputLabel value="Trabajo Realizar: " />
+                        <p:inputTextarea id="txtTrabajoRealizar" value="#{ordenTrabajoMB.detalleOrdenTrabajoEditar.trabajoRealizar}" />
+                        <p:message for="txtTrabajoRealizar" display="icon" />
+
+                        <p:outputLabel value="Precio: " />
+                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajoEditar.precio}" style="width: 80px" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtPrecio" display="icon" />
+
+
+                    </p:panelGrid>
+                    <p:spacer height="10px"/>
+                    <div style="text-align: center">
+                        <p:commandButton validateClient="true"  partialSubmit="true" process=":formDialogoDetalle,:formPrincipal:txtTotal" value="Editar" actionListener="#{ordenTrabajoMB.agregarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregarEdit,mensajeGeneral2Edit" />
                     </div>
                 </h:form>
             </p:dialog>
@@ -260,7 +344,19 @@ and open the template in the editor.
                     </h:form>
                 </p:panelGrid>
             </p:dialog>
-            
+
+            <!-- Dialogo de confirmacion para agregar un nuevo Cliente -->
+            <p:dialog header="Agregar Cliente" widgetVar="confirmarCliente" modal="true">
+                <h:form>
+                    <h2>El cliente no existe</h2>
+                    <p:commandButton onclick="PF('confirmarCliente').hide();" value="Aceptar"/>
+                    <p:commandButton actionListener="#{ordenTrabajoMB.crearNuevoCliente()}"  style="background-image: none;background-color: forestgreen" value="Nuevo Cliente">
+                        <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update=":formPrincipal" />
+                    </p:commandButton>                        
+
+                </h:form>
+            </p:dialog>
+
 
 
 
@@ -270,7 +366,7 @@ and open the template in the editor.
                     showEffect="fade" 
                     hideEffect="fade" 
                     style="font-size: 12px">
-                    
+
                     <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                 </p:confirmDialog>

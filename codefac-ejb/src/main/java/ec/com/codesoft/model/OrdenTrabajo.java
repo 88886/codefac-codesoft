@@ -80,6 +80,7 @@ public class OrdenTrabajo implements Serializable {
     private BigDecimal descuento;
     @OneToMany(mappedBy = "idOrdenTrabajo", cascade = CascadeType.ALL)
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
+    
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
@@ -104,7 +105,7 @@ public class OrdenTrabajo implements Serializable {
     public String toStringDetalle() {
         String texto = "";
         for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) {
-            texto += detalle.getDiagnostico() + ",";
+            texto += detalle.getEquipo() + ",";
         }
         return texto;
     }

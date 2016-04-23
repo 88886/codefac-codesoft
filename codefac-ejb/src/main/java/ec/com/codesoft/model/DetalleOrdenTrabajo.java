@@ -31,16 +31,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "detalle_orden_trabajo")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "DetalleOrdenTrabajo.findAll", query = "SELECT d FROM DetalleOrdenTrabajo d"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByIdDetalleOrdenTrabajo", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.idDetalleOrdenTrabajo = :idDetalleOrdenTrabajo"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByEquipo", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.equipo = :equipo"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByDescripcion", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.descripcion = :descripcion"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByProblema", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.problema = :problema"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByTrabajoRealizar", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.trabajoRealizar = :trabajoRealizar"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByPrecio", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.precio = :precio"),
-    @NamedQuery(name = "DetalleOrdenTrabajo.findByDiagnostico", query = "SELECT d FROM DetalleOrdenTrabajo d WHERE d.diagnostico = :diagnostico")})
 public class DetalleOrdenTrabajo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
