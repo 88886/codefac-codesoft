@@ -44,6 +44,21 @@
                         </b:column>
 
                     </b:row>
+                    
+                                        <b:row>
+                        <b:column col-md="2" col-xs="10"  offset="4">
+                            <h:outputText value="Tipo:" />
+                        </b:column>
+                        <b:column col-md="2" col-xs="10" >
+                        <b:selectOneMenu value="#{sessionMB.perfilNombre}" >
+                            <f:selectItem itemLabel="Operador" itemValue="operador"/>
+                            <f:selectItem itemLabel="Empleado" itemValue="empleado"/>
+                            <f:selectItem itemLabel="Administrador" itemValue="admin"/>    
+                        </b:selectOneMenu>
+                        </b:column>
+
+                    </b:row>
+                    
                     <b:row>
                         <b:column span="2" offset="4">
                             <b:commandButton value="Ingresar" action="#{sessionMB.iniciarSesion()}" update="growl" ajax="false"  look="primary"
