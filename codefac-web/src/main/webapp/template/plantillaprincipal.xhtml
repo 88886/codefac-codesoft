@@ -17,41 +17,52 @@ and open the template in the editor.
         <h:outputScript name="ejemplo.js" library="js" target="form"/>
     </h:head>
     <h:body>
-
-        <div id="cabecera">
-            <p:graphicImage library="img" name="bannerCodefac.jpg"  styleClass="imagenCabecera" />
+        <div class="ui-grid headerDiv ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    <div id="cabecera">
+                        <p:graphicImage library="img" name="bannerCodefac.jpg"  styleClass="imagenCabecera" />
+                    </div>
+                </div>
+            </div>
         </div>
+
+
+        <h:outputStylesheet library="webjars" name="bootstrap/3.3.6/css/bootstrap.min.css"/>
+        <script type="text/javascript" src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+        <!-- Menu principal -->
         <div id="menu">
-            <h:form id="menuPlantilla">
-                <p:growl id="messages"/>
-                <p:layoutUnit position="center"> 
-                    <p:tabMenu activeIndex="#{param.i}" style="width: 850px; margin: 0 auto;">
-                        <p:menuitem style="width: 80px" outcome="index"   value="Inicio" icon="ui-icon-star">
-                            <f:param name="i" value="0" />
-                        </p:menuitem>
-                        <p:menuitem style="width: 80px" outcome="login" value="Login"  icon="ui-icon-document">
-                            <f:param name="i" value="1" />
-                        </p:menuitem>
-                        
-                        <p:menuitem style="width: 100px" outcome="nosotros" value="Nosotros"  icon="ui-icon-search">
-                            <f:param name="i" value="2" />
-                        </p:menuitem>
-                        
-                        <p:menuitem style="width: 100px" outcome="productoIndex" value="productos"  icon="ui-icon-search">
-                            <f:param name="i" value="2" />
-                        </p:menuitem>
-                        
-                        <p:menuitem style="width: 150px" outcome="ubicacion" value="ubicación"   icon="ui-icon-person">
-                            <f:param name="i" value="3" />
-                        </p:menuitem>
-                        <p:menuitem style="width: 150px" outcome="contactanos" value="Contactanos"  icon="ui-icon-search">
-                            <f:param name="i" value="4" />
-                        </p:menuitem>
-
-                    </p:tabMenu>
-                </p:layoutUnit>
-            </h:form>
+            <div class="navbar navbar-default " role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Menu Principal</a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><p:link outcome="index">Inicio</p:link></li>
+                            <li><p:link outcome="login">Login</p:link></li>
+                            <li><p:link outcome="nosotros">Nosotros</p:link></li>
+                            <li><p:link outcome="productoIndex">Productos</p:link></li>
+                            <li><p:link outcome="ubicacion">Ubicacion</p:link></li>
+                            <li><p:link outcome="contactanos">Contactanos</p:link></li>
+                        </ul>
+                        <form class="navbar-form navbar-right">
+                            <input type="text" class="form-control" placeholder="Search..." />
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
+
         <div id="contenido">
             <ui:insert name="contenido"/>
         </div>

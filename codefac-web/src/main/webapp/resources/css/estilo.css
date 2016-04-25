@@ -31,6 +31,16 @@ h1,h2
     text-align: center;
 }
 
+.titulo
+{
+    background-color: #5eaade;
+    color: #ffffff;
+    margin: 0px;
+    border: 0px;
+    padding: 4px;
+}
+
+
 
 #menu
 {
@@ -38,21 +48,37 @@ h1,h2
     color: white;
     height: 50px;
     text-align: center;
+    
+    border-color: #3f5da2;
+    border: 10px;
+    border-bottom-color: #009966;
+    border-bottom: 30px;
+    
 }
 
 #contenido
 {
     background-color: #ffffff;
     color: black;
+    padding: 0px;
+    margin: 0px;
+   
+    
+   
     
 }
 
 #piepagina
 {
-    background-color: #3f5da2;
+    background-color: #485798;
     height: 25px;
     color: white;
     text-align: center;
+    font-size: 13px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    padding-top: 5px;
 }
 
 .imagenCabecera
@@ -71,4 +97,9 @@ h1,h2
 .menuItem
 {
     text-align: center;
+}
+
+.panelNoBorder, .panelNoBorder tr, .panelNoBorder td{
+    border: hidden;
+    border-color: white;
 }

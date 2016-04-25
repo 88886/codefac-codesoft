@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Codefac</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="estiloMensajes.css"/>
+        <h:outputStylesheet name="grid/grid.css" library="primefaces" />
+
+    </h:head>
+    <h:body>
+        <div class="ui-grid headerDiv ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    header
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid  ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2 menuDiv">small menu column</div>
+                <div class="ui-grid-col-8 contentDiv">wide column</div>
+                <div class="ui-grid-col-2 sidebarDiv">small sidebar column</div>
+            </div>
+        </div>
+        <div class="ui-grid footerDiv  ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    footer
+                </div>
+            </div>
+        </div>
+
+        
+
+    </h:body>
+
+</html>
