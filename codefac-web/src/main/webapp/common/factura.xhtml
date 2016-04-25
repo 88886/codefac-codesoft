@@ -35,7 +35,7 @@ and open the template in the editor.
 
             <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success" >
                 <p:panelGrid columns="8" style="margin: 0 auto;" >
-                    <p:commandButton  id="btnBuscarCli" value="Buscar"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()" />  
+                    <p:commandButton  id="btnBuscarCli" value="Buscar"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
 
                     <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
                     <p:inputText id="cedCliente" 
@@ -54,30 +54,30 @@ and open the template in the editor.
                     <p:outputLabel value=" "/>
                     <p:outputLabel value=" "/>
 
-                    <p:outputLabel value="Codigo Documento: "/>
+                    <b:badge  value="Codigo Documento: " style="background-color: #0087ca;color: white"/>
                     <p:inputText value="#{facturaMB.codigoDocumento}" />
 
-                    <p:outputLabel  value="Nombre:      " />
+                    <b:badge  value="Nombre:      "  style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
 
 
-                    <p:outputLabel value="Teléfono:" />
+                    <b:badge value="Teléfono:" style="background-color: #0087ca;color: white" />
                     <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
 
-                    <p:outputLabel  value="Celular:" />
+                    <b:badge  value="Celular:" style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
 
-                    <p:outputLabel  value="Dirección:" />
+                    <b:badge  value="Dirección:" style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
 
-                    <p:outputLabel value="Correo:" />
+                    <b:badge value="Correo:" style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
 
 
-                    <p:outputLabel  value="Notas" />
+                    <b:badge  value="Notas" style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;font-weight: bold" />
 
-                    <p:outputLabel  value="Tipo Venta" />
+                    <b:badge  value="Tipo Venta"  style="background-color: #0087ca;color: white"/>
                     <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}" title="Escojer el tipo de Pago">
                         <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
                         <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
@@ -106,8 +106,8 @@ and open the template in the editor.
                         </p:panelGrid>
 
                         <p:panelGrid id="idCampoInteres" columns="2">
-                            <p:outputLabel value="Interés :"/>
-                            <p:outputLabel value="#{facturaMB.campoInteres}"  style="width:25%;font-weight: bold"/>
+                            <b:badge value="Interés :" style="background-color: #0087ca;color: white"/>
+                            <p:outputLabel value="#{facturaMB.campoInteres}"  style="width:25%;font-weight: bold;background-color: #0087ca;color: white"/>
                         </p:panelGrid>
                     </p:panel>
 
@@ -117,7 +117,7 @@ and open the template in the editor.
                             <p:selectOneMenu  id="bancoCheques" value="#{facturaMB.nombreBanco}" style="width:125px">
                                 <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
                             </p:selectOneMenu>  
-                            <p:outputLabel value="No Cheque:" />
+                            <b:badge value="No Cheque:" style="background-color: #0087ca;color: white" />
                             <p:inputText  value="#{facturaMB.NCheque}"/>
                         </p:panelGrid>
                     </p:panel>
@@ -282,24 +282,24 @@ and open the template in the editor.
 
                 <p:spacer/>
                 <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%;">
-                    <p:outputLabel  value="Subtotal:"/>
+                    <b:badge  value="Subtotal:" style="background-color: #0087ca;color: white" />
                     <p:outputLabel id="subTotal" value="#{calculosMB.redondeoSuperior(facturaMB.subtotal)}" style="font-weight: bold"/>
 
-                    <p:outputLabel  value="Descuento % :"/>
+                    <b:badge  value="Descuento % :" style="background-color: #0087ca;color: white"/>
                     <p:inputText id="txtDescuento" value="#{facturaMB.descuento}" readonly="false" style="width: 30%">
                         <p:ajax event="blur" listener="#{facturaMB.calcularDescuento()}" update="@form"/>
                     </p:inputText>
 
-                    <p:outputLabel  value="Iva #{facturaMB.ivaMostrar.intValue()}%:"/>
+                    <b:badge  value="Iva #{facturaMB.ivaMostrar.intValue()}%:" style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="iva" value="#{calculosMB.redondeoSuperior(facturaMB.iva)}" style="font-weight: bold"/>
 
-                    <p:outputLabel  value="Total + Iva : "/>
+                    <b:badge  value="Total + Iva : " style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="totalIva" value="#{calculosMB.redondeoSuperior(facturaMB.total)}" style="font-weight: bold"/>
 
-                    <p:outputLabel  value="Recargo Tarjeta : "/>
+                    <b:badge  value="Recargo Tarjeta : " style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="interes" value="#{calculosMB.redondeoSuperior(facturaMB.interesTarjeta)}" style="font-weight: bold"/>
 
-                    <p:outputLabel  value="Total a Pagar : "/>
+                    <b:badge  value="Total a Pagar : " style="background-color: #0087ca;color: white"/>
                     <p:outputLabel id="totalPagar" value="#{calculosMB.redondeoSuperior(facturaMB.totalPagar)}" style="font-weight: bold"/>
                 </p:panelGrid>
             </p:panel>
@@ -307,13 +307,13 @@ and open the template in the editor.
         </h:form>
         <p:spacer/>
         <h:form id="frmVueltos">
-            <div style="background-image: none;background-color: #485798">
+            <div >
                 <p:panelGrid columns="2" style="margin-left: 70%">
-                    <p:outputLabel value="Recibo"/>
+                    <b:badge value="Recibo" style="background-color: #0087ca;color: white"/>
                     <p:inputText id="recibo" value="#{facturaMB.recibo}">
                         <p:ajax event="keyup" listener="#{facturaMB.darVuelto()}" update="vuelto"/>
                     </p:inputText>
-                    <p:outputLabel value="Vuelto"/>
+                    <b:badge value="Vuelto" style="background-color: #0087ca;color: white"/>
                     <p:inputText id="vuelto" value="#{calculosMB.redondeoSuperior(facturaMB.vuelto)}"/>
                 </p:panelGrid>
             </div>
