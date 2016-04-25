@@ -10,6 +10,7 @@ and open the template in the editor.
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
                 template="/template/plantilladmin.xhtml">
 
 
@@ -28,6 +29,7 @@ and open the template in the editor.
                             id="txtCedulaRuc" 
                             value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.cedulaRuc}" 
                             onkeypress="return validarEnter(event, 'test');"
+                            placeholder="Ingrese la cedula"
                             required="false" />
 
                         <!-- Verifica si el cliente existe o no -->
@@ -46,6 +48,7 @@ and open the template in the editor.
 
 
                         <!-- Boton que abre un dialogo para buscar el cliente -->
+                        
                         <p:commandButton partialSubmit="true" 
                                          process="
                                          @this,
@@ -172,8 +175,9 @@ and open the template in the editor.
                                              update=":formPrincipal:txtTotal,:formPrincipal:tablaDetalle" >
                                 <p:confirm header="Confirmar" message="Quieres quitar el detalle?" icon="ui-icon-alert" />
                             </p:commandButton>
-                            <p:commandButton immediate="true" 
-                                             icon="ui-icon-pencil" 
+                            
+                            <b:commandButton look="info" value="" immediate="true" 
+                                             icon="glyphicon-pencil" 
                                              actionListener="#{ordenTrabajoMB.abrirDialogoEditar(detalle)}"
                                              update=":formDialogoDetalleEdit" />
 
@@ -199,8 +203,8 @@ and open the template in the editor.
                             <p:confirm header="Confirmar" message="Esta seguro que quiere grabar la orden de trabajo?" icon="ui-icon-alert" />
 
                         </p:commandButton>
-                        <p:commandButton value=" Cancelar "/>
-                        <p:commandButton immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
+                        <b:commandButton value=" Cancelar " look="danger"/>
+                        <b:commandButton look="warning" immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
                     </p:panelGrid>
                 </p:panel>
 

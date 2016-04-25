@@ -10,18 +10,19 @@ and open the template in the editor.
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
                 template="/template/plantillaEmpleado.xhtml">
 
 
     <ui:define name="contenido" >
 
-        <p:panel header="Trabajos Pendientes">
+        <p:panel header="Trabajos Pendientes"  >
 
             <h:form id="formPrincipal">                
                 <p:accordionPanel >
                     <!-- panel que contiene los filtros aplicados a las ordenes de trabajo-->
                     <p:tab title="filtros">
-                        <p:panelGrid columns="6" styleClass="panelNoBorder" >
+                        <p:panelGrid columns="7" styleClass="panelNoBorder" >
                             <p:outputLabel value="Ordenar por:"/>
 
                             <p:selectOneMenu value="#{trabajosPendientesMB.tipoFiltro}"  style="width:200px">
@@ -44,7 +45,8 @@ and open the template in the editor.
                                 <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
                             </p:selectOneMenu>
 
-                            <p:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" />
+                            <b:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" look="success" icon="glyphicon-triangle-right"/>
+                            <b:commandButton ajax="false" value="Default"  look="warning" icon="glyphicon glyphicon-share"/>
                         </p:panelGrid>
                         <p:separator style="background-color: green;background-image: none" />
                     </p:tab>
@@ -54,10 +56,13 @@ and open the template in the editor.
                 <ui:repeat id="repeatOrdenTrabajo" var="ordenTrabajo" value="#{trabajosPendientesMB.ordenTrabajoList}" >
                     <p:panelGrid columns="4" styleClass="panelNoBorder top-aligned-columns" >
 
-
-                        <p:commandButton value="REPARAR" style="height: 100px" actionListener="#{trabajosPendientesMB.reparacionRapida(ordenTrabajo)}" update=":formReparacionRapida" />                    
+                        <p:panelGrid columns="1">
+                            <b:commandButton value="" title="Reparacion rapida" style="height: 50px" actionListener="#{trabajosPendientesMB.reparacionRapida(ordenTrabajo)}" update=":formReparacionRapida" look="primary" icon="glyphicon-wrench" size="lg" />                    
+                            <b:commandButton value="" title="Reparacion detallada" style="height: 50px" actionListener="#{trabajosPendientesMB.reparacionRapida(ordenTrabajo)}" update=":formReparacionRapida"  look="info" icon="glyphicon-object-align-vertical" size="lg" />                    
+                            <b:commandButton value="@" title="Enviar email" style="height: 50px" actionListener="#{trabajosPendientesMB.reparacionRapida(ordenTrabajo)}" update=":formReparacionRapida"  look="warning" size="lg" />                    
+                        </p:panelGrid>
                         <p:panel >
-                            <p:panelGrid columns="2" style="width: 300px">
+                            <p:panelGrid columns="2" style="width: 270px">
                                 <p:outputLabel value="Orden No:"/>
                                 <p:outputLabel value="#{ordenTrabajo.idOrdenTrabajo}" style="font-weight: bold" />
 
@@ -84,9 +89,9 @@ and open the template in the editor.
                             </p:panelGrid>
 
 
-                            <p:panel style="background-image: none;background-color:#{ordenTrabajo.diferenciaDiasEntrega() == 0?'darkorange':ordenTrabajo.diferenciaDiasEntrega() > 0?'darkcyan':'red'}">
-                                <p:outputLabel value="#{ordenTrabajo.diferenciaDiasEntrega() >= 0 ? 'Tiempo Entrega:: ':'Tiempo Atraso: '}" style="color: white"/>
-                                <p:outputLabel value="#{ordenTrabajo.tiempoEntrega()}" style="font-weight: bold;color: white" >
+                            <p:panel style="background-image: none;border-width: 2px;border-color:#{ordenTrabajo.diferenciaDiasEntrega() == 0?'darkorange':ordenTrabajo.diferenciaDiasEntrega() > 0?'darkcyan':'red'}">
+                                <p:outputLabel value="#{ordenTrabajo.diferenciaDiasEntrega() >= 0 ? 'Tiempo Entrega:  ':'Tiempo Atraso:  '}" style="color: #000033;background-color: white;padding: 4px"/>
+                                <p:outputLabel value="#{ordenTrabajo.tiempoEntrega()}" style="font-weight: bold;color: #000033;background-color: white;padding: 4px" >
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </p:outputLabel>
                             </p:panel>

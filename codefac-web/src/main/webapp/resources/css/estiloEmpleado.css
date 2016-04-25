@@ -28,12 +28,12 @@ h1 , h2
 
 .panelContenido
 {
-    font-size: 10px;    
+   // font-size: 10px;    
 }
 
 .menuPanel
 {
-    font-size: 12px;
+    //font-size: 12px;
 }
 
 #cabecera

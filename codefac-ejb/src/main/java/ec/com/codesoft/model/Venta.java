@@ -111,8 +111,6 @@ public class Venta implements Serializable {
 
     @OneToMany(mappedBy = "codigoFactura")
     private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
-    
-    
 
     public Venta() {
 
@@ -282,7 +280,6 @@ public class Venta implements Serializable {
         this.cheque = cheque;
     }
 
-
     public List<DetalleVentaOrdenTrabajo> getDetalleVentaOrdenTrabajoList() {
         return detalleVentaOrdenTrabajoList;
     }
@@ -298,8 +295,6 @@ public class Venta implements Serializable {
     public void setUsuarioPermiso(Usuario usuarioPermiso) {
         this.usuarioPermiso = usuarioPermiso;
     }
-    
-    
 
     public String toStringDetalle() {
         String cadena = "";
@@ -311,6 +306,13 @@ public class Venta implements Serializable {
         List<DetalleProductoIndividual> listaIndividual = detalleProductoIndividualList;
         for (DetalleProductoIndividual detalle : listaIndividual) {
             cadena = cadena + detalle.getProductoIndividualCompra().getCodigoProducto().getNombre() + ",";
+        }
+
+        if (detalleVentaOrdenTrabajoList!=null) {
+            List<DetalleVentaOrdenTrabajo> listaOrden = detalleVentaOrdenTrabajoList;
+            for (DetalleVentaOrdenTrabajo detalle : listaOrden) {
+                cadena = cadena + detalle.getIdOrdenTrabajo().toStringDetalle()+ ",";
+            }
         }
 
         if (cadena.length() > 3) {

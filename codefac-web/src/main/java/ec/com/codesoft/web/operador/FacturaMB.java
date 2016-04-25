@@ -623,19 +623,18 @@ public class FacturaMB {
             subtotalRegistro = totalRegistro.multiply(ivaTotal);
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
-//                iva = new BigDecimal("0.0");
-//                // iva = iva.setScale(2, BigDecimal.ROUND_UP);
-//                total = subtotal;
-//                // total = total.setScale(2, BigDecimal.ROUND_UP);
-//                totalPagar = total;
-                iva = subtotal.multiply(ivaSubTotal);
-                total = subtotal.multiply(ivaTotal);
+                iva = new BigDecimal("0.0");
+                total = subtotal;
                 totalPagar = total;
+//                iva = subtotal.multiply(ivaSubTotal);
+//                total = subtotal.multiply(ivaTotal);
+//                totalPagar = total;
             } else {
-                iva = subtotal.multiply(ivaSubTotal);
-                //  iva = iva.setScale(2, BigDecimal.ROUND_UP);
-                total = subtotal.multiply(ivaTotal);
-                // total = total.setScale(2, BigDecimal.ROUND_UP);
+//                iva = subtotal.multiply(ivaSubTotal);
+//                total = subtotal.multiply(ivaTotal);
+//                totalPagar = total;
+                iva = new BigDecimal("0.0");
+                total = subtotal;
                 totalPagar = total;
             }
 
@@ -728,6 +727,9 @@ public class FacturaMB {
         if (tipoCliente.equals("F")) {
             //obtiene el ultimo codigo de la factura
             codigoDocumento = facturaServicio.getCodigoFactura("Factura");
+            clienteEncontrado.setNombre("");
+            clienteEncontrado.setTipo("");
+            cedCliente = "";
             maxItems = maxItemFactura;
 
 //            System.out.println(tipoCliente);
@@ -1182,7 +1184,10 @@ public class FacturaMB {
                             detalleOrdenTrabajo.setDescuento(detallesVenta.get(i).getValorDescuento());
                             detalleOrdenTrabajo.setEstado("Facturado");
                             detalleOrdenTrabajo.setIva(new BigDecimal("0.0"));
-                            //detalleOrdenTrabajo.setNick(null);
+                            OrdenTrabajo orden = new OrdenTrabajo();
+                            orden.setIdOrdenTrabajo(Integer.parseInt(detallesVenta.get(i).getCodigo()));
+                            detalleOrdenTrabajo.setIdOrdenTrabajo(orden);
+                            //detalleOrdenTrabajo.setNick;
                             detalleOrdenTrabajo.setTotal(detallesVenta.get(i).getTotal());
                             detallesOrdenTrabajo.add(detalleOrdenTrabajo);
                             numOrdenes = i + 1;
@@ -1243,7 +1248,7 @@ public class FacturaMB {
 
             try {
                 notaVenta.exportarPDF();
-                            //detallesFactura.setCantidad(1);
+                //detallesFactura.setCantidad(1);
                 //factura.agregarDetalle(detallesFactura);
                 //factura.exportarPDF();
             } catch (JRException ex) {
@@ -1284,7 +1289,7 @@ public class FacturaMB {
 
             try {
                 facturaReporte.exportarPDF();
-                            //detallesFactura.setCantidad(1);
+                //detallesFactura.setCantidad(1);
                 //factura.agregarDetalle(detallesFactura);
                 //factura.exportarPDF();
             } catch (JRException ex) {

@@ -9,6 +9,7 @@ and open the template in the editor.
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
                 xmlns:p="http://primefaces.org/ui">
 
     <p:panel id="panelFactura" header="Factura" style="width: 70%;text-align: left;margin: 0 auto;" >
@@ -18,7 +19,7 @@ and open the template in the editor.
             <div style="width: 100%;height: 50px">
                 <div style="float: left;width:100%;height: 50px" >
                     <h:panelGrid columns="5" style="margin-bottom:10px;margin-left:35%" cellpadding="8">
-                        <p:outputLabel for="tipoCl" value="Tipo: " />
+
                         <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
                             <f:selectItem itemLabel="Nota de Entrega" itemValue="C" />
                             <f:selectItem itemLabel="Factura" itemValue="F" />
@@ -32,12 +33,11 @@ and open the template in the editor.
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
 
-            <p:accordionPanel id="infDistr" styleClass="panelNoBorder" rendered="true">
-                <p:tab title="Información Cliente"> 
+            <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success">
                     <p:panelGrid columns="8" style="margin: 0 auto;" >
-                        <p:commandButton id="btnBuscarCli" value="B U S C A R " type="button" title="Buscar un Cliente en la Base de Datos" />
-
+                        <p:commandButton type="button" id="btnBuscarCli" value="Buscar"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
                         <p:overlayPanel widgetVar="overLayBuscarCliente" id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
+                            
                             <p:dataTable var="cliente" 
                                          value="#{facturaMB.clientesLista}"
                                          rows="10"
@@ -152,15 +152,12 @@ and open the template in the editor.
                             </p:panelGrid>
                         </p:panel>
                     </p:panelGrid>
-
-
-                </p:tab>
-            </p:accordionPanel>
+            </b:panel>
         </h:form>
         <h:form id="formCompra">
             <p:panel id="idAgregar" style="width:100%;" visible="true" header="Tipo de Detalle">
                 <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;margin-left: 5%">
-                    <p:commandButton id="btnAgregarProd" value="P R O D U C T O S " type="button" title="Agregar Productos a la Factura"  />
+                    <b:button id="btnAgregarProd" value="Productos " title="Agregar Productos a la Factura" look="info" icon="glyphicon glyphicon-shopping-cart" />  
                     <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
                                      rows="10"
@@ -184,7 +181,7 @@ and open the template in the editor.
                         </p:dataTable>
                     </p:overlayPanel>
 
-                    <p:commandButton id="btnAgregarOrden" value="S E R V I C I O S" type="button"  title="Agregar Servicio a la Factura" />
+                    <b:button id="btnAgregarOrden" value="Servicios"  title="Agregar Servicio a la Factura" look="info" icon="glyphicon glyphicon-briefcase"/>  
                     <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
                                      rows="10"
@@ -208,7 +205,8 @@ and open the template in the editor.
                         </p:dataTable>
                     </p:overlayPanel>
 
-                    <p:commandButton id="btnAgregarServicio" value="O. T R A B A J O" type="button" title="Agregar Ordenes de Trabajo a la Factura" />
+                    <b:button id="btnAgregarServicio" value="O.Trabajo"  title="Agregar Ordenes de Trabajo a la Factura" look="info" icon="
+                    glyphicon glyphicon-folder-close" />  
                     <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
                                      rows="10"

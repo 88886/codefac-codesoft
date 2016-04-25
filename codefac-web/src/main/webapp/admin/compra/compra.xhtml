@@ -31,6 +31,7 @@ and open the template in the editor.
                                     id="txtRuc" 
                                     onkeypress="return validarEnter(event, 'buscarDistribuidorJS');"  
                                     value="#{comprarMB.compra.ruc.ruc}" 
+                                    placeholder="Ingrese la cedula o ruc"
                                     />
 
                                 <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
@@ -69,17 +70,17 @@ and open the template in the editor.
 
                         <!-- Datos del distribuidor para mostrar	 -->
                         <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%;text-align: left">
-                            <p:outputLabel value="Nombre: " />
-                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}" style="font-weight: bold" />
+                            <b:badge value="Nombre: " />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}"  />
 
-                            <p:outputLabel value="Direccion: "/>
-                            <p:outputLabel value="#{comprarMB.compra.ruc.direccion}" style="font-weight: bold" />
+                            <b:badge value="Direccion: "/>
+                            <p:outputLabel value="#{comprarMB.compra.ruc.direccion}"  />
 
-                            <p:outputLabel value="Telefono: "/>
-                            <p:outputLabel value="#{comprarMB.compra.ruc.telefono}" style="font-weight: bold" />
+                            <b:badge value="Telefono: " style="background-color: #0087ca;color: white"/>
+                            <p:outputLabel value="#{comprarMB.compra.ruc.telefono}"  />
 
-                            <p:outputLabel value="Email: "/>
-                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}" style="font-weight: bold" />
+                            <b:badge value="Email: " style="background-color: #0087ca;color: white"/>
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}"  />
 
                         </p:panelGrid>
 
@@ -89,7 +90,11 @@ and open the template in the editor.
                         <p:panel >
                             <p:panelGrid columns="4">
                                 <p:outputLabel value="No Documento: "/>
-                                <p:inputText id="txtNumeroDocumento" onkeypress="return noProcesar(event);" value="#{comprarMB.compra.codigoDocumento}" />
+                                <p:inputText 
+                                    placeholder="Numero de Documento"
+                                    id="txtNumeroDocumento" 
+                                    onkeypress="return noProcesar(event);" 
+                                    value="#{comprarMB.compra.codigoDocumento}" />
 
                                 <p:outputLabel value="Fecha Compra:" />
                                 <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="MM/dd/yyyy HH:mm:ss" value="#{comprarMB.compra.fechaIngreso}" title="Fecha cuando se realizo la compra" />
@@ -109,6 +114,7 @@ and open the template in the editor.
 
                             <p:outputLabel value="Codigo General:  "/>
                             <p:inputText 
+                                placeholder="Codigo del Producto"
                                 id="txtCodigoDetalle" 
                                 onkeypress="return validarEnter(event, 'btnValidar');" 
                                 value="#{comprarMB.codigoDetalle}" />

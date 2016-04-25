@@ -154,7 +154,7 @@ public class VentaFacade extends AbstractFacade<Venta> {
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
             List<DetalleVentaOrdenTrabajo> detalles = (List<DetalleVentaOrdenTrabajo>) query.getResultList();
-            //  System.out.println("facade"+intereses);
+             System.out.println("facadeVenta"+detalles);
             return detalles;
         } catch (NoResultException e) {
             return null;
