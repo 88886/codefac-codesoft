@@ -21,8 +21,8 @@ and open the template in the editor.
                     <h:panelGrid columns="5" style="margin-bottom:10px;margin-left:35%" cellpadding="8">
 
                         <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
-                            <f:selectItem itemLabel="Nota de Entrega" itemValue="C" />
-                            <f:selectItem itemLabel="Factura" itemValue="F" />
+                            <f:selectItem itemLabel=" Nota de Entrega " itemValue="C" />
+                            <f:selectItem itemLabel=" Factura " itemValue="F" />
                         </p:selectOneRadio>
                         <p:ajax event="click" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
                     </h:panelGrid>
@@ -33,125 +33,102 @@ and open the template in the editor.
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
 
-            <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success">
-                    <p:panelGrid columns="8" style="margin: 0 auto;" >
-                        <p:commandButton type="button" id="btnBuscarCli" value="Buscar"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
-                        <p:overlayPanel widgetVar="overLayBuscarCliente" id="movieBuscarCli" for="btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
-                            
-                            <p:dataTable var="cliente" 
-                                         value="#{facturaMB.clientesLista}"
-                                         rows="10"
-                                         selectionMode="single" 
-                                         scrollable="true"
-                                         selection="#{facturaMB.clienteSeleccionado}"
-                                         rowKey="#{cliente.cedulaRuc}"
-                                         scrollHeight="200">
+            <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success" >
+                <p:panelGrid columns="8" style="margin: 0 auto;" >
+                    <p:commandButton  id="btnBuscarCli" value="Buscar"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()" />  
+
+                    <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
+                    <p:inputText id="cedCliente" 
+                                 value="#{facturaMB.cedCliente}" 
+                                 required="true" 
+                                 requiredMessage="Campo necesario"
+                                 onkeypress="return validarEnter(event, 'btnBuscarCliente');"/>
+                    <p:message for="cedCliente" />
+                    <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form"/>
+
+                    <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" />
+                </p:panelGrid>
+                <p:spacer style="background-image: none;background-color: #009966"/>
+                <p:separator/>
+                <p:panelGrid columns="4" id="panelGridDistr" style="width: 100%">
+                    <p:outputLabel value=" "/>
+                    <p:outputLabel value=" "/>
+
+                    <p:outputLabel value="Codigo Documento: "/>
+                    <p:inputText value="#{facturaMB.codigoDocumento}" />
+
+                    <p:outputLabel  value="Nombre:      " />
+                    <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
 
 
-                                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente}" update=":form:infDistr:panelGridDistr,:form:infDistr:cedCliente,@this" />       
-                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectCliente}"/>
+                    <p:outputLabel value="Teléfono:" />
+                    <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
 
-                                <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}" >
-                                    <h:outputText value="#{cliente.cedulaRuc}" />
-                                </p:column>
-                                <p:column headerText="Nombre" filterBy="#{cliente.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                    <h:outputText value="#{cliente.nombre}" />
-                                </p:column>
+                    <p:outputLabel  value="Celular:" />
+                    <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
 
-                            </p:dataTable>
-                        </p:overlayPanel>
-                        <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
-                        <p:inputText id="cedCliente" 
-                                     value="#{facturaMB.cedCliente}" 
-                                     required="true" 
-                                     requiredMessage="Campo necesario"
-                                     onkeypress="return validarEnter(event, 'btnBuscarCliente');"/>
-                        <p:message for="cedCliente" />
-                        <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form:infDistr"/>
+                    <p:outputLabel  value="Dirección:" />
+                    <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
 
-                        <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" />
-                    </p:panelGrid>
-                    <p:spacer style="background-image: none;background-color: #009966"/>
-                    <p:separator/>
-                    <p:panelGrid columns="4" id="panelGridDistr" style="width: 100%">
-                        <p:outputLabel value=" "/>
-                        <p:outputLabel value=" "/>
-
-                        <p:outputLabel value="Codigo Documento: "/>
-                        <p:inputText value="#{facturaMB.codigoDocumento}" />
-
-                        <p:outputLabel  value="Nombre:      " />
-                        <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
+                    <p:outputLabel value="Correo:" />
+                    <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
 
 
-                        <p:outputLabel value="Teléfono:" />
-                        <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
+                    <p:outputLabel  value="Notas" />
+                    <p:outputLabel id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;font-weight: bold" />
 
-                        <p:outputLabel  value="Celular:" />
-                        <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
+                    <p:outputLabel  value="Tipo Venta" />
+                    <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}" title="Escojer el tipo de Pago">
+                        <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
+                        <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
+                        <f:selectItem itemLabel="Credito" itemValue="Credito" />
+                        <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
+                        <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
+                    </p:selectOneMenu>
 
-                        <p:outputLabel  value="Dirección:" />
-                        <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
+                    <p:outputLabel/>
+                    <p:panel  rendered="#{facturaMB.estBanco}" id="idBanco">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel for="tipoBanco"  value="Banco :" />
+                            <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="width:125px">
+                                <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                                <p:ajax event="change" listener="#{facturaMB.devolverBancoNombre()}" update=":form:infDistr"/>        
+                            </p:selectOneMenu>  
+                        </p:panelGrid>
 
-                        <p:outputLabel value="Correo:" />
-                        <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
+                        <p:panelGrid columns="2" id="idMeses">
+                            <p:outputLabel for="mesesBanco"  value="Meses :" />
+                            <p:selectOneMenu  id="mesesBanco" value="#{facturaMB.mesSeleccionado}" style="width:125px">
+                                <f:selectItem itemLabel="Seleccione el Mes"/>
+                                <f:selectItems var="meses" value="#{facturaMB.intereses}" itemLabel="#{meses.meses} meses" itemValue="#{meses.meses}" />
+                                <p:ajax event="change" listener="#{facturaMB.calcularlInteres()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
+                            </p:selectOneMenu>  
+                        </p:panelGrid>
 
+                        <p:panelGrid id="idCampoInteres" columns="2">
+                            <p:outputLabel value="Interés :"/>
+                            <p:outputLabel value="#{facturaMB.campoInteres}"  style="width:25%;font-weight: bold"/>
+                        </p:panelGrid>
+                    </p:panel>
 
-                        <p:outputLabel  value="Notas" />
-                        <p:outputLabel id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;font-weight: bold" />
+                    <p:panel  rendered="#{facturaMB.estCheue}" id="idCheque">
+                        <p:panelGrid columns="4">
+                            <p:outputLabel for="bancoCheques" value="Banco:" />
+                            <p:selectOneMenu  id="bancoCheques" value="#{facturaMB.nombreBanco}" style="width:125px">
+                                <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                            </p:selectOneMenu>  
+                            <p:outputLabel value="No Cheque:" />
+                            <p:inputText  value="#{facturaMB.NCheque}"/>
+                        </p:panelGrid>
+                    </p:panel>
 
-                        <p:outputLabel  value="Tipo Venta" />
-                        <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}" title="Escojer el tipo de Pago">
-                            <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
-                            <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
-                            <f:selectItem itemLabel="Credito" itemValue="Credito" />
-                            <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
-                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
-                        </p:selectOneMenu>
-
-                        <p:outputLabel/>
-                        <p:panel  rendered="#{facturaMB.estBanco}" id="idBanco">
-                            <p:panelGrid columns="2">
-                                <p:outputLabel for="tipoBanco"  value="Banco :" />
-                                <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="width:125px">
-                                    <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
-                                    <p:ajax event="change" listener="#{facturaMB.devolverBancoNombre()}" update=":form:infDistr"/>        
-                                </p:selectOneMenu>  
-                            </p:panelGrid>
-
-                            <p:panelGrid columns="2" id="idMeses">
-                                <p:outputLabel for="mesesBanco"  value="Meses :" />
-                                <p:selectOneMenu  id="mesesBanco" value="#{facturaMB.mesSeleccionado}" style="width:125px">
-                                    <f:selectItem itemLabel="Seleccione el Mes"/>
-                                    <f:selectItems var="meses" value="#{facturaMB.intereses}" itemLabel="#{meses.meses} meses" itemValue="#{meses.meses}" />
-                                    <p:ajax event="change" listener="#{facturaMB.calcularlInteres()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
-                                </p:selectOneMenu>  
-                            </p:panelGrid>
-
-                            <p:panelGrid id="idCampoInteres" columns="2">
-                                <p:outputLabel value="Interés :"/>
-                                <p:outputLabel value="#{facturaMB.campoInteres}"  style="width:25%;font-weight: bold"/>
-                            </p:panelGrid>
-                        </p:panel>
-
-                        <p:panel  rendered="#{facturaMB.estCheue}" id="idCheque">
-                            <p:panelGrid columns="4">
-                                <p:outputLabel for="bancoCheques" value="Banco:" />
-                                <p:selectOneMenu  id="bancoCheques" value="#{facturaMB.nombreBanco}" style="width:125px">
-                                    <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
-                                </p:selectOneMenu>  
-                                <p:outputLabel value="No Cheque:" />
-                                <p:inputText  value="#{facturaMB.NCheque}"/>
-                            </p:panelGrid>
-                        </p:panel>
-
-                        <p:panel id="idCreditoDirecto" rendered="#{facturaMB.creditoDirecto}">
-                            <p:panelGrid columns="2">
-                                <p:outputLabel for="fechaPago" value="Fecha Màximo Pago" />
-                                <p:calendar id="fechaPago" value="#{facturaMB.fechaFinal}" style="font-size:10px"/>
-                            </p:panelGrid>
-                        </p:panel>
-                    </p:panelGrid>
+                    <p:panel id="idCreditoDirecto" rendered="#{facturaMB.creditoDirecto}">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel for="fechaPago" value="Fecha Màximo Pago" />
+                            <p:calendar id="fechaPago" value="#{facturaMB.fechaFinal}" style="font-size:10px"/>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:panelGrid>
             </b:panel>
         </h:form>
         <h:form id="formCompra">
@@ -206,7 +183,7 @@ and open the template in the editor.
                     </p:overlayPanel>
 
                     <b:button id="btnAgregarServicio" value="O.Trabajo"  title="Agregar Ordenes de Trabajo a la Factura" look="info" icon="
-                    glyphicon glyphicon-folder-close" />  
+                              glyphicon glyphicon-folder-close" />  
                     <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
                                      rows="10"
@@ -389,6 +366,33 @@ and open the template in the editor.
             </h:form>
         </p:panelGrid>
     </p:dialog>
+
+
+    <p:overlayPanel widgetVar="overLayBuscarCliente"  for=":form:btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
+        <h:form>
+            <p:dataTable var="cliente" 
+                         value="#{facturaMB.clientesLista}"
+                         rows="10"
+                         selectionMode="single" 
+                         scrollable="true"
+                         selection="#{facturaMB.clienteSeleccionado}"
+                         rowKey="#{cliente.cedulaRuc}"
+                         scrollHeight="200">
+
+
+                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente}" update=":form:panelGridDistr,:form:cedCliente,@this" />       
+                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectCliente}"/>
+
+                <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}" >
+                    <h:outputText value="#{cliente.cedulaRuc}" />
+                </p:column>
+                <p:column headerText="Nombre" filterBy="#{cliente.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                    <h:outputText value="#{cliente.nombre}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </p:overlayPanel>
 
     <!--Textos en botones -->
 
