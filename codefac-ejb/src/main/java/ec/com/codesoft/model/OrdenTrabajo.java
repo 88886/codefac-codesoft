@@ -105,7 +105,7 @@ public class OrdenTrabajo implements Serializable {
     public String toStringDetalle() {
         String texto = "";
         for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) {
-            texto += detalle.getEquipo()+ ":" +detalle.getDiagnostico() + ",";
+            texto += detalle.getEquipo()+ ":" +detalle.getIdOrdenTrabajo().getDiagnostico() + ",";
         }
         return texto;
     }
