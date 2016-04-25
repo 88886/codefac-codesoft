@@ -10,6 +10,7 @@ and open the template in the editor.
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
                 template="/template/plantilladmin.xhtml">
 
 
@@ -111,8 +112,8 @@ and open the template in the editor.
                                 id="txtCodigoDetalle" 
                                 onkeypress="return validarEnter(event, 'btnValidar');" 
                                 value="#{comprarMB.codigoDetalle}" />
-                            
-                            
+
+
                             <p:commandButton oncomplete="PF('widgetVarCatalogo').loadContents()" id="btnEncontrarCatalogo" icon="ui-icon-search" />
 
                             <p:tooltip style="font-size: 11px" id="toolTipGrow" for="btnEncontrarCatalogo" value="Buscar Productos"
@@ -242,16 +243,16 @@ and open the template in the editor.
                         <p:panelGrid columns="2" style="margin: 0 auto">                            
 
                             <p:commandButton 
-                                partialSubmit="true"
+                                
                                 process="@this,:formDetalleDistribuidor:txtNumeroDocumento,:formDetalleDistribuidor:txtFechaIngreso"                                              
                                 update=":formDetalleDistribuidor:txtNumeroDocumento"
                                 value="Comprar" 
-                                style="background-image: none;background-color: darkgreen" 
+
                                 actionListener="#{comprarMB.ejecutarCompra()}"  >
 
                             </p:commandButton>
-                            <p:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar">                                
-                            </p:commandButton>
+                            <b:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar" look="danger">                                
+                            </b:commandButton>
                         </p:panelGrid>
                     </p:panel>
 
@@ -333,7 +334,7 @@ and open the template in the editor.
                             <p:panelGrid columns="2" >
                                 <p:inputText id="txtCambiarPrecio" value="#{comprarMB.cambiarCosto}" style="width: 80px;" />
                                 <p:selectOneMenu id="cmbIVAPrecio" value="#{comprarMB.ivaCosto}" >
-                                    
+
                                     <f:selectItem itemLabel="con Iva" itemValue="+" />                            
                                     <f:selectItem itemLabel="sin Iva " itemValue="-" />                                    
                                 </p:selectOneMenu>

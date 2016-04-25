@@ -78,6 +78,7 @@ public class SessionMB implements Serializable {
     }
 
     public String iniciarSesion() {
+        System.out.println("verificando inicio session ...");
         FacesContext context = FacesContext.getCurrentInstance();
         Usuario usuarioAux = seguridadServicio.loguear(nick, clave);
         //System.out.println("Entro");
