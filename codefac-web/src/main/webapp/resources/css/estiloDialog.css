@@ -27,12 +27,12 @@ h1 , h2
 
 .panelContenido
 {
-    font-size: 10px;    
+    //font-size: 10px;    
 }
 
 .menuPanel
 {
-    font-size: 12px;
+    //font-size: 12px;
 }
 
 #cabecera
@@ -74,7 +74,7 @@ h1 , h2
     height: 25px;
     color: white;
     text-align: center;
-    font-size: 13px;
+    //font-size: 13px;
     position: fixed;
     bottom: 0px;
     width: 100%;
