@@ -94,7 +94,7 @@ h1 , h2
 
 .imagenCabecera2
 {
-    
+
     width: 500px;
     height: 75px;
     float: right;
@@ -132,28 +132,28 @@ h1 , h2
 .customTitleBar > .ui-panel-titlebar {
     background: #485798;
     color: white;
-    }
-   
+}
+
 
 .filaRoja
 {
-      background: none repeat scroll 0 0 ;
-      background-color: wheat;
-      font-weight: bold;
+    background: none repeat scroll 0 0 ;
+    background-color: wheat;
+    font-weight: bold;
 }
 
 .greenColoredPanel .ui-panel-titlebar 
 {
-   color: white;
-   background-image: none;
-   background-color: #009966;
+    color: white;
+    background-image: none;
+    background-color: #009966;
 }
 
 .whiteColoredPanel .ui-panel-titlebar 
 {
-   color: #485798;
-   background-image: none;
-   background-color: white;
+    color: #485798;
+    background-image: none;
+    background-color: white;
 }
 
 .ui-panelgrid td 
@@ -166,3 +166,50 @@ h1 , h2
     height:16px;
     width:16px;
 }
+
+.ui-botonAzul.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_azul.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+}
+.ui-botonAzul.ui-state-hover {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_azul2.png");
+    background-color: #999999 ;
+    color: #485798;
+    font-weight: bold;
+}
+.ui-botonAzul.ui-state-active {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_azul.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+}
+
+.ui-botonVerde.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_verde.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+}
+
+.ui-botonVerde.ui-state-hover {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_verde2.png");
+    background-color: #999999 ;
+    color: #009966;
+    font-weight: bold;
+}
+
+.ui-botonConchaVino.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_conchaVino.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+}
+

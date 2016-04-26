@@ -49,7 +49,8 @@ and open the template in the editor.
 
                         <!-- Boton que abre un dialogo para buscar el cliente -->
                         
-                        <p:commandButton partialSubmit="true" 
+                        <p:commandButton partialSubmit="true"
+                                         styleClass="ui-botonConchaVino"
                                          process="
                                          @this,
                                          :formPrincipal:txtTotal,
@@ -239,13 +240,13 @@ and open the template in the editor.
 
 
                         <p:outputLabel value="Nombre: " />
-                        <p:inputText id="txtEquipo" value="#{ordenTrabajoMB.detalleOrdenTrabajo.equipo}" required="true" >
+                        <p:inputText id="txtEquipo" value="#{ordenTrabajoMB.detalleOrdenTrabajo.equipo}" required="true" placeholder="Ingrese el equipo" >
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="txtEquipo" display="icon" />
 
                         <p:outputLabel value="Descripcion: " />
-                        <p:inputTextarea id="txtDescripcion" value="#{ordenTrabajoMB.detalleOrdenTrabajo.descripcion}" />
+                        <p:inputTextarea id="txtDescripcion" value="#{ordenTrabajoMB.detalleOrdenTrabajo.descripcion}" placeholder="Ingrse la descripcion del equipo" />
                         <p:message for="txtDescripcion" display="icon" />
 
                         <p:outputLabel value="Problema: " />
@@ -259,7 +260,7 @@ and open the template in the editor.
                         <p:message for="txtTrabajoRealizar" display="icon" />
 
                         <p:outputLabel value="Precio: " />
-                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" style="width: 80px" >
+                        <p:inputText id="txtPrecio" value="#{ordenTrabajoMB.detalleOrdenTrabajo.precio}" required="true" style="width: 80px" >
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="txtPrecio" display="icon" />
@@ -330,7 +331,9 @@ and open the template in the editor.
                     </p:panelGrid>
                     <p:spacer height="10px"/>
                     <div style="text-align: center">
-                        <p:commandButton validateClient="true"  partialSubmit="true" process=":formDialogoDetalle,:formPrincipal:txtTotal" value="Editar" actionListener="#{ordenTrabajoMB.agregarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregarEdit,mensajeGeneral2Edit" />
+                       
+                        <p:commandButton validateClient="true"  partialSubmit="true" process=":formDialogoDetalleEdit,:formPrincipal:txtTotal" value="Editar" actionListener="#{ordenTrabajoMB.editarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregarEdit,mensajeGeneral2Edit" />
+                        <p:commandButton immediate="true"  value="Cancelar" />
                     </div>
                 </h:form>
             </p:dialog>
@@ -369,7 +372,7 @@ and open the template in the editor.
                     global="true" 
                     showEffect="fade" 
                     hideEffect="fade" 
-                    style="font-size: 12px">
+                    >
 
                     <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
