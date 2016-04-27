@@ -140,6 +140,7 @@ public class FacturaMB {
     private Integer maxItemNota;
     private Integer maxItems;
     private boolean mostrarDescuentoManual;
+    private String tipoDescuento;
 
     private Venta ventaImprimir; //venta q se facturara
     //
@@ -235,6 +236,7 @@ public class FacturaMB {
         System.out.println(ivaTotal + " -- " + ivaSubTotal);
 
         descuentoManual = new BigDecimal("0.0");
+        tipoDescuento = "porcentaje";
         //numero de items maximo
         maxItemFactura = sistemaServicio.getConfiguracion().getMaxItemFactura();
         maxItemNota = sistemaServicio.getConfiguracion().getMaxItemNota();
@@ -615,53 +617,75 @@ public class FacturaMB {
 
         if (detallesVenta.size() > maxItems - 1) {
 
+            estadoDialogo = false;
+            estadoDialogoGeneral = false;
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia...!", "Número Máximo de Detalles Alcanzado..!");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
         } else {
-            DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
-            totalRegistro = ordenTrabajoSeleccionada.getTotal();
-            subtotalRegistro = totalRegistro.multiply(ivaTotal);
-            subtotal = subtotal.add(totalRegistro);
-            if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
-                iva = new BigDecimal("0.0");
-                total = subtotal;
-                totalPagar = total;
-//                iva = subtotal.multiply(ivaSubTotal);
-//                total = subtotal.multiply(ivaTotal);
-//                totalPagar = total;
+            if (tipoCliente == "" || tipoCliente == null) {
+                FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                cerrarDialogo();
+                cerrarDialogoG();
+            } else if (clienteEncontrado.getCedulaRuc() == null || clienteEncontrado.getCedulaRuc() == "") {
+                estadoDialogo = false;
+                estadoDialogoGeneral = false;
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "Ingrese el Cliente!");
+                RequestContext.getCurrentInstance().showMessageInDialog(message);
             } else {
+
+                cerrarDialogoG();
+                DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
+                totalRegistro = ordenTrabajoSeleccionada.getTotal().divide(ivaTotal, 2, BigDecimal.ROUND_FLOOR);
+                subtotalRegistro = totalRegistro.multiply(ivaTotal);
+                subtotal = subtotal.add(totalRegistro);
+                if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
+                    iva = new BigDecimal("0.0");
+                    total = subtotal;
+                    totalPagar = total;
+                    devolverDescuento(new BigDecimal("0.0"));
 //                iva = subtotal.multiply(ivaSubTotal);
 //                total = subtotal.multiply(ivaTotal);
 //                totalPagar = total;
-                iva = new BigDecimal("0.0");
-                total = subtotal;
-                totalPagar = total;
+                } else {
+//                iva = subtotal.multiply(ivaSubTotal);
+//                total = subtotal.multiply(ivaTotal);
+//                totalPagar = total;
+                    iva = new BigDecimal("0.0");
+                    total = subtotal;
+                    totalPagar = total;
+                    devolverDescuento(new BigDecimal("0.0"));
+                }
+
+//                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
+//                        ordenTrabajoSeleccionada.toStringDetalle(),
+//                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
+                  DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
+                        ordenTrabajoSeleccionada.toStringDetalle(),
+                        totalRegistro, totalRegistro);
+
+                Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
+                Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
+                Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
+                //System.out.println(catalogoSeleccionado.getDescuento());
+                Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
+                List<Descuentos> descuentos = new ArrayList<Descuentos>();
+                descuentos.add(precioMayorista);
+                descuentos.add(precioDescuento);
+                descuentos.add(dcto);
+                descuentos.add(dctoMayorista);
+                detalles.setValorVerdaderoMayorista(ordenTrabajoSeleccionada.getTotal());
+                detalles.setValorVerdaderoPVP(ordenTrabajoSeleccionada.getTotal());
+                detalles.setDescuentos(descuentos);
+                detalles.setPrecioSeleccionado("PVP");
+                detalles.setEscogerDescuento("No");
+                detalles.setTipoDetalle("Orden Trabajo");
+                detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
+                detallesVenta.add(detalles);
+                System.out.println("Detallles: " + detallesVenta);
             }
-
-            DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
-                    ordenTrabajoSeleccionada.toStringDetalle(),
-                    ordenTrabajoSeleccionada.getTotal(), totalRegistro);
-
-            Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
-            Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
-            Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
-            //System.out.println(catalogoSeleccionado.getDescuento());
-            Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
-            List<Descuentos> descuentos = new ArrayList<Descuentos>();
-            descuentos.add(precioMayorista);
-            descuentos.add(precioDescuento);
-            descuentos.add(dcto);
-            descuentos.add(dctoMayorista);
-            detalles.setValorVerdaderoMayorista(ordenTrabajoSeleccionada.getTotal());
-            detalles.setValorVerdaderoPVP(ordenTrabajoSeleccionada.getTotal());
-            detalles.setDescuentos(descuentos);
-            detalles.setPrecioSeleccionado("PVP");
-            detalles.setEscogerDescuento("No");
-            detalles.setTipoDetalle("Orden Trabajo");
-            detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
-            detallesVenta.add(detalles);
-            System.out.println("Detallles: " + detallesVenta);
         }
+
     }
 
     public void onRowUnSelectOrden(SelectEvent event) {
@@ -1428,36 +1452,55 @@ public class FacturaMB {
 
     }
 
-    public void calcularDescuento() {
-        BigDecimal descuentoPorcentaje = descuento.divide(new BigDecimal(100)).add(new BigDecimal(1));
+    public void devolverDescuento(BigDecimal descuentoCalcular) {
+        BigDecimal descuentoPorcentaje = descuentoCalcular.divide(new BigDecimal(100)).add(new BigDecimal(1));
         System.out.println("porcetaje " + descuentoPorcentaje);
         BigDecimal subTotalDescuento = subtotal.divide(descuentoPorcentaje, 2, BigDecimal.ROUND_FLOOR);
         System.out.println(subTotalDescuento);
-
-        // subTotalDescuento.setScale(2, BigDecimal.ROUND_UP);
         iva = subTotalDescuento.multiply(ivaSubTotal, MathContext.DECIMAL32);
         iva = iva.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
-
-        // iva.setScale(2, BigDecimal.ROUND_UP);
         total = subTotalDescuento.multiply(ivaTotal, MathContext.DECIMAL32);
         total = total.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
-
-        //total.setScale(2, BigDecimal.ROUND_UP);
         totalPagar = total;
-//        if (descuento != null) {
-//            if (descuento.equals("")) {
-//                descuento=new BigDecimal("0.00");
-//                cargarDetalles();
-//            }
-//        } else {
-//            descuento=new BigDecimal("0.00");
-//            cargarDetalles();
-//        }
-//        total = subtotal.subtract(descuento);
-//        iva = subtotal.multiply(ivaSubTotal);
-//        total = subtotal.multiply(ivaTotal);
-//        totalPagar = total;
+    }
 
+    public void calcularDescuento() {
+
+        if (tipoDescuento.equals("porcentaje")) {
+            if (descuento.equals(0)) {
+            } else {
+                devolverDescuento(descuento);
+            }
+        } else {
+            System.out.println("totalPagar" + descuento);
+
+            if (descuento.equals(0)) {
+                System.out.println("Cargar Detalles");
+                cargarDetalles();
+            } else {
+
+                totalPagar = totalPagar.subtract(descuento);
+                subtotal = totalPagar.divide(ivaTotal, 2, BigDecimal.ROUND_FLOOR);
+                System.out.println("Total " + totalPagar + " Subtotal" + subtotal);
+                //subtotal=totalPagar.divide(i);
+                BigDecimal descuentoCalcular = new BigDecimal("0.0");
+                //descuentoCalcular=(descuento.multiply(new BigDecimal("100"))).divide(subtotal,2,BigDecimal.ROUND_FLOOR);
+                devolverDescuento(descuentoCalcular);
+            }
+        }
+
+    }
+    /*
+     escojer tipo descuento 
+     */
+
+    public void escojerTipoDescuento() {
+        System.out.println("Desceunto" + tipoDescuento);
+        if (tipoDescuento.equals("porcentaje")) {
+            tipoDescuento = "porcentaje";
+        } else {
+            tipoDescuento = "directo";
+        }
     }
 
     // metodo para escojer el tipo de pago
@@ -1983,6 +2026,14 @@ public class FacturaMB {
 
     public void setMostrarDescuentoManual(boolean mostrarDescuentoManual) {
         this.mostrarDescuentoManual = mostrarDescuentoManual;
+    }
+
+    public String getTipoDescuento() {
+        return tipoDescuento;
+    }
+
+    public void setTipoDescuento(String tipoDescuento) {
+        this.tipoDescuento = tipoDescuento;
     }
 
     //get y set del sesion 

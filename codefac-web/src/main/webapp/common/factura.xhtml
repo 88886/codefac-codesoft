@@ -12,336 +12,346 @@ and open the template in the editor.
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:p="http://primefaces.org/ui">
 
-    <p:panel id="panelFactura" header="Factura" style="width: 70%;text-align: left;margin: 0 auto;" >
-        <h:form id="tipoCliente">
-            <p:remoteCommand name="onloadE" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
-            <p:remoteCommand name="onloadG" action="#{facturaMB.verificarDialogoG()}" autoRun="true" />
-            <div style="width: 100%;height: 50px">
-                <div style="float: left;width:100%;height: 50px" >
-                    <h:panelGrid columns="5" style="margin-bottom:10px;margin-left:35%" cellpadding="8">
-
-                        <p:selectOneRadio id="tipoCl" value="#{facturaMB.tipoCliente}">
-                            <f:selectItem itemLabel=" Nota de Entrega " itemValue="C" />
-                            <f:selectItem itemLabel=" Factura " itemValue="F" />
-                        </p:selectOneRadio>
-                        <p:ajax event="click" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
-                    </h:panelGrid>
+    <p:panel id="panelFactura" header="Factura" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
+        <div style="text-align:center">
+            <h:form id="tipoCliente">
+                <p:remoteCommand name="onloadE" action="#{facturaMB.verificarDialogo()}" autoRun="true" />
+                <p:remoteCommand name="onloadG" action="#{facturaMB.verificarDialogoG()}" autoRun="true" />
+                <div style="width: 100%;height: 50px">
+                    <div style="float: left;width:100%;height: 50px" >
+                        <h:panelGrid columns="2" style="margin-bottom:10px;margin-left: 30%" cellpadding="5">
+                            <b:badge  value="Tipo Documento: "  style="background-color: #999999;color: white"/>
+                            <p:selectOneButton value="#{facturaMB.tipoCliente}">
+                                <f:selectItem itemLabel=" Nota de Entrega " itemValue="C" />
+                                <f:selectItem itemLabel=" Factura " itemValue="F" />
+                                <p:ajax event="change" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
+                            </p:selectOneButton>
+                        </h:panelGrid>
+                    </div>
                 </div>
-            </div>
 
-        </h:form>
-        <h:form id="form">
-            <p:growl id="msgs" showDetail="true" />
+            </h:form>
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true" />
 
-            <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success" >
-                <p:panelGrid columns="8" style="margin: 0 auto;" >
-                    <p:commandButton  id="btnBuscarCli" value="Buscar"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
+                <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success" >
+                    <p:panelGrid columns="8" style="margin: 0 auto;" >
+                        <p:commandButton  id="btnBuscarCli" icon="ui-icon-search" style="background-image: none;background-color: #3366ff;color: #ffffff"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
 
-                    <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
-                    <p:inputText id="cedCliente" 
-                                 value="#{facturaMB.cedCliente}" 
-                                 required="true" 
-                                 requiredMessage="Campo necesario"
-                                 onkeypress="return validarEnter(event, 'btnBuscarCliente');"/>
-                    <p:message for="cedCliente" />
-                    <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form"/>
+                        <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
+                        <p:inputText id="cedCliente" 
+                                     value="#{facturaMB.cedCliente}" 
+                                     required="true" 
+                                     requiredMessage="Campo necesario"
+                                     onkeypress="return validarEnter(event, 'btnBuscarCliente');"/>
+                        <p:message for="cedCliente" />
+                        <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form"/>
 
-                    <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" />
-                </p:panelGrid>
-                <p:spacer style="background-image: none;background-color: #009966"/>
-                <p:separator/>
-                <p:panelGrid columns="4" id="panelGridDistr" style="width: 100%">
-                    <p:outputLabel value=" "/>
-                    <p:outputLabel value=" "/>
+                        <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" />
+                    </p:panelGrid>
+                    <p:spacer style="background-image: none;background-color: #009966"/>
+                    <p:separator/>
+                    <p:panelGrid columns="4" id="panelGridDistr" style="width:80%">
+                        <p:outputLabel value=" "/>
+                        <p:outputLabel value=" "/>
 
-                    <b:badge  value="Codigo Documento: " style="background-color: #0087ca;color: white"/>
-                    <p:inputText value="#{facturaMB.codigoDocumento}" />
+                        <p:outputLabel  value="Codigo Documento: " style="color: #0087ca"/>
+                        <p:inputText value="#{facturaMB.codigoDocumento}" />
 
-                    <b:badge  value="Nombre:      "  style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
-
-
-                    <b:badge value="Teléfono:" style="background-color: #0087ca;color: white" />
-                    <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
-
-                    <b:badge  value="Celular:" style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
-
-                    <b:badge  value="Dirección:" style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
-
-                    <b:badge value="Correo:" style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
+                        <b:badge  value="Nombre:      "  style="background-color: #0087ca;color: white"/>
+                        <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
 
 
-                    <b:badge  value="Notas" style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;font-weight: bold" />
+                        <b:badge value="Teléfono:" style="background-color: #0087ca;color: white" />
+                        <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
 
-                    <b:badge  value="Tipo Venta"  style="background-color: #0087ca;color: white"/>
-                    <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}" title="Escojer el tipo de Pago">
-                        <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
-                        <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
-                        <f:selectItem itemLabel="Credito" itemValue="Credito" />
-                        <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
-                        <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
-                    </p:selectOneMenu>
+                        <b:badge  value="Celular:" style="background-color: #999999;color: white"/>
+                        <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
 
-                    <p:outputLabel/>
-                    <p:panel  rendered="#{facturaMB.estBanco}" id="idBanco">
-                        <p:panelGrid columns="2">
-                            <p:outputLabel for="tipoBanco"  value="Banco :" />
-                            <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="width:125px">
-                                <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
-                                <p:ajax event="change" listener="#{facturaMB.devolverBancoNombre()}" update=":form:infDistr"/>        
-                            </p:selectOneMenu>  
-                        </p:panelGrid>
+                        <b:badge  value="Dirección:" style="background-color: #999999;color: white"/>
+                        <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
 
-                        <p:panelGrid columns="2" id="idMeses">
-                            <p:outputLabel for="mesesBanco"  value="Meses :" />
-                            <p:selectOneMenu  id="mesesBanco" value="#{facturaMB.mesSeleccionado}" style="width:125px">
-                                <f:selectItem itemLabel="Seleccione el Mes"/>
-                                <f:selectItems var="meses" value="#{facturaMB.intereses}" itemLabel="#{meses.meses} meses" itemValue="#{meses.meses}" />
-                                <p:ajax event="change" listener="#{facturaMB.calcularlInteres()}" update=":form:infDistr,:formDetalles:panelTotales"/>        
-                            </p:selectOneMenu>  
-                        </p:panelGrid>
+                        <b:badge value="Correo:" style="background-color: #0087ca;color: white"/>
+                        <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
 
-                        <p:panelGrid id="idCampoInteres" columns="2">
-                            <b:badge value="Interés :" style="background-color: #0087ca;color: white"/>
-                            <p:outputLabel value="#{facturaMB.campoInteres}"  style="width:25%;font-weight: bold;background-color: #0087ca;color: white"/>
-                        </p:panelGrid>
-                    </p:panel>
 
-                    <p:panel  rendered="#{facturaMB.estCheue}" id="idCheque">
-                        <p:panelGrid columns="4">
-                            <p:outputLabel for="bancoCheques" value="Banco:" />
-                            <p:selectOneMenu  id="bancoCheques" value="#{facturaMB.nombreBanco}" style="width:125px">
-                                <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
-                            </p:selectOneMenu>  
-                            <b:badge value="No Cheque:" style="background-color: #0087ca;color: white" />
-                            <p:inputText  value="#{facturaMB.NCheque}"/>
-                        </p:panelGrid>
-                    </p:panel>
+                        <b:badge  value="Notas" style="background-color: #0087ca;color: white"/>
+                        <p:outputLabel id="notasD" value="#{facturaMB.clienteEncontrado.notas}" style="width: 250px;font-weight: bold" />
 
-                    <p:panel id="idCreditoDirecto" rendered="#{facturaMB.creditoDirecto}">
-                        <p:panelGrid columns="2">
-                            <p:outputLabel for="fechaPago" value="Fecha Màximo Pago" />
-                            <p:calendar id="fechaPago" value="#{facturaMB.fechaFinal}" style="font-size:10px"/>
-                        </p:panelGrid>
-                    </p:panel>
-                </p:panelGrid>
-            </b:panel>
-        </h:form>
-        <h:form id="formCompra">
-            <p:panel id="idAgregar" style="width:100%;" visible="true" header="Tipo de Detalle">
-                <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;margin-left: 5%">
-                    <b:button id="btnAgregarProd" value="Productos " title="Agregar Productos a la Factura" look="info" icon="glyphicon glyphicon-shopping-cart" />  
-                    <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
-                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
-                                     rows="10"
-                                     selectionMode="single" 
-                                     scrollable="true" 
-                                     scrollHeight="200"  
-                                     rowKey="#{catalogo.codigoProducto}"
-                                     selection="#{facturaMB.catalogoSeleccionado}">
-                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
-                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
-
-                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                <h:outputText value="#{catalogo.codigoProducto}" />
-                            </p:column>
-                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                <h:outputText value="#{catalogo.nombre}" />
-                            </p:column>
-                            <p:column headerText="Precio">
-                                <h:outputText value="#{catalogo.precio}" />
-                            </p:column>
-                        </p:dataTable>
-                    </p:overlayPanel>
-
-                    <b:button id="btnAgregarOrden" value="Servicios"  title="Agregar Servicio a la Factura" look="info" icon="glyphicon glyphicon-briefcase"/>  
-                    <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
-                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
-                                     rows="10"
-                                     selectionMode="single" 
-                                     scrollable="true" 
-                                     scrollHeight="200"  
-                                     rowKey="#{catalogo.codigoProducto}"
-                                     selection="#{facturaMB.catalogoSeleccionado}">
-                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
-                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
-
-                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                <h:outputText value="#{catalogo.codigoProducto}" />
-                            </p:column>
-                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                <h:outputText value="#{catalogo.nombre}" />
-                            </p:column>
-                            <p:column headerText="Precio">
-                                <h:outputText value="#{catalogo.precio}" />
-                            </p:column>
-                        </p:dataTable>
-                    </p:overlayPanel>
-
-                    <b:button id="btnAgregarServicio" value="O.Trabajo"  title="Agregar Ordenes de Trabajo a la Factura" look="info" icon="
-                              glyphicon glyphicon-folder-close" />  
-                    <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
-                        <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
-                                     rows="10"
-                                     selectionMode="single" 
-                                     scrollable="true" 
-                                     scrollHeight="200"  
-                                     rowKey="#{ordenes.idOrdenTrabajo}"
-                                     selection="#{facturaMB.ordenTrabajoSeleccionada}">
-                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
-                                    :formDetalles:panelTotales" />  
-                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden(event)}"/>
-
-                            <p:column headerText="Código" filterBy="#{ordenes.idOrdenTrabajo}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                <h:outputText value="#{ordenes.idOrdenTrabajo}" />
-                            </p:column>
-                            <p:column headerText="Cliente" filterBy="#{ordenes.cedulaRuc.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                <h:outputText value="#{ordenes.cedulaRuc.nombre}" />
-                            </p:column>
-                            <p:column headerText="Problema" filterBy="#{ordenes.toStringDetalle()}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                <h:outputText value="#{ordenes.toStringDetalle()}" />
-                            </p:column>
-                            <p:column headerText="Precio">
-                                <h:outputText value="#{ordenes.total}" />
-                            </p:column>
-                        </p:dataTable>
-                    </p:overlayPanel>
-                </p:panelGrid>
-            </p:panel>
-        </h:form>
-        <h:form id="formGeneral">
-            <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" modal="true" height="auto">
-                <p:panelGrid columns="4" >
-                    <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
-                    <p:inputText id="cantidadP" value="#{facturaMB.cantidadComprar}" required="true" />
-                    <p:commandButton  icon="ui-icon-plusthick" 
-                                      actionListener="#{facturaMB.venta()}" ajax="true" update=":formGeneral,
-                                      :form:msgs,
-                                      :form:infDistr,
-                                      :formDetalles:tablaDetallesFactura,
-                                      :formDetalles:panelTotales"/>
-                    <p:outputLabel value="#{facturaMB.msjStock}" style="color: darkred"/>
-                </p:panelGrid>
-            </p:dialog>
-        </h:form>
-        <h:form id="formEspecifico">
-            <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" modal="true" height="auto">
-                <p:panelGrid columns="5" >
-                    <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
-                    <p:outputLabel  value="Código Único : "/>
-                    <p:inputText id="codPEspec" value="#{facturaMB.codPEspe}" required="true" requiredMessage="Campo Necesario" />
-                    <p:commandButton  icon="ui-icon-plusthick" 
-                                      actionListener="#{facturaMB.venta()}" ajax="false" />
-                    <p:outputLabel  value="#{facturaMB.msjCodUnico}" style="color: darkred"/>
-                    <p:message for="codPEspec" />
-                </p:panelGrid>
-            </p:dialog>
-        </h:form>
-        <h:form id="formDetalles">
-            <p:panel id="idDetallesFactura" >
-                <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}" id="tablaDetallesFactura" style="width:100%">   
-
-                    <p:column headerText="Cantidad" style="text-align: left;width:50px">
-                        <h:outputText value="#{detallesVenta.cantidad}" />
-                    </p:column>
-                    <p:column headerText="Código" style="text-align: left">
-                        <h:outputText value="#{detallesVenta.codigo}" />
-                    </p:column>
-                    <p:column headerText="Descripción" style="text-align: left">
-                        <h:outputText value="#{detallesVenta.nombre}" />
-                    </p:column>
-                    <p:column headerText="P. Unitario" style="text-align: left;width:50px" id="descuentoIndividual">
-                        <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
-                    </p:column>
-                    <p:column headerText="Total" style="text-align: left;width:50px" id="totalDescuento">
-                        <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
-                    </p:column>
-                    <p:column headerText="Descuento %" style="width:60px">
-                        <p:selectOneMenu  value="#{detallesVenta.escogerDescuento}">
-                            <f:selectItem itemLabel="No" itemValue="No" />
-                            <f:selectItem itemLabel="Si" itemValue="Si" />
-                            <p:ajax  event="change" listener="#{facturaMB.aplicarDescuentos(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
+                        <b:badge  value="Tipo Venta"  style="background-color: #999999;color: white"/>
+                        <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoPago}" title="Escojer el tipo de Pago">
+                            <f:selectItem itemLabel="Efectivo" itemValue="Efectivo" />
+                            <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
+                            <f:selectItem itemLabel="Credito" itemValue="Credito" />
+                            <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
+                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":formDetalles:panelTotales"/>        
                         </p:selectOneMenu>
-                    </p:column>
 
-                    <p:column headerText="Descuento Manual %" style="text-align: center;width:50px" rendered="#{facturaMB.mostrarDescuentoManual}" > 
-                        <p:inputText id="descuentoManual" style="width:80%" value="#{detallesVenta.valorDescuento}" rendered="#{detallesVenta.mostrarDescuentoManual}" onkeypress="return noProcesar(event);">
-                            <p:ajax event="blur" listener="#{facturaMB.aplicarDescuentosManual(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
-                        </p:inputText>   
-                    </p:column>
+                        <p:outputLabel/>
+                        <p:panel  rendered="#{facturaMB.estBanco}" id="idBanco">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel for="tipoBanco"  value="Banco :" />
+                                <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="width:125px">
+                                    <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                                    <p:ajax event="change" listener="#{facturaMB.devolverBancoNombre()}" update=":form:infDistr"/>        
+                                </p:selectOneMenu>  
+                            </p:panelGrid>
+
+                            <p:panelGrid columns="2" id="idMeses">
+                                <p:outputLabel for="mesesBanco"  value="Meses :" />
+                                <p:selectOneMenu  id="mesesBanco" value="#{facturaMB.mesSeleccionado}" style="width:125px">
+                                    <f:selectItem itemLabel="Seleccione el Mes"/>
+                                    <f:selectItems var="meses" value="#{facturaMB.intereses}" itemLabel="#{meses.meses} meses" itemValue="#{meses.meses}" />
+                                    <p:ajax event="change" listener="#{facturaMB.calcularlInteres()}" update=":formDetalles:panelTotales"/>        
+                                </p:selectOneMenu>  
+                            </p:panelGrid>
+
+                            <p:panelGrid id="idCampoInteres" columns="2">
+                                <b:badge value="Interés :" style="background-color: #0087ca;color: white"/>
+                                <p:outputLabel value="#{facturaMB.campoInteres}"  style="width:25%;font-weight: bold"/>
+                            </p:panelGrid>
+                        </p:panel>
+
+                        <p:panel  rendered="#{facturaMB.estCheue}" id="idCheque">
+                            <p:panelGrid columns="4">
+                                <p:outputLabel for="bancoCheques" value="Banco:" />
+                                <p:selectOneMenu  id="bancoCheques" value="#{facturaMB.nombreBanco}" style="width:125px">
+                                    <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
+                                </p:selectOneMenu>  
+                                <b:badge value="No Cheque:" style="background-color: #0087ca;color: white" />
+                                <p:inputText  value="#{facturaMB.NCheque}"/>
+                            </p:panelGrid>
+                        </p:panel>
+
+                        <p:panel id="idCreditoDirecto" rendered="#{facturaMB.creditoDirecto}">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel for="fechaPago" value="Fecha Màximo Pago" />
+                                <p:calendar id="fechaPago" value="#{facturaMB.fechaFinal}" style="font-size:10px"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:panelGrid>
+                </b:panel>
+            </h:form>
+            <h:form id="formCompra">
+                <p:panel id="idAgregar" style="width:100%;" visible="true" header="Tipo de Detalle">
+                    <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;margin-left: 5%">
+                        <b:button id="btnAgregarProd" value="Productos " title="Agregar Productos a la Factura" look="info" icon="glyphicon glyphicon-shopping-cart" />  
+                        <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
+                            <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                         rows="10"
+                                         selectionMode="single" 
+                                         scrollable="true" 
+                                         scrollHeight="200"  
+                                         rowKey="#{catalogo.codigoProducto}"
+                                         selection="#{facturaMB.catalogoSeleccionado}">
+                                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
+                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+
+                                <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                    <h:outputText value="#{catalogo.codigoProducto}" />
+                                </p:column>
+                                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                    <h:outputText value="#{catalogo.nombre}" />
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{catalogo.precio}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:overlayPanel>
+
+                        <b:button id="btnAgregarOrden" value="Servicios"  title="Agregar Servicio a la Factura" look="info" icon="glyphicon glyphicon-briefcase"/>  
+                        <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
+                            <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                         rows="10"
+                                         selectionMode="single" 
+                                         scrollable="true" 
+                                         scrollHeight="200"  
+                                         rowKey="#{catalogo.codigoProducto}"
+                                         selection="#{facturaMB.catalogoSeleccionado}">
+                                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
+                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+
+                                <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                    <h:outputText value="#{catalogo.codigoProducto}" />
+                                </p:column>
+                                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                    <h:outputText value="#{catalogo.nombre}" />
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{catalogo.precio}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:overlayPanel>
+
+                        <b:button id="btnAgregarServicio" value="O.Trabajo"  title="Agregar Ordenes de Trabajo a la Factura" look="info" icon="
+                                  glyphicon glyphicon-folder-close" />  
+                        <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
+                            <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
+                                         rows="10"
+                                         selectionMode="single" 
+                                         scrollable="true" 
+                                         scrollHeight="200"  
+                                         rowKey="#{ordenes.idOrdenTrabajo}"
+                                         selection="#{facturaMB.ordenTrabajoSeleccionada}">
+                                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
+                                        :formDetalles:panelTotales" />  
+                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden(event)}"/>
+
+                                <p:column headerText="Código" filterBy="#{ordenes.idOrdenTrabajo}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                    <h:outputText value="#{ordenes.idOrdenTrabajo}" />
+                                </p:column>
+                                <p:column headerText="Cliente" filterBy="#{ordenes.cedulaRuc.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                    <h:outputText value="#{ordenes.cedulaRuc.nombre}" />
+                                </p:column>
+                                <p:column headerText="Problema" filterBy="#{ordenes.toStringDetalle()}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                    <h:outputText value="#{ordenes.toStringDetalle()}" />
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{ordenes.total}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:overlayPanel>
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+            <h:form id="formGeneral">
+                <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" modal="true" height="auto">
+                    <p:panelGrid columns="4" >
+                        <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
+                        <p:inputText id="cantidadP" value="#{facturaMB.cantidadComprar}" required="true" />
+                        <p:commandButton  icon="ui-icon-plusthick" 
+                                          actionListener="#{facturaMB.venta()}" ajax="true" update=":formGeneral,
+                                          :form:msgs,
+                                          :form:infDistr,
+                                          :formDetalles:tablaDetallesFactura,
+                                          :formDetalles:panelTotales"/>
+                        <p:outputLabel value="#{facturaMB.msjStock}" style="color: darkred"/>
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
+            <h:form id="formEspecifico">
+                <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" modal="true" height="auto">
+                    <p:panelGrid columns="5" >
+                        <p:outputLabel  value="Stock : #{facturaMB.stock}"/>
+                        <p:outputLabel  value="Código Único : "/>
+                        <p:inputText id="codPEspec" value="#{facturaMB.codPEspe}" required="true" requiredMessage="Campo Necesario" />
+                        <p:commandButton  icon="ui-icon-plusthick" 
+                                          actionListener="#{facturaMB.venta()}" ajax="false" />
+                        <p:outputLabel  value="#{facturaMB.msjCodUnico}" style="color: darkred"/>
+                        <p:message for="codPEspec" />
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
+            <h:form id="formDetalles">
+                <p:panel id="idDetallesFactura" >
+                    <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}" id="tablaDetallesFactura" style="width:100%;font-size: 10px;text-align: left">   
+
+                        <p:column headerText="Cantidad" style="text-align: left;width:60px">
+                            <h:outputText value="#{detallesVenta.cantidad}" />
+                        </p:column>
+                        <p:column headerText="Código" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.codigo}" />
+                        </p:column>
+                        <p:column headerText="Descripción" style="text-align: left">
+                            <h:outputText value="#{detallesVenta.nombre}" />
+                        </p:column>
+                        <p:column headerText="P. Unitario" style="text-align: left;width:60px" id="descuentoIndividual">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
+                        </p:column>
+                        <p:column headerText="Total" style="text-align: left;width:60px" id="totalDescuento">
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
+                        </p:column>
+                        <p:column headerText="Dsct %" style="width:50px">
+                            <p:selectOneMenu  value="#{detallesVenta.escogerDescuento}">
+                                <f:selectItem itemLabel="No" itemValue="No" />
+                                <f:selectItem itemLabel="Si" itemValue="Si" />
+                                <p:ajax  event="change" listener="#{facturaMB.aplicarDescuentos(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column headerText="Dsct Manual %" style="text-align: center;width:80px" rendered="#{facturaMB.mostrarDescuentoManual}" > 
+                            <p:inputText id="descuentoManual" style="width:100%" value="#{detallesVenta.valorDescuento}" rendered="#{detallesVenta.mostrarDescuentoManual}" onkeypress="return noProcesar(event);">
+                                <p:ajax event="blur" listener="#{facturaMB.aplicarDescuentosManual(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
+                            </p:inputText>   
+                        </p:column>
 
 
-                    <p:column headerText="Acciones" style="text-align: left;width:70px">
-                        <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
-                    </p:column>
-                </p:dataTable>
+                        <p:column headerText="Acciones" style="text-align: left;width:70px">
+                            <p:commandButton value="Eliminar" style="background-image: none;background-color: darkorange" action="#{facturaMB.eliminarDetalle(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
+                        </p:column>
+                    </p:dataTable>
 
-                <p:spacer/>
-                <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%;">
-                    <b:badge  value="Subtotal:" style="background-color: #0087ca;color: white" />
-                    <p:outputLabel id="subTotal" value="#{calculosMB.redondeoSuperior(facturaMB.subtotal)}" style="font-weight: bold"/>
+                    <p:spacer/>
+                    <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%;text-align: left">
 
-                    <b:badge  value="Descuento % :" style="background-color: #0087ca;color: white"/>
-                    <p:inputText id="txtDescuento" value="#{facturaMB.descuento}" readonly="false" style="width: 30%">
-                        <p:ajax event="blur" listener="#{facturaMB.calcularDescuento()}" update="@form"/>
-                    </p:inputText>
+                        <b:badge  value="Subtotal:" style="background-color: #0087ca;color: white" />
+                        <p:outputLabel id="subTotal" value="#{calculosMB.redondeoSuperior(facturaMB.subtotal)}" style="font-weight: bold"/>
 
-                    <b:badge  value="Iva #{facturaMB.ivaMostrar.intValue()}%:" style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="iva" value="#{calculosMB.redondeoSuperior(facturaMB.iva)}" style="font-weight: bold"/>
+                        <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoDescuento}" title="Escojer el tipo de Pago">
+                            <f:selectItem itemLabel="Descuento %" itemValue="porcentaje" />
+                            <f:selectItem itemLabel="Dsct Directo" itemValue="directo" />
+                            <p:ajax event="change" listener="#{facturaMB.escojerTipoDescuento()}" update=":formDetalles:panelTotales"/>
+                        </p:selectOneMenu>
+                        <p:inputText id="txtDescuento" value="#{facturaMB.descuento}" readonly="false" style="width: 50%">
+                            <p:ajax event="blur" listener="#{facturaMB.calcularDescuento()}" update="@form"/>
+                        </p:inputText>
 
-                    <b:badge  value="Total + Iva : " style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="totalIva" value="#{calculosMB.redondeoSuperior(facturaMB.total)}" style="font-weight: bold"/>
 
-                    <b:badge  value="Recargo Tarjeta : " style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="interes" value="#{calculosMB.redondeoSuperior(facturaMB.interesTarjeta)}" style="font-weight: bold"/>
 
-                    <b:badge  value="Total a Pagar : " style="background-color: #0087ca;color: white"/>
-                    <p:outputLabel id="totalPagar" value="#{calculosMB.redondeoSuperior(facturaMB.totalPagar)}" style="font-weight: bold"/>
+                        <b:badge  value="Iva #{facturaMB.ivaMostrar.intValue()}%:" style="background-color: #0087ca;color: white"/>
+                        <p:outputLabel id="iva" value="#{calculosMB.redondeoSuperior(facturaMB.iva)}" style="font-weight: bold"/>
+
+                        <b:badge  value="Total + Iva : " style="background-color: #0087ca;color: white"/>
+                        <p:outputLabel id="totalIva" value="#{calculosMB.redondeoSuperior(facturaMB.total)}" style="font-weight: bold"/>
+
+                        <b:badge  value="Recargo Tarjeta : " style="background-color: #0087ca;color: white"/>
+                        <p:outputLabel id="interes" value="#{calculosMB.redondeoSuperior(facturaMB.interesTarjeta)}" style="font-weight: bold"/>
+
+                        <b:badge  value="Total a Pagar : " style="background-color: #0087ca;color: white"/>
+                        <p:outputLabel id="totalPagar" value="#{calculosMB.redondeoSuperior(facturaMB.totalPagar)}" style="font-weight: bold"/>
+
+                    </p:panelGrid>
+                </p:panel>
+
+            </h:form>
+            <p:spacer/>
+            <h:form id="frmVueltos">
+                <div >
+                    <p:panelGrid columns="2" style="margin-left: 70%">
+                        <b:badge value="Recibo" style="background-color: #0087ca;color: white"/>
+                        <p:inputText id="recibo" value="#{facturaMB.recibo}">
+                            <p:ajax event="keyup" listener="#{facturaMB.darVuelto()}" update="vuelto"/>
+                        </p:inputText>
+                        <b:badge value="Vuelto" style="background-color: #0087ca;color: white"/>
+                        <p:inputText id="vuelto" value="#{calculosMB.redondeoSuperior(facturaMB.vuelto)}"/>
+                    </p:panelGrid>
+                </div>
+
+            </h:form>
+            <h:form id="frmFacturar">
+                <p:growl id="msgsFactura" showDetail="true" />
+                <p:panelGrid columns="3" style="margin: 0 auto;">
+
+
+                    <p:commandButton  partialSubmit="true" process="@this,:form" value="Facturar" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
+                    <p:commandButton value="Nuevo" style="background-image: none;background-color: chartreuse" action="factura" ajax="false"/>
+
+
+                    <!-- Dialogo de confirmacion para grabar o cancelar-->
                 </p:panelGrid>
-            </p:panel>
 
-        </h:form>
-        <p:spacer/>
-        <h:form id="frmVueltos">
-            <div >
-                <p:panelGrid columns="2" style="margin-left: 70%">
-                    <b:badge value="Recibo" style="background-color: #0087ca;color: white"/>
-                    <p:inputText id="recibo" value="#{facturaMB.recibo}">
-                        <p:ajax event="keyup" listener="#{facturaMB.darVuelto()}" update="vuelto"/>
-                    </p:inputText>
-                    <b:badge value="Vuelto" style="background-color: #0087ca;color: white"/>
-                    <p:inputText id="vuelto" value="#{calculosMB.redondeoSuperior(facturaMB.vuelto)}"/>
-                </p:panelGrid>
-            </div>
-
-        </h:form>
-        <h:form id="frmFacturar">
-            <p:growl id="msgsFactura" showDetail="true" />
-            <p:panelGrid columns="3" style="margin: 0 auto;">
-
-
-                <p:commandButton  partialSubmit="true" process="@this,:form" value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFactura').show();" />
-                <p:commandButton value="N U E V O" style="background-image: none;background-color: chartreuse" action="factura" ajax="false"/>
-
-
-                <!-- Dialogo de confirmacion para grabar o cancelar-->
-            </p:panelGrid>
-
-        </h:form>
-
+            </h:form>
+        </div>
     </p:panel>
 
-    <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFactura" modal="true" >
-        <p:panelGrid columns="3">
-            <h:form style="margin: 0 auto">
+    <p:dialog header="Segur@ ?" widgetVar="confirmarFactura" modal="true" showEffect="explode" hideEffect="bounce" height="100" >
+        <h:form>
+            <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
                 <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange "  actionListener="#{facturaMB.facturar()}" ajax="false" />
                 <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
-            </h:form>
-        </p:panelGrid>
+
+            </p:panelGrid>
+        </h:form>
     </p:dialog>
     <!-- Dialogo de confirmacion para agregar un nuevo Cliente -->
     <p:dialog header="Agregar Cliente" widgetVar="confirmarCliente" modal="true">
