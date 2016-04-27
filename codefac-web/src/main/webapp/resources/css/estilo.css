@@ -103,3 +103,13 @@ h1,h2
     border: hidden;
     border-color: white;
 }
+
+.presentadora
+{
+    background-image: url("#{request.contextPath}/resources/img/banner/presentadora.png");
+    background-repeat: no-repeat;
+    border: 5px;
+    border-bottom-width: 5px;
+    border-bottom-color: #485798;
+}
+

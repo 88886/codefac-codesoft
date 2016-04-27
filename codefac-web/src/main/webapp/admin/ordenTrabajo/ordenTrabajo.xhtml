@@ -23,14 +23,34 @@ and open the template in the editor.
 
                     <p:panelGrid columns="6" style="margin: 0 auto" styleClass="panelNoBorder" >
 
-                        <p:outputLabel value="CI/RUC: " />
 
-                        <p:inputText 
-                            id="txtCedulaRuc" 
+
+                        <p:inputText
+                            
+                            size="20"
+                            id="txtCedulaRuc"                            
                             value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.cedulaRuc}" 
                             onkeypress="return validarEnter(event, 'test');"
-                            placeholder="Ingrese la cedula"
+                            placeholder="Ingrese la cedula o RUC"
                             required="false" />
+
+                        <!-- Boton que abre un dialogo para buscar el cliente -->
+
+                        <p:commandButton partialSubmit="true"
+                                         styleClass="ui-botonEsmeralda"
+                                         process="
+                                         @this,
+                                         :formPrincipal:txtTotal,
+                                         :formPrincipal:datetime
+                                         :formPrincipal:txtAdelanto
+                                         :formPrincipal:txtObservaciones
+                                         "  
+                                         id="btnBuscarCliente"                                          
+                                         icon="ui-icon-search"
+                                         actionListener="#{ordenTrabajoMB.buscarClienteDlg()}"  >
+
+                            <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form,panelGridDatosCliente" />
+                        </p:commandButton>
 
                         <!-- Verifica si el cliente existe o no -->
                         <p:remoteCommand 
@@ -47,23 +67,7 @@ and open the template in the editor.
                         </p:remoteCommand>
 
 
-                        <!-- Boton que abre un dialogo para buscar el cliente -->
-                        
-                        <p:commandButton partialSubmit="true"
-                                         styleClass="ui-botonConchaVino"
-                                         process="
-                                         @this,
-                                         :formPrincipal:txtTotal,
-                                         :formPrincipal:datetime
-                                         :formPrincipal:txtAdelanto
-                                         :formPrincipal:txtObservaciones
-                                         "  
-                                         id="btnBuscarCliente" 
-                                         value="B U S C A R "  
-                                         actionListener="#{ordenTrabajoMB.buscarClienteDlg()}"  >
 
-                            <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form,panelGridDatosCliente" />
-                        </p:commandButton>
 
                     </p:panelGrid>
 
@@ -139,7 +143,7 @@ and open the template in the editor.
                         <p:separator />
 
                         <div style="text-align: center">
-                            <p:commandButton partialSubmit="true" process="@this"  value="Agregar Equipo" actionListener="#{ordenTrabajoMB.abrirEquipoDialog()}" update=":formDialogoDetalle"  style="margin: 0 auto;"/>
+                            <p:commandButton partialSubmit="true" process="@this"  value="" actionListener="#{ordenTrabajoMB.abrirEquipoDialog()}" update=":formDialogoDetalle"  style="margin: 0 auto;" />
                         </div>
 
                     </p:panel>
@@ -176,7 +180,7 @@ and open the template in the editor.
                                              update=":formPrincipal:txtTotal,:formPrincipal:tablaDetalle" >
                                 <p:confirm header="Confirmar" message="Quieres quitar el detalle?" icon="ui-icon-alert" />
                             </p:commandButton>
-                            
+
                             <b:commandButton look="info" value="" immediate="true" 
                                              icon="glyphicon-pencil" 
                                              actionListener="#{ordenTrabajoMB.abrirDialogoEditar(detalle)}"
@@ -193,6 +197,7 @@ and open the template in the editor.
 
                     <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
                         <p:commandButton 
+                            styleClass="ui-botonAzul"
                             ajax="true"
                             process="@this,txtTotal,txtAdelanto,cmbEmpleado,datetime"  
                             validateClient="true"
@@ -331,7 +336,7 @@ and open the template in the editor.
                     </p:panelGrid>
                     <p:spacer height="10px"/>
                     <div style="text-align: center">
-                       
+
                         <p:commandButton validateClient="true"  partialSubmit="true" process=":formDialogoDetalleEdit,:formPrincipal:txtTotal" value="Editar" actionListener="#{ordenTrabajoMB.editarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregarEdit,mensajeGeneral2Edit" />
                         <p:commandButton immediate="true"  value="Cancelar" />
                     </div>
