@@ -133,6 +133,12 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajoEditar = detalle;
         System.out.println("abriendo dialogo de la edicion ...");
         RequestContext.getCurrentInstance().execute("PF('dlgDetalleEdit').show()");
+        idCategoriaSeleccionado=detalle.getIdCategoriaTrabajo().getIdCategoriaTrabajo().toString();
+        idServicioSeleccionado=detalle.getIdCategoriaTrabajo().getCodigoServicio().getCodigoServicio().toString();
+        
+        cargarCategoriasServicios();
+        cargarDatosCategoria();
+        
 
     }
 
@@ -213,6 +219,17 @@ public class OrdenTrabajoMB implements Serializable {
 
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
     }
+    
+    /**
+     * Metodo que me permite editar los items de la orden de trabajo
+     */
+    public void editarDetalle()
+    {
+        System.out.println("editando el detalle");
+        RequestContext.getCurrentInstance().execute("PF('dlgDetalleEdit').hide()");
+        
+    }
+            
 
     public void eliminar(DetalleOrdenTrabajo detalle) {
         this.ordenTrabajo.getDetalleOrdenTrabajoList().remove(detalle);
