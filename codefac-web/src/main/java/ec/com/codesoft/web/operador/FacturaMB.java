@@ -147,6 +147,7 @@ public class FacturaMB {
     private BigDecimal descuentoManual;
 
     //ordenes de trabajo
+    private List<OrdenTrabajo> ordenesTemporal;
     private List<OrdenTrabajo> ordenesTrabajo;
     private OrdenTrabajo ordenTrabajoSeleccionada;
     private List<DetalleVentaOrdenTrabajo> detallesOrdenTrabajo;
@@ -244,7 +245,24 @@ public class FacturaMB {
         maxItems = maxItemFactura;
 
         //exclusivo para ordenes de Trabajo
-        ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
+        //filtar por ordenes facturadas
+        ordenesTrabajo = new ArrayList<OrdenTrabajo>();
+        ordenesTemporal = ordenTrabajoServicio.obtenerOrdenesTrabajo();
+        for (int i = 0; i < ordenesTemporal.size(); i++) {
+            List<DetalleVentaOrdenTrabajo> detalllesVentaOrden = new ArrayList<DetalleVentaOrdenTrabajo>();
+            detalllesVentaOrden = ordenesTemporal.get(i).getDetalleVentaOrdenTrabajoList();
+            if (detalllesVentaOrden.size() == 0) {
+
+            } else {
+                if (detalllesVentaOrden.get(0).getEstado().equals("Facturado")) {
+
+                } else {
+                    ordenesTrabajo.add(ordenesTemporal.get(i));
+                }
+            }
+        }
+
+        //ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
         detallesOrdenTrabajo = new ArrayList<DetalleVentaOrdenTrabajo>();
 
         //habilitarDEescuento Manual
@@ -661,15 +679,15 @@ public class FacturaMB {
 //                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
 //                        ordenTrabajoSeleccionada.toStringDetalle(),
 //                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
-                  DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
+                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
                         ordenTrabajoSeleccionada.toStringDetalle(),
                         totalRegistro, totalRegistro);
 
-                  //descomentar para que coja el descuento con el precio sin iva
+                //descomentar para que coja el descuento con el precio sin iva
 //                Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
 //                Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
                 Descuentos precioMayorista = new Descuentos("Prec Mayorista", totalRegistro);
-                Descuentos precioDescuento = new Descuentos("PVP",totalRegistro);
+                Descuentos precioDescuento = new Descuentos("PVP", totalRegistro);
                 Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
                 //System.out.println(catalogoSeleccionado.getDescuento());
                 Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
