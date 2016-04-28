@@ -19,7 +19,7 @@ and open the template in the editor.
             <p:growl id="growl" showDetail="true" sticky="false" life="2000" />  
             <p:remoteCommand name="onload" action="#{gestionProductoMB.verificarDialogo()}" autoRun="true" />
 
-            <div style="text-align: center"><h2>Gestion del Catalogo de Productos</h2></div>
+            <div style="text-align: center"><h4 class="titulo">Gestion del Catalogo de Productos</h4></div>
             <!-- Tabla que tiene el contenido del catalogo -->
             <p:dataTable id="tablaCatalogo" value="#{gestionProductoMB.catalagoProductos}"
                          filteredValue="#{gestionProductoMB.catalagoProductosFiltrados}"
@@ -136,7 +136,7 @@ and open the template in the editor.
                         <p:inputText value="#{gestionProductoMB.catalagoProducto.precio}" style="width: 50px" />
 
                         <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;" >
-                            <p:ajax listener="#{gestionProductoMB.cambiarPrecioEditar()}" update="txtCambiarPrecio" />
+                            <p:ajax listener="#{gestionProductoMB.cambiarPrecioEditar()}" />
                             <f:selectItem itemLabel="sin Iva " itemValue="-" />
                             <f:selectItem itemLabel="con Iva" itemValue="+" />
                         </p:selectOneMenu>
