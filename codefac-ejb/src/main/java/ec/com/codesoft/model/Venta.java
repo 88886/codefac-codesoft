@@ -77,6 +77,9 @@ public class Venta implements Serializable {
 
     @Column(name = "CHEQUE")
     private String cheque;
+    
+    @Column(name = "IVA")
+    private BigDecimal iva;
 
     @OneToMany(mappedBy = "codigoFactura", cascade = CascadeType.ALL)
     private List<CreditoFactura> creditoFacturaList;
@@ -295,6 +298,16 @@ public class Venta implements Serializable {
     public void setUsuarioPermiso(Usuario usuarioPermiso) {
         this.usuarioPermiso = usuarioPermiso;
     }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+    
+    
 
     public String toStringDetalle() {
         String cadena = "";
