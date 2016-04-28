@@ -26,7 +26,7 @@ h1,h2
 
 #cabecera
 {
-    height: 150px;
+    height: 100%;
     background-color: #485798;
     text-align: center;
 }
@@ -52,7 +52,7 @@ h1,h2
     border-color: #3f5da2;
     border: 10px;
     border-bottom-color: #009966;
-    border-bottom: 30px;
+    border-bottom: 30%;
     
 }
 
@@ -84,7 +84,7 @@ h1,h2
 .imagenCabecera
 {
     background-color: activeborder;
-    width: 600px;
+    width: 35%;
 }
 
 .menuPF
@@ -103,3 +103,13 @@ h1,h2
     border: hidden;
     border-color: white;
 }
+
+.presentadora
+{
+    background-image: url("#{request.contextPath}/resources/img/banner/presentadora.png");
+    background-repeat: no-repeat;
+    border: 5px;
+    border-bottom-width: 5px;
+    border-bottom-color: #485798;
+}
+

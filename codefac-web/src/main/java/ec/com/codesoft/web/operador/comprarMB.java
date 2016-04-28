@@ -13,6 +13,7 @@ import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.modelo.servicios.CompraServicio;
 import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
+import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.modelo.servicios.ProductoGeneralCompraServicio;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -99,6 +100,11 @@ public class comprarMB implements Serializable {
 
     private List<CatalagoProducto> listaCatalogos;
     private CatalagoProducto catalogoProductoSeleccionado;
+    
+    /**
+     * Variable para mostrar el Stock seleccionado del catalogo
+     */
+    private Integer stockProductoSeleccionado;
 
     /*
      Servicios para consultar del distribuidor
@@ -114,6 +120,11 @@ public class comprarMB implements Serializable {
 
     @EJB
     private CompraServicio compraServicio;
+    
+    @EJB
+    private FacturaServicio facturaServicio;
+    
+    
 
     //ejb que me permiten cominucarme entre beans
     //@ManagedProperty("#{gestionarCompraMB}")
@@ -193,7 +204,6 @@ public class comprarMB implements Serializable {
          */
     public void abrirDialogoCambiarPrecio() {
         System.out.println("abriendo dialogo editar ...");
-
         cambiarCosto = new BigDecimal(catalogo.getPrecio().toString());
         System.out.println("aumentado el iva al costo del producto");
         cambiarCosto = cambiarCosto.multiply(new BigDecimal("1.12"));
@@ -446,6 +456,15 @@ public class comprarMB implements Serializable {
                 System.out.println("El producto existe");
                 costoDetalle = compraServicio.obtenerUltimoCostoDistribuidor(catalogo, compra.getRuc().getRuc());
                 costoDetalle = costoDetalle.setScale(3, RoundingMode.DOWN);
+                if(catalogo.getTipoProducto().equals("G"))
+                {
+                    stockProductoSeleccionado=catalogo.getProductoGeneralVenta().getCantidadDisponible();
+                }
+                else
+                {
+                    stockProductoSeleccionado=facturaServicio.devolverStockIndividual(catalogo.getCodigoProducto());
+                }
+                
                 this.visibleDetalleAgregar = true;
             } else {
                 System.out.println("El producto no existe");
@@ -720,5 +739,15 @@ public class comprarMB implements Serializable {
     public void setIvaCosto(String ivaCosto) {
         this.ivaCosto = ivaCosto;
     }
+
+    public Integer getStockProductoSeleccionado() {
+        return stockProductoSeleccionado;
+    }
+
+    public void setStockProductoSeleccionado(Integer stockProductoSeleccionado) {
+        this.stockProductoSeleccionado = stockProductoSeleccionado;
+    }
+    
+    
 
 }

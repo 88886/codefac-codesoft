@@ -26,6 +26,16 @@ h1 , h2
 
 }
 
+.titulo
+{
+    background-color: #5eaade;
+    color: #ffffff;
+    margin: 0px;
+    border: 0px;
+    padding: 4px;
+}
+
+
 .panelContenido
 {
     //font-size: 10px;    
@@ -77,7 +87,6 @@ h1 , h2
     height: 25px;
     color: white;
     text-align: center;
-    font-size: 13px;
     position: fixed;
     bottom: 0px;
     width: 100%;
@@ -173,6 +182,8 @@ h1 , h2
     background-color: #666666;
     color: white;
     font-weight: bold;
+    padding: 3px;
+
 }
 .ui-botonAzul.ui-state-hover {
     background-image: none;
@@ -180,6 +191,7 @@ h1 , h2
     background-color: #999999 ;
     color: #485798;
     font-weight: bold;
+    padding: 3px;
 }
 .ui-botonAzul.ui-state-active {
     background-image: none;
@@ -187,6 +199,7 @@ h1 , h2
     background-color: #666666;
     color: white;
     font-weight: bold;
+    padding: 3px;
 }
 
 .ui-botonVerde.ui-state-default {
@@ -195,6 +208,7 @@ h1 , h2
     background-color: #666666;
     color: white;
     font-weight: bold;
+    padding: 3px;
 }
 
 .ui-botonVerde.ui-state-hover {
@@ -203,6 +217,7 @@ h1 , h2
     background-color: #999999 ;
     color: #009966;
     font-weight: bold;
+    padding: 3px;
 }
 
 .ui-botonConchaVino.ui-state-default {
@@ -212,4 +227,36 @@ h1 , h2
     color: white;
     font-weight: bold;
 }
+
+.ui-botonCafe.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_cafe.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+    padding: 3px;
+}
+
+.ui-botonAmarillo.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_blanco.png");
+    padding: 3px;
+}
+
+.ui-botonCeleste.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_celeste.png");
+    padding: 3px;
+    color: black;
+}
+
+.ui-botonEsmeralda.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_esmeralda.png");
+    padding: 3px;
+    color: black;
+}
+
+
+
 

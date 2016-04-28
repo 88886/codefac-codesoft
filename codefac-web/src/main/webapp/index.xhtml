@@ -10,23 +10,21 @@
                 xmlns:h5="http://java.sun.com/jsf/composite/ezcomp">
 
     <ui:define name="contenido">
-        
-        <p:panel id="basic" header="Inicio"  style="margin-bottom:20px;text-align: center">
-            <img width="92%" height="12%" src="#{facesContext.externalContext.requestContextPath}/resources/img/bannerFacturacion.jpg" align="top"/>
-            <h2>Sistema de Facturación </h2><h1>Compras y Ventas a un click de distancia  </h1>
 
-        </p:panel>
-        <h:form>       
-            <p:panel rendered="#{dockMB.mostrarNote}"> 
-                <div align="right">
-                    <p:panel id="handlepnl" header="Handle">
-                        <h:outputText value="I can only be dragged with my header." />
-                    </p:panel>
-                    <p:draggable for="handlepnl" handle=".ui-panel-titlebar" />
-                </div>
-            </p:panel>
+      
 
-        </h:form>
+            <h:form>
+                    
+                        <p:imageSwitch effect="fade" speed="1000" id="fadeEffect" style="text-align: center;background-color: #3f5da2;background-image: none">
+                            <ui:repeat value="#{bannerPrincipalMB.images}" var="image" id="fadeEffectImages">
+                                <p:graphicImage library="img/banner/" name="#{image}" id="image" style="width: 100%" />
+                            </ui:repeat>
+                        </p:imageSwitch>
+
+                    
+
+            </h:form>
+
 
     </ui:define>
 </ui:composition>
