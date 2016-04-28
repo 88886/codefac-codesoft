@@ -678,8 +678,8 @@ public class FacturaMB {
                 descuentos.add(precioDescuento);
                 descuentos.add(dcto);
                 descuentos.add(dctoMayorista);
-                detalles.setValorVerdaderoMayorista(ordenTrabajoSeleccionada.getTotal());
-                detalles.setValorVerdaderoPVP(ordenTrabajoSeleccionada.getTotal());
+                detalles.setValorVerdaderoMayorista(totalRegistro);
+                detalles.setValorVerdaderoPVP(totalRegistro);
                 detalles.setDescuentos(descuentos);
                 detalles.setPrecioSeleccionado("PVP");
                 detalles.setEscogerDescuento("No");
