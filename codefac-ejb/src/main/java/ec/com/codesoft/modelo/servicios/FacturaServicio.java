@@ -70,11 +70,20 @@ public class FacturaServicio {
     DetalleVentaOrdenTrabajoFacade detalleVentaOrdenTrabajoFacade;
     
     
-
+    /**
+     * Busca los productos con especifico y devuelve la cantidad disponible
+     * @param codP
+     * @return 
+     */
     public int devolverStockIndividual(String codP) {
         return (productoIndividualFacade.findStockIndividual(codP).intValue());
     }
 
+    /**
+     * Busca los producto con codigo general y devuelve la cantidad disponible
+     * @param codP
+     * @return 
+     */
     public ProductoGeneralVenta devolverStockGeneral(String codP) {
 
         return productoGeneralFacade.findGeneralCodP(codP);

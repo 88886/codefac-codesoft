@@ -11,19 +11,17 @@
 
     <ui:define name="contenido">
 
-        <p:spacer width="5px"/>
+      
 
             <h:form>
-                <div >
-                    <div style="background-color: #3f5da2;width: 1000px;height: 350px;text-align: center;margin: 0 auto" >
+                    
                         <p:imageSwitch effect="fade" speed="1000" id="fadeEffect" style="text-align: center;background-color: #3f5da2;background-image: none">
                             <ui:repeat value="#{bannerPrincipalMB.images}" var="image" id="fadeEffectImages">
-                                <p:graphicImage library="img/banner/" name="#{image}" id="image" />
+                                <p:graphicImage library="img/banner/" name="#{image}" id="image" style="width: 100%" />
                             </ui:repeat>
                         </p:imageSwitch>
 
-                    </div>
-                </div>
+                    
 
             </h:form>
 
