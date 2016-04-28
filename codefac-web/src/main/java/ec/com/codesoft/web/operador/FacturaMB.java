@@ -657,6 +657,7 @@ public class FacturaMB {
                     devolverDescuento(new BigDecimal("0.0"));
                 }
 
+                //descomentar para que coja la orden sin el iva
 //                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
 //                        ordenTrabajoSeleccionada.toStringDetalle(),
 //                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
@@ -664,8 +665,11 @@ public class FacturaMB {
                         ordenTrabajoSeleccionada.toStringDetalle(),
                         totalRegistro, totalRegistro);
 
-                Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
-                Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
+                  //descomentar para que coja el descuento con el precio sin iva
+//                Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
+//                Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
+                Descuentos precioMayorista = new Descuentos("Prec Mayorista", totalRegistro);
+                Descuentos precioDescuento = new Descuentos("PVP",totalRegistro);
                 Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
                 //System.out.println(catalogoSeleccionado.getDescuento());
                 Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
