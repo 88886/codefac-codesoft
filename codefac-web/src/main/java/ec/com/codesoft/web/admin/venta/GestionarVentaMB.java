@@ -181,7 +181,7 @@ public class GestionarVentaMB implements Serializable {
             facturaReporte.setRuc(venta.getCedulaRuc().getCedulaRuc());
             facturaReporte.setFechaaFactura(sdf.format(venta.getFecha()));
             facturaReporte.setFormaPago("Efectivo");
-            facturaReporte.setIvaTotal(venta.getTotal());
+            facturaReporte.setIvaTotal(venta.getIva());
             facturaReporte.setNombreCliente(venta.getCedulaRuc().getNombre());
             facturaReporte.setNota(" ");
             BigDecimal subtotal=venta.getTotal().divide(new BigDecimal("1.12"),2,RoundingMode.DOWN);

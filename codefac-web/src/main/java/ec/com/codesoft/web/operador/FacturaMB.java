@@ -1127,7 +1127,7 @@ public class FacturaMB {
                     }
 
                     venta.setDescuento(descuento);// descuento general
-
+                    venta.setIva(iva); //guarda el iva de la venta
                     facturaServicio.guardarFactura(venta);
                     //guardarfactura Carlos reportes
                     venta.setDetalleProductoGeneralList(detallesGeneralVenta);
@@ -1472,7 +1472,9 @@ public class FacturaMB {
 
         if (tipoDescuento.equals("porcentaje")) {
             if (descuento.equals(0)) {
+                cargarDetalles();
             } else {
+                cargarDetalles();
                 devolverDescuento(descuento);
             }
         } else {
@@ -1482,7 +1484,7 @@ public class FacturaMB {
                 System.out.println("Cargar Detalles");
                 cargarDetalles();
             } else {
-
+                cargarDetalles();
                 totalPagar = totalPagar.subtract(descuento);
                 subtotal = totalPagar.divide(ivaTotal, 2, BigDecimal.ROUND_FLOOR);
                 System.out.println("Total " + totalPagar + " Subtotal" + subtotal);
