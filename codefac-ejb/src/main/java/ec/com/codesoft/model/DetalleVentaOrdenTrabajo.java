@@ -46,9 +46,9 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
     private BigDecimal iva;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO")
+    @JoinColumn(name = "ID_DETALLE_ORDEN_TRABAJO", referencedColumnName = "ID_DETALLE_ORDEN_TRABAJO")
     @ManyToOne
-    private OrdenTrabajo idOrdenTrabajo;
+    private DetalleOrdenTrabajo idDetalleOrdenTrabajo;
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
@@ -103,13 +103,17 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
         this.descuento = descuento;
     }
 
-    public OrdenTrabajo getIdOrdenTrabajo() {
-        return idOrdenTrabajo;
+    public DetalleOrdenTrabajo getIdDetalleOrdenTrabajo() 
+    {
+        return idDetalleOrdenTrabajo;
     }
 
-    public void setIdOrdenTrabajo(OrdenTrabajo idOrdenTrabajo) {
-        this.idOrdenTrabajo = idOrdenTrabajo;
+    public void setIdDetalleOrdenTrabajo(DetalleOrdenTrabajo idDetalleOrdenTrabajo) 
+    {
+        this.idDetalleOrdenTrabajo = idDetalleOrdenTrabajo;
     }
+
+    
 
     public Usuario getNick() {
         return nick;
@@ -126,6 +130,8 @@ public class DetalleVentaOrdenTrabajo implements Serializable {
     public void setCodigoFactura(Venta codigoFactura) {
         this.codigoFactura = codigoFactura;
     }
+    
+    
 
     @Override
     public int hashCode() {

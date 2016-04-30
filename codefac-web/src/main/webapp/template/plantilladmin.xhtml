@@ -113,11 +113,13 @@ and open the template in the editor.
 
         <!-- Dialogo de la  Calculadora -->
         <p:dialog 
+            styleClass="overlayDialog"
             position="#{calcuUtilMB.x},#{calcuUtilMB.y}"
-            header="Calculadora" 
+            header="Calculadora"
             widgetVar="dlgCalculadora" 
             minHeight="40" 
-            style="font-size:12px">
+            showHeader="true"
+            >
 
             <p:ajax event="close"  listener="#{calcuUtilMB.handleClose}" />
             <p:ajax event="move"   listener="#{calcuUtilMB.handleMove}" />

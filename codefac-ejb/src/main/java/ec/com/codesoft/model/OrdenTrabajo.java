@@ -74,10 +74,16 @@ public class OrdenTrabajo implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
     @Size(max = 256)
+    
     @Column(name = "DIAGNOSTICO")
     private String diagnostico;
+    
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
+    
+    @Column(name = "SALDO_AFAVOR")
+    private BigDecimal saldoAfavor;
+    
     @OneToMany(mappedBy = "idOrdenTrabajo", cascade = CascadeType.ALL)
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
     
@@ -87,12 +93,7 @@ public class OrdenTrabajo implements Serializable {
     @JoinColumn(name = "CEDULA_RUC", referencedColumnName = "CEDULA_RUC")
     @ManyToOne
     private Cliente cedulaRuc;
-    @JoinColumn(name = "USU_EMPLEADO", referencedColumnName = "NICK")
-    @ManyToOne
-    private Usuario usuEmpleado;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenTrabajo")
-    private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
 
     public OrdenTrabajo() {
     }
@@ -254,21 +255,16 @@ public class OrdenTrabajo implements Serializable {
         this.cedulaRuc = cedulaRuc;
     }
 
-    public Usuario getUsuEmpleado() {
-        return usuEmpleado;
+    public BigDecimal getSaldoAfavor() {
+        return saldoAfavor;
     }
 
-    public void setUsuEmpleado(Usuario usuEmpleado) {
-        this.usuEmpleado = usuEmpleado;
+    public void setSaldoAfavor(BigDecimal saldoAfavor) {
+        this.saldoAfavor = saldoAfavor;
     }
+    
+    
 
-    public List<DetalleVentaOrdenTrabajo> getDetalleVentaOrdenTrabajoList() {
-        return detalleVentaOrdenTrabajoList;
-    }
-
-    public void setDetalleVentaOrdenTrabajoList(List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList) {
-        this.detalleVentaOrdenTrabajoList = detalleVentaOrdenTrabajoList;
-    }
 
     @Override
     public int hashCode() {

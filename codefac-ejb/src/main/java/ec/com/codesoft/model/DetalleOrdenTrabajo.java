@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.model;
 
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,6 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "detalle_orden_trabajo")
 public class DetalleOrdenTrabajo implements Serializable {
+
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,14 +57,32 @@ public class DetalleOrdenTrabajo implements Serializable {
     @Size(max = 512)
     @Column(name = "DIAGNOSTICO")
     private String diagnostico;
+
+    @Column(name = "DESCUENTO")
+    private BigDecimal descuento;
+
+    @Column(name = "ESTADO")
+    private String estado;
+
     @JoinColumn(name = "ID_ORDEN_TRABAJO", referencedColumnName = "ID_ORDEN_TRABAJO")
     @ManyToOne
     private OrdenTrabajo idOrdenTrabajo;
     @JoinColumn(name = "ID_CATEGORIA_TRABAJO", referencedColumnName = "ID_CATEGORIA_TRABAJO")
     @ManyToOne
     private CategoriaTrabajo idCategoriaTrabajo;
+
+    @JoinColumn(name = "USU_EMPLEADO", referencedColumnName = "NICK")
+    @ManyToOne
+    private Usuario usuEmpleado;
+
     @OneToMany(mappedBy = "idDetalleOrdenTrabajo")
     private List<DetalleProductoOrdenTrabajo> detalleProductoOrdenTrabajoList;
+
+    @OneToMany(mappedBy = "idDetalleOrdenTrabajo")
+    private List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList;
+
+    @OneToMany(mappedBy = "idDetalleOrdenTrabajo")
+    private List<AccesoriosOrdenTrabajo> accesoriosOrdenTrabajoList;
 
     public DetalleOrdenTrabajo() {
     }
@@ -144,6 +163,32 @@ public class DetalleOrdenTrabajo implements Serializable {
         this.idCategoriaTrabajo = idCategoriaTrabajo;
     }
 
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Usuario getUsuEmpleado() {
+        return usuEmpleado;
+    }
+
+    public void setUsuEmpleado(Usuario usuEmpleado) {
+        this.usuEmpleado = usuEmpleado;
+    }
+    
+    
+
     @XmlTransient
     public List<DetalleProductoOrdenTrabajo> getDetalleProductoOrdenTrabajoList() {
         return detalleProductoOrdenTrabajoList;
@@ -152,6 +197,24 @@ public class DetalleOrdenTrabajo implements Serializable {
     public void setDetalleProductoOrdenTrabajoList(List<DetalleProductoOrdenTrabajo> detalleProductoOrdenTrabajoList) {
         this.detalleProductoOrdenTrabajoList = detalleProductoOrdenTrabajoList;
     }
+
+    public List<DetalleVentaOrdenTrabajo> getDetalleVentaOrdenTrabajoList() {
+        return detalleVentaOrdenTrabajoList;
+    }
+
+    public void setDetalleVentaOrdenTrabajoList(List<DetalleVentaOrdenTrabajo> detalleVentaOrdenTrabajoList) {
+        this.detalleVentaOrdenTrabajoList = detalleVentaOrdenTrabajoList;
+    }
+
+    public List<AccesoriosOrdenTrabajo> getAccesoriosOrdenTrabajoList() {
+        return accesoriosOrdenTrabajoList;
+    }
+
+    public void setAccesoriosOrdenTrabajoList(List<AccesoriosOrdenTrabajo> accesoriosOrdenTrabajoList) {
+        this.accesoriosOrdenTrabajoList = accesoriosOrdenTrabajoList;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -177,5 +240,5 @@ public class DetalleOrdenTrabajo implements Serializable {
     public String toString() {
         return "modelo.DetalleOrdenTrabajo[ idDetalleOrdenTrabajo=" + idDetalleOrdenTrabajo + " ]";
     }
-    
+
 }

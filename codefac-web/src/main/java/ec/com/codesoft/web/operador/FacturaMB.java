@@ -250,7 +250,8 @@ public class FacturaMB {
         ordenesTemporal = ordenTrabajoServicio.obtenerOrdenesTrabajo();
         for (int i = 0; i < ordenesTemporal.size(); i++) {
             List<DetalleVentaOrdenTrabajo> detalllesVentaOrden = new ArrayList<DetalleVentaOrdenTrabajo>();
-            detalllesVentaOrden = ordenesTemporal.get(i).getDetalleVentaOrdenTrabajoList();
+            //REVISAR 
+           // detalllesVentaOrden = ordenesTemporal.get(i).getDetalleVentaOrdenTrabajoList();
             if (detalllesVentaOrden.size() == 0) {
 
             } else {
@@ -702,7 +703,8 @@ public class FacturaMB {
                 detalles.setPrecioSeleccionado("PVP");
                 detalles.setEscogerDescuento("No");
                 detalles.setTipoDetalle("Orden Trabajo");
-                detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
+                //REVISAR
+                //detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
                 detallesVenta.add(detalles);
                 System.out.println("Detallles: " + detallesVenta);
             }
@@ -1232,7 +1234,8 @@ public class FacturaMB {
                             detalleOrdenTrabajo.setIva(new BigDecimal("0.0"));
                             OrdenTrabajo orden = new OrdenTrabajo();
                             orden.setIdOrdenTrabajo(Integer.parseInt(detallesVenta.get(i).getCodigo()));
-                            detalleOrdenTrabajo.setIdOrdenTrabajo(orden);
+                            //REVISAR                           
+                            //detalleOrdenTrabajo.setIdOrdenTrabajo(orden);
                             //detalleOrdenTrabajo.setNick;
                             detalleOrdenTrabajo.setTotal(detallesVenta.get(i).getTotal());
                             detallesOrdenTrabajo.add(detalleOrdenTrabajo);

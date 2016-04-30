@@ -86,7 +86,7 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "nick")
     private List<OrdenTrabajo> ordenTrabajoList;
     @OneToMany(mappedBy = "usuEmpleado")
-    private List<OrdenTrabajo> ordenTrabajoList1;
+    private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
     @OneToMany(mappedBy = "nick")
     private List<Venta> ventaList;
     @OneToMany(mappedBy = "nick")
@@ -218,6 +218,16 @@ public class Usuario implements Serializable {
         this.detalleProductoIndividualList = detalleProductoIndividualList;
     }
 
+    public List<DetalleOrdenTrabajo> getDetalleOrdenTrabajoList() {
+        return detalleOrdenTrabajoList;
+    }
+
+    public void setDetalleOrdenTrabajoList(List<DetalleOrdenTrabajo> detalleOrdenTrabajoList) {
+        this.detalleOrdenTrabajoList = detalleOrdenTrabajoList;
+    }
+    
+    
+
     @XmlTransient
     public List<OrdenTrabajo> getOrdenTrabajoList() {
         return ordenTrabajoList;
@@ -227,14 +237,7 @@ public class Usuario implements Serializable {
         this.ordenTrabajoList = ordenTrabajoList;
     }
 
-    @XmlTransient
-    public List<OrdenTrabajo> getOrdenTrabajoList1() {
-        return ordenTrabajoList1;
-    }
-
-    public void setOrdenTrabajoList1(List<OrdenTrabajo> ordenTrabajoList1) {
-        this.ordenTrabajoList1 = ordenTrabajoList1;
-    }
+    
 
     @XmlTransient
     public List<Venta> getVentaList() {

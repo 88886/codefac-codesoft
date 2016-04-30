@@ -183,6 +183,8 @@ h1 , h2
     color: white;
     font-weight: bold;
     padding: 3px;
+    padding-bottom: 4px;
+
 
 }
 .ui-botonAzul.ui-state-hover {
@@ -192,6 +194,7 @@ h1 , h2
     color: #485798;
     font-weight: bold;
     padding: 3px;
+    padding-bottom: 4px;
 }
 .ui-botonAzul.ui-state-active {
     background-image: none;
@@ -200,6 +203,8 @@ h1 , h2
     color: white;
     font-weight: bold;
     padding: 3px;
+    padding-bottom: 4px;
+
 }
 
 .ui-botonVerde.ui-state-default {
@@ -209,6 +214,7 @@ h1 , h2
     color: white;
     font-weight: bold;
     padding: 3px;
+    padding-bottom: 4px;
 }
 
 .ui-botonVerde.ui-state-hover {
@@ -218,6 +224,7 @@ h1 , h2
     color: #009966;
     font-weight: bold;
     padding: 3px;
+    padding-bottom: 4px;
 }
 
 .ui-botonConchaVino.ui-state-default {
@@ -226,6 +233,7 @@ h1 , h2
     background-color: #666666;
     color: white;
     font-weight: bold;
+    padding-bottom: 4px;
 }
 
 .ui-botonCafe.ui-state-default {
@@ -235,12 +243,14 @@ h1 , h2
     color: white;
     font-weight: bold;
     padding: 3px;
+    padding-bottom: 4px;
 }
 
 .ui-botonAmarillo.ui-state-default {
     background-image: none;
     background-image: url("#{request.contextPath}/resources/img/btn_img/btn_blanco.png");
     padding: 3px;
+    padding-bottom: 4px;
 }
 
 .ui-botonCeleste.ui-state-default {
@@ -248,6 +258,7 @@ h1 , h2
     background-image: url("#{request.contextPath}/resources/img/btn_img/btn_celeste.png");
     padding: 3px;
     color: black;
+    padding-bottom: 4px;
 }
 
 .ui-botonEsmeralda.ui-state-default {
@@ -255,7 +266,31 @@ h1 , h2
     background-image: url("#{request.contextPath}/resources/img/btn_img/btn_esmeralda.png");
     padding: 3px;
     color: black;
+    padding-bottom: 4px;
 }
+
+.ui-botonNaranja.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_naranja.png");
+    padding: 3px;
+    color: black;
+    padding-bottom: 4px;
+}
+
+.ui-dialog.ui-widget-content .ui-dialog-title
+{
+    padding-top: 5px;
+    font-size: 15px;  
+    color: white;
+}
+
+.ui-dialog.ui-widget-content .ui-dialog-titlebar
+{
+    padding: 0px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #485798;
+}
+
 
 
 

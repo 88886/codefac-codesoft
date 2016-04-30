@@ -32,16 +32,16 @@ and open the template in the editor.
                                     placeholder="RUC del distribuidor"
                                     onkeypress="return validarEnter(event, 'buscarDistribuidorJS');"  
                                     value="#{comprarMB.compra.ruc.ruc}" 
-                                    
+
                                     />
 
                                 <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
-                                
+
                                 <p:commandButton 
                                     id="btnEncontrarDitribuidor"                                    
                                     icon="ui-icon-search" 
                                     styleClass="ui-botonEsmeralda" />
-                                
+
                                 <p:tooltip style="font-size: 11px" id="toolTipGrow" for=":formDetalleDistribuidor:btnEncontrarDitribuidor" value="Buscar distribuidores"
                                            showEffect="clip" hideEffect="explode" />
                                 <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
@@ -156,7 +156,7 @@ and open the template in the editor.
 
                             <p:tooltip style="font-size: 11px" id="toolTipGrow3" for=":formBuscarProducto:btnCambiarPrecio" value="Cambiar el precio de Venta al publico"
                                        showEffect="clip" hideEffect="explode" />
-                            
+
                             <p:outputLabel value="Stock" />
                             <p:outputLabel id="lblStock" value="#{comprarMB.stockProductoSeleccionado}" style="font-weight: lighter" />
 
@@ -254,7 +254,7 @@ and open the template in the editor.
                         </p:panel>
                     </div>
                 </h:form>
-                
+
                 <p:spacer height="5px" />
 
                 <!-- Botones de Accion para la Fatura -->

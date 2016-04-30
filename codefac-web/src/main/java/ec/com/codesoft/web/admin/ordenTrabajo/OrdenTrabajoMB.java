@@ -19,6 +19,7 @@ import ec.com.codesoft.web.reportes.ordenTrabajo.OrdenTrabajoReporte;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,6 +85,11 @@ public class OrdenTrabajoMB implements Serializable {
     private String nickEmpleadoSeleccionado;
     private String idServicioSeleccionado;
     private String idCategoriaSeleccionado;
+    
+    /**
+     * Valor para calcular el saldo anterior al momento de editar
+     */
+    private BigDecimal valorEditar;
 
     @PostConstruct
     public void postConstruct() {
@@ -112,10 +118,12 @@ public class OrdenTrabajoMB implements Serializable {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No existe items para grabar");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
         } else {
-            Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);
+           // Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);
 
-            ordenTrabajo.setUsuEmpleado(empleado);
+            //ordenTrabajo.setUsuEmpleado(empleado);
+
             ordenTrabajo.setFechaEmision(new Date());
+            ordenTrabajo.setSaldoAfavor(ordenTrabajo.getTotal().subtract(ordenTrabajo.getAdelanto()));
 
             ordenTrabajoServicio.grabar(ordenTrabajo);
             System.out.println("orden grabado ...");
@@ -130,11 +138,14 @@ public class OrdenTrabajoMB implements Serializable {
      * Abre el dialogo que me permite realizar la edicion
      */
     public void abrirDialogoEditar(DetalleOrdenTrabajo detalle) {
+        
         detalleOrdenTrabajoEditar = detalle;
+        valorEditar=new BigDecimal(detalleOrdenTrabajoEditar.getPrecio().toString());
         System.out.println("abriendo dialogo de la edicion ...");
         RequestContext.getCurrentInstance().execute("PF('dlgDetalleEdit').show()");
         idCategoriaSeleccionado=detalle.getIdCategoriaTrabajo().getIdCategoriaTrabajo().toString();
         idServicioSeleccionado=detalle.getIdCategoriaTrabajo().getCodigoServicio().getCodigoServicio().toString();
+        nickEmpleadoSeleccionado=detalle.getUsuEmpleado().getNick();
         
         cargarCategoriasServicios();
         cargarDatosCategoria();
@@ -202,7 +213,11 @@ public class OrdenTrabajoMB implements Serializable {
         System.out.println("agregando detalle ...");
 //        System.out.println(detalleOrdenTrabajo.getEquipo());
 //        System.out.println(ordenTrabajo.getTotal());
-
+        //ordenTrabajoServicio //obtnickEmpleadoSeleccionado;
+        Usuario empleado=ordenTrabajoServicio.getUsuarioByCodigo(nickEmpleadoSeleccionado);
+        
+       detalleOrdenTrabajo.setUsuEmpleado(empleado);
+       
         ordenTrabajo.getDetalleOrdenTrabajoList().add(detalleOrdenTrabajo);
 
         CategoriaTrabajo categoria = ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
@@ -212,7 +227,7 @@ public class OrdenTrabajoMB implements Serializable {
         System.out.println(detalleOrdenTrabajo.getPrecio());
 
         ordenTrabajo.setTotal(ordenTrabajo.getTotal().add(detalleOrdenTrabajo.getPrecio()));
-        ordenTrabajo.setDescuento(new BigDecimal("12.00"));
+       // ordenTrabajo.setDescuento(new BigDecimal("12.00"));
 
         System.out.println(ordenTrabajo.getTotal());
         RequestContext.getCurrentInstance().execute("PF('dlgDetalle').hide()");
@@ -225,6 +240,12 @@ public class OrdenTrabajoMB implements Serializable {
      */
     public void editarDetalle()
     {
+        Usuario empleado=ordenTrabajoServicio.getUsuarioByCodigo(nickEmpleadoSeleccionado);
+        detalleOrdenTrabajoEditar.setUsuEmpleado(empleado);
+        
+        BigDecimal nuevoTotal=ordenTrabajo.getTotal().subtract(valorEditar).add(detalleOrdenTrabajoEditar.getPrecio());
+        ordenTrabajo.setTotal(nuevoTotal);
+        
         System.out.println("editando el detalle");
         RequestContext.getCurrentInstance().execute("PF('dlgDetalleEdit').hide()");
         
@@ -282,7 +303,8 @@ public class OrdenTrabajoMB implements Serializable {
         System.out.println("Cliente llego " + cliente);
 
     }
-
+    
+    
     public void cargarCategoriasServicios() {
         Servicios servicioSeleccionado = ordenTrabajoServicio.obtenerServicioPorCodigo(Integer.parseInt(idServicioSeleccionado));
         categorias = servicioSeleccionado.getCategoriaTrabajoList();
@@ -297,6 +319,8 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajo.setTrabajoRealizar(categoria.getTrabajoRealizar());
         System.out.println("cargando categorias ..." + categoria.getPrecio());
     }
+    
+
 
     public void seleccionarEmpleado(Usuario usuario) {
         System.out.println("se llamo al usuario");
@@ -336,13 +360,6 @@ public class OrdenTrabajoMB implements Serializable {
         this.empleados = empleados;
     }
 
-    public String getNickEmpleadoSeleccionado() {
-        return nickEmpleadoSeleccionado;
-    }
-
-    public void setNickEmpleadoSeleccionado(String nickEmpleadoSeleccionado) {
-        this.nickEmpleadoSeleccionado = nickEmpleadoSeleccionado;
-    }
 
     public List<Servicios> getServicios() {
         return servicios;
@@ -383,5 +400,15 @@ public class OrdenTrabajoMB implements Serializable {
     public void setDetalleOrdenTrabajoEditar(DetalleOrdenTrabajo detalleOrdenTrabajoEditar) {
         this.detalleOrdenTrabajoEditar = detalleOrdenTrabajoEditar;
     }
+
+    public String getNickEmpleadoSeleccionado() {
+        return nickEmpleadoSeleccionado;
+    }
+
+    public void setNickEmpleadoSeleccionado(String nickEmpleadoSeleccionado) {
+        this.nickEmpleadoSeleccionado = nickEmpleadoSeleccionado;
+    }
+    
+    
 
 }

@@ -91,14 +91,14 @@ public class GestionarVentaMB implements Serializable {
         }
         
          List<DetalleVentaOrdenTrabajo> listaDetallesOrden =venta.getDetalleVentaOrdenTrabajoList();
-        for (DetalleVentaOrdenTrabajo detalle : listaDetallesOrden) {
-            detallesVenta.add(new DetallesVenta(
-                    1,
-                    detalle.getIdOrdenTrabajo().getIdOrdenTrabajo().toString(),
-                    detalle.getIdOrdenTrabajo().getEstado(),
-                    detalle.getIdOrdenTrabajo().getTotal(),
-                    detalle.getIdOrdenTrabajo().getTotal()));
-        }
+//        for (DetalleVentaOrdenTrabajo detalle : listaDetallesOrden) {
+//            detallesVenta.add(new DetallesVenta(
+//                    1,
+//                    detalle.getIdOrdenTrabajo().getIdOrdenTrabajo().toString(),
+//                    detalle.getIdOrdenTrabajo().getEstado(),
+//                    detalle.getIdOrdenTrabajo().getTotal(),
+//                    detalle.getIdOrdenTrabajo().getTotal()));
+//        }
     }
 
     public String getColor(Venta venta) {

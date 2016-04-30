@@ -324,7 +324,8 @@ public class Venta implements Serializable {
         if (detalleVentaOrdenTrabajoList!=null) {
             List<DetalleVentaOrdenTrabajo> listaOrden = detalleVentaOrdenTrabajoList;
             for (DetalleVentaOrdenTrabajo detalle : listaOrden) {
-                cadena = cadena + detalle.getIdOrdenTrabajo().toStringDetalle()+ ",";
+                //Cambiar la forma como se guardan las ordenes de trabajo
+                //cadena = cadena + detalle.getEstado().toStringDetalle()+ ",";
             }
         }
 
