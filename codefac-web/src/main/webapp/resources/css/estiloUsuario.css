@@ -233,6 +233,7 @@ h1 , h2
     background-color: #666666;
     color: white;
     font-weight: bold;
+    padding: 3px;
     padding-bottom: 4px;
 }
 
@@ -275,7 +276,18 @@ h1 , h2
     padding: 3px;
     color: black;
     padding-bottom: 4px;
+    font-weight: bold;
 }
+
+.ui-botonRojo.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_rojo.png");
+    padding: 3px;
+    color: white;
+    padding-bottom: 4px;
+    font-weight: lighter;
+}
+
 
 .ui-dialog.ui-widget-content .ui-dialog-title
 {

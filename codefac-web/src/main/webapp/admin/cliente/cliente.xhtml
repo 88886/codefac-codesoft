@@ -10,6 +10,7 @@ and open the template in the editor.
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
                 template="/template/plantilladmin.xhtml">
 
 
@@ -37,12 +38,12 @@ and open the template in the editor.
 
 
                     <f:facet name="header" >                               
-                        <p:commandButton id="btnNuevoCliente" process="tablaClientes" icon="ui-icon-plus" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enCrear()}" style="width: 20px;height: 20px"/>  
-                        <p:commandButton id="btnEditarCliente" process="tablaClientes" icon="ui-icon-pencil" onclick="PF('editarCliente').show();" actionListener="#{clienteMB.enModificar()}" disabled="#{clienteMB.flagBoton1}" style="width: 20px;height: 20px" update=":formDialogoEdit:panelGrid2"/>                          
+                        <p:commandButton id="btnNuevoCliente" styleClass="ui-botonEsmeralda" process="tablaClientes" icon="ui-icon-plus" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enCrear()}" style="width: 20px;height: 20px" title="Agregar un nuevo Cliente" update=":formDialogo:panelGrid" />  
+                        <p:commandButton id="btnEditarCliente" styleClass="ui-botonNaranja" process="tablaClientes" icon="ui-icon-pencil" onclick="PF('editarCliente').show();" actionListener="#{clienteMB.enModificar()}" disabled="#{clienteMB.flagBoton1}" style="width: 20px;height: 20px" update=":formDialogEdit:panelGrid2"  title="Editar el cliente seleccionado"/>                          
                     </f:facet>
 
 
-                    <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >
+                    <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" style="width: 120px" >
                         <h:outputText value="#{cliente.cedulaRuc}" />
                     </p:column>
 
@@ -50,7 +51,7 @@ and open the template in the editor.
                         <h:outputText value="#{cliente.nombre}"   />
                     </p:column>
 
-                    <p:column headerText="Telefono" >
+                    <p:column headerText="Telefono" style="width: 150px" >
                         <h:outputText value="#{cliente.telefono}" />
                     </p:column>
                     <p:column headerText="Correo" >
@@ -65,8 +66,13 @@ and open the template in the editor.
                     </p:column>
 
 
-                    <p:column headerText="Acciones">
-                        <p:commandButton  value="Eliminar" actionListener="#{clienteMB.eliminarDetalle(cliente)}" update="@form" >
+                    <p:column headerText="Acciones" style="width: 100px">
+                        <p:commandButton  
+                            styleClass="ui-botonNaranja"
+                            value="Eliminar" 
+                            actionListener="#{clienteMB.eliminarDetalle(cliente)}" 
+                            update="@form" >
+                            
                             <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
                         </p:commandButton>
                     </p:column>
@@ -86,62 +92,77 @@ and open the template in the editor.
         <h:form id="formDialogo">
             <!-- Dialogo para grabar un nuevo cliente -->
             <p:dialog  id="dlgCliente" header="Administracion Cliente" widgetVar="nuevoCliente" modal="true" height="auto">
-                <p:panelGrid columns="3" id="panelGrid" styleClass="panelNoBorder">   
+                <p:messages id="msgCliNombre" />
+                <p:panelGrid columns="6" id="panelGrid" styleClass="panelNoBorder">   
                     <p:outputLabel for="cliCedula" value="Cédula:" />
 
                     <p:inputText id="cliCedula" value="#{clienteMB.cliente.cedulaRuc}" required="true" requiredMessage="Cedula necesario">
                         <p:ajax event="blur" listener="#{clienteMB.verificarClienteExiste()}"  />
                     </p:inputText>
 
-                    <p:message for="cliCedula" />                  
+                    <p:message for="cliCedula" display="icon" />                  
 
                     <p:outputLabel for="cliNombre" value="Nombre:" />
                     <p:inputText id="cliNombre" value="#{clienteMB.cliente.nombre}" required="true" requiredMessage="Nombre necesario">
                         <f:validateLength minimum="2" />
-                        <p:ajax update="msgCliNombre" event="keyup" />
+                        <p:ajax  event="keyup" />
                     </p:inputText>
-                    <p:message id="msgCliNombre" for="cliNombre" />                                
+                    <p:message for="cliNombre" display="icon" />                                
 
                     <p:outputLabel for="cliTelefono" value="Telefono:" />
                     <p:inputText id="cliTelefono" value="#{clienteMB.cliente.telefono}" required="true" requiredMessage="Telefono necesario"/>
-                    <p:message for="cliTelefono" />                
+                    <p:message for="cliTelefono" display="icon" />                
 
                     <p:outputLabel for="cliDireccion" value="Direccion:" />
                     <p:inputText id="cliDireccion" value="#{clienteMB.cliente.direccion}" />
-                    <p:message for="cliDireccion" />    
+                    <p:message for="cliDireccion" display="icon" />    
 
                     <p:outputLabel for="cliCorreo" value="Correo:" />
                     <p:inputText id="cliCorreo" value="#{clienteMB.cliente.correo}" />
-                    <p:message for="cliCorreo" />  
+                    <p:message for="cliCorreo" display="icon" />  
 
                     <p:outputLabel  value="Tipo Cliente" />
                     <p:selectOneMenu id="tipoCliente" value="#{clienteMB.cliente.tipo}">
                         <f:selectItem itemLabel="Cliente Final" itemValue="PVP" />
                         <f:selectItem itemLabel="Distribuidor" itemValue="Distribuidor" />
                     </p:selectOneMenu>
-                    <p:message for="tipoCliente" /> 
+                    <p:message for="tipoCliente" display="icon" /> 
 
                     <p:outputLabel for="notas" value="Notas" />
                     <p:inputTextarea id="notas" value="#{clienteMB.cliente.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
-                    <p:message for="notas" />
+                    <p:message for="notas" display="icon" />
                 </p:panelGrid>
 
                 <f:facet name="footer">
-                    <p:commandButton 
-                        value="Aceptar" 
-                        icon="ui-icon-disk"
-                        update=":form:tablaClientes,@form"
-                        actionListener="#{clienteMB.registarCliente(e)}"/>
-                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" actionListener="#{clienteMB.cancelar()}" onclick="PF('nuevoCliente').hide();" update=":form:tablaClientes"/>                        
+                    <div style="text-align: center">
+                        <p:commandButton
+                            styleClass="ui-botonAzul"
+                            process="@this,cliCedula,cliNombre,cliTelefono,cliDireccion,cliCorreo,tipoCliente,notas"
+                            validateClient="true"
+                            value="Aceptar" 
+                            icon="ui-icon-disk"
+                            update=":form:tablaClientes,@form"
+                            actionListener="#{clienteMB.registarCliente(e)}"/>
+
+                        <b:commandButton
+                            immediate="true"
+                            look="danger"                        
+                            value="Cancelar" 
+                            icon="ui-icon-cancel" 
+                            actionListener="#{clienteMB.cancelar()}" 
+                            onclick="PF('nuevoCliente').hide();" 
+                            />                        
+                    </div>
                 </f:facet>
 
             </p:dialog>
         </h:form>
 
-        <h:form id="formDialogoEdit"> 
+        <h:form id="formDialogEdit"> 
             <!-- Dialogo para editar un cliente -->
             <p:dialog  id="dlgEditCliente" header="Editar Cliente" widgetVar="editarCliente" modal="true" height="auto">
-                <p:panelGrid columns="3" id="panelGrid2">   
+                <p:messages />
+                <p:panelGrid columns="6" id="panelGrid2" styleClass="panelNoBorder">   
                     <p:outputLabel for="cliCedula2" value="Cédula:" />
 
                     <p:inputText id="cliCedula2" value="#{clienteMB.clienteSeleccionado.cedulaRuc}" required="true" requiredMessage="Cedula necesario" readonly="true">                        
@@ -150,7 +171,9 @@ and open the template in the editor.
                     <p:message for="cliCedula2" />                  
 
                     <p:outputLabel for="cliNombre2" value="Nombre:" />
-                    <p:inputText id="cliNombre2" value="#{clienteMB.clienteSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario"/>
+                    <p:inputText id="cliNombre2" value="#{clienteMB.clienteSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario">
+                        <p:ajax event="keyup" />
+                    </p:inputText>
                     <p:message for="cliNombre2" />                                
 
                     <p:outputLabel for="cliTelefono2" value="Telefono:" />
@@ -179,16 +202,23 @@ and open the template in the editor.
                 </p:panelGrid>
 
                 <f:facet name="footer">
-                    <p:commandButton 
-                        value="Aceptar" 
-                        icon="ui-icon-disk"
-                        update=":form:tablaClientes,@form"
-                        actionListener="#{clienteMB.registarCliente(e)}"/>
+                    <div style="text-align: center">
+                        <p:commandButton
+                            process="@this,cliCedula2,cliNombre2,cliTelefono2,cliDireccion2,cliCorreo2,cliCorreo2"
+                            validateClient="true"
+                            styleClass="ui-botonAzul"
+                            value="Aceptar" 
+                            icon="ui-icon-disk"
+                            update=":form:tablaClientes,@form"
+                            actionListener="#{clienteMB.registarCliente(e)}"/>
 
-                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" actionListener="#{clienteMB.cancelar()}" onclick="PF('editarCliente').hide();" update=":form:tablaClientes"/>                        
+                        <b:commandButton look="danger" value="Cancelar" icon="ui-icon-cancel" actionListener="#{clienteMB.cancelar()}" onclick="PF('editarCliente').hide();" />                        
+                    </div>
                 </f:facet>
-
             </p:dialog>
+
         </h:form>
+
+
     </ui:define>
 </ui:composition>
