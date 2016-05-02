@@ -59,5 +59,13 @@ public class CalculosMB implements Serializable {
         }
         return new BigDecimal(0);
     }
+    
+     public BigDecimal redondeoInferiorMostar(BigDecimal valor) {
+        if (valor != null) {
+            BigDecimal respuesta = valor.setScale(2, RoundingMode.DOWN);
+            return respuesta;
+        }
+        return new BigDecimal(0);
+    }
 
 }
