@@ -21,7 +21,7 @@ and open the template in the editor.
                     <div style="float: left;width:100%;height: 50px" >
                         <h:panelGrid columns="2" style="margin-bottom:10px;margin-left: 30%" cellpadding="5">
                             <b:badge  value="Tipo Documento: "  style="background-color: #999999;color: white"/>
-                            <p:selectOneButton value="#{facturaMB.tipoCliente}">
+                            <p:selectOneButton value="#{facturaMB.tipoCliente}" styleClass="ui-botonEsmeralda">
                                 <f:selectItem itemLabel=" Nota de Entrega " itemValue="C" />
                                 <f:selectItem itemLabel=" Factura " itemValue="F" />
                                 <p:ajax event="change" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
@@ -36,7 +36,7 @@ and open the template in the editor.
 
                 <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success" >
                     <p:panelGrid columns="8" style="margin: 0 auto;" >
-                        <p:commandButton  id="btnBuscarCli" icon="ui-icon-search" style="background-image: none;background-color: #3366ff;color: #ffffff"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
+                        <p:commandButton  id="btnBuscarCli" icon="ui-icon-search"  styleClass="ui-botonEsmeralda"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
 
                         <p:outputLabel for="cedCliente" value="Cédula/RUC:" />
                         <p:inputText id="cedCliente" 
@@ -256,10 +256,10 @@ and open the template in the editor.
                             <h:outputText value="#{detallesVenta.nombre}" />
                         </p:column>
                         <p:column headerText="P. Unitario" style="text-align: left;width:60px" id="descuentoIndividual">
-                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
+                            <h:outputText value="#{calculosMB.redondeoInferiorMostar(detallesVenta.costo)}" />
                         </p:column>
                         <p:column headerText="Total" style="text-align: left;width:60px" id="totalDescuento">
-                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
+                            <h:outputText value="#{calculosMB.redondeoInferiorMostar(detallesVenta.total)}" />
                         </p:column>
                         <p:column headerText="Dsct %" style="width:50px">
                             <p:selectOneMenu  value="#{detallesVenta.escogerDescuento}">
@@ -285,7 +285,7 @@ and open the template in the editor.
                     <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%;text-align: left">
 
                         <b:badge  value="Subtotal:" style="background-color: #0087ca;color: white" />
-                        <p:outputLabel id="subTotal" value="#{calculosMB.redondeoSuperior(facturaMB.subtotal)}" style="font-weight: bold"/>
+                        <p:outputLabel id="subTotal" value="#{calculosMB.redondeoInferiorMostar(facturaMB.subtotal)}" style="font-weight: bold"/>
 
                         <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoDescuento}" title="Escojer el tipo de Pago">
                             <f:selectItem itemLabel="Descuento %" itemValue="porcentaje" />
@@ -305,7 +305,7 @@ and open the template in the editor.
                         <p:outputLabel id="totalIva" value="#{calculosMB.redondeoSuperior(facturaMB.total)}" style="font-weight: bold"/>
 
                         <b:badge  value="Recargo Tarjeta : " style="background-color: #0087ca;color: white"/>
-                        <p:outputLabel id="interes" value="#{calculosMB.redondeoSuperior(facturaMB.interesTarjeta)}" style="font-weight: bold"/>
+                        <p:outputLabel id="interes" value="#{calculosMB.redondeoInferiorMostar(facturaMB.interesTarjeta)}" style="font-weight: bold"/>
 
                         <b:badge  value="Total a Pagar : " style="background-color: #0087ca;color: white"/>
                         <p:outputLabel id="totalPagar" value="#{calculosMB.redondeoSuperior(facturaMB.totalPagar)}" style="font-weight: bold"/>
@@ -323,7 +323,7 @@ and open the template in the editor.
                             <p:ajax event="keyup" listener="#{facturaMB.darVuelto()}" update="vuelto"/>
                         </p:inputText>
                         <b:badge value="Vuelto" style="background-color: #0087ca;color: white"/>
-                        <p:inputText id="vuelto" value="#{calculosMB.redondeoSuperior(facturaMB.vuelto)}"/>
+                        <p:inputText id="vuelto" value="#{calculosMB.redondeoInferiorMostar(facturaMB.vuelto)}"/>
                     </p:panelGrid>
                 </div>
 
@@ -346,10 +346,20 @@ and open the template in the editor.
 
     <p:dialog header="Segur@ ?" widgetVar="confirmarFactura" modal="true" showEffect="explode" hideEffect="bounce" height="100" >
         <h:form>
-            <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
-                <p:commandButton  value="Facturar" style="background-image: none;background-color: darkorange "  actionListener="#{facturaMB.facturar()}" ajax="false" />
+            <p:panelGrid columns="3" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
+                <b:badge  value="Enviar Correo " style="background-color: #999999;color: white"/>
+                <p:selectBooleanCheckbox value="#{facturaMB.estadoCorreo}">
+                    <p:ajax listener="#{facturaMB.cambiarEstadoCorreo()}" />
+                </p:selectBooleanCheckbox>
+                <h:outputText/>
+                <p:commandButton
+                    styleClass="ui-botonEsmeralda"
+                    onstart="PF('statusEnvioCorreo').show()" 
+                    onsuccess="PF('statusEnvioCorreo').hide()"
+                    actionListener="#{facturaMB.facturar()}" 
+                    value="Facturar">
+                </p:commandButton>
                 <p:commandButton onclick="PF('confirmarFactura').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
-
             </p:panelGrid>
         </h:form>
     </p:dialog>
@@ -363,7 +373,7 @@ and open the template in the editor.
             </p:commandButton>                        
         </h:form>
     </p:dialog>
-
+    
     <p:dialog header="Factura Completa " modal="true" widgetVar="dlgImprimir" showEffect="explode" hideEffect="bounce" height="100">
         <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
             <h:outputText value="Que desea hacer?" />
@@ -403,6 +413,14 @@ and open the template in the editor.
             </p:dataTable>
         </h:form>
     </p:overlayPanel>
+
+    <!-- Dialago para mostrar la espera del envio del correo  -->
+    <p:dialog widgetVar="statusEnvioCorreo" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+        <p:panelGrid columns="2" styleClass="panelNoBorder">
+            <p:graphicImage library="img"  name="/util/waitIcon.gif" />
+            <p:outputLabel value="enviando correo ..." />
+        </p:panelGrid>
+    </p:dialog>
 
     <!--Textos en botones -->
 

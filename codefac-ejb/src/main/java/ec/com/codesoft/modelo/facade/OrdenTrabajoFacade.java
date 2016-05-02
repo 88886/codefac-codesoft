@@ -91,7 +91,7 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo> {
     public List<OrdenTrabajo> findAllDesc()
     {
          try {
-                String queryString = "SELECT o FROM OrdenTrabajo o where o.estado='reparado' and order by o.idOrdenTrabajo DESC ";
+                String queryString = "SELECT o FROM OrdenTrabajo o where o.estado='reparado' order by o.idOrdenTrabajo DESC ";
             Query query = em.createQuery(queryString);
             //query.setParameter(1,estado);
            

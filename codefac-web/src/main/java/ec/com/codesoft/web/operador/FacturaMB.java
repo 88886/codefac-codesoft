@@ -31,6 +31,8 @@ import ec.com.codesoft.web.reportes.FacturaModeloReporte;
 import ec.com.codesoft.web.reportes.NotaVentaModeloReporte;
 import ec.com.codesoft.web.reportes.ProformaModelo;
 import ec.com.codesoft.web.seguridad.SessionMB;
+import ec.com.codesoft.web.seguridad.SistemaMB;
+import ec.com.codesoft.web.util.CorreoMB;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -156,6 +158,10 @@ public class FacturaMB {
      */
     private Integer codigoDocumento;
 
+    /**
+     * propiedad para enviar correo
+     */
+    private boolean estadoCorreo;
     @EJB
     ClienteServicio clienteServicio;
 
@@ -180,6 +186,10 @@ public class FacturaMB {
     //sesion 
     @ManagedProperty(value = "#{sessionMB}")
     private SessionMB sesion;
+
+    //correo
+    @ManagedProperty(value = "#{sistemaMB}")
+    private SistemaMB sistemaMB;
 
     @PostConstruct
     public void inicializar() {
@@ -248,17 +258,14 @@ public class FacturaMB {
         //filtar por ordenes facturadas
         ordenesTrabajo = new ArrayList<OrdenTrabajo>();
         ordenesTemporal = ordenTrabajoServicio.obtenerOrdenesTrabajo();
+        System.out.println("Tam" + ordenesTemporal.size());
         for (int i = 0; i < ordenesTemporal.size(); i++) {
             List<DetalleVentaOrdenTrabajo> detalllesVentaOrden = new ArrayList<DetalleVentaOrdenTrabajo>();
             detalllesVentaOrden = ordenesTemporal.get(i).getDetalleVentaOrdenTrabajoList();
             if (detalllesVentaOrden.size() == 0) {
-
+                ordenesTrabajo.add(ordenesTemporal.get(i));
             } else {
-                if (detalllesVentaOrden.get(0).getEstado().equals("Facturado")) {
-
-                } else {
-                    ordenesTrabajo.add(ordenesTemporal.get(i));
-                }
+                //las ordenes estan facturadas
             }
         }
 
@@ -276,6 +283,19 @@ public class FacturaMB {
             mostrarDescuentoManual = false;
         }
 
+        //variable correo
+        estadoCorreo = true;
+
+    }
+
+    public void cambiarEstadoCorreo() {
+        if (estadoCorreo == true) {
+            estadoCorreo = true;
+            System.out.println(estadoCorreo);
+        } else {
+            estadoCorreo = false;
+            System.out.println(estadoCorreo);
+        }
     }
 
     public void pruebar() {
@@ -299,6 +319,76 @@ public class FacturaMB {
                     }
                 }
             }
+        }
+    }
+
+    public void enviarCorreo(Venta venta) {
+        System.out.println("En enviar");
+        if (clienteEncontrado.getCorreo() == null || clienteEncontrado.equals(venta)) {
+            System.out.println("No hay correo");
+        } else {
+            String cabecera = "";
+            String detalles = "";
+            System.out.println("enviando correo ...");
+            System.out.println(sistemaMB.getConfiguracion());
+            CorreoMB correo = new CorreoMB(sistemaMB.getConfiguracion().getEmailServicioTecnico(), sistemaMB.getConfiguracion().getClaveEmailServicioTecnico());
+
+            //detalles de la factura
+            detalles = detalles + "<table align='center' style='border: #3f5da2'>";
+            detalles = detalles + "<tr>";
+            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Cantidad" + "</td>";
+            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Código" + "</td>";
+            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Descripción" + "</td>";
+            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "P.Unitario" + "</td>";
+            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Total" + "</td>";
+            detalles = detalles + "</tr>";
+            for (int i = 0; i < detallesVenta.size(); i++) {
+                detalles = detalles + "<tr>";
+                detalles = detalles + "<td>" + detallesVenta.get(i).getCantidad() + "</td>";
+                detalles = detalles + "<td>" + detallesVenta.get(i).getCodigo() + "</td>";
+                detalles = detalles + "<td>" + detallesVenta.get(i).getNombre() + "</td>";
+                detalles = detalles + "<td>" + detallesVenta.get(i).getCosto() + "</td>";
+                detalles = detalles + "<td>" + detallesVenta.get(i).getTotal() + "</td>";
+                detalles = detalles + "</tr>";
+            }
+            detalles = detalles + "</table>";
+
+            //cabecera de la Factura
+            cabecera = "<div align='center'>"
+                    + "<br/>"
+                    + "<h3>Factura N - " + venta.getCodigoDocumento() + "</h3>"
+                    + "<br/>"
+                    + "<b>Cliente</b>"
+                    + "<br/>"
+                    + "<b>Cédula: </b>" + clienteEncontrado.getCedulaRuc() + ""
+                    + "<br/>"
+                    + "<b>Nombre: </b>" + clienteEncontrado.getNombre() + ""
+                    + "<br/>"
+                    + "<b>Dirección: </b>" + clienteEncontrado.getDireccion() + ""
+                    + "<br/>"
+                    + "<b>Teléfono: </b>" + clienteEncontrado.getTelefono() + ""
+                    + "<br/>"
+                    + "<h2 style='background-color: #ffff33'>Codefac</h2> "
+                    + "<br/><b>Le informa que su factura</b> ha sido emitida exitosamente</b>"
+                    + "<br/>"
+                    + "<br/> <b>DETALLES</b>"
+                    + "<br/>"
+                    + detalles
+                    + "<br/>"
+                    + "<br/> <b>Subtotal: </b>" + subtotal.setScale(2, BigDecimal.ROUND_DOWN)
+                    + "<br/> <b>Iva " + ivaMostrar + " % : </b>" + venta.getIva().setScale(2, BigDecimal.ROUND_UP)
+                    + "<br/> <b>Total: </b>" + venta.getTotal().setScale(2, BigDecimal.ROUND_UP)
+                    + "<br/>"
+                    + "<br/>"
+                    + "<p><b>Este correo fué generado por Codefac Sistema de Facturación</b></p>"
+                    + "<br/>"
+                    + "<p><b>Consultas y Servicios :</b></p>"
+                    + "<br/>"
+                    + "<br/>"
+                    + "<b>Dirección: </b>Sangolquí: Av Abdón Calderón y Espejo esq local 4 -- Telf:  2339487 - 0986612116-0994905332 "
+                    + "</div>";
+            System.out.println(cabecera);
+            correo.EnviarCorreoSinArchivoAdjunto(clienteEncontrado.getCorreo(), "Codesoft", cabecera);
         }
     }
 
@@ -1145,7 +1235,7 @@ public class FacturaMB {
                     }
 
                     venta.setDescuento(descuento);// descuento general
-                    venta.setIva(iva); //guarda el iva de la venta
+                    venta.setIva(iva.setScale(2, BigDecimal.ROUND_UP)); //guarda el iva de la venta
                     facturaServicio.guardarFactura(venta);
                     //guardarfactura Carlos reportes
                     venta.setDetalleProductoGeneralList(detallesGeneralVenta);
@@ -1201,9 +1291,9 @@ public class FacturaMB {
                         }
                         for (int i = 0; i < detallesVenta.size(); i++) {
                             for (int j = 0; j < detallesGeneralVenta.size(); j++) {
-                                System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
+                                // System.out.println(detallesVenta.get(i).getCodigo() + " -- " + detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto());
                                 if (detallesVenta.get(i).getCodigo().equals(detallesGeneralVenta.get(j).getCodigoProducto().getCodigoProducto())) {
-                                    System.out.println("DetallesGVenta" + detallesVenta.get(i).getValorDescuento());
+                                    //System.out.println("DetallesGVenta" + detallesVenta.get(i).getValorDescuento());
                                     detallesGeneralVenta.get(j).setDescuento(detallesVenta.get(i).getValorDescuento());
                                     detallesGeneralVenta.get(j).setSubtotal(detallesVenta.get(i).getTotal());
                                 }
@@ -1255,8 +1345,14 @@ public class FacturaMB {
                     // return "factura";
 
                     //dlgImprimir
-                    RequestContext.getCurrentInstance().execute("PF('dlgImprimir').show()");
                     ventaImprimir = venta;
+                    System.out.println("Correo" + estadoCorreo);
+                    if (estadoCorreo) {
+                        enviarCorreo(ventaImprimir);
+                    }
+
+                    RequestContext.getCurrentInstance().execute("PF('dlgImprimir').show()");
+
                 }
 
             }
@@ -1313,7 +1409,7 @@ public class FacturaMB {
             facturaReporte.setRuc(cedCliente);
             facturaReporte.setFechaaFactura(sdf.format(ventaImprimir.getFecha()));
             facturaReporte.setFormaPago(devolverTipoPago());
-            facturaReporte.setIvaTotal(iva);
+            facturaReporte.setIvaTotal(ventaImprimir.getIva());
             facturaReporte.setNombreCliente(clienteEncontrado.getNombre());
             facturaReporte.setNota(" ");
             facturaReporte.setSubtotal(subtotal);
@@ -2061,4 +2157,20 @@ public class FacturaMB {
     }
 
     //get y set del sesion 
+    public boolean getEstadoCorreo() {
+        return estadoCorreo;
+    }
+
+    public void setEstadoCorreo(boolean estadoCorreo) {
+        this.estadoCorreo = estadoCorreo;
+    }
+
+    public SistemaMB getSistemaMB() {
+        return sistemaMB;
+    }
+
+    public void setSistemaMB(SistemaMB sistemaMB) {
+        this.sistemaMB = sistemaMB;
+    }
+
 }
