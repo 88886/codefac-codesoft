@@ -77,7 +77,7 @@ h1 , h2
     color: black;
     margin: 0 auto;
     top: 100px;
-    padding-top: 120px;
+    padding-top: 115px;
     padding-bottom: 25px;
 }
 
@@ -303,7 +303,13 @@ h1 , h2
     background-color: #485798;
 }
 
-
+//Me permite editar los campos td de los panel grid
+.ui-panelgrid td
+{
+    background-color: white;
+    padding: 22px 25px;
+    
+}
 
 
 
