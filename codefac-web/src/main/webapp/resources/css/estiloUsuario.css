@@ -147,8 +147,15 @@ h1 , h2
 .filaRoja
 {
     background: none repeat scroll 0 0 ;
-    background-color: wheat;
+    background-color: #33ff33;
     font-weight: bold;
+}
+
+.filaVerde
+{
+    background: none repeat scroll 0 0 ;
+    background-color: window;
+    font-weight: bold;    
 }
 
 .greenColoredPanel .ui-panel-titlebar 

@@ -193,9 +193,9 @@ and open the template in the editor.
                                          scrollHeight="200"  
                                          rowKey="#{ordenes.idOrdenTrabajo}"
                                          selection="#{facturaMB.ordenTrabajoSeleccionada}">
-                                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
-                                        :formDetalles:panelTotales" />  
-                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden(event)}"/>
+                                <p:ajax event="rowSelect" listener="#{facturaMB.mostrarDialogoDetallesOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
+                                        :formDetalles:panelTotales,frmDetallesOrden:tablaDetallesOrden" />  
+                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden}"/>
 
                                 <p:column headerText="Código" filterBy="#{ordenes.idOrdenTrabajo}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
                                     <h:outputText value="#{ordenes.idOrdenTrabajo}" />
@@ -203,7 +203,7 @@ and open the template in the editor.
                                 <p:column headerText="Cliente" filterBy="#{ordenes.cedulaRuc.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
                                     <h:outputText value="#{ordenes.cedulaRuc.nombre}" />
                                 </p:column>
-                                <p:column headerText="Problema" filterBy="#{ordenes.toStringDetalle()}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <p:column headerText="Equipos" filterBy="#{ordenes.toStringDetalle()}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
                                     <h:outputText value="#{ordenes.toStringDetalle()}" />
                                 </p:column>
                                 <p:column headerText="Precio">
@@ -373,7 +373,7 @@ and open the template in the editor.
             </p:commandButton>                        
         </h:form>
     </p:dialog>
-    
+
     <p:dialog header="Factura Completa " modal="true" widgetVar="dlgImprimir" showEffect="explode" hideEffect="bounce" height="100">
         <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
             <h:outputText value="Que desea hacer?" />
@@ -420,6 +420,52 @@ and open the template in the editor.
             <p:graphicImage library="img"  name="/util/waitIcon.gif" />
             <p:outputLabel value="enviando correo ..." />
         </p:panelGrid>
+    </p:dialog>
+
+
+    <!-- Dialago para mostrar los detalles de las ordenes  -->
+    <p:dialog widgetVar="dlgDetallesOrden" 
+              modal="true" 
+              resizable="false"
+              showHeader="false"  
+              minHeight="30" 
+              width="700px"
+              id="dlgDetallesOrden">
+        <h:form id="frmDetallesOrden">
+        <p:dataTable rows="10"                     
+                     id="tablaDetallesOrden"
+                     var="detallesOrden"
+                     value="#{facturaMB.detallesOrdenMostrar}"
+                     scrollable="true" 
+                     selection="#{facturaMB.detallesOrdenSeleccionadas}" 
+                     rowKey="#{detallesOrden.idDetalleOrdenTrabajo}"
+                     style="font-size: 10px; margin-bottom:0"
+                     rowStyleClass="#{detallesOrden.estado eq 'reparado'?'filaRoja':'null'}">
+            <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
+            <p:column headerText="Código" >
+                <h:outputText value="#{detallesOrden.idDetalleOrdenTrabajo}" />
+            </p:column>
+            <p:column headerText="Equipo">
+                <h:outputText value="#{detallesOrden.equipo}" />
+            </p:column>
+            <p:column headerText="Descripción" >
+                <h:outputText value="#{detallesOrden.descripcion}" />
+            </p:column>
+            <p:column headerText="Problema"  >
+                <h:outputText value="#{detallesOrden.problema}" />
+            </p:column>
+            <p:column headerText="Tbj. Realizar" >
+                <h:outputText value="#{detallesOrden.trabajoRealizar}" />
+            </p:column>
+            <f:facet name="footer">
+                <p:commandButton update=":formDetalles:tablaDetallesFactura,
+                                 :formDetalles:panelTotales" 
+                                 value="Aceptar" 
+                                 styleClass="ui-botonCeleste"
+                                 action="#{facturaMB.onRowSelectOrden()}"/>
+            </f:facet>
+        </p:dataTable>
+            </h:form>
     </p:dialog>
 
     <!--Textos en botones -->

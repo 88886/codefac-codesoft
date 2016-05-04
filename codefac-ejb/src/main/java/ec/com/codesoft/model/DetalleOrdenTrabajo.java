@@ -240,5 +240,9 @@ public class DetalleOrdenTrabajo implements Serializable {
     public String toString() {
         return "modelo.DetalleOrdenTrabajo[ idDetalleOrdenTrabajo=" + idDetalleOrdenTrabajo + " ]";
     }
+    
+    public String devolverDetalles(){
+        return this.equipo+" "+this.diagnostico;
+    }
 
 }
