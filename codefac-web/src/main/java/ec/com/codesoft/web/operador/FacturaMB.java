@@ -9,6 +9,7 @@ import ec.com.codesoft.model.Banco;
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.Creditobanco;
+import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
@@ -153,6 +154,8 @@ public class FacturaMB {
     private List<OrdenTrabajo> ordenesTrabajo;
     private OrdenTrabajo ordenTrabajoSeleccionada;
     private List<DetalleVentaOrdenTrabajo> detallesOrdenTrabajo;
+    private List<DetalleOrdenTrabajo> detallesOrdenMostrar;
+    private List<DetalleOrdenTrabajo> detallesOrdenSeleccionadas;
     /**
      * Porpiedad para enlazar el numero de factura
      */
@@ -258,20 +261,24 @@ public class FacturaMB {
         //filtar por ordenes facturadas
         ordenesTrabajo = new ArrayList<OrdenTrabajo>();
         ordenesTemporal = ordenTrabajoServicio.obtenerOrdenesTrabajo();
-        System.out.println("Tam" + ordenesTemporal.size());
+
         for (int i = 0; i < ordenesTemporal.size(); i++) {
-            List<DetalleVentaOrdenTrabajo> detalllesVentaOrden = new ArrayList<DetalleVentaOrdenTrabajo>();
-            //REVISAR 
-           // detalllesVentaOrden = ordenesTemporal.get(i).getDetalleVentaOrdenTrabajoList();
-            if (detalllesVentaOrden.size() == 0) {
-                ordenesTrabajo.add(ordenesTemporal.get(i));
-            } else {
+            List<DetalleOrdenTrabajo> detallesOrden = new ArrayList<DetalleOrdenTrabajo>();
+            detallesOrden = ordenesTemporal.get(i).getDetalleOrdenTrabajoList(); //cargo los detalles orden trabajo
+            int verDetalles = 0; //verificar si existe algun detalle venta vacio
+            for (int j = 0; j < detallesOrden.size(); j++) {
+                List<DetalleVentaOrdenTrabajo> detallesVentaOrden = new ArrayList<DetalleVentaOrdenTrabajo>();
+                detallesVentaOrden = detallesOrden.get(j).getDetalleVentaOrdenTrabajoList();
+                if (detallesVentaOrden.isEmpty()) {
+                    verDetalles += 1;
+                }
                 //las ordenes estan facturadas
             }
-        }
+            if (verDetalles != 0) {
+                ordenesTrabajo.add(ordenesTemporal.get(i));
+            }
 
-        //ordenesTrabajo = ordenTrabajoServicio.obtenerOrdenesTrabajo();
-        detallesOrdenTrabajo = new ArrayList<DetalleVentaOrdenTrabajo>();
+        }
 
         //habilitarDEescuento Manual
         System.out.println("Sesion" + sesion);
@@ -369,8 +376,10 @@ public class FacturaMB {
                     + "<br/>"
                     + "<b>Teléfono: </b>" + clienteEncontrado.getTelefono() + ""
                     + "<br/>"
+                    + "<img src='http://thumbs.subefotos.com/bd228d061d5c2675698d5be2f301129eo.jpg' width='30%' height='30%'>"
+                    + "<br/>"
                     + "<h2 style='background-color: #ffff33'>Codefac</h2> "
-                    + "<br/><b>Le informa que su factura</b> ha sido emitida exitosamente</b>"
+                    + "<br/><b>Le informa que su factura ha sido emitida exitosamente</b>"
                     + "<br/>"
                     + "<br/> <b>DETALLES</b>"
                     + "<br/>"
@@ -720,10 +729,16 @@ public class FacturaMB {
         }
     }
 
-    public void onRowSelectOrden(SelectEvent event) {
+    public void mostrarDialogoDetallesOrden(SelectEvent event) {
 
+        detallesOrdenMostrar = ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList();
+        RequestContext.getCurrentInstance().execute("PF('dlgDetallesOrden').show()");
+
+    }
+
+    public void onRowSelectOrden() {
+        //detallesOrden=detallesOrdenSeleccionadas;
         System.out.println("Venta Orden");
-
         if (detallesVenta.size() > maxItems - 1) {
 
             estadoDialogo = false;
@@ -744,61 +759,71 @@ public class FacturaMB {
             } else {
 
                 cerrarDialogoG();
-                DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
-                totalRegistro = ordenTrabajoSeleccionada.getTotal().divide(ivaTotal, 2, BigDecimal.ROUND_FLOOR);
-                subtotalRegistro = totalRegistro.multiply(ivaTotal);
-                subtotal = subtotal.add(totalRegistro);
-                if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
-                    iva = new BigDecimal("0.0");
-                    total = subtotal;
-                    totalPagar = total;
-                    devolverDescuento(new BigDecimal("0.0"));
-//                iva = subtotal.multiply(ivaSubTotal);
-//                total = subtotal.multiply(ivaTotal);
-//                totalPagar = total;
-                } else {
-//                iva = subtotal.multiply(ivaSubTotal);
-//                total = subtotal.multiply(ivaTotal);
-//                totalPagar = total;
-                    iva = new BigDecimal("0.0");
-                    total = subtotal;
-                    totalPagar = total;
-                    devolverDescuento(new BigDecimal("0.0"));
-                }
+                //DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
 
-                //descomentar para que coja la orden sin el iva
+                //cargar a los detallesVenta los DetallesOrdenesTrabajo
+                System.out.println("Antes del for");
+                System.out.println(detallesOrdenSeleccionadas);
+                
+                //FOR recorre lista de los detalles orden
+                for (int i = 0; i < detallesOrdenSeleccionadas.size(); i++) {
+                    System.out.println("Entro al for "+i);
+                    totalRegistro = detallesOrdenSeleccionadas.get(i).getPrecio().divide(ivaTotal, 2, BigDecimal.ROUND_FLOOR);
+                    subtotalRegistro = totalRegistro.multiply(ivaTotal);
+                    subtotal = subtotal.add(totalRegistro);
+                    if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
+                        iva = new BigDecimal("0.0");
+                        total = subtotal;
+                        totalPagar = total;
+                        devolverDescuento(new BigDecimal("0.0"));
+//                iva = subtotal.multiply(ivaSubTotal);
+//                total = subtotal.multiply(ivaTotal);
+//                totalPagar = total;
+                    } else {
+//                iva = subtotal.multiply(ivaSubTotal);
+//                total = subtotal.multiply(ivaTotal);
+//                totalPagar = total;
+                        iva = new BigDecimal("0.0");
+                        total = subtotal;
+                        totalPagar = total;
+                        devolverDescuento(new BigDecimal("0.0"));
+                    }
+
+                    //descomentar para que coja la orden sin el iva
 //                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
 //                        ordenTrabajoSeleccionada.toStringDetalle(),
 //                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
-                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
-                        ordenTrabajoSeleccionada.toStringDetalle(),
-                        totalRegistro, totalRegistro);
+                    DetallesVenta detalles = new DetallesVenta(1,detallesOrdenSeleccionadas.get(i).getIdDetalleOrdenTrabajo().toString(),
+                            detallesOrdenSeleccionadas.get(i).devolverDetalles(),
+                            totalRegistro, totalRegistro);
 
-                //descomentar para que coja el descuento con el precio sin iva
+                    //descomentar para que coja el descuento con el precio sin iva
 //                Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
 //                Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
-                Descuentos precioMayorista = new Descuentos("Prec Mayorista", totalRegistro);
-                Descuentos precioDescuento = new Descuentos("PVP", totalRegistro);
-                Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
-                //System.out.println(catalogoSeleccionado.getDescuento());
-                Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
-                List<Descuentos> descuentos = new ArrayList<Descuentos>();
-                descuentos.add(precioMayorista);
-                descuentos.add(precioDescuento);
-                descuentos.add(dcto);
-                descuentos.add(dctoMayorista);
-                detalles.setValorVerdaderoMayorista(totalRegistro);
-                detalles.setValorVerdaderoPVP(totalRegistro);
-                detalles.setDescuentos(descuentos);
-                detalles.setPrecioSeleccionado("PVP");
-                detalles.setEscogerDescuento("No");
-                detalles.setTipoDetalle("Orden Trabajo");
+                    Descuentos precioMayorista = new Descuentos("Prec Mayorista", totalRegistro);
+                    Descuentos precioDescuento = new Descuentos("PVP", totalRegistro);
+                    Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
+                    //System.out.println(catalogoSeleccionado.getDescuento());
+                    Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
+                    List<Descuentos> descuentos = new ArrayList<Descuentos>();
+                    descuentos.add(precioMayorista);
+                    descuentos.add(precioDescuento);
+                    descuentos.add(dcto);
+                    descuentos.add(dctoMayorista);
+                    detalles.setValorVerdaderoMayorista(totalRegistro);
+                    detalles.setValorVerdaderoPVP(totalRegistro);
+                    detalles.setDescuentos(descuentos);
+                    detalles.setPrecioSeleccionado("PVP");
+                    detalles.setEscogerDescuento("No");
+                    detalles.setTipoDetalle("Orden Trabajo");
                 //REVISAR
-                //detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
-                detallesVenta.add(detalles);
-                System.out.println("Detallles: " + detallesVenta);
+                    //detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
+                    detallesVenta.add(detalles);
+                    System.out.println("Detallles: " + detallesVenta);
+                }
             }
         }
+        RequestContext.getCurrentInstance().execute("PF('dlgDetallesOrden').hide()");
 
     }
 
@@ -2174,6 +2199,22 @@ public class FacturaMB {
 
     public void setSistemaMB(SistemaMB sistemaMB) {
         this.sistemaMB = sistemaMB;
+    }
+
+    public List<DetalleOrdenTrabajo> getDetallesOrdenMostrar() {
+        return detallesOrdenMostrar;
+    }
+
+    public void setDetallesOrdenMostrar(List<DetalleOrdenTrabajo> detallesOrdenMostrar) {
+        this.detallesOrdenMostrar = detallesOrdenMostrar;
+    }
+
+    public List<DetalleOrdenTrabajo> getDetallesOrdenSeleccionadas() {
+        return detallesOrdenSeleccionadas;
+    }
+
+    public void setDetallesOrdenSeleccionadas(List<DetalleOrdenTrabajo> detallesOrdenSeleccionadas) {
+        this.detallesOrdenSeleccionadas = detallesOrdenSeleccionadas;
     }
 
 }
