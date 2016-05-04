@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.web.reportes.ordenTrabajo;
 
+import ec.com.codesoft.model.Empresa;
 import ec.com.codesoft.web.reportes.ReporteJasper;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     private String monto;
     private String abono;
     private String saldo;
+    private Empresa empresa;
 
     private List<OrdenTrabajoDetalleReporte> detalles;
 
@@ -56,9 +58,22 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     }
 
     @Override
-    public Map<String, Object> getParametros() {
+    public Map<String, Object> getParametros() 
+    {
         Map<String, Object> lista = new HashMap<String, Object>();
-
+        
+        ///Agregar los datos de la empresa
+        lista.put("var_direccion",empresa.getDireccion());
+        lista.put("var_facebook",empresa.getFacebook());
+        lista.put("var_empresa",empresa.getNombre());
+        lista.put("var_paginaOficial",empresa.getPaginaOficial());
+        lista.put("var_propietario",empresa.getPropietario());
+        lista.put("var_ruc",empresa.getRucEmpresa());
+        lista.put("var_telefono",empresa.getTelefonos());
+        lista.put("var_whatsapp",empresa.getWhatsapp());    
+        
+        
+        
         if (this.cedula != null) {
             lista.put("cedula", this.cedula);
         } else {
@@ -182,5 +197,15 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     public void setDetalles(List<OrdenTrabajoDetalleReporte> detalles) {
         this.detalles = detalles;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
 
 }

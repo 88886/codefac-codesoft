@@ -6,7 +6,9 @@
 package ec.com.codesoft.modelo.servicios;
 
 import ec.com.codesoft.model.Configuracion;
+import ec.com.codesoft.model.Empresa;
 import ec.com.codesoft.modelo.facade.ConfiguracionFacade;
+import ec.com.codesoft.modelo.facade.EmpresaFacade;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -23,6 +25,9 @@ public class SistemaServicio implements Serializable
     @EJB
     private ConfiguracionFacade configuracionFacade;
     
+    @EJB
+    private EmpresaFacade empresaFacade;
+    
     /**
      * Devolver la configuracion actual
      * 
@@ -31,5 +36,10 @@ public class SistemaServicio implements Serializable
     public Configuracion getConfiguracion()
     {
         return configuracionFacade.findAll().get(0);
+    }
+    
+    public Empresa getEmpresa()
+    {
+        return empresaFacade.findAll().get(0);
     }
 }

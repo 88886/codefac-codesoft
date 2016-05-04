@@ -64,7 +64,7 @@ and open the template in the editor.
                 </p:column>
 
                 <p:column style="width: 50px" >
-                    <p:commandButton icon="ui-icon-zoomin" actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" update=":formDialogProductoDistri" />
+                    <p:commandButton icon="ui-icon-zoomin" styleClass="ui-botonEsmeralda" actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" update=":formDialogProductoDistri" />
                 </p:column>
 
                 <p:column headerText="PVP " style="width: 50px" >
@@ -93,7 +93,7 @@ and open the template in the editor.
                 </p:column>
 
                 <p:column headerText="Accion" style="width: 100px">
-                    <p:commandButton value="Eliminar" actionListener="#{gestionProductoMB.eliminarDetalle(catalogo)}" update="@form">
+                    <p:commandButton value="Eliminar" styleClass="ui-botonNaranja" actionListener="#{gestionProductoMB.eliminarDetalle(catalogo)}" update="@form">
                         <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
                     </p:commandButton>
                 </p:column>
@@ -112,109 +112,111 @@ and open the template in the editor.
         <p:dialog id="idDialogProducto" modal="true" header="Agregar Catalogo producto" widgetVar="dialogNuevoProducto" showEffect="explode" hideEffect="explode" >
             <h:form id="formGrabar">
                 <p:messages/>
-                <p:panelGrid columns="6" id="panelGrabar" styleClass="panelNoBorder">
+                <p:panel>
+                    <p:panelGrid columns="6" id="panelGrabar" styleClass="panelNoBorder">
 
-                    <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
-                    <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalagoProducto.codigoProducto}" required="true">
-                        <p:ajax event="blur" listener="#{gestionProductoMB.verificarExisteCatalogoProducto()}"  />
-                        <p:clientValidator event="keyup"/>
-                    </p:inputText>
-                    <p:message for="txtCodigoCatalogo" display="icon" />
+                        <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
+                        <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalagoProducto.codigoProducto}" required="true">
+                            <p:ajax event="blur" listener="#{gestionProductoMB.verificarExisteCatalogoProducto()}"  />
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtCodigoCatalogo" display="icon" />
 
-                    <p:outputLabel value="Codigo Distribuidor: "/>
-                    <p:inputText id="txtCodigoDistribuidor" value="#{gestionProductoMB.catalagoProducto.codigoDistribuidor}"/>
-                    <p:message for="txtCodigoDistribuidor" display="icon" />
+                        <p:outputLabel value="Codigo Distribuidor: "/>
+                        <p:inputText id="txtCodigoDistribuidor" value="#{gestionProductoMB.catalagoProducto.codigoDistribuidor}"/>
+                        <p:message for="txtCodigoDistribuidor" display="icon" />
 
-                    <p:outputLabel value="Nombre: "/>
-                    <p:inputText id="txtNombre" value="#{gestionProductoMB.catalagoProducto.nombre}" required="true">
-                        <p:clientValidator event="keyup"/>
-                    </p:inputText>
-                    <p:message for="txtNombre" display="icon" />
+                        <p:outputLabel value="Nombre: "/>
+                        <p:inputText id="txtNombre" value="#{gestionProductoMB.catalagoProducto.nombre}" required="true">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtNombre" display="icon" />
 
-                    <p:outputLabel value="Descripcion: "/>
-                    <p:inputText id="txtDescripcion" value="#{gestionProductoMB.catalagoProducto.descripcion}"/>
-                    <p:message for="txtDescripcion" display="icon" />
+                        <p:outputLabel value="Descripcion: "/>
+                        <p:inputText id="txtDescripcion" value="#{gestionProductoMB.catalagoProducto.descripcion}"/>
+                        <p:message for="txtDescripcion" display="icon" />
 
-                    <p:outputLabel value="Marca: "/>
-                    <p:inputText id="txtMarca" value="#{gestionProductoMB.catalagoProducto.marca}"/>
-                    <p:message for="txtMarca" display="icon" />
+                        <p:outputLabel value="Marca: "/>
+                        <p:inputText id="txtMarca" value="#{gestionProductoMB.catalagoProducto.marca}"/>
+                        <p:message for="txtMarca" display="icon" />
 
-                    <p:outputLabel value="PVP: "/>
+                        <p:outputLabel value="PVP: "/>
 
-                    <p:panelGrid columns="2" style="width: 100%">
-                        <p:inputText id="txtPrecio" value="#{gestionProductoMB.catalagoProducto.precio}" style="width: 50px" />
+                        <p:panelGrid columns="2" style="width: 100%">
+                            <p:inputText id="txtPrecio" value="#{gestionProductoMB.catalagoProducto.precio}" style="width: 50px" />
 
-                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;" >
-                            <p:ajax listener="#{gestionProductoMB.cambiarPrecioEditar()}" />
-                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
-                            <f:selectItem itemLabel="con Iva" itemValue="+" />
+                            <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;" >
+                                <p:ajax listener="#{gestionProductoMB.cambiarPrecioEditar()}" />
+                                <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                                <f:selectItem itemLabel="con Iva" itemValue="+" />
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                        <p:message for="txtPrecio" display="icon" />
+
+                        <p:outputLabel value="Descuento: "/>
+                        <p:inputText id="txtDescuento" value="#{gestionProductoMB.catalagoProducto.descuento}" required="true" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtDescuento" display="icon" />
+
+                        <p:outputLabel value="Precio Mayorista: "/>
+
+                        <p:panelGrid columns="2" style="width: 100%">
+                            <p:inputText id="txtMayorista" value="#{gestionProductoMB.catalagoProducto.precioMayorista}" style="width: 50px" />
+
+                            <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" style="font-weight: 11px;" >
+                                <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                                <f:selectItem itemLabel="con Iva" itemValue="+" />
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:message for="cmbIVAMayorista" display="icon" />
+
+                        <p:outputLabel value="Descuento Mayorista: "/>
+                        <p:inputText id="txtDecuentoMayorista" value="#{gestionProductoMB.catalagoProducto.descuentoMayorista}" required="true" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtDecuentoMayorista" display="icon" />
+
+                        <p:outputLabel value="Costo Referencial: "/>
+                        <p:inputText id="costoReferencial" value="#{gestionProductoMB.catalagoProducto.costo}" required="true" >
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="costoReferencial" display="icon" />
+
+                        <p:outputLabel value="Ubicacion: "/>
+                        <p:inputText id="txtUbicacion" value="#{gestionProductoMB.catalagoProducto.ubicacion}"/>
+                        <p:message for="txtUbicacion" display="icon" />
+
+                        <p:outputLabel value="Unidad medida: "/>
+                        <p:inputText id="txtUnidadMedida" value="#{gestionProductoMB.catalagoProducto.unidades}"/>
+                        <p:message for="txtUnidadMedida" display="icon" />
+
+                        <p:outputLabel value="Tipo: "/>
+                        <p:selectOneMenu id="sexo" value="#{gestionProductoMB.catalagoProducto.tipoProducto}" >
+                            <f:selectItem itemLabel="General" itemValue='G' />
+                            <f:selectItem itemLabel="Especifico" itemValue='E' />
                         </p:selectOneMenu>
+                        <p:message for="sexo" display="icon" />
+
 
                     </p:panelGrid>
-                    <p:message for="txtPrecio" display="icon" />
+                    <f:facet name="footer">
+                        <div style="text-align: center;background-color: white">            
 
-                    <p:outputLabel value="Descuento: "/>
-                    <p:inputText id="txtDescuento" value="#{gestionProductoMB.catalagoProducto.descuento}" required="true" >
-                        <p:clientValidator event="keyup"/>
-                    </p:inputText>
-                    <p:message for="txtDescuento" display="icon" />
+                            <p:commandButton
 
-                    <p:outputLabel value="Precio Mayorista: "/>
+                                validateClient="true"
+                                value="Grabar" 
+                                styleClass="ui-botonAzul" 
+                                actionListener="#{gestionProductoMB.grabarCatalogo()}" 
+                                update=":formTabla:tablaCatalogo,@form,:formGrabar:panelGrabar" 
+                                ajax="true" />                             
 
-                    <p:panelGrid columns="2" style="width: 100%">
-                        <p:inputText id="txtMayorista" value="#{gestionProductoMB.catalagoProducto.precioMayorista}" style="width: 50px" />
-
-                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" style="font-weight: 11px;" >
-                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
-                            <f:selectItem itemLabel="con Iva" itemValue="+" />
-                        </p:selectOneMenu>
-                    </p:panelGrid>
-                    <p:message for="cmbIVAMayorista" display="icon" />
-
-                    <p:outputLabel value="Descuento Mayorista: "/>
-                    <p:inputText id="txtDecuentoMayorista" value="#{gestionProductoMB.catalagoProducto.descuentoMayorista}" required="true" >
-                        <p:clientValidator event="keyup"/>
-                    </p:inputText>
-                    <p:message for="txtDecuentoMayorista" display="icon" />
-
-                    <p:outputLabel value="Costo Referencial: "/>
-                    <p:inputText id="costoReferencial" value="#{gestionProductoMB.catalagoProducto.costo}" required="true" >
-                        <p:clientValidator event="keyup"/>
-                    </p:inputText>
-                    <p:message for="costoReferencial" display="icon" />
-
-                    <p:outputLabel value="Ubicacion: "/>
-                    <p:inputText id="txtUbicacion" value="#{gestionProductoMB.catalagoProducto.ubicacion}"/>
-                    <p:message for="txtUbicacion" display="icon" />
-
-                    <p:outputLabel value="Unidad medida: "/>
-                    <p:inputText id="txtUnidadMedida" value="#{gestionProductoMB.catalagoProducto.unidades}"/>
-                    <p:message for="txtUnidadMedida" display="icon" />
-
-                    <p:outputLabel value="Tipo: "/>
-                    <p:selectOneMenu id="sexo" value="#{gestionProductoMB.catalagoProducto.tipoProducto}" >
-                        <f:selectItem itemLabel="General" itemValue='G' />
-                        <f:selectItem itemLabel="Especifico" itemValue='E' />
-                    </p:selectOneMenu>
-                    <p:message for="sexo" display="icon" />
-
-
-                </p:panelGrid>
-                <f:facet name="footer">
-                    <div style="text-align: center;background-color: white">                            
-
-                        <p:commandButton
-
-                            validateClient="true"
-                            value="Grabar" 
-                            styleClass="ui-botonAzul" 
-                            actionListener="#{gestionProductoMB.grabarCatalogo()}" 
-                            update=":formTabla:tablaCatalogo,@form,:formGrabar:panelGrabar" 
-                            ajax="true" />                             
-
-                        <p:commandButton value="Cancelar" styleClass="ui-botonRojo" actionListener="#{gestionProductoMB.cancelarGrabar()}" immediate="true" update=":formTabla:growl"  />                             
-                    </div>
-                </f:facet>
+                            <p:commandButton value="Cancelar" styleClass="ui-botonRojo" actionListener="#{gestionProductoMB.cancelarGrabar()}" immediate="true" update=":formTabla:growl"  />                             
+                        </div>
+                    </f:facet>
+                </p:panel>
             </h:form>
         </p:dialog>
 
@@ -223,95 +225,97 @@ and open the template in the editor.
         <p:dialog id="idDialogProductoEdit" modal="true" header="Editar Catalogo producto" widgetVar="dialogNuevoProductoEdit" showEffect="explode" hideEffect="explode" >
             <h:form>
                 <p:messages/>
-                <p:panelGrid columns="6" styleClass="panelNoBorder">
-                    <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
-                    <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalogoSeleccionado.codigoProducto}" required="">
-                        <p:clientValidator event="keyup"/>
-                    </p:inputText>
-                    <p:message for="txtCodigoCatalogo" display="icon" />
+                <p:panel styleClass="panelNoBorder">
+                    <p:panelGrid columns="6" styleClass="panelNoBorder">
+                        <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
+                        <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalogoSeleccionado.codigoProducto}" required="">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtCodigoCatalogo" display="icon" />
 
-                    <p:outputLabel value="Codigo Distribuidor: "/>
-                    <p:inputText id="txtCodigoDistribuidor" value="#{gestionProductoMB.catalogoSeleccionado.codigoDistribuidor}"/>
-                    <p:message for="txtCodigoDistribuidor" display="icon" />
+                        <p:outputLabel value="Codigo Distribuidor: "/>
+                        <p:inputText id="txtCodigoDistribuidor" value="#{gestionProductoMB.catalogoSeleccionado.codigoDistribuidor}"/>
+                        <p:message for="txtCodigoDistribuidor" display="icon" />
 
-                    <p:outputLabel value="Nombre: "/>
-                    <p:inputText id="txtNombre" value="#{gestionProductoMB.catalogoSeleccionado.nombre}">
-                        <p:clientValidator event="keyup"/>
-                    </p:inputText>
-                    <p:message for="txtNombre" display="icon" />
+                        <p:outputLabel value="Nombre: "/>
+                        <p:inputText id="txtNombre" value="#{gestionProductoMB.catalogoSeleccionado.nombre}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtNombre" display="icon" />
 
-                    <p:outputLabel value="Descripcion: "/>
-                    <p:inputText id="txtDescripcion" value="#{gestionProductoMB.catalogoSeleccionado.descripcion}"/>
-                    <p:message for="txtDescripcion" display="icon" />
+                        <p:outputLabel value="Descripcion: "/>
+                        <p:inputText id="txtDescripcion" value="#{gestionProductoMB.catalogoSeleccionado.descripcion}"/>
+                        <p:message for="txtDescripcion" display="icon" />
 
-                    <p:outputLabel value="Marca: "/>
-                    <p:inputText id="txtMarca" value="#{gestionProductoMB.catalogoSeleccionado.marca}"/>
-                    <p:message for="txtMarca" display="icon" />
-
-
-                    <p:outputLabel value="PVP: "/>
-
-                    <p:panelGrid columns="2" style="width: 100%">
-                        <p:inputText id="txtPrecio" value="#{gestionProductoMB.catalogoSeleccionado.precio}" style="width: 50px" />
-
-                        <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;"  title="(- Iva) sin IVA , (+ IVA) incluido iva " >
-                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
-                            <f:selectItem itemLabel="con Iva" itemValue="+" />                            
-                        </p:selectOneMenu>
-
-                    </p:panelGrid>
-                    <p:message for="txtPrecio" display="icon" />
-
-                    <p:outputLabel value="Descuento: "/>
-                    <p:inputText id="txtDescuento" value="#{gestionProductoMB.catalogoSeleccionado.descuento}"/>
-                    <p:message for="txtDescuento" display="icon" />
-
-                    <p:outputLabel value="Precio Mayorista: "/>
-
-                    <p:panelGrid columns="2" style="width: 100%">
-                        <p:inputText id="txtPrecioMayorista" value="#{gestionProductoMB.catalogoSeleccionado.precioMayorista}" style="width: 50px" />
-
-                        <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" style="font-weight: 11px;" >
-                            <f:selectItem itemLabel="sin Iva " itemValue="-" />
-                            <f:selectItem itemLabel="con Iva" itemValue="+" />                            
-                        </p:selectOneMenu>
-                    </p:panelGrid>
-                    <p:message for="txtPrecioMayorista" display="icon" />
-
-                    <p:outputLabel value="Descuento Mayorista: "/>
-                    <p:inputText id="txtDescuentoMayorista" value="#{gestionProductoMB.catalogoSeleccionado.descuentoMayorista}" required="true"/>
-                    <p:message for="txtDescuentoMayorista" display="icon" />
-
-                    <p:outputLabel value="Costo Referencial: "/>
-                    <p:inputText id="txtCosto" value="#{gestionProductoMB.catalogoSeleccionado.costo}" style="width: 70px" required="true" />
-                    <p:message for="txtCosto" display="icon" />
-
-                    <p:outputLabel value="Ubicacion: "/>
-                    <p:inputText id="txtUbicacion" value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>
-                    <p:message for="txtUbicacion" display="icon" />
-
-                    <p:outputLabel value="Unidad medida: "/>
-                    <p:inputText id="txtUnidadMedida" value="#{gestionProductoMB.catalogoSeleccionado.unidades}"/>
-                    <p:message for="txtUnidadMedida" display="icon" />
-
-                    <p:outputLabel value="Tipo: "/>
-                    <p:selectOneMenu id="sexo" value="#{gestionProductoMB.catalogoSeleccionado.tipoProducto}" >
-                        <f:selectItem itemLabel="General" itemValue='G' />
-                        <f:selectItem itemLabel="Especifico" itemValue='E' />
-                    </p:selectOneMenu>
-                    <p:message for="sexo" display="icon" />
+                        <p:outputLabel value="Marca: "/>
+                        <p:inputText id="txtMarca" value="#{gestionProductoMB.catalogoSeleccionado.marca}"/>
+                        <p:message for="txtMarca" display="icon" />
 
 
-                </p:panelGrid>
+                        <p:outputLabel value="PVP: "/>
 
-                <f:facet name="footer">
-                    <div style="text-align: center">
-                        <p:panelGrid columns="2" style="margin: 0 auto">
-                            <p:commandButton value="Editar" styleClass="ui-botonAzul"  actionListener="#{gestionProductoMB.editarCatalago()}" update=":formTabla:tablaCatalogo" ajax="false" />                             
-                            <p:commandButton value="Cancelar" styleClass="ui-botonRojo" actionListener="#{gestionProductoMB.cancelarEditar()}" immediate="true"  /> 
+                        <p:panelGrid columns="2" style="width: 100%">
+                            <p:inputText id="txtPrecio" value="#{gestionProductoMB.catalogoSeleccionado.precio}" style="width: 50px" />
+
+                            <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;"  title="(- Iva) sin IVA , (+ IVA) incluido iva " >
+                                <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                                <f:selectItem itemLabel="con Iva" itemValue="+" />                            
+                            </p:selectOneMenu>
+
                         </p:panelGrid>
-                    </div>
-                </f:facet>
+                        <p:message for="txtPrecio" display="icon" />
+
+                        <p:outputLabel value="Descuento: "/>
+                        <p:inputText id="txtDescuento" value="#{gestionProductoMB.catalogoSeleccionado.descuento}"/>
+                        <p:message for="txtDescuento" display="icon" />
+
+                        <p:outputLabel value="Precio Mayorista: "/>
+
+                        <p:panelGrid columns="2" style="width: 100%">
+                            <p:inputText id="txtPrecioMayorista" value="#{gestionProductoMB.catalogoSeleccionado.precioMayorista}" style="width: 50px" />
+
+                            <p:selectOneMenu id="cmbIVAMayorista" value="#{gestionProductoMB.ivaMayorista}" style="font-weight: 11px;" >
+                                <f:selectItem itemLabel="sin Iva " itemValue="-" />
+                                <f:selectItem itemLabel="con Iva" itemValue="+" />                            
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:message for="txtPrecioMayorista" display="icon" />
+
+                        <p:outputLabel value="Descuento Mayorista: "/>
+                        <p:inputText id="txtDescuentoMayorista" value="#{gestionProductoMB.catalogoSeleccionado.descuentoMayorista}" required="true"/>
+                        <p:message for="txtDescuentoMayorista" display="icon" />
+
+                        <p:outputLabel value="Costo Referencial: "/>
+                        <p:inputText id="txtCosto" value="#{gestionProductoMB.catalogoSeleccionado.costo}" style="width: 70px" required="true" />
+                        <p:message for="txtCosto" display="icon" />
+
+                        <p:outputLabel value="Ubicacion: "/>
+                        <p:inputText id="txtUbicacion" value="#{gestionProductoMB.catalogoSeleccionado.ubicacion}"/>
+                        <p:message for="txtUbicacion" display="icon" />
+
+                        <p:outputLabel value="Unidad medida: "/>
+                        <p:inputText id="txtUnidadMedida" value="#{gestionProductoMB.catalogoSeleccionado.unidades}"/>
+                        <p:message for="txtUnidadMedida" display="icon" />
+
+                        <p:outputLabel value="Tipo: "/>
+                        <p:selectOneMenu id="sexo" value="#{gestionProductoMB.catalogoSeleccionado.tipoProducto}" >
+                            <f:selectItem itemLabel="General" itemValue='G' />
+                            <f:selectItem itemLabel="Especifico" itemValue='E' />
+                        </p:selectOneMenu>
+                        <p:message for="sexo" display="icon" />
+
+
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <div style="text-align: center">
+                            <p:panelGrid columns="2" style="margin: 0 auto">
+                                <p:commandButton value="Editar" styleClass="ui-botonAzul"  actionListener="#{gestionProductoMB.editarCatalago()}" update=":formTabla:tablaCatalogo" ajax="false" />                             
+                                <p:commandButton value="Cancelar" styleClass="ui-botonRojo" actionListener="#{gestionProductoMB.cancelarEditar()}" immediate="true"  /> 
+                            </p:panelGrid>
+                        </div>
+                    </f:facet>
+                </p:panel>
             </h:form>
         </p:dialog>
 

@@ -118,6 +118,10 @@ and open the template in the editor.
                                 <p:outputLabel value="#{detalle.trabajoRealizar}" />
                             </p:column>
 
+                            <p:column style="width: 50px" >
+                                <p:commandButton immediate="true" actionListener="#{trabajosPendientesMB.abrirRepararTarea(detalle)}" icon="ui-icon-wrench" styleClass="ui-botonCeleste" title="Reparar" update=":formRepararTarea" />
+                            </p:column>
+
                         </p:dataTable>
 
                     </p:panelGrid>
@@ -126,7 +130,7 @@ and open the template in the editor.
             </h:form>
 
             <!-- Dialogo que me permite reparar la orden de trabajo-->
-            <p:dialog header="Reparacion Rapida" modal="true" widgetVar="dlgReparacion" showEffect="explode" hideEffect="explode" height="2s00">
+            <p:dialog header="Reparacion Rapida" modal="true" widgetVar="dlgReparacion" showEffect="explode" hideEffect="explode" height="200">
                 <h:form id="formReparacionRapida">
                     <p:messages autoUpdate="true"/>
                     <p:panelGrid columns="3" styleClass="panelNoBorder">
@@ -186,6 +190,80 @@ and open the template in the editor.
                     <p:graphicImage library="img"  name="/util/waitIcon.gif" />
                     <p:outputLabel value="enviando correo ..." />
                 </p:panelGrid>
+            </p:dialog>
+
+            <!-- Dialogo para reparar los item de forma individual -->
+            <p:dialog header="Reparar Tarea" widgetVar="widgetReparItem" modal="true" showEffect="explode" hideEffect="explode" >
+                <h:form id="formRepararTarea">
+                    <p:panel>
+                        <p:messages autoUpdate="true" />
+
+                        <f:facet name="header">
+                            <p:outputLabel value="Reparar Tarea" />
+                        </f:facet>
+
+                        <p:panelGrid columns="6" styleClass="panelNoBorder" >
+                            <p:outputLabel value="Equipo:"/>
+                            <p:outputLabel value="#{trabajosPendientesMB.repararTarea.equipo}" style="font-weight: lighter" />
+                            <p:spacer/>
+
+                            <p:outputLabel value="Descripcion:"/>
+                            <p:outputLabel value="#{trabajosPendientesMB.repararTarea.descripcion}" style="font-weight: lighter" />
+                            <p:spacer/>                           
+
+                            <p:outputLabel value="Diagnostico:"/>
+                            <p:inputTextarea id="txtDiagnostico" rows="3" value="#{trabajosPendientesMB.repararTarea.diagnostico}" required="true">
+                                <p:clientValidator event="keyup"/>
+                            </p:inputTextarea>
+                            <p:message for="txtDiagnostico" display="icon" />
+
+                            <p:outputLabel value="Estado:"/>
+                            <p:selectOneMenu id="cmbEstado" style="width:100%">
+                                <f:selectItem itemLabel="Seleccione el estado" itemValue="" />
+                                <f:selectItem itemLabel="Sin revisar" itemValue="sinRevisar" />
+                                <f:selectItem itemLabel="En proceso" itemValue="enProceso" />
+                                <f:selectItem itemLabel="Terminado" itemValue="terminado" />
+                                <f:selectItem itemLabel="Sin solucion" itemValue="sinSolucion" />
+                                <f:selectItem itemLabel="Devuelto" itemValue="devuelto" />
+                                <f:selectItem itemLabel="Facturado" itemValue="facturado" />
+                            </p:selectOneMenu>
+                            <p:message for="cmbEstado" />                            
+
+                            <p:outputLabel value="Total:"/>
+                            <p:inputText id="txtTotal" value="#{trabajosPendientesMB.repararTarea.precio}" required="true">
+                                <p:clientValidator event="keyup"/>
+                            </p:inputText>
+                            <p:message for="txtTotal" display="icon" />
+
+                            <p:outputLabel value="Detalle:"/>
+                            <p:commandButton id="btnDetalle" value="Agregar Detalle" styleClass="ui-botonVerde"/>
+                            <p:message for="btnDetalle" />
+                        </p:panelGrid>
+
+                        <p:separator  />
+
+                        <p:panelGrid columns="3" styleClass="panelNoBorder">
+                            <p:outputLabel value="Informar el estado por correo (#{trabajosPendientesMB.repararTarea.idOrdenTrabajo.cedulaRuc.correo})" style="font-weight: lighter;color: #3f5da2" />
+                            <p:selectBooleanCheckbox value="#{trabajosPendientesMB.confirmarCorreo}" />
+                        </p:panelGrid>
+
+                        <f:facet name="footer"> 
+                            <div style="text-align: center">
+                                <p:commandButton 
+                                    value="Guardar" 
+                                    onstart="PF('statusEnvioCorreo').show()" 
+                                    onsuccess="PF('statusEnvioCorreo').hide()"
+                                    styleClass="ui-botonAzul" 
+                                    actionListener="#{trabajosPendientesMB.revisarTarea()}" />
+
+                                <p:spacer width="20px"/>
+                                <p:commandButton value="Cancelar" immediate="true" styleClass="ui-botonRojo" actionListener="#{trabajosPendientesMB.cerrarRepararTarea()}" />
+                            </div>
+                        </f:facet>
+                    </p:panel>
+
+
+                </h:form>
             </p:dialog>
         </p:panel>
     </ui:define>

@@ -42,6 +42,7 @@ public class OrdenTrabajoServicio {
 
     @EJB
     private CategoriaTrabajoFacade categoriaTrabajoFacade;
+    
 
     public void grabar(OrdenTrabajo ordenTrabajo) {
         ordenTrabajo.setEstado("revision");
@@ -54,6 +55,7 @@ public class OrdenTrabajoServicio {
 
         for (DetalleOrdenTrabajo detalle : lista) {
             detalle.setIdOrdenTrabajo(ordenTrabajo);
+            detalle.setEstado("sinRevisar");
             detalleOrdenTrabajoFacade.edit(detalle);
         }
     }
@@ -91,6 +93,15 @@ public class OrdenTrabajoServicio {
     public Usuario getUsuarioByCodigo(String nick)
     {
         return usuarioFacade.find(nick);
+    }
+    
+    /**
+     * Envia un item de la orden de trabajo para editar y cambiar el
+     * estado 
+     */
+    public void reparar(DetalleOrdenTrabajo detalle)
+    {
+        detalleOrdenTrabajoFacade.edit(detalle);
     }
     
     ////////////////////////////////// GET AND SET //////////////////////

@@ -159,3 +159,131 @@ h1 , h2
 .top-aligned-columns td{
     vertical-align: top;
 }
+
+
+.ui-botonAzul.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_azul.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+    padding: 3px;
+    padding-bottom: 4px;
+
+
+}
+.ui-botonAzul.ui-state-hover {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_azul2.png");
+    background-color: #999999 ;
+    color: #485798;
+    font-weight: bold;
+    padding: 3px;
+    padding-bottom: 4px;
+}
+.ui-botonAzul.ui-state-active {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_azul.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+    padding: 3px;
+    padding-bottom: 4px;
+
+}
+
+.ui-botonVerde.ui-state-default 
+{
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_verde.png");
+    background-color: #666666;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+}
+
+
+.ui-botonConchaVino.ui-state-default 
+{
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_conchaVino.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+    padding: 3px;
+    padding-bottom: 4px;
+}
+
+.ui-botonCafe.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_cafe.png");
+    background-color: #666666;
+    color: white;
+    font-weight: bold;
+    padding: 3px;
+    padding-bottom: 4px;
+}
+
+.ui-botonAmarillo.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_blanco.png");
+    padding: 3px;
+    padding-bottom: 4px;
+}
+
+.ui-botonCeleste.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_celeste.png");
+    padding: 3px;
+    color: black;
+    padding-bottom: 4px;
+}
+
+.ui-botonEsmeralda.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_esmeralda.png");
+    padding: 3px;
+    color: black;
+    padding-bottom: 4px;
+}
+
+.ui-botonNaranja.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_naranja.png");
+    padding: 3px;
+    color: black;
+    padding-bottom: 4px;
+    font-weight: bold;
+}
+
+.ui-botonRojo.ui-state-default {
+    background-image: none;
+    background-image: url("#{request.contextPath}/resources/img/btn_img/btn_rojo.png");
+    padding: 3px;
+    color: white;
+    padding-bottom: 4px;
+    font-weight: lighter;
+}
+
+
+.ui-dialog.ui-widget-content .ui-dialog-title
+{
+    padding-top: 5px;
+    font-size: 15px;  
+    color: white;
+}
+
+.ui-dialog.ui-widget-content .ui-dialog-titlebar
+{
+    padding: 0px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #485798;
+}
+
+//Me permite editar los campos td de los panel grid
+.ui-panelgrid td
+{
+    background-color: white;
+    padding: 22px 25px;
+    
+}

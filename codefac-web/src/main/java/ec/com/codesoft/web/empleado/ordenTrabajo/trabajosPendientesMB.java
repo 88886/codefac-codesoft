@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.web.empleado.ordenTrabajo;
 
+import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.modelo.servicios.OrdenTrabajoServicio;
 import ec.com.codesoft.web.seguridad.SistemaMB;
@@ -53,6 +54,12 @@ public class trabajosPendientesMB implements Serializable {
      * Variable para confirmar el envio de correo
      */
     private boolean confirmarCorreo;
+    
+    /**
+     * Variable que me permite saber la tarea que estoy reparando o editando
+     */
+    private DetalleOrdenTrabajo repararTarea;
+    
 
     private OrdenTrabajo ordenTrabajoSeleccionados;
 
@@ -117,7 +124,49 @@ public class trabajosPendientesMB implements Serializable {
         }
         RequestContext.getCurrentInstance().execute("PF('dlgReparacion').hide()");
         //dlgReparacion
-
+    }
+    
+     
+    /**
+     * Metodo para abrir el dialogo para reparar
+     */    
+    public void abrirRepararTarea(DetalleOrdenTrabajo detalle)
+    {        
+        RequestContext.getCurrentInstance().execute("PF('widgetReparItem').show()");
+        this.repararTarea=detalle;
+        
+    }
+    
+    /**
+     * Metodo que me permite cerrar el dialogo para reparar la tarea
+     */
+    public void cerrarRepararTarea()
+    {
+        System.out.println("cerrar el dialogo para editar los items");
+        RequestContext.getCurrentInstance().execute("PF('widgetReparItem').hide()");
+    }
+    
+    /**
+     * Revisa y cambia el estado segun el arreglo del tecnico
+     */
+    public void revisarTarea()
+    {
+        //ordenTrabajoSeleccionados.setEstado("reparado");
+        repararTarea.setEstado("reparado");
+        ordenTrabajoServicio.reparar(repararTarea);
+        
+        if (confirmarCorreo) 
+        {
+            System.out.println("enviando correo ...");
+            System.out.println(sistemaMB.getConfiguracion());
+            CorreoMB correo = new CorreoMB(sistemaMB.getConfiguracion().getEmailServicioTecnico(), sistemaMB.getConfiguracion().getClaveEmailServicioTecnico());
+            correo.EnviarCorreoSinArchivoAdjunto(""
+                    + repararTarea.getIdOrdenTrabajo().getCedulaRuc().getCorreo(), ""
+                    + "Codesoft", ""
+                    + "Codefac le informa que su trabajo con orden No: " + repararTarea.getIdOrdenTrabajo().getIdOrdenTrabajo() + "(" + repararTarea.getEquipo() + ") se encuentra listo "
+                    + "<br> Diagnostico:" + repararTarea.getDiagnostico() + "<br> Costo: " + repararTarea.getIdOrdenTrabajo().getTotal());
+        }
+        RequestContext.getCurrentInstance().execute("PF('widgetReparItem').hide()");
     }
 
     //////////////////////////GET AND SET//////////////////////////////
@@ -175,6 +224,14 @@ public class trabajosPendientesMB implements Serializable {
 
     public void setTipoEstado(String tipoEstado) {
         this.tipoEstado = tipoEstado;
+    }
+
+    public DetalleOrdenTrabajo getRepararTarea() {
+        return repararTarea;
+    }
+
+    public void setRepararTarea(DetalleOrdenTrabajo repararTarea) {
+        this.repararTarea = repararTarea;
     }
     
     
