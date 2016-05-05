@@ -144,4 +144,7 @@ public class OrdenTrabajoServicio {
         return ordenTrabajoFacade.getByPrice(orden,estado);
     }
 
+    public void actualizarOrdenTrabajo(OrdenTrabajo orden){
+        ordenTrabajoFacade.edit(orden);
+    }
 }

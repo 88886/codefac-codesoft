@@ -420,7 +420,7 @@ public class FacturaMB {
                     + "<br/>"
                     + "<b>Este correo fué generado por Codefac Sistema de Facturación</b>"
                     + "<div style=\"background-color: #485798;color: #ffffff\">"
-                    + "<b>Consultas Ventas y Servicios :</b>"                    
+                    + "<b>Consultas Ventas y Servicios :</b>"
                     + "<b>Dirección: </b>Sangolquí: Av Abdón Calderón y Espejo esq local 4 -- Telf:  2339487 - 0986612116-0994905332 "
                     + "</div>"
                     + "</div>";
@@ -758,7 +758,17 @@ public class FacturaMB {
 
     public void mostrarDialogoDetallesOrden(SelectEvent event) {
 
-        detallesOrdenMostrar = ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList();
+        detallesOrdenMostrar=new ArrayList<DetalleOrdenTrabajo>();
+        System.out.println("ordenesCargar"+ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList());
+        for(int i=0;i<ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().size();i++){
+           //if(ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("reparado")){
+                System.out.println("Entro a FIltrar");
+                detallesOrdenMostrar.add(ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i));
+           // }
+            
+        }
+        
+        
         RequestContext.getCurrentInstance().execute("PF('dlgDetallesOrden').show()");
 
     }
@@ -1374,17 +1384,21 @@ public class FacturaMB {
                             detalleOrdenTrabajo.setDescuento(detallesVenta.get(i).getValorDescuento());
                             detalleOrdenTrabajo.setEstado("Facturado");
                             detalleOrdenTrabajo.setIva(new BigDecimal("0.0"));
-                            OrdenTrabajo orden = new OrdenTrabajo();
-                            orden.setIdOrdenTrabajo(Integer.parseInt(detallesVenta.get(i).getCodigo()));
+                            DetalleOrdenTrabajo orden = new DetalleOrdenTrabajo();
+                            orden.setIdDetalleOrdenTrabajo(Integer.parseInt(detallesVenta.get(i).getCodigo()));
+                            orden.setEstado("Facturado");
+                            facturaServicio.actualizarDetalleOrden(orden);
                             //REVISAR                           
-                            //detalleOrdenTrabajo.setIdOrdenTrabajo(orden);
+                            detalleOrdenTrabajo.setIdDetalleOrdenTrabajo(orden);
                             //detalleOrdenTrabajo.setNick;
                             detalleOrdenTrabajo.setTotal(detallesVenta.get(i).getTotal());
+                            System.out.println("DetalleOrden "+ detalleOrdenTrabajo);
                             detallesOrdenTrabajo.add(detalleOrdenTrabajo);
                             numOrdenes = i + 1;
                         }
 
                     }
+                    cambiarEstadoOrden(); //cambiarEstadoOrden
 
                     //guaradmos los detalles orden trabajo
                     if (numOrdenes >= 1) {
@@ -1415,6 +1429,27 @@ public class FacturaMB {
         }
 
         //return null;
+    }
+
+    /**
+     * Cambiar estado a los detallesOrdenTrabajo
+     */
+    public void cambiarEstadoOrden() {
+
+        for (int i = 0; i <= ordenesTrabajo.size(); i++) {
+            int bandera = 0;
+            List<DetalleOrdenTrabajo> detalle = new ArrayList<DetalleOrdenTrabajo>();
+            detalle = ordenesTrabajo.get(i).getDetalleOrdenTrabajoList();
+            for (int j = 0; j < detalle.size(); j++) {
+                if (detalle.get(j).getEstado().equals("facturado")) {
+                    bandera += 1;
+                }
+            }
+            if (bandera == detalle.size()) {
+                ordenesTrabajo.get(i).setEstado("Terminado");
+                ordenTrabajoServicio.editar(ordenesTrabajo.get(i));
+            }
+        }
     }
 
     public void imprimirFactura() {
