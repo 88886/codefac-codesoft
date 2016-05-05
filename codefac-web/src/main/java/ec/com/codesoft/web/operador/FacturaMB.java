@@ -342,60 +342,87 @@ public class FacturaMB {
             CorreoMB correo = new CorreoMB(sistemaMB.getConfiguracion().getEmailServicioTecnico(), sistemaMB.getConfiguracion().getClaveEmailServicioTecnico());
 
             //detalles de la factura
-            detalles = detalles + "<table align='center' style='border: #3f5da2'>";
+            detalles = detalles + "<table align='center' style='border: #3f5da2;width: 100%'>";
             detalles = detalles + "<tr>";
-            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Cantidad" + "</td>";
-            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Código" + "</td>";
-            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Descripción" + "</td>";
-            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "P.Unitario" + "</td>";
-            detalles = detalles + "<td style='background-color: #3366ff;color: #ffffff'>" + "Total" + "</td>";
+            detalles = detalles + "<td style='background-color: #485798;color: #ffffff'>" + "Cantidad" + "</td>";
+            detalles = detalles + "<td style='background-color: #485798;color: #ffffff'>" + "Código" + "</td>";
+            detalles = detalles + "<td style='background-color: #485798;color: #ffffff'>" + "Descripción" + "</td>";
+            detalles = detalles + "<td style='background-color: #485798;color: #ffffff'>" + "P.Unitario" + "</td>";
+            detalles = detalles + "<td style='background-color: #485798;color: #ffffff'>" + "Total" + "</td>";
             detalles = detalles + "</tr>";
             for (int i = 0; i < detallesVenta.size(); i++) {
                 detalles = detalles + "<tr>";
                 detalles = detalles + "<td>" + detallesVenta.get(i).getCantidad() + "</td>";
                 detalles = detalles + "<td>" + detallesVenta.get(i).getCodigo() + "</td>";
                 detalles = detalles + "<td>" + detallesVenta.get(i).getNombre() + "</td>";
-                detalles = detalles + "<td>" + detallesVenta.get(i).getCosto() + "</td>";
-                detalles = detalles + "<td>" + detallesVenta.get(i).getTotal() + "</td>";
+                detalles = detalles + "<td>" + detallesVenta.get(i).getCosto().setScale(2, BigDecimal.ROUND_DOWN) + "</td>";
+                detalles = detalles + "<td>" + detallesVenta.get(i).getTotal().setScale(2, BigDecimal.ROUND_DOWN) + "</td>";
                 detalles = detalles + "</tr>";
             }
             detalles = detalles + "</table>";
 
             //cabecera de la Factura
-            cabecera = "<div align='center'>"
-                    + "<br/>"
-                    + "<h3>Factura N - " + venta.getCodigoDocumento() + "</h3>"
-                    + "<br/>"
-                    + "<b>Cliente</b>"
-                    + "<br/>"
-                    + "<b>Cédula: </b>" + clienteEncontrado.getCedulaRuc() + ""
-                    + "<br/>"
-                    + "<b>Nombre: </b>" + clienteEncontrado.getNombre() + ""
-                    + "<br/>"
-                    + "<b>Dirección: </b>" + clienteEncontrado.getDireccion() + ""
-                    + "<br/>"
-                    + "<b>Teléfono: </b>" + clienteEncontrado.getTelefono() + ""
-                    + "<br/>"
-                    + "<img src='http://thumbs.subefotos.com/bd228d061d5c2675698d5be2f301129eo.jpg' width='30%' height='30%'>"
-                    + "<br/>"
-                    + "<h2 style='background-color: #ffff33'>Codefac</h2> "
-                    + "<br/><b>Le informa que su factura ha sido emitida exitosamente</b>"
-                    + "<br/>"
-                    + "<br/> <b>DETALLES</b>"
-                    + "<br/>"
+            cabecera = "<div style=\"width: 80%;padding: 10px;border-style: dashed;margin: 0 auto;border-color: #cccccc\">\n"
+                    + "	<div style=\"width: 100%;text-align: center\"><h2>EMPRESA ABC S.A.</h2></div>\n"
+                    + "	<br/>\n"
+                    + "	<table style=\"width: 100%\">\n"
+                    + "			<tr>\n"
+                    + "				<td style=\"width: 20%;text-align: center\">\n"
+                    + "					<img src=\"http://thumbs.subefotos.com/bd228d061d5c2675698d5be2f301129eo.jpg\" width=\"80px\" height=\"80px\">\n"
+                    + "				</td>\n"
+                    + "				<td style=\"width: 70%\">\n"
+                    + "					<table style=\"width: 100%;height: 100%\">\n"
+                    + "						<tr>\n"
+                    + "							<td><b>Propietario</b></td>\n"
+                    + "							<td><b>Ruc</b></td>\n"
+                    + "							<td><b>Factura N.</b></td>\n"
+                    + "						</tr>\n"
+                    + "						<tr>\n"
+                    + "							<td><b>Direccion</b></td>\n"
+                    + "							<td><b>Telefono</b></td>\n"
+                    + "							<td><div style=\"border-style: solid;width: 80px;text-align: center\">#000</div></td>\n"
+                    + "						</tr>\n"
+                    + "\n"
+                    + "					</table>\n"
+                    + "				</td>\n"
+                    + "			</tr>\n"
+                    + "		</table>\n"
+                    + "		<br/>\n"
+                    + "		<div style=\"border-style: solid;width: 100%;\"></div>\n"
+                    + "		<br/>\n"
+                    + "		 <table style=\"width: 100%\">\n"
+                    + "						<tr>\n"
+                    + "							<td><b>CI/RUC</b></td>\n"
+                    + "							<td>999999999</td>\n"
+                    + "							<td><b>Telefono.</b></td>\n"
+                    + "							<td>5555555</td>\n"
+                    + "							<td><b>Observaciones</b></td>\n"
+                    + "							<td><p>sdsd sdf sdf sdf sdfsdfsdfsdf</p></td>\n"
+                    + "						</tr>\n"
+                    + "						<tr>\n"
+                    + "							<td><b>Nombre</b></td>\n"
+                    + "							<td>mijin 123</td>\n"
+                    + "							<td><b>Fecha Recepcion</b></td>\n"
+                    + "							<td>2016-12-12</td>\n"
+                    + "						</tr>\n"
+                    + "\n"
+                    + "		  </table>\n"
+                    + "		  \n"
+                    + "		  <br/>\n"
+                    + "		  <div style=\"border-style: solid;width: 100%;text-align: center;background-color: #666666;color: #ffffff\">D E T A L L E S</div>\n"
                     + detalles
                     + "<br/>"
+                    + "<div style=\"text-align: right\">"
                     + "<br/> <b>Subtotal: </b>" + subtotal.setScale(2, BigDecimal.ROUND_DOWN)
-                    + "<br/> <b>Iva " + ivaMostrar + " % : </b>" + venta.getIva().setScale(2, BigDecimal.ROUND_UP)
+                    + "<br/> <b>Iva " + ivaMostrar.setScale(0, BigDecimal.ROUND_UP) + " % : </b>" + venta.getIva().setScale(2, BigDecimal.ROUND_UP)
                     + "<br/> <b>Total: </b>" + venta.getTotal().setScale(2, BigDecimal.ROUND_UP)
+                    + "</div>"
                     + "<br/>"
-                    + "<br/>"
-                    + "<p><b>Este correo fué generado por Codefac Sistema de Facturación</b></p>"
-                    + "<br/>"
-                    + "<p><b>Consultas y Servicios :</b></p>"
-                    + "<br/>"
-                    + "<br/>"
+                    + "<b>Este correo fué generado por Codefac Sistema de Facturación</b>"
+                    + "<div style=\"background-color: #485798;color: #ffffff\">"
+                    + "<b>Consultas Ventas y Servicios :</b>"                    
                     + "<b>Dirección: </b>Sangolquí: Av Abdón Calderón y Espejo esq local 4 -- Telf:  2339487 - 0986612116-0994905332 "
+                    + "</div>"
                     + "</div>";
             System.out.println(cabecera);
             correo.EnviarCorreoSinArchivoAdjunto(clienteEncontrado.getCorreo(), "Codesoft", cabecera);
@@ -764,10 +791,10 @@ public class FacturaMB {
                 //cargar a los detallesVenta los DetallesOrdenesTrabajo
                 System.out.println("Antes del for");
                 System.out.println(detallesOrdenSeleccionadas);
-                
+
                 //FOR recorre lista de los detalles orden
                 for (int i = 0; i < detallesOrdenSeleccionadas.size(); i++) {
-                    System.out.println("Entro al for "+i);
+                    System.out.println("Entro al for " + i);
                     totalRegistro = detallesOrdenSeleccionadas.get(i).getPrecio().divide(ivaTotal, 2, BigDecimal.ROUND_FLOOR);
                     subtotalRegistro = totalRegistro.multiply(ivaTotal);
                     subtotal = subtotal.add(totalRegistro);
@@ -793,7 +820,7 @@ public class FacturaMB {
 //                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
 //                        ordenTrabajoSeleccionada.toStringDetalle(),
 //                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
-                    DetallesVenta detalles = new DetallesVenta(1,detallesOrdenSeleccionadas.get(i).getIdDetalleOrdenTrabajo().toString(),
+                    DetallesVenta detalles = new DetallesVenta(1, detallesOrdenSeleccionadas.get(i).getIdDetalleOrdenTrabajo().toString(),
                             detallesOrdenSeleccionadas.get(i).devolverDetalles(),
                             totalRegistro, totalRegistro);
 
@@ -816,7 +843,7 @@ public class FacturaMB {
                     detalles.setPrecioSeleccionado("PVP");
                     detalles.setEscogerDescuento("No");
                     detalles.setTipoDetalle("Orden Trabajo");
-                //REVISAR
+                    //REVISAR
                     //detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
                     detallesVenta.add(detalles);
                     System.out.println("Detallles: " + detallesVenta);

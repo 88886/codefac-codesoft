@@ -432,42 +432,42 @@ and open the template in the editor.
               width="700px"
               id="dlgDetallesOrden">
         <h:form id="frmDetallesOrden">
-        <p:dataTable rows="10"                     
-                     id="tablaDetallesOrden"
-                     var="detallesOrden"
-                     value="#{facturaMB.detallesOrdenMostrar}"
-                     scrollable="true" 
-                     selection="#{facturaMB.detallesOrdenSeleccionadas}" 
-                     rowKey="#{detallesOrden.idDetalleOrdenTrabajo}"
-                     style="font-size: 10px; margin-bottom:0"
-                     rowStyleClass="#{detallesOrden.estado eq 'reparado'?'filaRoja':'null'}">
-            <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
-            <p:column headerText="Código" >
-                <h:outputText value="#{detallesOrden.idDetalleOrdenTrabajo}" />
-            </p:column>
-            <p:column headerText="Equipo">
-                <h:outputText value="#{detallesOrden.equipo}" />
-            </p:column>
-            <p:column headerText="Descripción" >
-                <h:outputText value="#{detallesOrden.descripcion}" />
-            </p:column>
-            <p:column headerText="Problema"  >
-                <h:outputText value="#{detallesOrden.problema}" />
-            </p:column>
-            <p:column headerText="Tbj. Realizar" >
-                <h:outputText value="#{detallesOrden.trabajoRealizar}" />
-            </p:column>
-            <f:facet name="footer">
-                <p:commandButton update=":formDetalles:tablaDetallesFactura,
-                                 :formDetalles:panelTotales" 
-                                 value="Aceptar" 
-                                 styleClass="ui-botonCeleste"
-                                 action="#{facturaMB.onRowSelectOrden()}"/>
-            </f:facet>
-        </p:dataTable>
-            </h:form>
+            <p:dataTable rows="10"                     
+                         id="tablaDetallesOrden"
+                         var="detallesOrden"
+                         value="#{facturaMB.detallesOrdenMostrar}"
+                         scrollable="true" 
+                         selection="#{facturaMB.detallesOrdenSeleccionadas}" 
+                         rowKey="#{detallesOrden.idDetalleOrdenTrabajo}"
+                         style="font-size: 10px; margin-bottom:0"
+                         rowStyleClass="#{detallesOrden.estado eq 'reparado'?'filaRoja':'null'}">
+                <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
+                <p:column headerText="Código" >
+                    <h:outputText value="#{detallesOrden.idDetalleOrdenTrabajo}" />
+                </p:column>
+                <p:column headerText="Equipo">
+                    <h:outputText value="#{detallesOrden.equipo}" />
+                </p:column>
+                <p:column headerText="Descripción" >
+                    <h:outputText value="#{detallesOrden.descripcion}" />
+                </p:column>
+                <p:column headerText="Problema"  >
+                    <h:outputText value="#{detallesOrden.problema}" />
+                </p:column>
+                <p:column headerText="Tbj. Realizar" >
+                    <h:outputText value="#{detallesOrden.trabajoRealizar}" />
+                </p:column>
+                <f:facet name="footer">
+                    <p:commandButton update=":formDetalles:tablaDetallesFactura,
+                                     :formDetalles:panelTotales" 
+                                     value="Aceptar" 
+                                     styleClass="ui-botonCeleste"
+                                     action="#{facturaMB.onRowSelectOrden()}"/>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
     </p:dialog>
-
+    
     <!--Textos en botones -->
 
 
