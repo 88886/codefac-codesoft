@@ -160,6 +160,26 @@ h1 , h2
     vertical-align: top;
 }
 
+.ui-botonBlanco.ui-state-default {
+    background-image: none;
+    
+    background-color: #ffffff;
+    color: black;
+    font-weight: bold;
+    padding: 3px;
+    padding-bottom: 4px;
+}
+
+.ui-botonBlanco.ui-state-hover {
+    background-image: none;
+    
+    background-color: #cccccc;
+    color: black;
+    font-weight: bold;
+    padding: 3px;
+    padding-bottom: 4px;
+}
+
 
 .ui-botonAzul.ui-state-default {
     background-image: none;
@@ -287,3 +307,50 @@ h1 , h2
     padding: 22px 25px;
     
 }
+
+.filaCeleste
+{
+    background-color: #2fadd3;
+    color: white;
+}
+
+.filaRoja
+{
+    background: none repeat scroll 0 0 ;
+    background-color: #c3322e;
+    color: white;
+}
+
+.filaVerde
+{
+    background: none repeat scroll 0 0 ;
+    background-color: #459b45;
+    font-weight: bold;
+    color: white;
+}
+
+.filaAzul
+{
+    background-color: #2b6598;
+    color: white;
+}
+
+.filaNaranja
+{
+    background-color: #ec9922;
+    color: white;
+    
+}
+
+.filaNegra
+{
+    background-color: black;
+    color: white;
+}
+
+.filaGris
+{
+    background-color: #666666;
+    color: white;
+}
+

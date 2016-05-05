@@ -82,9 +82,11 @@ public class trabajosPendientesMB implements Serializable {
     private OrdenTrabajo ordenTrabajoCorreo;
     
     /**
-     * Correo 
+     * Correo destinatario para enviar un correo de aviso
      */
-    private String correoEnviar;
+    private String correoDestinatario;
+    
+
 
     @PostConstruct
     public void postConstruct() {
@@ -121,7 +123,9 @@ public class trabajosPendientesMB implements Serializable {
      */
     public void reparacionRapida(OrdenTrabajo orden) {
         System.out.println("reparacion rapida..");
-        RequestContext.getCurrentInstance().execute("PF('dlgReparacion').show()");
+        //widgetEnviarCorreo
+        //RequestContext.getCurrentInstance().execute("PF('dlgReparacion').show()");
+        RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').show()");
         ordenTrabajoSeleccionados = orden;
 
     }
@@ -193,6 +197,9 @@ public class trabajosPendientesMB implements Serializable {
         System.out.println("abriendo dialogo -> "+orden);
         RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').show()");
         this.ordenTrabajoCorreo = orden;
+        System.out.println("destinario= "+correoDestinatario);
+        correoDestinatario="destinatario";
+        System.out.println("destinario= "+correoDestinatario);
         
     }
 
@@ -200,15 +207,20 @@ public class trabajosPendientesMB implements Serializable {
      * Metodo que me enviar cerrar el dialogo de los correoss
      */
     public void cerrarEnviarCorreo() {
+        System.out.println("Cerrar widget enviar correo ...");
         RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').hide()");
-        System.out.println(this.ordenTrabajoCorreo);
+        
+        System.out.println(this.correoDestinatario);
+        //this.correoDestinatario="correo editado";
     }
 
     /**
      * Metodo que me permite enviar el correo al destinatario
      */
-    public void enviarCorreo() {
+    public void enviarCorreo() 
+    {
         System.out.println("Orden-> "+ordenTrabajoCorreo);
+        System.out.println("Destinario:"+correoDestinatario);
         System.out.println("enviando correo de informacion ...");
         System.out.println(sistemaMB.getConfiguracion());
         CorreoMB correo = new CorreoMB(sistemaMB.getConfiguracion().getEmailServicioTecnico(), sistemaMB.getConfiguracion().getClaveEmailServicioTecnico());
