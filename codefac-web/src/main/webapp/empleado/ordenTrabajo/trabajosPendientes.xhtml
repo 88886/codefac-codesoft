@@ -45,7 +45,7 @@ and open the template in the editor.
                                 <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
                             </p:selectOneMenu>
 
-                            <b:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" look="success" icon="glyphicon-triangle-right"/>
+                            <p:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" styleClass="ui-botonEsmeralda" icon="ui-icon-search"/>
                             <b:commandButton ajax="false" value="Default"  look="warning" icon="glyphicon glyphicon-share"/>
                         </p:panelGrid>
                         <p:separator style="background-color: green;background-image: none" />
@@ -59,7 +59,7 @@ and open the template in the editor.
                         <p:panelGrid columns="1">
                             <b:commandButton value="" title="Reparacion rapida" style="height: 50px" actionListener="#{trabajosPendientesMB.reparacionRapida(ordenTrabajo)}" update=":formReparacionRapida" look="primary" icon="glyphicon-wrench" size="lg" />                    
                             <b:commandButton value="" title="Reparacion detallada" style="height: 50px" actionListener="#{trabajosPendientesMB.reparacionRapida(ordenTrabajo)}" update=":formReparacionRapida"  look="info" icon="glyphicon-object-align-vertical" size="lg" />                    
-                            <b:commandButton value="@" title="Enviar email" style="height: 50px" actionListener="#{trabajosPendientesMB.abrirDialogoCorreo(ordenTrabajo)}" update=":idEnviarCorreo"  look="warning" size="lg" />                    
+                            <p:commandButton value="@" title="Enviar email" style="height: 50px;color: white;font-size: 13px;width: 45px" actionListener="#{trabajosPendientesMB.abrirDialogoCorreo(ordenTrabajo)}" styleClass="ui-botonVerde" update=":idEnviarCorreo"   />                    
                         </p:panelGrid>
                         <p:panel >
                             <p:panelGrid columns="2" style="width: 270px">
@@ -100,26 +100,32 @@ and open the template in the editor.
                         <p:dataTable 
                             value="#{ordenTrabajo.detalleOrdenTrabajoList}"
                             var="detalle"
+                            rowStyleClass="#{detalle.estado eq 'reparado'?'filaAzul': detalle.estado eq 'recibido'?'filaVerde':detalle.estado eq 'procesando'?'filaCeleste':detalle.estado eq 'devuelto'?'filaRoja':detalle.estado eq 'devolver'?'filaNaranja':detalle.estado eq 'facturado'?'filaGris':'null'}"
+
                             >
 
                             <p:column headerText="Equipo">
-                                <p:outputLabel value="#{detalle.equipo}" />
+                                <p:outputLabel value="#{detalle.equipo}" style="font-weight: bold" />
                             </p:column>
 
                             <p:column headerText="Descripcion">
-                                <p:outputLabel value="#{detalle.descripcion}" />
+                                <p:outputLabel value="#{detalle.descripcion}" style="font-weight: lighter" />
                             </p:column>
 
                             <p:column headerText="Problema">
-                                <p:outputLabel value="#{detalle.problema}" />
+                                <p:outputLabel value="#{detalle.problema}" style="font-weight: lighter" />
                             </p:column>
 
-                            <p:column headerText="Trabajo Relizar">
-                                <p:outputLabel value="#{detalle.trabajoRealizar}" />
+                            <p:column headerText="Trabajo Realizar">
+                                <p:outputLabel value="#{detalle.trabajoRealizar}" style="font-weight: lighter" />
+                            </p:column>
+
+                            <p:column headerText="Estado" style="width: 80px" >
+                                <p:outputLabel value="#{detalle.estado}" style="font-weight: bold" />                                
                             </p:column>
 
                             <p:column style="width: 50px" >
-                                <p:commandButton immediate="true" actionListener="#{trabajosPendientesMB.abrirRepararTarea(detalle)}" icon="ui-icon-wrench" styleClass="ui-botonCeleste" title="Reparar" update=":formRepararTarea" />
+                                <p:commandButton immediate="true" actionListener="#{trabajosPendientesMB.abrirRepararTarea(detalle)}" icon="ui-icon-wrench" styleClass="ui-botonBlanco" title="Reparar" update=":formRepararTarea" />
                             </p:column>
 
                         </p:dataTable>
@@ -219,11 +225,12 @@ and open the template in the editor.
 
                             <p:outputLabel value="Estado:"/>
                             <p:selectOneMenu id="cmbEstado" style="width:100%">
+
                                 <f:selectItem itemLabel="Seleccione el estado" itemValue="" />
-                                <f:selectItem itemLabel="Sin revisar" itemValue="sinRevisar" />
-                                <f:selectItem itemLabel="En proceso" itemValue="enProceso" />
-                                <f:selectItem itemLabel="Terminado" itemValue="terminado" />
-                                <f:selectItem itemLabel="Sin solucion" itemValue="sinSolucion" />
+                                <f:selectItem itemLabel="Recibido" itemValue="recibido" />
+                                <f:selectItem itemLabel="En proceso" itemValue="procesano" />
+                                <f:selectItem itemLabel="Reparado" itemValue="reparado" />
+                                <f:selectItem itemLabel="Devolver" itemValue="devolver" />
                                 <f:selectItem itemLabel="Devuelto" itemValue="devuelto" />
                                 <f:selectItem itemLabel="Facturado" itemValue="facturado" />
                             </p:selectOneMenu>
@@ -298,7 +305,7 @@ and open the template in the editor.
                                 <p:clientValidator event="keyup"/>
                             </p:inputTextarea>
                             <p:message for="txtContenido" display="icon" />                            
-                            
+
 
                         </p:panelGrid>
 
@@ -306,6 +313,8 @@ and open the template in the editor.
                         <f:facet name="footer" >
                             <div style="text-align: center">
                                 <p:commandButton 
+                                    onstart="PF('statusEnvioCorreo').show()" 
+                                    onsuccess="PF('statusEnvioCorreo').hide()"
                                     value="Enviar" 
                                     styleClass="ui-botonAzul" 
                                     actionListener="#{trabajosPendientesMB.enviarCorreo()}" />
