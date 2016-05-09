@@ -302,8 +302,8 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
         //caragr detalles
         //position del widget
-        setX(5);
-        setY(370);
+        setX(0);
+        setY(530);
         setNameVar("dlgDetalles");
 
     }

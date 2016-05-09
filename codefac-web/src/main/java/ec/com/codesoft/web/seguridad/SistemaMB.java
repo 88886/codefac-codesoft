@@ -6,6 +6,7 @@
 package ec.com.codesoft.web.seguridad;
 
 import ec.com.codesoft.model.Configuracion;
+import ec.com.codesoft.model.Empresa;
 import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -29,10 +30,21 @@ public class SistemaMB implements Serializable
     
     private Configuracion configuracion;
     
+    private Empresa empresa;
+    
     @PostConstruct
     public void init()
     {
         configuracion=sistemaServicio.getConfiguracion();
+        empresa=sistemaServicio.getEmpresa();
+    }
+    
+    public void guardarEmpresa(){
+        System.out.println("Guardar Empresa");   
+    }
+    
+    public void guardarConfiguracion(){
+        System.out.println("Guardar Configuracion");   
     }
 
     public Configuracion getConfiguracion() 
@@ -44,6 +56,15 @@ public class SistemaMB implements Serializable
     {
         this.configuracion = configuracion;
     }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
     
     
 }

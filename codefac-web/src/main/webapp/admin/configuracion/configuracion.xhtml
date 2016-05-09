@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <div style="text-align:center">
+            <b:panel title="Configuración Empresa"  style="width:50%;margin: 0 auto" styleClass="customTitleBar" look="primary"  > 
+                <!-- Formulario para controlar el encabezado de la compra -->
+                <h:form id="formConfiguracionE">
+                    <p:panelGrid columns="4" styleClass="panelNoBorder">
+                        <b:badge value="RUC Empresa %"/>
+                        <p:inputText value="#{sistemaMB.empresa.rucEmpresa}"  placeholder="Ingrese el Ruc"/>
+                        <b:badge value="Nombre "/>
+                        <p:inputText value="#{sistemaMB.empresa.nombre}"  placeholder="Ingrese El nombre"/>
+                        <b:badge value="Propietario"/>
+                        <p:inputText value="#{sistemaMB.empresa.propietario}"  placeholder="Ingrese el nombre del Propietario"/>
+                        <b:badge value="Dirección"/>
+                        <p:inputText value="#{sistemaMB.empresa.direccion}"  placeholder="Ingrese la dirección"/>
+                        <b:badge value="Correo Electrónico"/>
+                        <p:inputText value="#{sistemaMB.empresa.email}"  placeholder="Ingrese el correo"/>
+                        <b:badge value="Teléfonos"/>
+                        <p:inputText value="#{sistemaMB.empresa.telefonos}"  placeholder="2222222-333333-099999999"/>
+                        <b:badge value="Slogan"/>
+                        <p:inputText value="#{sistemaMB.empresa.eslogan}"  placeholder="Codefac Facturando Tus Ideas"/>
+                        <b:badge value="Facebook"/>
+                        <p:inputText value="#{sistemaMB.empresa.facebook}"  placeholder="codesoft.ec"/>
+                        <b:badge value="Skype"/>
+                        <p:inputText value="#{sistemaMB.empresa.skype}"  placeholder="Codesoft"/>
+                        <b:badge value="Twitter"/>
+                        <p:inputText value="#{sistemaMB.empresa.twiter}"  placeholder="@Codesoft"/>
+                        <b:badge value="Whatssap"/>
+                        <p:inputText value="#{sistemaMB.empresa.whatsapp}"  placeholder="099999999"/>
+                        <b:badge value="WebSite"/>
+                        <p:inputText value="#{sistemaMB.empresa.paginaOficial}"  placeholder="www.codesoft.zz.mu"/>
+
+                    </p:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" 
+                                         styleClass="ui-botonCeleste"
+                                         actionListener="#{sistemaMB.guardarEmpresa()}"/>
+                    </f:facet>
+
+
+                </h:form>
+            </b:panel>
+            <p:separator/>
+            <b:panel title="Configuración General"  style="width: 70%;margin: 0 auto" styleClass="customTitleBar" look="primary"  > 
+                <!-- Formulario para controlar el encabezado de la compra -->
+                <h:form id="formConfiguracionG">
+                    <p:panelGrid columns="4" styleClass="panelNoBorder">
+                        <b:badge value="Iva %"/>
+                        <p:inputText value="#{sistemaMB.configuracion.iva}"  placeholder="Iva"/>
+                        <b:badge value="Ruta Reportes"/>
+                        <p:inputText value="#{sistemaMB.configuracion.pathreportes}"  placeholder="Ingrese la ruta"/>
+                        <b:badge value="Max Items facturas"/>
+                        <p:inputText value="#{sistemaMB.configuracion.maxItemFactura}"  placeholder="N Items"/>
+                        <b:badge value="Max Items Notas"/>
+                        <p:inputText value="#{sistemaMB.configuracion.maxItemNota}"  placeholder="N Items"/>
+                        <b:badge value="Max Items Orden Trabajo"/>
+                        <p:inputText value="#{sistemaMB.configuracion.maxItemOrdenTrabajo}"  placeholder="Iva"/>
+                        <b:badge value="Correo Electrónico Servicio Técnico"/>
+                        <p:inputText value="#{sistemaMB.configuracion.emailServicioTecnico}"  placeholder="Ingrese el Correo"/>
+                        <b:badge value="Clave Correo Electrónico Servicio Técnico"/>
+                        <p:inputText value="#{sistemaMB.configuracion.claveEmailServicioTecnico}"  placeholder="Ingrese la clave"/>
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" 
+                                         styleClass="ui-botonCeleste"
+                                         actionListener="#{sistemaMB.guardarConfiguracion()}"/>
+                    </f:facet>
+
+
+                </h:form>
+            </b:panel>
+        </div>
+    </ui:define>
+
+</ui:composition>
