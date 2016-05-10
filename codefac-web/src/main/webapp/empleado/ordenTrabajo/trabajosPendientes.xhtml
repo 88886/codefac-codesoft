@@ -22,35 +22,46 @@ and open the template in the editor.
                 <p:accordionPanel >
                     <!-- panel que contiene los filtros aplicados a las ordenes de trabajo-->
                     <p:tab title="filtros">
-                        <p:panelGrid columns="7" styleClass="panelNoBorder" >
-                            <p:outputLabel value="Ordenar por:"/>
+                        <div>
+                            <div style="background-color: #3f5da2;float: left">
+                                <p:panelGrid columns="10" styleClass="panelNoBorder" style="width: 100%" >
+                                    <p:outputLabel value="Ordenar por:"/>
 
-                            <p:selectOneMenu value="#{trabajosPendientesMB.tipoFiltro}"  style="width:200px">
-                                <f:selectItem itemLabel="Fecha de ingreso" itemValue="ingreso" />
-                                <f:selectItem itemLabel="Fecha de entrega" itemValue="entrega" />                                
-                                <f:selectItem itemLabel="Precio" itemValue="precio" />
-                                <p:ajax  event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
-                            </p:selectOneMenu>
+                                    <p:selectOneMenu value="#{trabajosPendientesMB.tipoFiltro}"  >
+                                        <f:selectItem itemLabel="Fecha de ingreso" itemValue="ingreso" />
+                                        <f:selectItem itemLabel="Fecha de entrega" itemValue="entrega" />                                
+                                        <f:selectItem itemLabel="Precio" itemValue="precio" />
+                                        <p:ajax  event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
+                                    </p:selectOneMenu>
 
-                            <p:selectOneMenu value="#{trabajosPendientesMB.tipoOrden}"  style="width:200px">
-                                <f:selectItem itemLabel="Menor al Mayor" itemValue="ASC" />
-                                <f:selectItem itemLabel="Mayor al Menor" itemValue="DESC" />
-                                <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
-                            </p:selectOneMenu>
+                                    <p:selectOneMenu value="#{trabajosPendientesMB.tipoOrden}" >
+                                        <f:selectItem itemLabel="Menor al Mayor" itemValue="ASC" />
+                                        <f:selectItem itemLabel="Mayor al Menor" itemValue="DESC" />
+                                        <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
+                                    </p:selectOneMenu>
 
-                            <!--  -->
-                            <p:selectOneMenu value="#{trabajosPendientesMB.tipoEstado}"  style="width:100px">
-                                <f:selectItem itemLabel="Revision" itemValue="revision" />
-                                <f:selectItem itemLabel="Reparados" itemValue="reparado" />
-                                <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
-                            </p:selectOneMenu>
+                                    <!--  -->
+                                    <p:selectOneMenu value="#{trabajosPendientesMB.tipoEstado}"  style="width:100px">
+                                        <f:selectItem itemLabel="Revision" itemValue="revision" />
+                                        <f:selectItem itemLabel="Reparados" itemValue="reparado" />
+                                        <p:ajax event="change" listener="#{trabajosPendientesMB.filtrar()}" update=":formPrincipal:repeatOrdenTrabajo"/>
+                                    </p:selectOneMenu>
 
-                            <p:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" styleClass="ui-botonEsmeralda" icon="ui-icon-search"/>
-                            <b:commandButton ajax="false" value="Default"  look="warning" icon="glyphicon glyphicon-share"/>
-                        </p:panelGrid>
-                        <p:separator style="background-color: green;background-image: none" />
+                                    <p:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" styleClass="ui-botonEsmeralda" icon="ui-icon-search"/>
+                                    <p:commandButton ajax="false" value="Default" styleClass="ui-botonNaranja" icon="ui-icon-pin-w" />
+                                </p:panelGrid>
+                            </div>
+                            <div style="background-color: white;float: right;border: #e5e5e5;border-width: 2px;border-style: solid;background-color:#e5e5e5 ">
+                                <p:panelGrid columns="2" styleClass="panelNoBorder">
+                                    <p:inputText />
+                                    <p:commandButton value="Buscar" styleClass="ui-botonEsmeralda" icon="ui-icon-search"/>
+                                </p:panelGrid>
+                            </div>
+                        </div>                       
+
                     </p:tab>
                 </p:accordionPanel>
+                <p:separator style="background-color: green;background-image: none" />
 
                 <!-- Listado de las ordenes de trabajo -->
                 <ui:repeat id="repeatOrdenTrabajo" var="ordenTrabajo" value="#{trabajosPendientesMB.ordenTrabajoList}" >
