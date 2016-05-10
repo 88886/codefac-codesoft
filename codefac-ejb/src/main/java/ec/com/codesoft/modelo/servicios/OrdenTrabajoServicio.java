@@ -147,4 +147,15 @@ public class OrdenTrabajoServicio {
     public void actualizarOrdenTrabajo(OrdenTrabajo orden){
         ordenTrabajoFacade.edit(orden);
     }
+    
+    
+    /**
+     * Obtener la orden de trabajo por id
+     * @param id
+     * @return 
+     */
+    public OrdenTrabajo getOrdenTrabajoById(Integer id)
+    {
+        return ordenTrabajoFacade.find(id);
+    }
 }

@@ -86,6 +86,12 @@ public class trabajosPendientesMB implements Serializable {
      */
     private String correoDestinatario;
     
+    /**
+     *  Variable que me permite grabar el codigo para realizar la
+     *  busqueda por orde codigo de la orden de trabajo
+     */
+    private Integer codigoOrdenTrabajoFind;
+    
 
 
     @PostConstruct
@@ -232,6 +238,17 @@ public class trabajosPendientesMB implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').hide()");
         
     }
+    
+    /**
+     * Filtrar por numero de la orden de trabajo 
+     */
+    public void buscarOrdenByID()
+    {
+        OrdenTrabajo ordenTrabajoBuscado=ordenTrabajoServicio.getOrdenTrabajoById(codigoOrdenTrabajoFind);
+        ordenTrabajoList.clear();
+        ordenTrabajoList.add(ordenTrabajoBuscado);
+        
+    }
 
     //////////////////////////GET AND SET//////////////////////////////
     public SistemaMB getSistemaMB() {
@@ -320,6 +337,14 @@ public class trabajosPendientesMB implements Serializable {
 
     public void setOrdenTrabajoCorreo(OrdenTrabajo ordenTrabajoCorreo) {
         this.ordenTrabajoCorreo = ordenTrabajoCorreo;
+    }
+
+    public Integer getCodigoOrdenTrabajoFind() {
+        return codigoOrdenTrabajoFind;
+    }
+
+    public void setCodigoOrdenTrabajoFind(Integer codigoOrdenTrabajoFind) {
+        this.codigoOrdenTrabajoFind = codigoOrdenTrabajoFind;
     }
     
     

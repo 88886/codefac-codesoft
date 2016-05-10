@@ -52,9 +52,21 @@ and open the template in the editor.
                                 </p:panelGrid>
                             </div>
                             <div style="background-color: white;float: right;border: #e5e5e5;border-width: 2px;border-style: solid;background-color:#e5e5e5 ">
-                                <p:panelGrid columns="2" styleClass="panelNoBorder">
-                                    <p:inputText />
-                                    <p:commandButton value="Buscar" styleClass="ui-botonEsmeralda" icon="ui-icon-search"/>
+                                <p:panelGrid columns="3" styleClass="panelNoBorder">
+                                    <p:inputText id="txtIdOrdenTrabajo" value="#{trabajosPendientesMB.codigoOrdenTrabajoFind}" placeholder="id orden de Trabajo" required="true" >
+                                        <p:clientValidator event="keyup" />
+                                    </p:inputText>
+                                    <p:message for="txtIdOrdenTrabajo" display="icon" />
+                                    <p:commandButton 
+                                        process="txtIdOrdenTrabajo"
+                                        validateClient="true"
+                                        value="Buscar" 
+                                        ajax="false" 
+                                        actionListener="#{trabajosPendientesMB.buscarOrdenByID()}" 
+                                        styleClass="ui-botonEsmeralda" 
+                                        icon="ui-icon-search"/>
+                                    
+                                    
                                 </p:panelGrid>
                             </div>
                         </div>                       
