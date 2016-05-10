@@ -16,6 +16,7 @@ import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.facade.BancoFacade;
 import ec.com.codesoft.modelo.facade.CompraFacade;
+import ec.com.codesoft.modelo.facade.DetalleOrdenTrabajoFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoGeneralFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoIndividualFacade;
 import ec.com.codesoft.modelo.facade.DetalleVentaOrdenTrabajoFacade;
@@ -68,6 +69,9 @@ public class FacturaServicio {
     
     @EJB
     DetalleVentaOrdenTrabajoFacade detalleVentaOrdenTrabajoFacade;
+    
+    @EJB
+    DetalleOrdenTrabajoFacade detalleOrdenFacade;
     
     
     /**
@@ -289,5 +293,9 @@ public class FacturaServicio {
     public List<Venta> devolverVentasIntervalo(String fecha1, String fecha2){
         
         return ventaFacade.findVentasIntervalo(fecha1, fecha2);
+    }
+    
+    public void actualizarDetalleOrden(DetalleOrdenTrabajo detalle){
+        detalleOrdenFacade.edit(detalle);
     }
 }

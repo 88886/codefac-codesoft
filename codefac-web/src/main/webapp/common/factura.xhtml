@@ -34,7 +34,7 @@ and open the template in the editor.
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true" />
 
-                <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="success" >
+                <b:panel id="infDistr" styleClass="panelNoBorder" rendered="true" title="Información Cliente" look="primary" >
                     <p:panelGrid columns="8" style="margin: 0 auto;" >
                         <p:commandButton  id="btnBuscarCli" icon="ui-icon-search"  styleClass="ui-botonEsmeralda"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
 
@@ -43,7 +43,8 @@ and open the template in the editor.
                                      value="#{facturaMB.cedCliente}" 
                                      required="true" 
                                      requiredMessage="Campo necesario"
-                                     onkeypress="return validarEnter(event, 'btnBuscarCliente');"/>
+                                     onkeypress="return validarEnter(event, 'btnBuscarCliente');"
+                                     placeholder="Ingrese la cedula o RUC"/>
                         <p:message for="cedCliente" />
                         <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form"/>
 
@@ -56,7 +57,7 @@ and open the template in the editor.
                         <p:outputLabel value=" "/>
 
                         <p:outputLabel  value="Codigo Documento: " style="color: #0087ca"/>
-                        <p:inputText value="#{facturaMB.codigoDocumento}" />
+                        <p:inputText value="#{facturaMB.codigoDocumento}"  />
 
                         <b:badge  value="Nombre:      "  style="background-color: #0087ca;color: white"/>
                         <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
@@ -84,7 +85,7 @@ and open the template in the editor.
                             <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
                             <f:selectItem itemLabel="Credito" itemValue="Credito" />
                             <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
-                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":formDetalles:panelTotales"/>        
+                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":formDetalles:panelTotales,@form"/>        
                         </p:selectOneMenu>
 
                         <p:outputLabel/>
@@ -119,7 +120,7 @@ and open the template in the editor.
                                     <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
                                 </p:selectOneMenu>  
                                 <b:badge value="No Cheque:" style="background-color: #0087ca;color: white" />
-                                <p:inputText  value="#{facturaMB.NCheque}"/>
+                                <p:inputText  value="#{facturaMB.NCheque}" placeholder="Ingrese el num del Cheque"/>
                             </p:panelGrid>
                         </p:panel>
 
@@ -270,7 +271,7 @@ and open the template in the editor.
                         </p:column>
 
                         <p:column headerText="Dsct Manual %" style="text-align: center;width:80px" rendered="#{facturaMB.mostrarDescuentoManual}" > 
-                            <p:inputText id="descuentoManual" style="width:100%" value="#{detallesVenta.valorDescuento}" rendered="#{detallesVenta.mostrarDescuentoManual}" onkeypress="return noProcesar(event);">
+                            <p:inputText id="descuentoManual" style="width:100%" value="#{detallesVenta.valorDescuento}" rendered="#{detallesVenta.mostrarDescuentoManual}" onkeypress="return noProcesar(event);" placeholder="dsct">
                                 <p:ajax event="blur" listener="#{facturaMB.aplicarDescuentosManual(detallesVenta)}" update=":formDetalles:idDetallesFactura,:formDetalles:panelTotales"/>
                             </p:inputText>   
                         </p:column>
@@ -292,7 +293,7 @@ and open the template in the editor.
                             <f:selectItem itemLabel="Dsct Directo" itemValue="directo" />
                             <p:ajax event="change" listener="#{facturaMB.escojerTipoDescuento()}" update=":formDetalles:panelTotales"/>
                         </p:selectOneMenu>
-                        <p:inputText id="txtDescuento" value="#{facturaMB.descuento}" readonly="false" style="width: 50%">
+                        <p:inputText placeholder="Dsct" id="txtDescuento" value="#{facturaMB.descuento}" readonly="false" style="width: 50%">
                             <p:ajax event="blur" listener="#{facturaMB.calcularDescuento()}" update="@form"/>
                         </p:inputText>
 
@@ -425,9 +426,8 @@ and open the template in the editor.
 
     <!-- Dialago para mostrar los detalles de las ordenes  -->
     <p:dialog widgetVar="dlgDetallesOrden" 
-              modal="true" 
-              resizable="false"
-              showHeader="false"  
+              modal="true"
+              header="Escojer los detalles a facturar"
               minHeight="30" 
               width="700px"
               id="dlgDetallesOrden">
@@ -440,7 +440,7 @@ and open the template in the editor.
                          selection="#{facturaMB.detallesOrdenSeleccionadas}" 
                          rowKey="#{detallesOrden.idDetalleOrdenTrabajo}"
                          style="font-size: 10px; margin-bottom:0"
-                         rowStyleClass="#{detallesOrden.estado eq 'reparado'?'filaRoja':'null'}">
+                         rowStyleClass="#{detallesOrden.estado eq 'facturado'?'filaVerde':'filaGris'}">
                 <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
                 <p:column headerText="Código" >
                     <h:outputText value="#{detallesOrden.idDetalleOrdenTrabajo}" />
