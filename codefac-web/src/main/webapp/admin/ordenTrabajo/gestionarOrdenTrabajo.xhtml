@@ -14,9 +14,10 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
+        <h4 class="titulo" style="text-align: center">Gestionar Orden de Trabajo</h4>
         <div style="text-align: left">         
             <h:form target="_blank">
-                <p:panel header="Ordenes de Trabajo">
+                <p:panel>
                     <p:dataTable 
                         value="#{gestionarOrdenTrabajoMB.ordenTrabajoList}"
                         var="orden"
@@ -26,7 +27,7 @@ and open the template in the editor.
                         widgetVar="ventaTable"
                         >
 
-                        <p:column filterBy="#{orden.idOrdenTrabajo}" headerText="No Orden" style="width: 60px;" filterMatchMode="contains">
+                        <p:column filterBy="#{orden.idOrdenTrabajo}" headerText="No" style="width: 60px;" filterMatchMode="contains">
                             <p:outputLabel value="#{orden.idOrdenTrabajo}"/>
                         </p:column>
 
@@ -64,27 +65,43 @@ and open the template in the editor.
                         </p:column>
 
 
-                        <p:column headerText="Fecha Ingreso" style="width: 110px" >
+                        <p:column headerText="Fecha Ingreso" style="width: 111px" >
                             <p:outputLabel value="#{orden.fechaEmision}" >
                                 <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                             </p:outputLabel>
                         </p:column>
 
-                        <p:column headerText="Fecha Entrega" style="width: 110px" >
+                        <p:column headerText="Fecha Entrega" style="width: 115px" >
                             <p:outputLabel value="#{orden.fechaEntrega}" >
                                 <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                             </p:outputLabel>
                         </p:column>
 
-                        <p:column headerText="Acciones" style="width: 180px;" >
+                        <p:column headerText="Acciones" style="width: 102px;" >
 
-                            <p:commandButton action="#{gestionarOrdenTrabajoMB.imprimir(orden)}" value="Imprimir" ajax="false" />
-
-                            <p:commandButton style="background-image: none;background-color: coral" value="Anular" actionListener="#{gestionarOrdenTrabajoMB.anular(orden)}" update="@form" disabled="#{orden.estado eq 'anulado'?'true':'false'}" >
+                            <p:commandButton
+                                styleClass="ui-botonCeleste"
+                                icon="ui-icon-print"
+                                title="Imprimir"
+                                action="#{gestionarOrdenTrabajoMB.imprimir(orden)}" 
+                                ajax="false" />
+                                                           
+                            <p:commandButton
+                                title="Anular"
+                                styleClass="ui-botonNaranja"
+                                icon="ui-icon-closethick"                                
+                                actionListener="#{gestionarOrdenTrabajoMB.anular(orden)}" 
+                                update="@form" 
+                                disabled="#{orden.estado eq 'anulado'?'true':'false'}" >
                                 <p:confirm header="Confirmar" message="Estas seguro que quieres anular la orden de trabajo !los cambios son irreversibles!?" icon="ui-icon-alert" />
                             </p:commandButton> 
 
-                            <p:commandButton action="verVenta" icon="ui-icon-search" style="background-color: darkgreen;background-image: none" >
+                            <p:commandButton 
+                                styleClass="ui-botonEsmeralda"
+                                action="verVenta" 
+                                icon="ui-icon-search"
+                                title="Ver orden trabajo"
+                                >
                                 <f:param name="id" value="#{venta.codigoFactura}" />
                             </p:commandButton>
                         </p:column>

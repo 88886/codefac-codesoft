@@ -75,30 +75,27 @@ public class trabajosPendientesMB implements Serializable {
     private String contenidoCorreo;
 
     private OrdenTrabajo ordenTrabajoSeleccionados;
-    
+
     /**
      * Orden de trabajo que me sirve para enviar el correo
      */
     private OrdenTrabajo ordenTrabajoCorreo;
-    
+
     /**
      * Correo destinatario para enviar un correo de aviso
      */
     private String correoDestinatario;
-    
+
     /**
-     *  Variable que me permite grabar el codigo para realizar la
-     *  busqueda por orde codigo de la orden de trabajo
+     * Variable que me permite grabar el codigo para realizar la busqueda por
+     * orde codigo de la orden de trabajo
      */
     private Integer codigoOrdenTrabajoFind;
-    
-
 
     @PostConstruct
     public void postConstruct() {
         tipoEstado = "revision";
         ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso("ASC", tipoEstado);
-        System.out.println(ordenTrabajoList.size());
         tipoFiltro = "ingreso";
         tipoOrden = "ASC";
     }
@@ -122,6 +119,13 @@ public class trabajosPendientesMB implements Serializable {
                 break;
 
         }
+    }
+
+    public void filtroPorDefecto() {
+        tipoEstado = "revision";
+        tipoFiltro = "ingreso";
+        tipoOrden = "ASC";
+        ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso("ASC", tipoEstado);
     }
 
     /**
@@ -198,15 +202,14 @@ public class trabajosPendientesMB implements Serializable {
     /**
      * Abrir el dialogo para enviar un correo rapido
      */
-    public void abrirDialogoCorreo(OrdenTrabajo orden) 
-    {
-        System.out.println("abriendo dialogo -> "+orden);
+    public void abrirDialogoCorreo(OrdenTrabajo orden) {
+        System.out.println("abriendo dialogo -> " + orden);
         RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').show()");
         this.ordenTrabajoCorreo = orden;
-        System.out.println("destinario= "+correoDestinatario);
-        correoDestinatario="destinatario";
-        System.out.println("destinario= "+correoDestinatario);
-        
+        System.out.println("destinario= " + correoDestinatario);
+        correoDestinatario = "destinatario";
+        System.out.println("destinario= " + correoDestinatario);
+
     }
 
     /**
@@ -215,7 +218,7 @@ public class trabajosPendientesMB implements Serializable {
     public void cerrarEnviarCorreo() {
         System.out.println("Cerrar widget enviar correo ...");
         RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').hide()");
-        
+
         System.out.println(this.correoDestinatario);
         //this.correoDestinatario="correo editado";
     }
@@ -223,31 +226,29 @@ public class trabajosPendientesMB implements Serializable {
     /**
      * Metodo que me permite enviar el correo al destinatario
      */
-    public void enviarCorreo() 
-    {
-        System.out.println("Orden-> "+ordenTrabajoCorreo);
-        System.out.println("Destinario:"+correoDestinatario);
+    public void enviarCorreo() {
+        System.out.println("Orden-> " + ordenTrabajoCorreo);
+        System.out.println("Destinario:" + correoDestinatario);
         System.out.println("enviando correo de informacion ...");
         System.out.println(sistemaMB.getConfiguracion());
         CorreoMB correo = new CorreoMB(sistemaMB.getConfiguracion().getEmailServicioTecnico(), sistemaMB.getConfiguracion().getClaveEmailServicioTecnico());
         correo.EnviarCorreoSinArchivoAdjunto(""
                 + ordenTrabajoCorreo.getCedulaRuc().getCorreo(), ""
-                + sistemaServicio.getEmpresa().getNombre()+" "+asuntoCorreo, ""
-                +contenidoCorreo);
+                + sistemaServicio.getEmpresa().getNombre() + " " + asuntoCorreo, ""
+                + contenidoCorreo);
 
         RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').hide()");
-        
+
     }
-    
+
     /**
-     * Filtrar por numero de la orden de trabajo 
+     * Filtrar por numero de la orden de trabajo
      */
-    public void buscarOrdenByID()
-    {
-        OrdenTrabajo ordenTrabajoBuscado=ordenTrabajoServicio.getOrdenTrabajoById(codigoOrdenTrabajoFind);
+    public void buscarOrdenByID() {
+        OrdenTrabajo ordenTrabajoBuscado = ordenTrabajoServicio.getOrdenTrabajoById(codigoOrdenTrabajoFind);
         ordenTrabajoList.clear();
         ordenTrabajoList.add(ordenTrabajoBuscado);
-        
+
     }
 
     //////////////////////////GET AND SET//////////////////////////////
@@ -346,7 +347,5 @@ public class trabajosPendientesMB implements Serializable {
     public void setCodigoOrdenTrabajoFind(Integer codigoOrdenTrabajoFind) {
         this.codigoOrdenTrabajoFind = codigoOrdenTrabajoFind;
     }
-    
-    
 
 }

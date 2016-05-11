@@ -172,10 +172,9 @@ and open the template in the editor.
                             <p:inputText  value="#{detalle.precio}" readonly="true" style="width: 50px" />
                         </p:column>                    
 
-                        <p:column headerText="Acciones" style="width: 50px">
+                        <p:column headerText="Acciones" style="width: 120px">
                             <p:commandButton 
                                 styleClass="ui-botonNaranja"
-                                style="width: 38px"
                                 partialSubmit="true" 
                                 process="@this" 
                                 icon="ui-icon-closethick" 
@@ -184,11 +183,12 @@ and open the template in the editor.
                                 <p:confirm header="Confirmar" message="Quieres quitar el detalle?" icon="ui-icon-alert" />
                             </p:commandButton>
 
-                            <b:commandButton look="info" value="" 
-                                             immediate="true" 
-                                             icon="glyphicon-pencil" 
-                                             actionListener="#{ordenTrabajoMB.abrirDialogoEditar(detalle)}"
-                                             update=":formDialogoDetalleEdit" />
+                            <p:commandButton
+                                styleClass="ui-botonCeleste"
+                                immediate="true" 
+                                icon="ui-icon-pencil" 
+                                actionListener="#{ordenTrabajoMB.abrirDialogoEditar(detalle)}"
+                                update=":formDialogoDetalleEdit" />
 
                         </p:column>
 
@@ -213,7 +213,7 @@ and open the template in the editor.
                             <p:confirm header="Confirmar" message="Esta seguro que quiere grabar la orden de trabajo?" icon="ui-icon-alert" />
 
                         </p:commandButton>
-                        <b:commandButton value=" Cancelar " look="danger"/>
+                        <p:commandButton value=" Cancelar " styleClass="btn_rojo" />
                         <b:commandButton look="warning" immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
                     </p:panelGrid>
                 </p:panel>
@@ -300,7 +300,7 @@ and open the template in the editor.
                             actionListener="#{ordenTrabajoMB.agregarDetalle()}" 
                             update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregar,mensajeGeneral2" />
                         <p:spacer width="20px" />
-                        <b:button immediate="true" onclick="PF('dlgDetalle').hide();" value="Cancelar" look="danger" />
+                        <p:commandButton immediate="true" onclick="PF('dlgDetalle').hide();" value="Cancelar" />
                     </div>
                 </h:form>
             </p:dialog>
@@ -372,7 +372,7 @@ and open the template in the editor.
 
                         <p:commandButton validateClient="true"  partialSubmit="true" process=":formDialogoDetalleEdit,:formPrincipal:txtTotal" value="Editar" actionListener="#{ordenTrabajoMB.editarDetalle()}" update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregarEdit,mensajeGeneral2Edit" styleClass="ui-botonAzul" />
                         <p:spacer width="20px" />
-                        <b:button immediate="true" onclick="PF('dlgDetalleEdit').hide();" value="Cancelar" look="danger" />
+                        <p:commandButton immediate="true" onclick="PF('dlgDetalleEdit').hide();" value="Cancelar" />
                     </div>
                 </h:form>
             </p:dialog>

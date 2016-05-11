@@ -48,7 +48,7 @@ and open the template in the editor.
                                     </p:selectOneMenu>
 
                                     <p:commandButton ajax="false" value="filtrar" actionListener="#{trabajosPendientesMB.filtrar()}" styleClass="ui-botonEsmeralda" icon="ui-icon-search"/>
-                                    <p:commandButton ajax="false" value="Default" styleClass="ui-botonNaranja" icon="ui-icon-pin-w" />
+                                    <p:commandButton ajax="false" immediate="true" actionListener="#{trabajosPendientesMB.filtroPorDefecto()}" value="Default" styleClass="ui-botonNaranja" icon="ui-icon-pin-w" />
                                 </p:panelGrid>
                             </div>
                             <div style="background-color: white;float: right;border: #e5e5e5;border-width: 2px;border-style: solid;background-color:#e5e5e5 ">

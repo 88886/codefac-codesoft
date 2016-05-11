@@ -185,7 +185,7 @@ h1 , h2
 
 .ui-botonBlanco.ui-state-default {
     background-image: none;
-    
+
     background-color: #ffffff;
     color: black;
     font-weight: bold;
@@ -195,7 +195,7 @@ h1 , h2
 
 .ui-botonBlanco.ui-state-hover {
     background-image: none;
-    
+
     background-color: #cccccc;
     color: black;
     font-weight: bold;
@@ -315,6 +315,33 @@ h1 , h2
     font-weight: lighter;
 }
 
+.btn_rojo.ui-state-default 
+{
+    background-color: #c9302c;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+}
+
+.btn_rojo.ui-state-default 
+{
+    background-color: #c9302c;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+}
+
+.btn_rojo.ui-state-hover
+{
+    background-color: #d9534f;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+}
+
 
 .ui-dialog.ui-widget-content .ui-dialog-title
 {
@@ -335,7 +362,7 @@ h1 , h2
 {
     background-color: white;
     padding: 22px 25px;
-    
+
 }
 
 .filaCeleste
@@ -369,7 +396,7 @@ h1 , h2
 {
     background-color: #ec9922;
     color: white;
-    
+
 }
 
 .filaNegra
