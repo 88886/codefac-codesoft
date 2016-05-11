@@ -40,6 +40,7 @@ public class SistemaServicio implements Serializable
     
     public Empresa getEmpresa()
     {
+        System.err.println("Empresa "+empresaFacade.findAll().get(0));
         return empresaFacade.findAll().get(0);
     }
 }
