@@ -17,7 +17,7 @@ and open the template in the editor.
     <ui:define name="contenido" >
         <div>
             <h:form id="formPrincipal">
-                <p:panel header="Orden de Trabajo" style="width: 70%;margin: 0 auto"   >
+                <p:panel header="Orden de Trabajo" style="width: 70%;margin: 0 auto" styleClass="customTitleBar"   >
 
                     <p:spacer width="15px"/>
 
@@ -37,7 +37,7 @@ and open the template in the editor.
                         <!-- Boton que abre un dialogo para buscar el cliente -->
 
                         <p:commandButton partialSubmit="true"
-                                         styleClass="ui-botonEsmeralda"
+                                         styleClass="btn_mint"
                                          process="
                                          @this,
                                          :formPrincipal:txtTotal,
@@ -46,7 +46,7 @@ and open the template in the editor.
                                          :formPrincipal:txtObservaciones
                                          "  
                                          id="btnBuscarCliente"                                          
-                                         icon="ui-icon-search"
+                                         icon="fa fa-search"
                                          actionListener="#{ordenTrabajoMB.buscarClienteDlg()}"  >
 
                             <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update="@form,panelGridDatosCliente" />
@@ -134,13 +134,15 @@ and open the template in the editor.
 
                         <div style="text-align: center">
                             <p:commandButton 
-                                styleClass="ui-botonEsmeralda"
+                                styleClass="btn_azul"
+                                title="Agregar mas trabajos a la orden"
                                 partialSubmit="true" 
-                                process="@this"  
+                                process="@this"
+                                icon="fa fa-plus"
                                 value="Agregar Detalle" 
                                 actionListener="#{ordenTrabajoMB.abrirEquipoDialog()}" 
                                 update=":formDialogoDetalle"  
-                                style="margin: 0 auto;" />
+                                style="margin: 0 auto;font-size: 13px" />
                         </div>
 
                     </p:panel>
@@ -201,7 +203,8 @@ and open the template in the editor.
 
                     <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
                         <p:commandButton 
-                            styleClass="ui-botonAzul"
+                            icon="fa fa-floppy-o"
+                            styleClass="btn_verde"
                             ajax="true"
                             process="@this,txtTotal,txtAdelanto,datetime"  
                             validateClient="true"
@@ -213,8 +216,8 @@ and open the template in the editor.
                             <p:confirm header="Confirmar" message="Esta seguro que quiere grabar la orden de trabajo?" icon="ui-icon-alert" />
 
                         </p:commandButton>
-                        <p:commandButton value=" Cancelar " styleClass="btn_rojo" />
-                        <b:commandButton look="warning" immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
+                        <p:commandButton icon="fa fa-ban" value=" Cancelar " styleClass="btn_rojo" />
+                        <p:commandButton styleClass="btn_tomate" icon="fa fa-star-half-o" immediate="true" ajax="false" value=" Nuevo " action="ordenTrabajo" />
                     </p:panelGrid>
                 </p:panel>
 

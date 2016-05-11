@@ -33,8 +33,8 @@ and open the template in the editor.
                          rowKey="#{catalogo.codigoProducto}">
 
                 <f:facet name="header" >                               
-                    <p:commandButton id="btnNuevoCliente" actionListener="#{gestionProductoMB.mostrarNuevoProducto()}"  icon="ui-icon-plus" update=":idDialogProducto" styleClass="ui-botonEsmeralda" title="Crear un nuevo producto" />  
-                    <p:commandButton id="btnEditarCliente" actionListener="#{gestionProductoMB.mostrarEditarProducto()}" icon="ui-icon-pencil" update=":idDialogProductoEdit" styleClass="ui-botonNaranja" title="Editar un producto" />                          
+                    <p:commandButton id="btnNuevoCliente" actionListener="#{gestionProductoMB.mostrarNuevoProducto()}"  icon="fa fa-plus" update=":idDialogProducto" styleClass="btn_azul" title="Crear un nuevo producto" />  
+                    <p:commandButton id="btnEditarCliente" actionListener="#{gestionProductoMB.mostrarEditarProducto()}" icon="fa fa-pencil" update=":idDialogProductoEdit" styleClass="btn_tomate" title="Editar un producto" />                          
                 </f:facet>
 
                 <p:column headerText="Codigo" filterBy="#{catalogo.codigoProducto}" filterMatchMode="contains" style="width: 50px">
@@ -64,7 +64,7 @@ and open the template in the editor.
                 </p:column>
 
                 <p:column style="width: 50px" >
-                    <p:commandButton icon="ui-icon-zoomin" styleClass="ui-botonEsmeralda" actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" update=":formDialogProductoDistri" />
+                    <p:commandButton icon="fa fa-search" styleClass="btn_verde" actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" update=":formDialogProductoDistri" />
                 </p:column>
 
                 <p:column headerText="PVP " style="width: 50px" >
@@ -94,12 +94,12 @@ and open the template in the editor.
 
                 <p:column headerText="" style="width: 50px">
                     <p:commandButton 
-                        icon="ui-icon-trash"
+                        icon="fa fa-trash-o"
+                        styleClass="btn_rojo"
                         title="Eliminar Producto"
-                        styleClass="ui-botonNaranja" 
                         actionListener="#{gestionProductoMB.eliminarDetalle(catalogo)}" 
                         update="@form">
-                        
+
                         <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
                     </p:commandButton>
                 </p:column>

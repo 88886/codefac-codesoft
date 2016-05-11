@@ -23,8 +23,21 @@ and open the template in the editor.
                     >
 
                     <f:facet name="header" >                               
-                        <p:commandButton id="btnNuevoCliente" ajax="false" action="crearCombo"  icon="ui-icon-plus" update="" />  
-                        <p:commandButton id="btnEditarCliente" actionListener="#{gestionProductoMB.mostrarEditarProducto()}" icon="ui-icon-pencil" update="" />                          
+                        <p:commandButton 
+                            styleClass="btn_azul"
+                            icon="fa fa-user-plus"
+                            title="Agregar Combo"
+                            id="btnNuevoCliente" 
+                            ajax="false" 
+                            action="crearCombo"                              
+                            update="" />
+                        
+                        <p:commandButton 
+                            styleClass="btn_tomate"
+                            icon="fa fa-pencil"
+                            id="btnEditarCliente" 
+                            actionListener="#{gestionProductoMB.mostrarEditarProducto()}" 
+                            update="" />                          
                     </f:facet>
 
                     <p:column headerText="Codigo">

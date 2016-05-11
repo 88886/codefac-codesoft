@@ -412,3 +412,195 @@ h1 , h2
 }
 
 
+
+/////////////////// BOTON AZUL ///////////////////////
+
+.btn_azul.ui-state-active {
+}
+
+.btn_azul.ui-state-default 
+{
+    background-image: none;
+    background-color: #4A89DC;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    
+    font-size: 14px;
+}
+
+.btn_azul.ui-state-hover
+{
+    background-color: #5d9cec;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    background-image: none;
+    font-size: 14px;
+}
+
+//////////////////// BOTON TOMATE /////////////////////
+.btn_tomate.ui-state-active {
+}
+
+.btn_tomate.ui-state-default 
+{
+    background-image: none;
+    background-color: #E9573F;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    
+    font-size: 14px;
+}
+
+.btn_tomate.ui-state-hover
+{
+    background-color: #fC6E51;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    background-image: none;
+    font-size: 14px;
+}
+
+///////////////////// BOTON ROJO /////////////////
+.btn_rojo.ui-state-active {
+}
+
+.btn_rojo.ui-state-default 
+{
+    background-image: none;
+    background-color: #c9302c;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    
+    font-size: 14px;
+}
+
+.btn_rojo.ui-state-hover
+{
+    background-color: #d9534f;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    background-image: none;
+    
+}
+
+////////////////////////BOTON VERDE////////////////////
+
+.btn_verde.ui-state-active {
+}
+
+.btn_verde.ui-state-default 
+{
+    background-image: none;
+    background-color: #8CC152;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    
+    font-size: 14px;
+}
+
+.btn_verde.ui-state-hover
+{
+    background-color: #A0D468;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    background-image: none;
+    font-size: 14px;
+}
+
+///////////////////////// BOTON MINT ////////////////////
+.btn_mint.ui-state-active {
+}
+
+.btn_mint.ui-state-default 
+{
+    background-image: none;
+    background-color: #37bc9b;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    
+    font-size: 14px;
+}
+
+.btn_mint.ui-state-hover
+{
+    background-color: #48cfad;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    background-image: none;
+    font-size: 14px;
+}
+
+////////////////////////BOTON CELESTE////////////////////
+
+.btn_celeste.ui-state-active {
+}
+
+.btn_celeste.ui-state-default 
+{
+    background-image: none;
+    background-color: #3bafda;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    
+    font-size: 14px;
+}
+
+.btn_celeste.ui-state-hover
+{
+    background-color: #4fc1e9;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    background-image: none;
+    font-size: 14px;
+}
+
+///////////////////////// BOTON MINT ////////////////////
+.btn_mint.ui-state-active {
+}
+
+.btn_mint.ui-state-default 
+{
+    background-image: none;
+    background-color: #37bc9b;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    
+    font-size: 14px;
+}
+
+.btn_mint.ui-state-hover
+{
+    background-color: #48cfad;
+    color: white;
+    padding: 3px;
+    padding-bottom: 4px;
+    font-weight: lighter;
+    background-image: none;
+    font-size: 14px;
+}

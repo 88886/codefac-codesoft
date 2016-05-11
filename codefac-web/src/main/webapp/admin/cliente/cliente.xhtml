@@ -38,8 +38,8 @@ and open the template in the editor.
 
 
                     <f:facet name="header" >                               
-                        <p:commandButton id="btnNuevoCliente" styleClass="ui-botonEsmeralda" process="tablaClientes" icon="ui-icon-plus" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enCrear()}"  title="Agregar un nuevo Cliente" update=":formDialogo:panelGrid" />  
-                        <p:commandButton id="btnEditarCliente" styleClass="ui-botonNaranja" process="tablaClientes" icon="ui-icon-pencil" onclick="PF('editarCliente').show();" actionListener="#{clienteMB.enModificar()}" disabled="#{clienteMB.flagBoton1}"  update=":formDialogEdit:panelGrid2"  title="Editar el cliente seleccionado"/>                          
+                        <p:commandButton id="btnNuevoCliente" styleClass="btn_azul" process="tablaClientes" icon="fa fa-user-plus" onclick="PF('nuevoCliente').show();" actionListener="#{clienteMB.enCrear()}"  title="Agregar un nuevo Cliente" update=":formDialogo:panelGrid" />  
+                        <p:commandButton id="btnEditarCliente" styleClass="btn_tomate" process="tablaClientes" icon="fa fa-pencil" onclick="PF('editarCliente').show();" actionListener="#{clienteMB.enModificar()}" disabled="#{clienteMB.flagBoton1}"  update=":formDialogEdit:panelGrid2"  title="Editar el cliente seleccionado"/>                          
                     </f:facet>
 
 
@@ -69,11 +69,11 @@ and open the template in the editor.
                     <p:column headerText="" style="width: 50px">
                         <p:commandButton  
                             icon="fa fa-trash-o"
-                            styleClass="ui-botonNaranja"
+                            styleClass="btn_rojo"
                             title="Eliminar Cliente" 
                             actionListener="#{clienteMB.eliminarDetalle(cliente)}" 
                             update="@form" >
-                            
+
                             <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
                         </p:commandButton>
                     </p:column>
@@ -99,7 +99,7 @@ and open the template in the editor.
 
                     <p:inputText id="cliCedula" value="#{clienteMB.cliente.cedulaRuc}" required="true" requiredMessage="Cedula necesario">
                         <p:ajax event="blur" listener="#{clienteMB.verificarClienteExiste()}"  />
-                         <p:clientValidator event="keyup"/>
+                        <p:clientValidator event="keyup"/>
                     </p:inputText>
 
                     <p:message for="cliCedula" display="icon" />                  
@@ -113,7 +113,7 @@ and open the template in the editor.
 
                     <p:outputLabel for="cliTelefono" value="Telefono:" />
                     <p:inputText id="cliTelefono" value="#{clienteMB.cliente.telefono}" required="true" requiredMessage="Telefono necesario">
-                         <p:clientValidator event="keyup"/>
+                        <p:clientValidator event="keyup"/>
                     </p:inputText>
                     <p:message for="cliTelefono" display="icon" />                
 
@@ -170,20 +170,20 @@ and open the template in the editor.
                     <p:outputLabel for="cliCedula2" value="Cédula:" />
 
                     <p:inputText id="cliCedula2" value="#{clienteMB.clienteSeleccionado.cedulaRuc}" required="true" requiredMessage="Cedula necesario" readonly="true">   
-                         <p:clientValidator event="keyup"/>
+                        <p:clientValidator event="keyup"/>
                     </p:inputText>
 
                     <p:message for="cliCedula2" />                  
 
                     <p:outputLabel for="cliNombre2" value="Nombre:" />
                     <p:inputText id="cliNombre2" value="#{clienteMB.clienteSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario">
-                         <p:clientValidator event="keyup"/>
+                        <p:clientValidator event="keyup"/>
                     </p:inputText>
                     <p:message for="cliNombre2" />                                
 
                     <p:outputLabel for="cliTelefono2" value="Telefono:" />
                     <p:inputText id="cliTelefono2" value="#{clienteMB.clienteSeleccionado.telefono}" required="true" requiredMessage="Telefono necesario">
-                         <p:clientValidator event="keyup"/>
+                        <p:clientValidator event="keyup"/>
                     </p:inputText>
                     <p:message for="cliTelefono2" />                
 
