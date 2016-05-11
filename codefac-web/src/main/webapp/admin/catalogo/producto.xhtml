@@ -92,8 +92,14 @@ and open the template in the editor.
                     <p:outputLabel value="#{catalogo.productoGeneralVenta.cantidadDisponible}"/>
                 </p:column>
 
-                <p:column headerText="Accion" style="width: 100px">
-                    <p:commandButton value="Eliminar" styleClass="ui-botonNaranja" actionListener="#{gestionProductoMB.eliminarDetalle(catalogo)}" update="@form">
+                <p:column headerText="" style="width: 50px">
+                    <p:commandButton 
+                        icon="ui-icon-trash"
+                        title="Eliminar Producto"
+                        styleClass="ui-botonNaranja" 
+                        actionListener="#{gestionProductoMB.eliminarDetalle(catalogo)}" 
+                        update="@form">
+                        
                         <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
                     </p:commandButton>
                 </p:column>

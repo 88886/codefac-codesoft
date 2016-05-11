@@ -68,8 +68,13 @@ and open the template in the editor.
                         <p:outputLabel value="#{distribuidor.ciudad}" />
                     </p:column>
 
-                    <p:column headerText="Acciones" style="width: 100px">
-                        <p:commandButton styleClass="ui-botonNaranja" value="Eliminar" actionListener="#{distribuidorGestionMB.eliminar(distribuidor)}" update=":formTabla:tablaDistribuidor" />
+                    <p:column style="width: 60px">
+                        <p:commandButton 
+                            styleClass="ui-botonNaranja" 
+                            icon="ui-icon-trash"
+                            title="Eliminar Distribuidor"
+                            actionListener="#{distribuidorGestionMB.eliminar(distribuidor)}" 
+                            update=":formTabla:tablaDistribuidor" />
                     </p:column>
                 </p:dataTable>
             </h:form> 

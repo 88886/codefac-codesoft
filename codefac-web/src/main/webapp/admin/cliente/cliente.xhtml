@@ -66,10 +66,11 @@ and open the template in the editor.
                     </p:column>
 
 
-                    <p:column headerText="Acciones" style="width: 100px">
+                    <p:column headerText="" style="width: 50px">
                         <p:commandButton  
+                            icon="fa fa-trash-o"
                             styleClass="ui-botonNaranja"
-                            value="Eliminar" 
+                            title="Eliminar Cliente" 
                             actionListener="#{clienteMB.eliminarDetalle(cliente)}" 
                             update="@form" >
                             
