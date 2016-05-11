@@ -14,7 +14,8 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        <p:panel header="Seleccione el producto para editar el inventario:" >
+        <h4 class="titulo" style="text-align: center">Editar Inventario</h4>
+        <p:panel >
             <h:form>
                 <p:dataTable value="#{inventarioCatalogoMB.listaCatalogo}"
                              filteredValue="#{inventarioCatalogoMB.listaCatalogoFiltrado}"
