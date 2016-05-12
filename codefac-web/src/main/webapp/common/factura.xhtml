@@ -245,7 +245,7 @@ and open the template in the editor.
             </h:form>
             <h:form id="formDetalles">
                 <p:panel id="idDetallesFactura" >
-                    <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}" id="tablaDetallesFactura" style="width:100%;font-size: 10px;text-align: left">   
+                    <p:dataTable var="detallesVenta" value="#{facturaMB.detallesVenta}" id="tablaDetallesFactura" style="width:100%;font-size: 11px;text-align: left">   
 
                         <p:column headerText="Cantidad" style="text-align: left;width:60px">
                             <h:outputText value="#{detallesVenta.cantidad}" />
@@ -429,7 +429,7 @@ and open the template in the editor.
               modal="true"
               header="Escojer los detalles a facturar"
               minHeight="30" 
-              width="700px"
+              width="70%"
               id="dlgDetallesOrden">
         <h:form id="frmDetallesOrden">
             <p:dataTable rows="10"                     
@@ -439,7 +439,7 @@ and open the template in the editor.
                          scrollable="true" 
                          selection="#{facturaMB.detallesOrdenSeleccionadas}" 
                          rowKey="#{detallesOrden.idDetalleOrdenTrabajo}"
-                         style="font-size: 10px; margin-bottom:0"
+                         style="font-size: 11px; margin-bottom:0"
                          rowStyleClass="#{detallesOrden.estado eq 'facturado'?'filaVerde':'filaGris'}">
                 <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
                 <p:column headerText="Código" >
