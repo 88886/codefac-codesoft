@@ -16,11 +16,12 @@ and open the template in the editor.
 
     <ui:define name="contenido" >
         <div style="text-align:center">
-            <b:panel title="Configuración Empresa"  style="width:50%;margin: 0 auto" styleClass="customTitleBar" look="primary"  > 
+            <p:panel header="Configuración Empresa"  style="width:50%;margin: 0 auto" styleClass="customTitleBar">  
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formConfiguracionE">
+                    <p:growl id="msgsE" showDetail="true" />
                     <p:panelGrid columns="4" styleClass="panelNoBorder">
-                        <b:badge value="RUC Empresa %"/>
+                        <b:badge value="RUC Empresa "/>
                         <p:inputText value="#{sistemaMB.empresa.rucEmpresa}"  placeholder="Ingrese el Ruc"/>
                         <b:badge value="Nombre "/>
                         <p:inputText value="#{sistemaMB.empresa.nombre}"  placeholder="Ingrese El nombre"/>
@@ -46,19 +47,22 @@ and open the template in the editor.
                         <p:inputText value="#{sistemaMB.empresa.paginaOficial}"  placeholder="www.codesoft.zz.mu"/>
 
                     </p:panelGrid>
-                    <f:facet name="footer">
+                    <p:separator/>
                         <p:commandButton value="Guardar" 
                                          styleClass="ui-botonCeleste"
-                                         actionListener="#{sistemaMB.guardarEmpresa()}"/>
-                    </f:facet>
+                                         actionListener="#{sistemaMB.guardarEmpresa()}"
+                                         update="@form"
+                                         title="Guardar la Configuración de la Empresa"/>
+                    
 
 
                 </h:form>
-            </b:panel>
+            </p:panel>
             <p:separator/>
-            <b:panel title="Configuración General"  style="width: 70%;margin: 0 auto" styleClass="customTitleBar" look="primary"  > 
+            <p:panel header="Configuración General"  style="width: 70%;margin: 0 auto" styleClass="customTitleBar"  > 
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formConfiguracionG">
+                    <p:growl id="msgsC" showDetail="true" />
                     <p:panelGrid columns="4" styleClass="panelNoBorder">
                         <b:badge value="Iva %"/>
                         <p:inputText value="#{sistemaMB.configuracion.iva}"  placeholder="Iva"/>
@@ -74,17 +78,16 @@ and open the template in the editor.
                         <p:inputText value="#{sistemaMB.configuracion.emailServicioTecnico}"  placeholder="Ingrese el Correo"/>
                         <b:badge value="Clave Correo Electrónico Servicio Técnico"/>
                         <p:inputText value="#{sistemaMB.configuracion.claveEmailServicioTecnico}"  placeholder="Ingrese la clave"/>
-                    </p:panelGrid>
 
-                    <f:facet name="footer">
+                    </p:panelGrid>
+                    <p:separator/>
                         <p:commandButton value="Guardar" 
                                          styleClass="ui-botonCeleste"
-                                         actionListener="#{sistemaMB.guardarConfiguracion()}"/>
-                    </f:facet>
-
-
+                                         actionListener="#{sistemaMB.guardarConfiguracion()}"
+                                         update="@form" title="Guardar la configuración general"/>
+                    
                 </h:form>
-            </b:panel>
+            </p:panel>
         </div>
     </ui:define>
 

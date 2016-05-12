@@ -43,4 +43,12 @@ public class SistemaServicio implements Serializable
         System.err.println("Empresa "+empresaFacade.findAll().get(0));
         return empresaFacade.findAll().get(0);
     }
+    
+    public void editarEmpresa(Empresa empresa){
+        empresaFacade.edit(empresa);
+    }
+    
+    public void editarConfiguracion(Configuracion configuracion){
+        configuracionFacade.edit(configuracion);
+    }
 }
