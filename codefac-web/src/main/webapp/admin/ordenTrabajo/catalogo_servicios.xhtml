@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h4 class="titulo" style="text-align: center">Catalogo de Servicios</h4>
+
+        <p:panel>
+            <h:form id="formPrincipal">
+                <p:dataTable
+                    id="tablaServicios"
+                    value="#{catalogoServiciosMB.serviciosList}"
+                    var="servicio"
+                    selectionMode="single"
+                    selection="#{catalogoServiciosMB.servicioSeleccionado}"
+                    rowKey="#{servicio.codigoServicio}"
+                    >
+
+                    <f:facet name="header" > 
+                        <p:commandButton
+                            actionListener="#{catalogoServiciosMB.abrirNuevoServicio}"
+                            update="idNuevoServicio"
+                            title="Nuevo Servicio"
+                            styleClass="btn_azul" 
+                            icon="fa fa-plus-circle" />
+                        <p:commandButton 
+                            title="Editar Servicio"
+                            styleClass="btn_tomate" 
+                            icon="fa fa-pencil-square-o" />
+                    </f:facet>
+
+                    <p:column headerText="Codigo" style="width: 10%" >
+                        <p:outputLabel value="#{servicio.codigoServicio}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre" style="width: 30%" >
+                        <p:outputLabel value="#{servicio.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Detalle" style="width: 55%" >
+                        <p:outputLabel value="#{servicio.descripcion}" />
+                    </p:column>
+
+                    <p:column headerText="Accion" style="width: 5%" >
+                        <p:commandButton
+                            styleClass="btn_rojo"
+                            title="Eliminar Servicio"                        
+                            icon="fa fa-trash-o"
+                            value=""
+                            />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+
+        <!-- Dialogo para crear un nuevo Servicio -->
+        <p:dialog id="idNuevoServicio" widgetVar="widgetNuevoServicio" header="Nuevo Servicio" modal="true" showEffect="explode" hideEffect="explode" >
+            <h:form>
+                <p:panel styleClass="panelNoBorder">
+                    <p:messages id="msgNuevoServicio" />
+                    <p:panelGrid columns="3">
+                        <p:outputLabel value="Nombre:" />
+                        <p:inputText value="#{catalogoServiciosMB.servicioNuevo.nombre}" id="txtNombre" required="true" requiredMessage="Un nombre es nesario para grabar">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtNombre" display="icon" />
+
+                        <p:outputLabel value="Descripcion:" />
+                        <p:inputTextarea id="txtDescripcion" value="#{catalogoServiciosMB.servicioNuevo.descripcion}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtDescripcion" display="icon"/>
+
+                        <f:facet name="footer" class="ui-panelgrid">
+                            <div style="text-align: center">
+                                <p:commandButton 
+                                    actionListener="#{catalogoServiciosMB.guardarServicio}"
+                                    update=":formPrincipal:tablaServicios,msgNuevoServicio"                                    
+                                    validateClient="true"
+                                    icon="fa fa-floppy-o"
+                                    styleClass="btn_azul"                                    
+                                    value="Grabar">
+
+                                    <p:confirm header="Confirmar" message="Desea guardar el servicio?" icon="ui-icon-alert" />
+
+                                </p:commandButton>
+
+                                <p:commandButton
+                                    onclick="PF('widgetNuevoServicio').hide();"
+                                    immediate="true"
+                                    icon="fa fa-ban"
+                                    styleClass="btn_tomate"
+                                    value="Cancelar"/>
+
+                            </div>
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialogo para editar los servicios -->
+        <p:dialog   header="Editar Servicio" modal="true" showEffect="explode" hideEffect="explode" >
+            <h:form>
+                <p:panel styleClass="panelNoBorder">
+                    <p:messages id="msgNuevoServicio" />
+                    <p:panelGrid columns="3">
+                        <p:outputLabel value="Nombre:" />
+                        <p:inputText value="#{catalogoServiciosMB.servicioSeleccionado.nombre}" id="txtNombre" required="true" requiredMessage="Un nombre es nesario para grabar">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtNombre" display="icon" />
+
+                        <p:outputLabel value="Descripcion:" />
+                        <p:inputTextarea id="txtDescripcion" value="#{catalogoServiciosMB.servicioSeleccionado.descripcion}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtDescripcion" display="icon"/>
+
+                        <f:facet name="footer" class="ui-panelgrid">
+                            <div style="text-align: center">
+                                <p:commandButton 
+                                    actionListener="#{catalogoServiciosMB.guardarServicio}"
+                                    update=":formPrincipal:tablaServicios,msgNuevoServicio"                                    
+                                    validateClient="true"
+                                    icon="fa fa-floppy-o"
+                                    styleClass="btn_azul"                                    
+                                    value="Grabar">
+
+                                    <p:confirm header="Confirmar" message="Desea guardar el servicio?" icon="ui-icon-alert" />
+
+                                </p:commandButton>
+
+                                <p:commandButton
+                                    onclick="PF('widgetNuevoServicio').hide();"
+                                    immediate="true"
+                                    icon="fa fa-ban"
+                                    styleClass="btn_tomate"
+                                    value="Cancelar"/>
+
+                            </div>
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialogo para las confirmaciones -->
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+
+    </ui:define>
+</ui:composition>

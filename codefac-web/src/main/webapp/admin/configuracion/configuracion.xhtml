@@ -19,11 +19,11 @@ and open the template in the editor.
         <div style="text-align: center">
             <i class="fa fa-cog fa-spin fa-5x fa-fw margin-bottom"></i>
             <span class="sr-only">Configuración.</span>
-            <p:panel header="Configuración Empresa..."  style="width:50%;margin: 0 auto" styleClass="customTitleBar">  
+            <p:panel header="Configuración Empresa..."  style="width:70%;margin: 0 auto" styleClass="titleBarAzul">  
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formConfiguracionE">
                     <p:growl id="msgsE" showDetail="true" />
-                    <p:panelGrid columns="4" styleClass="panelNoBorder" style="font-size: 11px">
+                    <p:panelGrid columns="4" styleClass="panelNoBorder" style="font-size: 11px;width: 100%;text-align: left">
                         <p:outputLabel style="font-weight: bold" value="RUC Empresa " />
                         <p:outputLabel style="font-weight: bold" value="#{sistemaMB.empresa.rucEmpresa}" />
                         <p:outputLabel style="font-weight: bold" value="Nombre "/>
@@ -51,8 +51,9 @@ and open the template in the editor.
 
                     </p:panelGrid>
                     <p:separator/>
-                    <p:commandButton value="Guardar" 
-                                     styleClass="ui-botonCeleste"
+                    <p:commandButton value="Guardar"
+                                     icon="fa fa-floppy-o"
+                                     styleClass="btn_azul"
                                      actionListener="#{sistemaMB.guardarEmpresa()}"
                                      update="@form"
                                      title="Guardar la Configuración de la Empresa"/>
@@ -64,11 +65,11 @@ and open the template in the editor.
 
 
             <p:separator/>
-            <p:panel header="Configuración General"  style="width: 50%;margin: 0 auto" styleClass="customTitleBar"> 
+            <p:panel header="Configuración General"  style="width: 70%;margin: 0 auto;text-align: left" styleClass="titleBarVerde"> 
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formConfiguracionG">
                     <p:messages id="msgsC" showDetail="true" />
-                    <p:panelGrid columns="6" styleClass="panelNoBorder" style="font-size: 11px">
+                    <p:panelGrid columns="6" styleClass="panelNoBorder" style="font-size: 11px;width: 100%">
 
                         <p:outputLabel for="civa" style="font-weight: bold" value="Iva %"/>
                         <p:inputText id="civa" value="#{sistemaMB.configuracionEnviar.iva}" required="true" requiredMessage="Iva Requerido"  placeholder="Iva">
@@ -87,25 +88,25 @@ and open the template in the editor.
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="cmif" display="icon" /> 
-                        
+
                         <p:outputLabel for="cmin" style="font-weight: bold" value="Max Items Notas"/>
                         <p:inputText id="cmin" value="#{sistemaMB.configuracionEnviar.maxItemNota}" required="true" requiredMessage="N Items Requerido"   placeholder="N Items">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="cmin" display="icon" /> 
-                        
+
                         <p:outputLabel for="cmio" style="font-weight: bold" value="Max Items Orden Trabajo"/>
                         <p:inputText id="cmio" value="#{sistemaMB.configuracionEnviar.maxItemOrdenTrabajo}" required="true" requiredMessage="N Items Requerido"  placeholder="Iva">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="cmio" display="icon" /> 
-                        
+
                         <p:outputLabel for="ccorreo" style="font-weight: bold" value="Correo Electrónico Servicio Técnico"/>
                         <p:inputText id="ccorreo" value="#{sistemaMB.configuracionEnviar.emailServicioTecnico}" required="true" requiredMessage="Correo  Requerido"  validatorMessage="No es una dirección de correo correcta" placeholder="Ingrese el Correo">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="ccorreo" display="icon" /> 
-                        
+
                         <p:outputLabel for="cclave" style="font-weight: bold" value="Clave Correo Electrónico Servicio Técnico"/>
                         <p:inputText id="cclave" value="#{sistemaMB.configuracionEnviar.claveEmailServicioTecnico}" required="true" requiredMessage="Clave Requerido" placeholder="Ingrese la clave">
                             <p:clientValidator event="keyup"/>
@@ -114,10 +115,14 @@ and open the template in the editor.
 
                     </p:panelGrid>
                     <p:separator/>
-                    <p:commandButton value="Guardar" 
-                                     styleClass="ui-botonCeleste"
-                                     actionListener="#{sistemaMB.guardarConfiguracion()}"
-                                     update="@form,msgsC" title="Guardar la configuración general"/>
+                    <div style="text-align: center">
+                        <p:commandButton value="Guardar"
+                                         style="margin: 0 auto"
+                                         icon="fa fa-floppy-o"
+                                         styleClass="btn_verde"
+                                         actionListener="#{sistemaMB.guardarConfiguracion()}"
+                                         update="@form,msgsC" title="Guardar la configuración general"/>
+                    </div>
 
                 </h:form>
             </p:panel>

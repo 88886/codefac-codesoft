@@ -9,12 +9,19 @@
 
     <ui:define name="contenido">
         <div style="text-align: center">
-            <p:panel header="Nota de credito" style="text-align: center;width: 60%;margin: 0 auto">
+            <p:panel styleClass="titleBarAzul" header="Nota de credito" style="text-align: center;width: 60%;margin: 0 auto">
                 <h:form id="formFactura">                
                     <p:panelGrid columns="3" style="margin: 0 auto" styleClass="panelNoBorder">
                         <p:outputLabel value="Codigo Factura"/>
                         <p:inputText value="#{notaCreditoMB.codigoDocumento}"/>
-                        <p:commandButton actionListener="#{notaCreditoMB.buscarFactura()}" value="Buscar" update=":formFactura:panelCliente,:formFactura:tablaDetalle,:formPieNotaCredito" ajax="false" />
+                        <p:commandButton 
+                            icon="fa fa-search"
+                            style="font-size: 12px"
+                            styleClass="ui-botonCeleste"
+                            actionListener="#{notaCreditoMB.buscarFactura()}" 
+                            title="Buscar factura"
+                            update=":formFactura:panelCliente,:formFactura:tablaDetalle,:formPieNotaCredito" 
+                            ajax="false" />
                     </p:panelGrid>        
 
                     <p:spacer height="15px"/>
@@ -93,9 +100,9 @@
                     <p:spacer height="15px"/>
 
                     <div style="text-align: center">
-                        <p:commandButton value="G R A B A R" actionListener="#{notaCreditoMB.grabarNotaCredito()}" />
-                        <p:commandButton value="C A N C E L A R" ajax="false" action="notaCredito" />
-                        <p:commandButton value="Imprimir" actionListener="#{notaCreditoMB.imprimir()}" ajax="false" />
+                        <p:commandButton value="Grabar" styleClass="btn_azul" icon="fa fa-floppy-o" actionListener="#{notaCreditoMB.grabarNotaCredito()}" />
+                        <p:commandButton value="Cancelar" icon="fa fa-ban" styleClass="btn_rojo"  ajax="false" action="notaCredito" />
+                        <p:commandButton value="Imprimir" styleClass="btn_mint" icon="fa fa-print" actionListener="#{notaCreditoMB.imprimir()}" ajax="false" />
                     </div>
 
                 </h:form>
