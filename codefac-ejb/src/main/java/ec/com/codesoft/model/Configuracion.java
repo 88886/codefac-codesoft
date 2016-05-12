@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -54,8 +55,10 @@ public class Configuracion implements Serializable {
     private Integer maxItemNota;
     @Column(name = "MAX_ITEM_ORDEN_TRABAJO")
     private Integer maxItemOrdenTrabajo;
-
+    
+    
     @Column(name = "EMAIL_SERVICIO_TECNICO")
+    @Pattern(regexp="^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$")
     private String emailServicioTecnico;
 
     @Column(name = "CLAVE_EMAIL_SERVICIO_TECNICO")
