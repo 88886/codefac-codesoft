@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.validation.constraints.Pattern;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -31,13 +32,35 @@ public class SistemaMB implements Serializable {
     private SistemaServicio sistemaServicio;
 
     private Configuracion configuracion;
+    private Configuracion configuracionEnviar;
+    
 
     private Empresa empresa;
+    
+    
+    
+//    private  BigDecimal iva;
+//    private String path;
+//    private int maxItemsF;
+//    private int maxItemsN;
+//    private int maxItemsO;
+//    private String mail;
+//    private String clave;
+    
 
     @PostConstruct
     public void init() {
         configuracion = sistemaServicio.getConfiguracion();
         empresa = sistemaServicio.getEmpresa();
+        configuracionEnviar=new Configuracion();
+        configuracionEnviar=configuracion;
+//        iva=configuracion.getIva();
+//        path=configuracion.getPathreportes();
+//        maxItemsF=configuracion.getMaxItemFactura();
+//        maxItemsN=configuracion.getMaxItemNota();
+//        maxItemsO=configuracion.getMaxItemNota();
+//        mail=configuracion.getEmailServicioTecnico();
+//        clave=configuracion.getClaveEmailServicioTecnico();
     }
 
     public void guardarEmpresa() {
@@ -47,10 +70,12 @@ public class SistemaMB implements Serializable {
     }
 
     public void guardarConfiguracion() {
-        sistemaServicio.editarConfiguracion(configuracion);
+      
+        sistemaServicio.editarConfiguracion(configuracionEnviar);        
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Datos guardados correctamente");
         RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
+    
 
     public Configuracion getConfiguracion() {
         return sistemaServicio.getConfiguracion();
@@ -67,5 +92,16 @@ public class SistemaMB implements Serializable {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    public Configuracion getConfiguracionEnviar() {
+        return configuracionEnviar;
+    }
+
+    public void setConfiguracionEnviar(Configuracion configuracionEnviar) {
+        this.configuracionEnviar = configuracionEnviar;
+    }
+
+    
+    
 
 }

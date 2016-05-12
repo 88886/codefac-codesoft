@@ -6,12 +6,13 @@
 package ec.com.codesoft.web.reportes.ordenTrabajo;
 
 import ec.com.codesoft.model.Empresa;
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.reportes.ReporteJasper;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ejb.EJB;
 
 /**
  *
@@ -31,6 +32,10 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     private String saldo;
     private Empresa empresa;
 
+    
+    @EJB
+    SistemaServicio sistemaServicio;
+    
     private List<OrdenTrabajoDetalleReporte> detalles;
 
     public OrdenTrabajoReporte(String cedula, String telefono, String nombre, String fechaRecepcion, String observacion, String ordenTrabajo, String monto, String abono, String saldo, String raiz) {
@@ -45,11 +50,16 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
         this.abono = abono;
         this.saldo = saldo;
         this.detalles = new ArrayList<OrdenTrabajoDetalleReporte>();
+        
+        empresa=sistemaServicio.getEmpresa();
+        
     }
 
     public OrdenTrabajoReporte(String raiz) {
         super(raiz);
         this.detalles = new ArrayList<OrdenTrabajoDetalleReporte>();
+        //empresa=new Empresa();
+        empresa=sistemaServicio.getEmpresa();
     }
 
     @Override
@@ -63,6 +73,7 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
         Map<String, Object> lista = new HashMap<String, Object>();
         
         ///Agregar los datos de la empresa
+        System.out.println("Empresa "+ empresa);
         lista.put("var_direccion",empresa.getDireccion());
         lista.put("var_facebook",empresa.getFacebook());
         lista.put("var_empresa",empresa.getNombre());
