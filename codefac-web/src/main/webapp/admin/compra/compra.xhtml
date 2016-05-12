@@ -39,8 +39,8 @@ and open the template in the editor.
 
                                 <p:commandButton 
                                     id="btnEncontrarDitribuidor"                                    
-                                    icon="ui-icon-search" 
-                                    styleClass="ui-botonEsmeralda" />
+                                    icon="fa fa-search" 
+                                    styleClass="btn_verde" />
 
                                 <p:tooltip style="font-size: 11px" id="toolTipGrow" for=":formDetalleDistribuidor:btnEncontrarDitribuidor" value="Buscar distribuidores"
                                            showEffect="clip" hideEffect="explode" />
@@ -75,16 +75,16 @@ and open the template in the editor.
                         <p:separator/>
                         <!-- Datos del distribuidor para mostrar	 -->
                         <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%;text-align: left">
-                            <b:badge value="Nombre: " />
+                            <p:outputLabel value="Nombre: " style="font-weight: lighter" />
                             <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}"  />
 
-                            <b:badge value="Direccion: "/>
+                            <p:outputLabel value="Direccion: " style="font-weight: lighter" />
                             <p:outputLabel value="#{comprarMB.compra.ruc.direccion}"  />
 
-                            <b:badge value="Telefono: " style="background-color: #0087ca;color: white"/>
+                            <p:outputLabel value="Telefono: " style="font-weight: lighter" />
                             <p:outputLabel value="#{comprarMB.compra.ruc.telefono}"  />
 
-                            <b:badge value="Email: " style="background-color: #0087ca;color: white"/>
+                            <p:outputLabel value="Email: " style="font-weight: lighter" />
                             <p:outputLabel  value="#{comprarMB.compra.ruc.correo}"  />
 
                         </p:panelGrid>
@@ -126,10 +126,10 @@ and open the template in the editor.
 
 
                             <p:commandButton 
-                                styleClass="ui-botonEsmeralda"
+                                styleClass="btn_mint"
                                 oncomplete="PF('widgetVarCatalogo').loadContents()" 
                                 id="btnEncontrarCatalogo" 
-                                icon="ui-icon-search" />
+                                icon="fa fa-search" />
 
                             <p:tooltip style="font-size: 11px" id="toolTipGrow" for="btnEncontrarCatalogo" value="Buscar Productos"
                                        showEffect="clip" hideEffect="explode" />
@@ -150,7 +150,15 @@ and open the template in the editor.
 
                             <p:panelGrid columnClasses="2">
                                 <p:outputLabel value="PVP:" style="width: 100px"/>
-                                <p:commandButton id="btnCambiarPrecio" icon="ui-icon-pencil" actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" styleClass="ui-botonCeleste" update="@form,:dialogEditPrecio" title="Cambiar el precio del producto" />
+                                <p:commandButton 
+                                    style="font-size: 12px;"
+                                    id="btnCambiarPrecio" 
+                                    icon="ui-icon-pencil" 
+                                    actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" 
+                                    styleClass="ui-botonEsmeralda" 
+                                    update="@form,:dialogEditPrecio" 
+                                    title="Cambiar el precio del producto" />
+                                
                             </p:panelGrid>
                             <p:outputLabel id='lblPVP' value="#{calculosMB.incluirIva(comprarMB.catalogo.precio)}" style="font-weight: lighter" />
 
@@ -185,7 +193,12 @@ and open the template in the editor.
                             <p:inputText id="txtCostoDetalle" value="#{comprarMB.costoDetalle}" style="width: 70px;" required="true" />
                             <p:message for="txtCostoDetalle" display="icon" />
 
-                            <p:commandButton id="btnAgregarDetalle" actionListener="#{comprarMB.agregarProducto()}" value="Agregar" update="@form,:formDetalleCompra,:formTotales,:formDetalleCompra:panelGridDetalle" />
+                            <p:commandButton 
+                                styleClass="btn_celeste"
+                                id="btnAgregarDetalle" 
+                                actionListener="#{comprarMB.agregarProducto()}" 
+                                value="Agregar" 
+                                update="@form,:formDetalleCompra,:formTotales,:formDetalleCompra:panelGridDetalle" />
 
                         </p:panelGrid>
 
@@ -263,7 +276,7 @@ and open the template in the editor.
                         <p:panelGrid columns="2" style="margin: 0 auto;width: 20%">                            
 
                             <p:commandButton 
-                                styleClass="ui-botonAzul"
+                                styleClass="btn_azul"
                                 process="@this,:formDetalleDistribuidor:txtNumeroDocumento,:formDetalleDistribuidor:txtFechaIngreso"                                              
                                 update=":formDetalleDistribuidor:txtNumeroDocumento"
                                 value="Comprar" 
@@ -271,7 +284,12 @@ and open the template in the editor.
                                 actionListener="#{comprarMB.ejecutarCompra()}"  >
 
                             </p:commandButton>
-                            <b:commandButton id="nonAjax"  ajax="false" action="compra" value="Cancelar" look="danger"/>                                
+                            <p:commandButton
+                                styleClass="btn_tomate"
+                                id="nonAjax"  
+                                ajax="false" 
+                                action="compra" 
+                                value="Cancelar"/>                                
 
                         </p:panelGrid>
                     </p:panel>
@@ -365,10 +383,20 @@ and open the template in the editor.
                         <p:spacer width="50px"/>
 
 
-                        <p:commandButton actionListener="#{comprarMB.editarPrecio()}" value="Editar"  style="background-image: none;background-color: forestgreen" update=":formBuscarProducto:lblPVP,:overlayCatalogoID,:formDialgBuscarProductos">
+                        <p:commandButton 
+                            actionListener="#{comprarMB.editarPrecio()}" 
+                            value="Editar"  
+                            styleClass="btn_azul"
+                            update=":formBuscarProducto:lblPVP,:overlayCatalogoID,:formDialgBuscarProductos">
+                            
                             <p:confirm header="Confirmar" message="Estas seguro que quieres editar el PVP?" icon="ui-icon-alert" />
                         </p:commandButton>
-                        <p:commandButton onclick="PF('widCambiarPrecio').hide();" value="Cancelar" update=":overlayCatalogoID,:formDialgBuscarProductos" />
+                        
+                        <p:commandButton 
+                            styleClass="btn_tomate"
+                            onclick="PF('widCambiarPrecio').hide();" 
+                            value="Cancelar" 
+                            update=":overlayCatalogoID,:formDialgBuscarProductos" />
 
                     </h:form>
                 </p:dialog>
