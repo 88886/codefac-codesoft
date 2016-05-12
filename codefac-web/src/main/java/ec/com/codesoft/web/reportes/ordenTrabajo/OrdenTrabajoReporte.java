@@ -33,8 +33,8 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     private Empresa empresa;
 
     
-    @EJB
-    SistemaServicio sistemaServicio;
+    //@EJB
+    //SistemaServicio sistemaServicio;
     
     private List<OrdenTrabajoDetalleReporte> detalles;
 
@@ -51,7 +51,7 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
         this.saldo = saldo;
         this.detalles = new ArrayList<OrdenTrabajoDetalleReporte>();
         
-        empresa=sistemaServicio.getEmpresa();
+        //empresa=sistemaServicio.getEmpresa();
         
     }
 
@@ -59,7 +59,7 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
         super(raiz);
         this.detalles = new ArrayList<OrdenTrabajoDetalleReporte>();
         //empresa=new Empresa();
-        empresa=sistemaServicio.getEmpresa();
+        //empresa=sistemaServicio.getEmpresa();
     }
 
     @Override

@@ -58,6 +58,7 @@ public class GestionarOrdenTrabajoMB implements Serializable
     public void generaPdf() {
         System.out.println("generando pdf..");
         OrdenTrabajoReporte orden = new OrdenTrabajoReporte(sistemaServicio.getConfiguracion().getPathreportes());
+        orden.setEmpresa(sistemaServicio.getEmpresa());
         orden.setAbono(ordenTrabajo.getAdelanto().toString());
         orden.setCedula(ordenTrabajo.getCedulaRuc().getCedulaRuc());
         SimpleDateFormat formateador = new SimpleDateFormat("EEEE d MMMM HH:mm:ss");
