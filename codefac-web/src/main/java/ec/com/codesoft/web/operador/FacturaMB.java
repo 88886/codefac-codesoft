@@ -371,6 +371,7 @@ public class FacturaMB {
             //cabecera de la Factura
             cabecera = "<div style=\"width: 80%;padding: 10px;border-style: dashed;margin: 0 auto;border-color: #cccccc\">\n"
                     + "	<div style=\"width: 100%;text-align: center\"><h2>"+sistemaMB.getEmpresa().getNombre()+"</h2></div>\n"
+                    + "	<div style=\"width: 100%;text-align: center\"><h4>"+sistemaMB.getEmpresa().getEslogan()+"</h4></div>\n"
                     + "	<br/>\n"
                     + "	<table style=\"width: 100%\">\n"
                     + "			<tr>\n"
@@ -427,9 +428,9 @@ public class FacturaMB {
                     + "<br/>"
                     + "<b>Este correo fué generado por Codefac Sistema de Facturación</b>"
                     + "<div style=\"background-color: #485798;color: #ffffff\">"
-                    + "<b>Consultas Ventas y Servicios :</b>"
-                    +"</br>"
-                    + "<b>Dirección: </b>Sangolquí: "+sistemaMB.getEmpresa().getDireccion()+" - "+sistemaMB.getEmpresa().getTelefonos()+""
+                    + "<p><b>Codesoft: Servicios de Mantenimiento, Desarrollo de Software, Consultoría Informática</b></p>"
+                    +"<br/>"
+                    + "<b>Dirección: </b>"+sistemaMB.getEmpresa().getDireccion()+" - "+sistemaMB.getEmpresa().getTelefonos()+""
                     + "</div>"
                     + "</div>";
             System.out.println(cabecera);
