@@ -17,7 +17,7 @@ and open the template in the editor.
     <ui:define name="contenido" >
         <div>
             <h:form id="formPrincipal">
-                <p:panel header="Orden de Trabajo" style="width: 70%;margin: 0 auto" styleClass="customTitleBar"   >
+                <p:panel header="Orden de Trabajo" style="width: 70%;margin: 0 auto" styleClass="titleBarMint"   >
 
                     <p:spacer width="15px"/>
 
@@ -75,7 +75,7 @@ and open the template in the editor.
                     <p:spacer width="15px"/>
 
                     <!-- Panel con los datos del cliente -->
-                    <p:panel header="Datos del Cliente" styleClass="greenColoredPanel panelNoBorder" >
+                    <p:panel header="Datos del Cliente" styleClass="titleBarMintSuave panelNoBorder" style="text-align: left" >
                         <p:panelGrid id="panelGridDatosCliente" columns="4" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Nombres:" />
                             <p:outputLabel id="txtNombres" value="#{ordenTrabajoMB.ordenTrabajo.cedulaRuc.nombre}" style="font-weight: lighter" />
@@ -93,7 +93,7 @@ and open the template in the editor.
                     </p:panel>
 
                     <!-- Panel con los datos del trabajo a realizar -->
-                    <p:panel id="panelTrabajo" header="Datos del Trabajo" styleClass="panelNoBorder greenColoredPanel">
+                    <p:panel id="panelTrabajo" header="Datos del Trabajo" styleClass="titleBarMintSuave panelNoBorder">
                         <p:messages autoUpdate="true" id="mensajeGeneral"/>
                         <p:panelGrid id="panelDatosOrdenTrabajo" columns="9" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Fecha Entrega:" />

@@ -143,6 +143,53 @@ h1 , h2
     color: white;
 }
 
+.titleBarAzul > .ui-panel-titlebar {
+    background: #4a89dc;
+    color: white;
+
+}
+
+.titleBarAzulSuave > .ui-panel-titlebar {
+    background: #5d9cec;
+    color: white;
+
+}
+
+.titleBarCeleste > .ui-panel-titlebar {
+    background: #4FC1E9;
+    color: white;
+   
+}
+
+.titleBarVerde > .ui-panel-titlebar {
+    background: #8cc152;
+    color: white;
+    
+}
+
+.titleBarVerdeSuave > .ui-panel-titlebar {
+    background: #a0d468;
+    color: white;
+    
+}
+
+
+.titleBarMint > .ui-panel-titlebar {
+    background: #37bc9b;
+    color: white;
+    
+}
+
+.titleBarMintSuave > .ui-panel-titlebar {
+    background: #48cfad;
+    color: white;
+    
+}
+
+.titleCenter > .ui-panel-titlebar {    
+    text-align: center;
+}
+
 
 .filaRoja
 {
