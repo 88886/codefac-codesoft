@@ -40,8 +40,8 @@ and open the template in the editor.
                     <p:ajax event="rowSelect" listener="#{distribuidorGestionMB.onRowSelect}" update=":formTabla:growl"/>
 
                     <f:facet name="header" >
-                        <p:commandButton  icon="ui-icon-plus" styleClass="ui-botonEsmeralda" actionListener="#{distribuidorGestionMB.mostrarNuevoDistribuidor()}" update=":formNuevo" />
-                        <p:commandButton  icon="ui-icon-pencil" styleClass="ui-botonNaranja" actionListener="#{distribuidorGestionMB.mostrarEditarDistribuidor()}" update=":formEditar" />
+                        <p:commandButton title="Agregar Distribuidor"  icon="fa fa-plus" styleClass="btn_azul" actionListener="#{distribuidorGestionMB.mostrarNuevoDistribuidor()}" update=":formNuevo" />
+                        <p:commandButton title="Editar Distribuidor" icon="fa fa-pencil" styleClass="btn_tomate" actionListener="#{distribuidorGestionMB.mostrarEditarDistribuidor()}" update=":formEditar" />
                     </f:facet>
 
                     <p:column headerText="RUC" style="width: 100px">
@@ -70,8 +70,8 @@ and open the template in the editor.
 
                     <p:column style="width: 60px">
                         <p:commandButton 
-                            styleClass="ui-botonNaranja" 
-                            icon="ui-icon-trash"
+                            styleClass="btn_rojo"
+                            icon="fa fa-trash-o"
                             title="Eliminar Distribuidor"
                             actionListener="#{distribuidorGestionMB.eliminar(distribuidor)}" 
                             update=":formTabla:tablaDistribuidor" />
