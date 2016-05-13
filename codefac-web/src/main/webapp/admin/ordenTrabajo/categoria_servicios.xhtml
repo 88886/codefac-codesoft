@@ -14,47 +14,60 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        <h4 class="titulo" style="text-align: center">Catalogo de Servicios</h4>
+        <h4 class="titulo" style="text-align: center">Categoria de Servicios</h4>
 
         <p:panel>
             <h:form id="formPrincipal">
                 <p:dataTable
                     id="tablaServicios"
-                    value="#{catalogoServiciosMB.serviciosList}"
+                    value="#{categoriaServiciosMB.categoriaTrabajoList}"
                     var="servicio"
                     selectionMode="single"
-                    selection="#{catalogoServiciosMB.servicioSeleccionado}"
-                    rowKey="#{servicio.codigoServicio}"
+                    selection="#{categoriaServiciosMB.categoriaSeleccionada}"
+                    rowKey="#{servicio.idCategoriaTrabajo}"
                     >
 
                     <f:facet name="header" > 
                         <p:commandButton
-                            actionListener="#{catalogoServiciosMB.abrirNuevoServicio}"
-                            update="idNuevoServicio"
+                            actionListener="#{categoriaServiciosMB.abrirNuevoCatalogo}"
+                            update="idNuevoCatalogo"
                             title="Nuevo Servicio"
                             styleClass="btn_azul" 
                             icon="fa fa-plus-circle" />
                         <p:commandButton 
-                            actionListener="#{catalogoServiciosMB.abrirEditarServicio}"
+                            actionListener="#{categoriaServiciosMB.abrirEditarCatalogo}"
                             update="idEditarServicio"
                             title="Editar Servicio"
                             styleClass="btn_tomate" 
                             icon="fa fa-pencil-square-o" />
                     </f:facet>
 
-                    <p:column headerText="Codigo" style="width: 10%" >
-                        <p:outputLabel value="#{servicio.codigoServicio}" />
+                    <p:column headerText="Codigo"  >
+                        <p:outputLabel value="#{servicio.idCategoriaTrabajo}" />
                     </p:column>
 
-                    <p:column headerText="Nombre" style="width: 30%" >
+                    <p:column headerText="Servicio"  >
+                        <p:outputLabel value="#{servicio.codigoServicio.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre"  >
                         <p:outputLabel value="#{servicio.nombre}" />
                     </p:column>
 
-                    <p:column headerText="Detalle" style="width: 55%" >
+                    <p:column headerText="Precio" style="width: 80px" >
+                        <p:outputLabel value="#{servicio.precio}" />
+                    </p:column>
+
+                    <p:column headerText="Descripcion"  >
                         <p:outputLabel value="#{servicio.descripcion}" />
                     </p:column>
 
-                    <p:column headerText="Accion" style="width: 5%" >
+                    <p:column headerText="Trabajo a Realizar"  >
+                        <p:outputLabel value="#{servicio.descripcion}" />
+                    </p:column>
+
+
+                    <p:column headerText="Accion" style="width: 6%" >
                         <p:commandButton
                             actionListener="#{catalogoServiciosMB.eliminar(servicio)}" 
                             update="@form"
@@ -65,7 +78,7 @@ and open the template in the editor.
                             icon="fa fa-times"                             
                             >
                             <p:confirm header="Confirmar" message="Desea eliminar el servicio?" icon="ui-icon-alert" />
-                            
+
                         </p:commandButton>
                     </p:column>
 
@@ -73,35 +86,55 @@ and open the template in the editor.
             </h:form>
         </p:panel>
 
-        <!-- Dialogo para crear un nuevo Servicio -->
-        <p:dialog id="idNuevoServicio" widgetVar="widgetNuevoServicio" header="Nuevo Servicio" modal="true" showEffect="explode" hideEffect="explode" >
+        <!-- Dialogo para crear un nuevo Catalogo -->
+        <p:dialog id="idNuevoCatalogo" widgetVar="widgetNuevoCatalogo" header="Nueva Categoria" modal="true" showEffect="explode" hideEffect="explode" >
             <h:form>
                 <p:panel styleClass="panelNoBorder">
-                    <p:messages id="msgNuevoServicio" />
-                    <p:panelGrid columns="3">
+                    <p:messages id="msgNuevoCatalogo" />
+                    <p:panelGrid columns="6">
+
+                        <p:outputLabel value="Servicio:" />
+                        <p:selectOneMenu id="cmbServicio" value="#{categoriaServiciosMB.idServicioSeleccionado}" style="width:125px">
+                            <f:selectItem itemLabel="Seleccione un servicio" itemValue="" />
+                            <f:selectItems value="#{categoriaServiciosMB.serviciosList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.codigoServicio}" />
+                        </p:selectOneMenu>
+                        <p:message for="cmbServicio" display="icon" />
+
                         <p:outputLabel value="Nombre:" />
-                        <p:inputText value="#{catalogoServiciosMB.servicioNuevo.nombre}" id="txtNombre" required="true" requiredMessage="Un nombre es nesario para grabar">
+                        <p:inputText value="#{categoriaServiciosMB.categoriaNuevo.nombre}" id="txtNombre" required="true" requiredMessage="Un nombre es nesario para grabar">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="txtNombre" display="icon" />
 
+                        <p:outputLabel value="Precio:"/>
+                        <p:inputText value="#{categoriaServiciosMB.categoriaNuevo.precio}" id="txtPrecio" required="true" requiredMessage="Un nombre es nesario para grabar">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtPrecio" display="icon" />
+
                         <p:outputLabel value="Descripcion:" />
-                        <p:inputTextarea id="txtDescripcion" value="#{catalogoServiciosMB.servicioNuevo.descripcion}">
+                        <p:inputTextarea id="txtDescripcion" value="#{categoriaServiciosMB.categoriaNuevo.descripcion}">
                             <p:clientValidator event="keyup"/>
                         </p:inputTextarea>
                         <p:message for="txtDescripcion" display="icon"/>
 
+                        <p:outputLabel value="Trabajo a realizar:" />
+                        <p:inputTextarea id="txtTrabajoRealizar" value="#{categoriaServiciosMB.categoriaNuevo.descripcion}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtTrabajoRealizar" display="icon"/>
+
                         <f:facet name="footer" class="ui-panelgrid">
                             <div style="text-align: center">
                                 <p:commandButton 
-                                    actionListener="#{catalogoServiciosMB.guardarServicio}"
-                                    update=":formPrincipal:tablaServicios,msgNuevoServicio"                                    
+                                    actionListener="#{categoriaServiciosMB.guardarCatalogo}"
+                                    update=":formPrincipal:tablaServicios,msgNuevoCatalogo"                                    
                                     validateClient="true"
                                     icon="fa fa-floppy-o"
                                     styleClass="btn_azul"                                    
                                     value="Grabar">
 
-                                    <p:confirm header="Confirmar" message="Desea guardar el servicio?" icon="ui-icon-alert" />
+                                    <p:confirm header="Confirmar" message="Desea guardar la categoria?" icon="ui-icon-alert" />
 
                                 </p:commandButton>
 
