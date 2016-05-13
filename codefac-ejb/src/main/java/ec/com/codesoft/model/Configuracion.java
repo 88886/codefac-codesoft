@@ -64,6 +64,12 @@ public class Configuracion implements Serializable {
     @Column(name = "CLAVE_EMAIL_SERVICIO_TECNICO")
     private String claveEmailServicioTecnico;
     
+    @Column(name = "DB_USER")
+    private String dbUser;
+   
+    @Column(name = "DB_PASSWORD")
+    private String dbPassword;
+    
     public Configuracion() {
     }
 
@@ -135,6 +141,23 @@ public class Configuracion implements Serializable {
         this.claveEmailServicioTecnico = claveEmailServicioTecnico;
     }
 
+    public String getDbUser() {
+        return dbUser;
+    }
+
+    public void setDbUser(String dbUser) {
+        this.dbUser = dbUser;
+    }
+
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
+    }
+
+    
     
     
 

@@ -70,6 +70,33 @@ public class CatalogoServiciosMB implements Serializable
         
     }
     
+    /**
+     * Abrir Editar Servicio
+     */
+    public void abrirEditarServicio()
+    {
+        System.out.println("editando el widget el servicio");
+        RequestContext.getCurrentInstance().execute("PF('widgetEditarServicio').show()");
+        
+    }
+    
+    public void editarServicio()
+    {
+        servicioServicios.editar(servicioSeleccionado);
+        RequestContext.getCurrentInstance().execute("PF('widgetEditarServicio').hide()");
+        
+    }
+    
+    /**
+     * Eliminar el servicio 
+     */
+    public void eliminar(Servicios servicio)
+    {
+        System.out.println("eliminando el servicio");
+        servicioServicios.eliminar(servicio);
+        serviciosList=servicioServicios.obtenerTodos();
+    }
+    
     //////////////////////METODOS GET AND SET ////////////////
 
     public List<Servicios> getServiciosList() {

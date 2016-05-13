@@ -39,4 +39,18 @@ public class ServiciosServicio
         servicioFacade.create(servicios);
     }
     
+    public void editar(Servicios servicio)
+    {
+        servicioFacade.edit(servicio);
+    }
+    
+    public void eliminar(Servicios servicio)
+    {
+        servicioFacade.remove(servicio);
+    }
+    
+    public Servicios buscarPorID(Integer codigo)
+    {
+        return servicioFacade.find(codigo);
+    }
 }
