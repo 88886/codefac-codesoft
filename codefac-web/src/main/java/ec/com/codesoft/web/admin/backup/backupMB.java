@@ -5,11 +5,14 @@
  */
 package ec.com.codesoft.web.admin.backup;
 
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 
 /**
@@ -24,13 +27,19 @@ public class backupMB {
     // private String txtPath = "G:\\New Folder\\";
     private String txtPath;
     private String lblMessage;
-    
+    private Connection conection;
+
+    private EntityManagerFactory emf;
+
     @PostConstruct
-    public void inicializar(){
+    public void inicializar() {
+//        emf = Persistence.createEntityManagerFactory("myDbFile.odb");
+//        System.out.println("Entidades "+emf.getMetamodel().getEntities());
+
         ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         basePath = ctx.getRealPath("/");
-        txtPath = basePath + "BackupRestoreMysqldb//";
-        System.out.println("Path "+ txtPath);
+        txtPath = "F://reportes//" + "backup//";
+        System.out.println("Path " + txtPath);
     }
 
     public void backup() {
@@ -47,7 +56,7 @@ public class backupMB {
             //strFilename = nowLong.toString();
             //strFilename = String.valueOf(nowLong);
             System.out.println(strFilename);
-              //String command = "C://xampp//mysql//bin/mysqldump -u(db user name) -p(db password) --add-drop-database -B (db name) -r " + "\"" + txtPath.getText().toString() + "\\" + strFilename + ".sql\"";
+            //String command = "C://xampp//mysql//bin/mysqldump -u(db user name) -p(db password) --add-drop-database -B (db name) -r " + "\"" + txtPath.getText().toString() + "\\" + strFilename + ".sql\"";
             String command = "C://xampp//mysql//bin/mysqldump --user=root --password=root --add-drop-database -B codefac -r " + "\"" + txtPath.toString() + "\\" + strFilename + ".sql\"";
             System.out.println(command);
             Process p = null;
@@ -79,6 +88,5 @@ public class backupMB {
     public void setLblMessage(String lblMessage) {
         this.lblMessage = lblMessage;
     }
-    
-    
+
 }
