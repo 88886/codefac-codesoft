@@ -5,14 +5,13 @@
  */
 package ec.com.codesoft.web.admin.backup;
 
-import java.sql.Connection;
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 
 /**
@@ -27,18 +26,15 @@ public class backupMB {
     // private String txtPath = "G:\\New Folder\\";
     private String txtPath;
     private String lblMessage;
-    private Connection conection;
-
-    private EntityManagerFactory emf;
+    
+    @EJB
+    private SistemaServicio sistemaServicio;
 
     @PostConstruct
     public void inicializar() {
-//        emf = Persistence.createEntityManagerFactory("myDbFile.odb");
-//        System.out.println("Entidades "+emf.getMetamodel().getEntities());
-
         ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         basePath = ctx.getRealPath("/");
-        txtPath = "F://reportes//" + "backup//";
+        txtPath = sistemaServicio.getConfiguracion().getPathreportes()+ "backup//"; //ruta para guardar el respaldo
         System.out.println("Path " + txtPath);
     }
 
@@ -57,7 +53,7 @@ public class backupMB {
             //strFilename = String.valueOf(nowLong);
             System.out.println(strFilename);
             //String command = "C://xampp//mysql//bin/mysqldump -u(db user name) -p(db password) --add-drop-database -B (db name) -r " + "\"" + txtPath.getText().toString() + "\\" + strFilename + ".sql\"";
-            String command = "C://xampp//mysql//bin/mysqldump --user=root --password=root --add-drop-database -B codefac -r " + "\"" + txtPath.toString() + "\\" + strFilename + ".sql\"";
+            String command = "C://xampp//mysql//bin/mysqldump --user="+sistemaServicio.getConfiguracion().getDbUser()+" --password="+sistemaServicio.getConfiguracion().getDbPassword()+" --add-drop-database -B codefac -r " + "\"" + txtPath.toString() + "\\" + strFilename + ".sql\"";
             System.out.println(command);
             Process p = null;
             try {
