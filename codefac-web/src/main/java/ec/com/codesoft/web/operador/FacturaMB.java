@@ -56,7 +56,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.validation.constraints.Min;
 import net.sf.jasperreports.engine.JRException;
+import org.eclipse.jdt.core.JavaCore;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -79,6 +81,8 @@ public class FacturaMB {
     private CatalagoProducto catalogoEncontrado;
     private CatalagoProducto catalogo;
     private int stock;
+
+    @Min(value = 1)
     private int cantidadComprar;
     private boolean mostrarInformacion;
     private List<CatalagoProducto> catalogosLista;
@@ -296,10 +300,6 @@ public class FacturaMB {
 
         //variable correo
         estadoCorreo = true;
-        
-        
-        
-        
 
     }
 
@@ -370,8 +370,8 @@ public class FacturaMB {
 
             //cabecera de la Factura
             cabecera = "<div style=\"width: 80%;padding: 10px;border-style: dashed;margin: 0 auto;border-color: #cccccc\">\n"
-                    + "	<div style=\"width: 100%;text-align: center\"><h2>"+sistemaMB.getEmpresa().getNombre()+"</h2></div>\n"
-                    + "	<div style=\"width: 100%;text-align: center\"><h4>"+sistemaMB.getEmpresa().getEslogan()+"</h4></div>\n"
+                    + "	<div style=\"width: 100%;text-align: center\"><h2>" + sistemaMB.getEmpresa().getNombre() + "</h2></div>\n"
+                    + "	<div style=\"width: 100%;text-align: center\"><h4>" + sistemaMB.getEmpresa().getEslogan() + "</h4></div>\n"
                     + "	<br/>\n"
                     + "	<table style=\"width: 100%\">\n"
                     + "			<tr>\n"
@@ -381,14 +381,14 @@ public class FacturaMB {
                     + "				<td style=\"width: 70%\">\n"
                     + "					<table style=\"width: 100%;height: 100%\">\n"
                     + "						<tr>\n"
-                    + "							<td><b>"+sistemaMB.getEmpresa().getPropietario()+"</b></td>\n"
-                    + "							<td><b>"+sistemaMB.getEmpresa().getRucEmpresa()+"</b></td>\n"
+                    + "							<td><b>" + sistemaMB.getEmpresa().getPropietario() + "</b></td>\n"
+                    + "							<td><b>" + sistemaMB.getEmpresa().getRucEmpresa() + "</b></td>\n"
                     + "							<td><b>Factura N.</b></td>\n"
                     + "						</tr>\n"
                     + "						<tr>\n"
-                    + "							<td><b>"+sistemaMB.getEmpresa().getDireccion()+"</b></td>\n"
-                    + "							<td><b>"+sistemaMB.getEmpresa().getTelefonos()+"</b></td>\n"
-                    + "							<td><div style=\"border-style: solid;width: 80px;text-align: center\">"+ventaImprimir.getCodigoDocumento()+"</div></td>\n"
+                    + "							<td><b>" + sistemaMB.getEmpresa().getDireccion() + "</b></td>\n"
+                    + "							<td><b>" + sistemaMB.getEmpresa().getTelefonos() + "</b></td>\n"
+                    + "							<td><div style=\"border-style: solid;width: 80px;text-align: center\">" + ventaImprimir.getCodigoDocumento() + "</div></td>\n"
                     + "						</tr>\n"
                     + "\n"
                     + "					</table>\n"
@@ -401,17 +401,17 @@ public class FacturaMB {
                     + "		 <table style=\"width: 100%\">\n"
                     + "						<tr>\n"
                     + "							<td><b>CI/RUC</b></td>\n"
-                    + "							<td>"+clienteEncontrado.getCedulaRuc()+"</td>\n"
+                    + "							<td>" + clienteEncontrado.getCedulaRuc() + "</td>\n"
                     + "							<td><b>Teléfono.</b></td>\n"
-                    + "							<td>"+clienteEncontrado.getTelefono()+"</td>\n"
+                    + "							<td>" + clienteEncontrado.getTelefono() + "</td>\n"
                     + "							<td><b>Observaciones</b></td>\n"
                     + "							<td><p></p></td>\n"
                     + "						</tr>\n"
                     + "						<tr>\n"
                     + "							<td><b>Nombre</b></td>\n"
-                    + "							<td>"+clienteEncontrado.getNombre()+"</td>\n"
+                    + "							<td>" + clienteEncontrado.getNombre() + "</td>\n"
                     + "							<td><b>Fecha </b></td>\n"
-                    + "							<td>"+getFechaActual()+"</td>\n"
+                    + "							<td>" + getFechaActual() + "</td>\n"
                     + "						</tr>\n"
                     + "\n"
                     + "		  </table>\n"
@@ -429,16 +429,16 @@ public class FacturaMB {
                     + "<b>Este correo fué generado por Codefac Sistema de Facturación</b>"
                     + "<div style=\"background-color: #485798;color: #ffffff\">"
                     + "<p><b>Codesoft: Servicios de Mantenimiento, Desarrollo de Software, Consultoría Informática</b></p>"
-                    +"<br/>"
-                    + "<b>Dirección: </b>"+sistemaMB.getEmpresa().getDireccion()+" - "+sistemaMB.getEmpresa().getTelefonos()+""
+                    + "<br/>"
+                    + "<b>Dirección: </b>" + sistemaMB.getEmpresa().getDireccion() + " - " + sistemaMB.getEmpresa().getTelefonos() + ""
                     + "</div>"
                     + "</div>";
             System.out.println(cabecera);
             correo.EnviarCorreoSinArchivoAdjunto(clienteEncontrado.getCorreo(), "Codesoft", cabecera);
         }
     }
-    
-     public String getFechaActual() {
+
+    public String getFechaActual() {
         Date ahora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
         return formateador.format(ahora);
@@ -1194,14 +1194,19 @@ public class FacturaMB {
                     // System.err.println(detalleIndividual);
                     if (detalleIndividual == null) {
                         msjCodUnico = "No existe Producto con ese código";
+                        codPEspe="";
+                        // RequestContext.getCurrentInstance().execute("PF('infProductoE').show()");
+                        System.out.println("No existe ese codigo");
 
                     } else if (detalleIndividual.getEstadoProceso().equals("Vendido")) {
-                        msjCodUnico = "Producto con ese código  ya esta en Venta";
+                        msjCodUnico = "Producto con ese código  ya se vendió";
+                        codPEspe="";
+                        //RequestContext.getCurrentInstance().execute("PF('infProductoE').show()");
+                        System.out.println("Ya se vendio");
                     } else {
                         cantidadComprar = 1;
-                        cerrarDialogo();
+                        //cerrarDialogo();
                         msjCodUnico = "";
-                    //cerrarDialogo();
 
                         // productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, codPEspe);
                         if (clienteEncontrado.getTipo().equals("Distribuidor")) {
