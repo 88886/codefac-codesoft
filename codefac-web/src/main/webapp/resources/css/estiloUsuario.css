@@ -173,6 +173,13 @@ h1 , h2
     
 }
 
+.titleBarRojo > .ui-panel-titlebar {
+    background: #ff0000;
+    color: white;
+    
+}
+
+
 
 .titleBarMint > .ui-panel-titlebar {
     background: #37bc9b;

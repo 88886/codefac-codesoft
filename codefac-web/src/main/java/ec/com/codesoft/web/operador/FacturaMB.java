@@ -5,9 +5,11 @@
  */
 package ec.com.codesoft.web.operador;
 
+import ec.com.codesoft.model.AbonoVentaCredito;
 import ec.com.codesoft.model.Banco;
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.Cliente;
+import ec.com.codesoft.model.CreditoFactura;
 import ec.com.codesoft.model.Creditobanco;
 import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
@@ -58,7 +60,6 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import javax.validation.constraints.Min;
 import net.sf.jasperreports.engine.JRException;
-import org.eclipse.jdt.core.JavaCore;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -170,6 +171,14 @@ public class FacturaMB {
      * propiedad para enviar correo
      */
     private boolean estadoCorreo;
+
+    //abono de la factura a credito
+    private BigDecimal abono;
+    private CreditoFactura creditoFactura;
+    private List<CreditoFactura> creditoFacturaObtenidos;
+    private List<Venta> ventasTipoPago;
+    private boolean mostrarDeudas;
+
     @EJB
     ClienteServicio clienteServicio;
 
@@ -199,6 +208,9 @@ public class FacturaMB {
     @ManagedProperty(value = "#{sistemaMB}")
     private SistemaMB sistemaMB;
 
+    /**
+     * ****************************************************PostConstruct***************************************
+     */
     @PostConstruct
     public void inicializar() {
         estadoDialogo = false;
@@ -301,8 +313,16 @@ public class FacturaMB {
         //variable correo
         estadoCorreo = true;
 
+        //abono de la factura a credito
+        abono = new BigDecimal("0.0");
+        creditoFacturaObtenidos = new ArrayList<CreditoFactura>();
+        mostrarDeudas = false;
+
     }
 
+    /**
+     * **************************************************PostConstuct**********************************************************************
+     */
     public void cambiarEstadoCorreo() {
         if (estadoCorreo == true) {
             estadoCorreo = true;
@@ -499,9 +519,26 @@ public class FacturaMB {
                 cliMayorista = "";
             }
 
-            //mostrarCompra = true;
-            // mostrarPanel = true;
-            //tabCompra = true;
+            //System.out.println("VentasCredito " + facturaServicio.obtenerVentaTipo(clienteEncontrado.getCedulaRuc(), "Credito"));
+            ventasTipoPago = facturaServicio.obtenerVentaTipo(clienteEncontrado.getCedulaRuc(), "Credito");
+
+            if (ventasTipoPago != null) {
+                mostrarDeudas = true;
+                creditoFacturaObtenidos = new ArrayList<CreditoFactura>();
+                for (int i = 0; i < ventasTipoPago.size(); i++) {
+                    CreditoFactura creditoTemporal = new CreditoFactura();
+                    creditoTemporal = facturaServicio.obtenerCreditoFactura(ventasTipoPago.get(i).getCodigoFactura(), "Proceso");
+                    //System.out.println("Credito"+creditoTemporal);
+                    if (creditoTemporal != null) {
+                        creditoFacturaObtenidos.add(creditoTemporal);
+                    }
+                }
+            } else {
+                mostrarDeudas = false;
+            }
+            if (creditoFacturaObtenidos.size() == 0) {
+                mostrarDeudas = false;
+            }
         }
     }
 
@@ -975,15 +1012,37 @@ public class FacturaMB {
         System.out.println("En sleccion");
         //clienteEncontrado = clienteSeleccionado;
         clienteEncontrado = (Cliente) event.getObject();
+        cedCliente = clienteEncontrado.getCedulaRuc();
+        System.out.println("Encontrado");
+        msjCliente = "Cliente Encontrado";
         if (clienteEncontrado.getTipo().equals("Distribuidor")) {
             cliMayorista = " --> Distribuidor";
         } else {
             cliMayorista = "";
         }
-        cedCliente = clienteEncontrado.getCedulaRuc();
+        ventasTipoPago = facturaServicio.obtenerVentaTipo(clienteEncontrado.getCedulaRuc(), "Credito");
+        if (ventasTipoPago != null) {
+            mostrarDeudas = true;
+            creditoFacturaObtenidos = new ArrayList<CreditoFactura>();
+            for (int i = 0; i < ventasTipoPago.size(); i++) {
+                CreditoFactura creditoTemporal = new CreditoFactura();
+                creditoTemporal = facturaServicio.obtenerCreditoFactura(ventasTipoPago.get(i).getCodigoFactura(), "Proceso");
+                //System.out.println("Credito"+creditoTemporal);
+                if (creditoTemporal != null) {
+                    creditoFacturaObtenidos.add(creditoTemporal);
+                }
+            }
+        } else {
+            mostrarDeudas = false;
+        }
+        if (creditoFacturaObtenidos.size() == 0) {
+            mostrarDeudas = false;
+        }
+
         System.out.println(clienteEncontrado);
         RequestContext.getCurrentInstance().execute("PF('overLayBuscarCliente').hide()");
         System.out.println("ocultado panel");
+
         //clientesLista = clienteServicio.obtenerTodos();
     }
 
@@ -1194,13 +1253,13 @@ public class FacturaMB {
                     // System.err.println(detalleIndividual);
                     if (detalleIndividual == null) {
                         msjCodUnico = "No existe Producto con ese código";
-                        codPEspe="";
+                        codPEspe = "";
                         // RequestContext.getCurrentInstance().execute("PF('infProductoE').show()");
                         System.out.println("No existe ese codigo");
 
                     } else if (detalleIndividual.getEstadoProceso().equals("Vendido")) {
                         msjCodUnico = "Producto con ese código  ya se vendió";
-                        codPEspe="";
+                        codPEspe = "";
                         //RequestContext.getCurrentInstance().execute("PF('infProductoE').show()");
                         System.out.println("Ya se vendio");
                     } else {
@@ -1324,6 +1383,32 @@ public class FacturaMB {
                     //guardarfactura Carlos reportes
                     venta.setDetalleProductoGeneralList(detallesGeneralVenta);
                     venta.setDetalleProductoIndividualList(detallesIndividualVenta);
+
+                    // guardar Creditos Directos
+                    if (devolverTipoPago().equals("Credito")) {
+                        System.out.println("Credito Directo" + creditoFactura.toString());
+                        creditoFactura.setCodigoFacturaCredito(0);
+                        //creditoFactura.setAbonoVentaCreditoList(abonos);
+                        creditoFactura.setFechaInicio(new Date());
+                        creditoFactura.setCalificacion(0);
+                        creditoFactura.setCodigoFactura(venta);
+                        creditoFactura.setDiaPago(0);
+                        creditoFactura.setEstado("Proceso");
+                        facturaServicio.guardarCreditoFactura(creditoFactura);
+
+                        //guardar abono inicial
+                        List<AbonoVentaCredito> abonos = new ArrayList<AbonoVentaCredito>();
+                        AbonoVentaCredito abonoGuardar = new AbonoVentaCredito();
+                        abonoGuardar.setCodigoAbono(0);
+                        abonoGuardar.setCantidad(abono);
+                        abonoGuardar.setCodigoFacturaCredito(creditoFactura);
+                        abonoGuardar.setFecha(new Date());
+                        abonoGuardar.setDescripcion("");
+                        facturaServicio.guardarAbonos(abonoGuardar);
+                        abonos.add(abonoGuardar);
+                        creditoFactura.setAbonoVentaCreditoList(abonos);
+
+                    }
 
                     codigoFactura = venta.getCodigoFactura();
 
@@ -1558,7 +1643,7 @@ public class FacturaMB {
         } else if (estCheue) {
             return "Cheque";
         } else if (creditoDirecto) {
-            return "Credito Directo";
+            return "Credito";
         } else {
             return "Efectivo";
         }
@@ -1752,6 +1837,7 @@ public class FacturaMB {
             estCheue = false;
             estBanco = false;
             creditoDirecto = true;
+            creditoFactura = new CreditoFactura();
             quitarRecargoTarjeta();
         } else if (tipoPago.equals("Cheque")) {
             System.out.println("cheque");
@@ -2297,6 +2383,46 @@ public class FacturaMB {
 
     public void setDetallesOrdenSeleccionadas(List<DetalleOrdenTrabajo> detallesOrdenSeleccionadas) {
         this.detallesOrdenSeleccionadas = detallesOrdenSeleccionadas;
+    }
+
+    public BigDecimal getAbono() {
+        return abono;
+    }
+
+    public void setAbono(BigDecimal abono) {
+        this.abono = abono;
+    }
+
+    public CreditoFactura getCreditoFactura() {
+        return creditoFactura;
+    }
+
+    public void setCreditoFactura(CreditoFactura creditoFactura) {
+        this.creditoFactura = creditoFactura;
+    }
+
+    public List<CreditoFactura> getCreditoFacturaObtenidos() {
+        return creditoFacturaObtenidos;
+    }
+
+    public void setCreditoFacturaObtenidos(List<CreditoFactura> creditoFacturaObtenidos) {
+        this.creditoFacturaObtenidos = creditoFacturaObtenidos;
+    }
+
+    public List<Venta> getVentasTipoPago() {
+        return ventasTipoPago;
+    }
+
+    public void setVentasTipoPago(List<Venta> ventasTipoPago) {
+        this.ventasTipoPago = ventasTipoPago;
+    }
+
+    public boolean getMostrarDeudas() {
+        return mostrarDeudas;
+    }
+
+    public void setMostrarDeudas(boolean mostrarDeudas) {
+        this.mostrarDeudas = mostrarDeudas;
     }
 
 }

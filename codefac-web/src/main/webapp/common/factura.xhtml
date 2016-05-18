@@ -100,9 +100,40 @@ and open the template in the editor.
                 </p:panel>
 
                 <p:separator/>
+                
+                <p:panel header="Deudas Cliente" styleClass="titleBarVerde panelNoBorder" style="width: 100%" rendered="#{facturaMB.mostrarDeudas}">
+                    <p:dataTable var="deudas" value="#{facturaMB.creditoFacturaObtenidos}"
+                                 id="tableDeudas">
+                        <p:column headerText="Factura N "  >
+                            <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
+                        </p:column>
+                        <p:column headerText="Fecha Inicio">
+                            <h:outputText value="#{deudas.fechaInicio}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Fecha Max Pago "  >
+                            <h:outputText value="#{deudas.fechaFin}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Abono"  >
+                            <h:outputText value="#{deudas.toStringAbonos()}" />
+                        </p:column>
+                        <p:column headerText="Total"  >
+                            <h:outputText value="#{deudas.codigoFactura.total}" />
+                        </p:column>
+                        <p:column headerText="Deuda"  >
+                            <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
+                        </p:column>
+
+
+                    </p:dataTable>
+                </p:panel>
+                <p:separator/>
 
                 <p:panel style="width:100%"> 
-                    <p:panelGrid columns="6" style="text-align: left;width:80%" styleClass="panelNoBorder">
+                    <p:panelGrid columns="6" style="text-align: left;width:100%" styleClass="panelNoBorder">
                         <p:panel styleClass="panelNoBorder">
                             <i class="fa fa-credit-card" aria-hidden="true"></i>
                             <p:outputLabel  value=" Tipo Venta" />
@@ -130,7 +161,7 @@ and open the template in the editor.
                                 <p:selectOneMenu  id="mesesBanco" value="#{facturaMB.mesSeleccionado}" style="width:125px">
                                     <f:selectItem itemLabel="Seleccione el Mes"/>
                                     <f:selectItems var="meses" value="#{facturaMB.intereses}" itemLabel="#{meses.meses} meses" itemValue="#{meses.meses}" />
-                                    <p:ajax event="change" listener="#{facturaMB.calcularlInteres()}" update=":formDetalles:panelTotales"/>        
+                                    <p:ajax event="change" listener="#{facturaMB.calcularlInteres()}" update=":formDetalles:panelTotales,@form"/>        
                                 </p:selectOneMenu>  
                             </p:panelGrid>
 
@@ -151,10 +182,19 @@ and open the template in the editor.
                             </p:panelGrid>
                         </p:panel>
 
-                        <p:panel id="idCreditoDirecto" rendered="#{facturaMB.creditoDirecto}">
-                            <p:panelGrid columns="2">
+                        <p:panel id="idCreditoDirecto" rendered="#{facturaMB.creditoDirecto}" style="width: 100%">
+                            <p:messages id="msgsCred"  />
+                            <p:panelGrid columns="2" style="width: 80%">
+                                <p:outputLabel for="abonoV" value="Abono"/>
+                                <p:inputText id="abonoV" value="#{facturaMB.abono}" 
+                                             validatorMessage="Debe ser un numero mayor o igual a 0"
+                                             style="width: 40%">
+                                    <p:clientValidator event="keyup"/>
+                                </p:inputText>
                                 <p:outputLabel for="fechaPago" value="Fecha Màximo Pago" />
-                                <p:calendar id="fechaPago" value="#{facturaMB.fechaFinal}" style="font-size:10px"/>
+                                <p:calendar id="fechaPago" value="#{facturaMB.creditoFactura.fechaFin}"/>
+                                <p:outputLabel value="Observaciones"/>
+                                <p:inputTextarea value="#{facturaMB.creditoFactura.observaciones}" cols="25" />
                             </p:panelGrid>
                         </p:panel>
                     </p:panelGrid>
@@ -245,7 +285,7 @@ and open the template in the editor.
 
             <h:form id="formGeneral">
                 <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" modal="true" height="auto" draggable="true" showEffect="fade" hideEffect="explode">
-                    <p:messages id="msgsC" showDetail="true" />
+                    <p:messages id="msgsC"  />
                     <p:panelGrid columns="4" >
                         <p:outputLabel for="cantidadP"  value="Stock : #{facturaMB.stock}"/>
                         <p:inputText id="cantidadP" value="#{facturaMB.cantidadComprar}" required="true" 
@@ -459,7 +499,7 @@ and open the template in the editor.
                          scrollHeight="200">
 
 
-                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente}" update=":form:panelGridDistr,:form:cedCliente,@this" />       
+                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectCliente}" update=":form" />       
                 <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectCliente}"/>
 
                 <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}" >

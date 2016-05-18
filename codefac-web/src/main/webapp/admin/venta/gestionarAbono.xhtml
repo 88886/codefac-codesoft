@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <p:panel id="panelFactura" header="Abonos" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
+
+            <div style="text-align: center">
+                <h:form>
+                    <p:growl id="msgs" showDetail="true" />
+                    <p:panelGrid columns="4" styleClass="panelNoBorder" style="margin-bottom:10px;margin-left: 30%">
+                        <p:selectOneMenu value="#{gestionarAbonoMB.campoBuscar}">
+                            <f:selectItem itemLabel="N Factura" itemValue="Factura" />
+                            <f:selectItem itemLabel="Cédula/Ruc" itemValue="Cliente"/>
+                            <p:ajax event="change" listener="#{gestionarAbonoMB.escojerFiltro()}" update="@form"/>
+                        </p:selectOneMenu>
+                        <p:inputText value="#{gestionarAbonoMB.codigoBuscar}" 
+                                     placeholder="#{gestionarAbonoMB.placeHolder}" id="codigoBuscar" required="true"/>
+
+                        <p:commandButton icon="fa fa-search"  styleClass="btn_verde"  
+                                         title="Buscar en la Base de Datos"
+                                         actionListener="#{gestionarAbonoMB.buscarDatos()}"
+                                         update=":deudas:tableDeudas"/>
+
+                    </p:panelGrid>    
+
+
+                </h:form> 
+
+                <p:separator/>
+
+                <p:panel header="Deudas Cliente" styleClass="titleBarVerde panelNoBorder" style="width: 100%" >
+                    <h:form id="deudas">
+                        <p:dataTable var="deudas" value="#{gestionarAbonoMB.creditoFacturaObtenidos}"
+                                     id="tableDeudas">
+                            <p:column headerText="Factura N "  >
+                                <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
+                            </p:column>
+                            <p:column headerText="Fecha Inicio">
+                                <h:outputText value="#{deudas.fechaInicio}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Fecha Max Pago "  >
+                                <h:outputText value="#{deudas.fechaFin}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Abono"  >
+                                <h:outputText value="#{deudas.toStringAbonos()}" />
+                            </p:column>
+                            <p:column headerText="Total"  >
+                                <h:outputText value="#{deudas.codigoFactura.total}" />
+                            </p:column>
+                            <p:column headerText="Deuda"  >
+                                <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form> 
+                </p:panel>
+                <p:separator/>
+
+
+            </div>  
+        </p:panel>
+    </ui:define>
+</ui:composition>
