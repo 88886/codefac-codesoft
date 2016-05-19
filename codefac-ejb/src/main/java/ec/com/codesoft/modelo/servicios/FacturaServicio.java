@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
+import ec.com.codesoft.model.AbonoVentaCredito;
 import ec.com.codesoft.model.Banco;
+import ec.com.codesoft.model.CreditoFactura;
 import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
@@ -14,8 +16,10 @@ import ec.com.codesoft.model.Intereses;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
 import ec.com.codesoft.model.Venta;
+import ec.com.codesoft.modelo.facade.AbonoVentaCreditoFacade;
 import ec.com.codesoft.modelo.facade.BancoFacade;
 import ec.com.codesoft.modelo.facade.CompraFacade;
+import ec.com.codesoft.modelo.facade.CreditoFacturaFacade;
 import ec.com.codesoft.modelo.facade.DetalleOrdenTrabajoFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoGeneralFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoIndividualFacade;
@@ -72,6 +76,12 @@ public class FacturaServicio {
     
     @EJB
     DetalleOrdenTrabajoFacade detalleOrdenFacade;
+    
+    @EJB
+    CreditoFacturaFacade creditoFacturaFacade;
+    
+    @EJB
+    AbonoVentaCreditoFacade abonoVentaCreditoFacade ;
     
     
     /**
@@ -298,4 +308,30 @@ public class FacturaServicio {
     public void actualizarDetalleOrden(DetalleOrdenTrabajo detalle){
         detalleOrdenFacade.edit(detalle);
     }
+    
+    public void guardarCreditoFactura(CreditoFactura credito){
+        creditoFacturaFacade.create(credito);
+    }
+    
+    public void guardarAbonos(AbonoVentaCredito abono){
+        abonoVentaCreditoFacade.create(abono);
+    } 
+    
+    public List<Venta> obtenerVentaTipo(String cedula, String tipoPago){
+        return ventaFacade.findVentaTipo(cedula, tipoPago);
+    }
+    
+    public CreditoFactura obtenerCreditoFactura(Integer codFactura,String estado){
+        return ventaFacade.findCreditoFactura(codFactura, estado);
+    }
+    
+    public void guardarAbono(AbonoVentaCredito abono){
+        abonoVentaCreditoFacade.create(abono);
+    }
+     public List<AbonoVentaCredito> obtenerAbonosCredito(Integer codigo){
+        return ventaFacade.findAbonoCredito(codigo);
+     }
+     
+    
+    
 }

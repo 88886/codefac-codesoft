@@ -5,7 +5,8 @@
  */
 package ec.com.codesoft.modelo.facade;
 
-import ec.com.codesoft.model.DetalleOrdenTrabajo;
+import ec.com.codesoft.model.AbonoVentaCredito;
+import ec.com.codesoft.model.CreditoFactura;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
@@ -46,7 +47,7 @@ public class VentaFacade extends AbstractFacade<Venta> {
         try {
             String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Factura' ";
             Query query = em.createQuery(queryString);
-            
+
             Integer numero = Integer.parseInt(query.getSingleResult().toString());
             //System.out.println("num: "+numero);
             return numero;
@@ -63,7 +64,6 @@ public class VentaFacade extends AbstractFacade<Venta> {
      *
      * @return
      */
-
     public Integer getCodigoUltimaNota() {
         try {
             String queryString = "SELECT max(v.codigoDocumento) FROM Venta v WHERE v.tipoDocumento='Nota' ";
@@ -147,14 +147,14 @@ public class VentaFacade extends AbstractFacade<Venta> {
         }
 
     }
-    
-     public List<DetalleVentaOrdenTrabajo> findFDetalleOrdenTrabajoCod(int cod) {
+
+    public List<DetalleVentaOrdenTrabajo> findFDetalleOrdenTrabajoCod(int cod) {
         try {
             String queryString = "SELECT g FROM DetalleVentaOrdenTrabajo g where g.codigoFactura.codigoFactura='" + cod + "'";
             Query query = em.createQuery(queryString);
             //query.setParameter(1, codP);
             List<DetalleVentaOrdenTrabajo> detalles = (List<DetalleVentaOrdenTrabajo>) query.getResultList();
-             System.out.println("facadeVenta"+detalles);
+            System.out.println("facadeVenta" + detalles);
             return detalles;
         } catch (NoResultException e) {
             return null;
@@ -176,4 +176,45 @@ public class VentaFacade extends AbstractFacade<Venta> {
         }
     }
 
+    public List<Venta> findVentaTipo(String cedula, String tipoPago) {
+        try {
+            String queryString = "SELECT v FROM Venta v WHERE v.tipoPago=?1 and v.cedulaRuc.cedulaRuc=?2";
+            Query query = em.createQuery(queryString);
+            query.setParameter(1, tipoPago);
+            query.setParameter(2, cedula);
+
+            List<Venta> ventas = (List<Venta>) query.getResultList();
+            //  System.out.println("facade"+intereses);
+            return ventas;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public CreditoFactura findCreditoFactura(Integer codFactura, String estado) {
+        try {
+            String queryString = "SELECT c FROM CreditoFactura c WHERE c.codigoFactura.codigoFactura=?1 and c.estado=?2";
+            Query query = em.createQuery(queryString);
+            //System.out.println("Query "+query);
+            query.setParameter(1, codFactura);
+            query.setParameter(2, estado);
+            CreditoFactura credito = (CreditoFactura) query.getSingleResult();
+            return credito;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<AbonoVentaCredito> findAbonoCredito(Integer codcredito) {
+        try {
+            String queryString = "SELECT c FROM AbonoVentaCredito c WHERE c.codigoFacturaCredito.codigoFacturaCredito=?1";
+            Query query = em.createQuery(queryString);
+            query.setParameter(1, codcredito);
+            List<AbonoVentaCredito> credito = (List<AbonoVentaCredito>) query.getResultList();
+            return credito;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
 }

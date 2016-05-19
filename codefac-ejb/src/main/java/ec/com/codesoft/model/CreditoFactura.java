@@ -7,11 +7,15 @@
 package ec.com.codesoft.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,6 +41,7 @@ public class CreditoFactura implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODIGO_FACTURA_CREDITO")
     private Integer codigoFacturaCredito;
     @Column(name = "FECHA_INICIO")
@@ -55,8 +60,10 @@ public class CreditoFactura implements Serializable {
     @JoinColumn(name = "CODIGO_FACTURA", referencedColumnName = "CODIGO_FACTURA")
     @ManyToOne
     private Venta codigoFactura;
-    @OneToMany(mappedBy = "codigoFacturaCredito")
+    @OneToMany(mappedBy = "codigoFacturaCredito", cascade = CascadeType.ALL)
     private List<AbonoVentaCredito> abonoVentaCreditoList;
+    @Column(name = "OBSERVACIONES")
+    private String observaciones;
 
     public CreditoFactura() {
     }
@@ -129,6 +136,15 @@ public class CreditoFactura implements Serializable {
         this.abonoVentaCreditoList = abonoVentaCreditoList;
     }
 
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -152,6 +168,18 @@ public class CreditoFactura implements Serializable {
     @Override
     public String toString() {
         return "ec.com.codesoft.model.CreditoFactura[ codigoFacturaCredito=" + codigoFacturaCredito + " ]";
+    }
+    
+    public BigDecimal toStringAbonos() {
+        
+        BigDecimal total=new BigDecimal("0.0");
+        BigDecimal debe;
+        for (AbonoVentaCredito abono : abonoVentaCreditoList) {
+            total=total.add(abono.getCantidad());
+        }
+        
+        return total;
+        
     }
     
 }

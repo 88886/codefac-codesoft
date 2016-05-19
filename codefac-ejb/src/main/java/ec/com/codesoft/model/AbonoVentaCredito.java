@@ -12,6 +12,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,6 +39,7 @@ public class AbonoVentaCredito implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODIGO_ABONO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer codigoAbono;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "CANTIDAD")

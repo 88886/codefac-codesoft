@@ -5,8 +5,9 @@
  */
 package ec.com.codesoft.test;
 
+import ec.com.codesoft.util.backupMB;
 import java.util.logging.Logger;
-import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
@@ -22,11 +23,15 @@ public class TimerExampleEJB
     
     private final Logger log = Logger
             .getLogger(TimerExampleEJB.class.getName());
+    
+    //@EJB
+    //private backupMB backup;
 
     
     @Schedule(minute = tiempo, hour = "*")
     public void runEveryMinute() 
     {
         System.out.println("imprimiendo...");
+        //backup.backup();
     }
 }

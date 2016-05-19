@@ -1,9 +1,14 @@
 
+import ec.com.codesoft.model.AbonoVentaCredito;
+import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.CreditoFactura;
 import ec.com.codesoft.model.Venta;
+import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -11,6 +16,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -31,27 +38,56 @@ public class gestionarAbonoMB implements Serializable {
     private String placeHolder;
     private List<CreditoFactura> creditoFacturaObtenidos;
     private List<Venta> ventasTipoPago;
+    private CreditoFactura creditoFacturaSeleccionada;
+    private AbonoVentaCredito abonoVentaSeleccionada;
+    private Boolean mostrarAbono;
+    private AbonoVentaCredito nuevoAbono;
+    private List<Cliente> clientesLista;
+    private Cliente clienteSeleccionado;
+    private Boolean mostrarBotonBuscar;
+    Integer bandera;
 
     @EJB
     private FacturaServicio facturaServicio;
 
+    @EJB
+    private ClienteServicio clienteServicio;
+
     @PostConstruct
     public void inicializar() {
-        campoBuscar = "Factura";
-        placeHolder = "Ingrese el N de Factura";
-        creditoFacturaObtenidos=new ArrayList<CreditoFactura>();
+        campoBuscar = "Cliente";
+        placeHolder = "Ingrese la Cédula o RUC";
+        creditoFacturaObtenidos = new ArrayList<CreditoFactura>();
+        clientesLista = clienteServicio.obtenerTodos();
+        mostrarAbono = false;
+        mostrarBotonBuscar = true;
     }
 
     public void escojerFiltro() {
         System.out.println(campoBuscar);
         if (campoBuscar.equals("Cliente")) {
+            mostrarBotonBuscar = true;
             placeHolder = "Ingrese la Cédula o RUC";
         } else {
             placeHolder = "Ingrese el N de Factura";
+            mostrarBotonBuscar = false;
         }
     }
 
+    public BigDecimal obtenerSaldoAnterior(Integer fila) {
+
+        List<AbonoVentaCredito> abonoTem=new ArrayList<AbonoVentaCredito>();
+        abonoTem=creditoFacturaSeleccionada.getAbonoVentaCreditoList();
+        BigDecimal saldoAnterior=new BigDecimal("0.0");
+        for (int i = 0; i <= fila; i++) {
+            saldoAnterior=saldoAnterior.add(abonoTem.get(i).getCantidad());
+        }
+        return saldoAnterior;
+    }
+
     public void buscarDatos() {
+        System.out.println("BuscarDatos");
+        //mostrarAbono = false;
         if (campoBuscar.equals("Cliente")) {
             ventasTipoPago = facturaServicio.obtenerVentaTipo(codigoBuscar, "Credito");
             if (ventasTipoPago != null) {
@@ -61,6 +97,9 @@ public class gestionarAbonoMB implements Serializable {
                     creditoTemporal = facturaServicio.obtenerCreditoFactura(ventasTipoPago.get(i).getCodigoFactura(), "Proceso");
                     //System.out.println("Credito"+creditoTemporal);
                     if (creditoTemporal != null) {
+                        creditoTemporal.setAbonoVentaCreditoList(facturaServicio.obtenerAbonosCredito(creditoTemporal.getCodigoFacturaCredito()));
+                        System.out.println("Credito" + creditoTemporal.toString());
+                        System.out.println("Abonos" + creditoTemporal.getAbonoVentaCreditoList().toString());
                         creditoFacturaObtenidos.add(creditoTemporal);
                     }
                 }
@@ -69,11 +108,70 @@ public class gestionarAbonoMB implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
 
-        }else{
-            
+        } else {
+
         }
     }
 
+    public void onRowSelect(SelectEvent event) {
+        System.out.println("Entro");
+        mostrarAbono = true;
+        nuevoAbono = new AbonoVentaCredito();
+        bandera = 0;
+
+    }
+
+    public void onRowUnSelect(SelectEvent event) {
+        mostrarAbono = false;
+    }
+
+    public void onRowSelectCliente(SelectEvent event) {
+        System.out.println("En sleccion");
+        mostrarAbono = false;
+        //clienteEncontrado = clienteSeleccionado;
+        clienteSeleccionado = (Cliente) event.getObject();
+        codigoBuscar = clienteSeleccionado.getCedulaRuc();
+        //System.out.println(campoBuscar);
+        buscarDatos();
+    }
+
+    public void onRowUnSelectCliente(SelectEvent event) {
+        System.out.println("deseleccionando ...");
+    }
+
+    public void guardarAbono() {
+        System.out.println("Guardar Abono");
+        nuevoAbono.setCodigoFacturaCredito(creditoFacturaSeleccionada);
+        nuevoAbono.setFecha(new Date());
+        nuevoAbono.setCodigoAbono(0);
+        System.out.println("Abono" + nuevoAbono.toString());
+        facturaServicio.guardarAbono(nuevoAbono);
+        buscarDatos();
+        System.out.println("Lista " + facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
+        creditoFacturaSeleccionada.setAbonoVentaCreditoList(facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
+        RequestContext.getCurrentInstance().execute("PF('dlgNuevoAbono').hide()");
+
+    }
+
+    public BigDecimal sumarAbonos() {
+        List<AbonoVentaCredito> listaAbonos = new ArrayList<AbonoVentaCredito>();
+        listaAbonos = creditoFacturaSeleccionada.getAbonoVentaCreditoList();
+        BigDecimal sumaAbono = new BigDecimal("0.0");
+        for (AbonoVentaCredito listaAbono : listaAbonos) {
+            sumaAbono = sumaAbono.add(listaAbono.getCantidad());
+        }
+        return sumaAbono;
+
+    }
+    public void imprimir(){
+        System.out.println("imprimir");
+    }
+
+    /**
+     * Getter and Setter
+     *
+     * @return
+     */
     public String getCampoBuscar() {
         return campoBuscar;
     }
@@ -113,7 +211,61 @@ public class gestionarAbonoMB implements Serializable {
     public void setVentasTipoPago(List<Venta> ventasTipoPago) {
         this.ventasTipoPago = ventasTipoPago;
     }
-    
-    
-    
+
+    public CreditoFactura getCreditoFacturaSeleccionada() {
+        return creditoFacturaSeleccionada;
+    }
+
+    public void setCreditoFacturaSeleccionada(CreditoFactura creditoFacturaSeleccionada) {
+        this.creditoFacturaSeleccionada = creditoFacturaSeleccionada;
+    }
+
+    public AbonoVentaCredito getAbonoVentaSeleccionada() {
+        return abonoVentaSeleccionada;
+    }
+
+    public void setAbonoVentaSeleccionada(AbonoVentaCredito abonoVentaSeleccionada) {
+        this.abonoVentaSeleccionada = abonoVentaSeleccionada;
+    }
+
+    public Boolean getMostrarAbono() {
+        return mostrarAbono;
+    }
+
+    public void setMostrarAbono(Boolean mostrarAbono) {
+        this.mostrarAbono = mostrarAbono;
+    }
+
+    public AbonoVentaCredito getNuevoAbono() {
+        return nuevoAbono;
+    }
+
+    public void setNuevoAbono(AbonoVentaCredito nuevoAbono) {
+        this.nuevoAbono = nuevoAbono;
+    }
+
+    public List<Cliente> getClientesLista() {
+        return clientesLista;
+    }
+
+    public void setClientesLista(List<Cliente> clientesLista) {
+        this.clientesLista = clientesLista;
+    }
+
+    public Cliente getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(Cliente clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+
+    public Boolean getMostrarBotonBuscar() {
+        return mostrarBotonBuscar;
+    }
+
+    public void setMostrarBotonBuscar(Boolean mostrarBotonBuscar) {
+        this.mostrarBotonBuscar = mostrarBotonBuscar;
+    }
+
 }

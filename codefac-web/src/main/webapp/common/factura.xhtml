@@ -539,7 +539,8 @@ and open the template in the editor.
                          selection="#{facturaMB.detallesOrdenSeleccionadas}" 
                          rowKey="#{detallesOrden.idDetalleOrdenTrabajo}"
                          style="margin-bottom:0"
-                         rowStyleClass="#{detallesOrden.estado eq 'facturado'?'filaVerde':null}">
+                         rowStyleClass="#{detallesOrden.estado eq 'facturado'?'filaVerde':null}"
+                         disabledSelection="#{detallesOrden.estado eq 'facturado'?'true':'false'}">
                 <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
                 <p:column headerText="Código" >
                     <h:outputText value="#{detallesOrden.idDetalleOrdenTrabajo}" />

@@ -14,25 +14,29 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        <p:panel id="panelFactura" header="Abonos" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
+        <p:panel id="panelFactura" header="Gestionar Créditos" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
 
             <div style="text-align: center">
-                <h:form>
+                <h:form id="form">
                     <p:growl id="msgs" showDetail="true" />
                     <p:panelGrid columns="4" styleClass="panelNoBorder" style="margin-bottom:10px;margin-left: 30%">
                         <p:selectOneMenu value="#{gestionarAbonoMB.campoBuscar}">
-                            <f:selectItem itemLabel="N Factura" itemValue="Factura" />
                             <f:selectItem itemLabel="Cédula/Ruc" itemValue="Cliente"/>
+                            <f:selectItem itemLabel="N Factura" itemValue="Factura" />
                             <p:ajax event="change" listener="#{gestionarAbonoMB.escojerFiltro()}" update="@form"/>
                         </p:selectOneMenu>
                         <p:inputText value="#{gestionarAbonoMB.codigoBuscar}" 
-                                     placeholder="#{gestionarAbonoMB.placeHolder}" id="codigoBuscar" required="true"/>
+                                     placeholder="#{gestionarAbonoMB.placeHolder}" 
+                                     id="codigoBuscar" required="true"
+                                     onkeypress="return validarEnter(event, 'btnBuscarCliente');"/>
+                        <p:remoteCommand name="btnBuscarCliente" actionListener="#{gestionarAbonoMB.buscarDatos()}" update=":form,:deudas,:frmAbonos"/>
 
-                        <p:commandButton icon="fa fa-search"  styleClass="btn_verde"  
-                                         title="Buscar en la Base de Datos"
-                                         actionListener="#{gestionarAbonoMB.buscarDatos()}"
-                                         update=":deudas:tableDeudas"/>
-
+                        <p:commandButton  id="btnBuscarCli" icon="fa fa-search"  
+                                          styleClass="btn_verde"  
+                                          title="Buscar un Cliente en la Base de Datos" 
+                                          oncomplete="PF('overLayBuscarCliente').loadContents()"
+                                          update=":deudas"
+                                          rendered="#{gestionarAbonoMB.mostrarBotonBuscar}"/>  
                     </p:panelGrid>    
 
 
@@ -43,7 +47,13 @@ and open the template in the editor.
                 <p:panel header="Deudas Cliente" styleClass="titleBarVerde panelNoBorder" style="width: 100%" >
                     <h:form id="deudas">
                         <p:dataTable var="deudas" value="#{gestionarAbonoMB.creditoFacturaObtenidos}"
-                                     id="tableDeudas">
+                                     id="tableDeudas"
+                                     rowKey="#{deudas.codigoFacturaCredito}"
+                                     selectionMode="single"
+                                     selection="#{gestionarAbonoMB.creditoFacturaSeleccionada}"
+                                     emptyMessage="El Cliente no registra facturas a Crédito">
+                            <p:ajax event="rowSelect" listener="#{gestionarAbonoMB.onRowSelect(event)}" update=":frmAbonos"/>
+                            <p:ajax event="rowUnselect" listener="#{gestionarAbonoMB.onRowUnSelect(event)}"/>
                             <p:column headerText="Factura N "  >
                                 <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
                             </p:column>
@@ -66,13 +76,138 @@ and open the template in the editor.
                             <p:column headerText="Deuda"  >
                                 <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
                             </p:column>
+
                         </p:dataTable>
                     </h:form> 
                 </p:panel>
                 <p:separator/>
 
+                <h:form id="frmAbonos">
+                    <p:panel header="Detalle Abonos"  styleClass="titleBarVerde panelNoBorder" style="width: 100%" 
+                             rendered="#{gestionarAbonoMB.mostrarAbono}" id="panelAbonos">
+                        <p:panel header="Deuda Total #{gestionarAbonoMB.creditoFacturaSeleccionada.codigoFactura.total}"
+                                 styleClass="titleBarMint panelNoBorder" style="width: 100%">
 
+                            <p:dataTable var="abono" value="#{gestionarAbonoMB.creditoFacturaSeleccionada.abonoVentaCreditoList}"
+                                         id="tableAbonos"
+                                         rowKey="#{abono.codigoAbono}"
+                                         selection="#{gestionarAbonoMB.abonoVentaSeleccionada}"
+                                         emptyMessage="No existen Abonos Registrados" rowIndexVar="fila">
+                                <p:column headerText="Código"  >
+                                    <h:outputText value="#{abono.codigoAbono}" />
+                                </p:column>
+                                <p:column headerText="Fecha"  >
+                                    <h:outputText value="#{abono.fecha}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Cantiddad"  >
+                                    <h:outputText value="#{abono.cantidad}" />
+                                </p:column>
+                                <p:column headerText="Descripción"  >
+                                    <h:outputText value="#{abono.descripcion}" />
+                                </p:column>
+                                <p:column headerText="Saldo"  >
+                                    <h:outputText style="color: #ff0000" value="#{abono.codigoFacturaCredito.codigoFactura.total-gestionarAbonoMB.obtenerSaldoAnterior(fila)}" />
+                                </p:column>
+                                <p:column headerText="Acciones">
+                                    <p:commandButton
+                                        title="Imprimir"
+                                        styleClass="btn_mint"
+                                        icon="fa fa-print"                                
+                                        actionListener="#{gestionarAbonoMB.imprimir()}">
+                                        <p:confirm header="Confirmar" message="Estas seguro que quieres anular la orden de trabajo !los cambios son irreversibles!?" icon="ui-icon-alert" />
+                                    </p:commandButton> 
+                                </p:column>
+                                <f:facet name="footer" >                               
+                                    <p:commandButton id="btnNuevoAbono" styleClass="btn_azul" icon="fa fa-plus-circle" onclick="PF('dlgNuevoAbono').show();" title="Agregar Abono" />  
+                                    <p:commandButton id="btnEditarAbono" styleClass="btn_tomate" icon="fa fa-pencil"  title="Editar Abono"/>                          
+                                </f:facet>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:panel> 
+                </h:form>
+                <p:separator/>                
             </div>  
         </p:panel>
+
+        <!-- Dialago para mostrar Agregar Editar Abono  -->
+        <h:form id="frmNuevoAbono">
+            <p:dialog widgetVar="dlgNuevoAbono" 
+                      modal="true"
+                      header="Deuda total #{gestionarAbonoMB.creditoFacturaSeleccionada.codigoFactura.total}"
+                      minHeight="30" 
+                      id="dlgNuevoAbono"
+                      showEffect="fade" hideEffect="explode">
+                <p:messages id="msgsAbono"/>
+                <p:panelGrid columns="3">
+                    <p:panel styleClass="panelNoBorder">
+                        <i class="fa fa-money" aria-hidden="true"></i>
+                        <p:outputLabel for="cantidadAbono"  value=" Cantidad"  />
+                    </p:panel>
+                    <p:inputText id="cantidadAbono" required="true" 
+                                 requiredMessage="Se requiere la cantidad" 
+                                 validatorMessage="Debe ser un numero entero positivo"
+                                 converterMessage="Campo incorrecto" 
+                                 value="#{gestionarAbonoMB.nuevoAbono.cantidad}">
+                        <p:clientValidator event="keyup"/>
+                    </p:inputText>
+                    <p:message for="cantidadAbono" display="icon"/>
+
+                    <p:panel styleClass="panelNoBorder">
+                        <i class="fa fa-sticky-note" aria-hidden="true"></i>
+                        <p:outputLabel for="descripcionAbono"  value=" Descripción"  />
+                    </p:panel>
+                    <p:inputText id="descripcionAbono" value="#{gestionarAbonoMB.nuevoAbono.descripcion}"/>
+                    <p:outputLabel value=""/>
+                </p:panelGrid>
+                <p:separator/>
+                <f:facet name="footer">
+                    <div style="text-align: center">
+                        <p:commandButton
+                            styleClass="ui-botonAzul"
+                            validateClient="true"
+                            value="Aceptar" 
+                            icon="ui-icon-disk"
+                            actionListener="#{gestionarAbonoMB.guardarAbono()}"
+                            update="msgsAbono,:deudas,:frmAbonos"/>
+
+                        <p:commandButton
+                            styleClass="ui-botonRojo"
+                            immediate="true"   
+                            value="Cancelar" 
+                            icon="ui-icon-cancel" 
+                            onclick="PF('dlgNuevoAbono').hide();"/>                        
+                    </div>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+
+        <p:overlayPanel widgetVar="overLayBuscarCliente"  for=":form:btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
+            <h:form>
+                <p:dataTable var="cliente" 
+                             value="#{gestionarAbonoMB.clientesLista}"
+                             rows="10"
+                             selectionMode="single" 
+                             scrollable="true"
+                             selection="#{gestionarAbonoMB.clienteSeleccionado}"
+                             rowKey="#{cliente.cedulaRuc}"
+                             scrollHeight="200">
+
+
+                    <p:ajax event="rowSelect" listener="#{gestionarAbonoMB.onRowSelectCliente}" update=":form,:deudas,:frmAbonos" />       
+                    <p:ajax event="rowUnselect" listener="#{gestionarAbonoMB.onRowUnSelectCliente}"/>
+
+                    <p:column headerText="Cédula/RUC" filterBy="#{cliente.cedulaRuc}" >
+                        <h:outputText value="#{cliente.cedulaRuc}" />
+                    </p:column>
+                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                        <h:outputText value="#{cliente.nombre}" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:overlayPanel>
+
     </ui:define>
 </ui:composition>
