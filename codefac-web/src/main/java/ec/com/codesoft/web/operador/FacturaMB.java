@@ -299,16 +299,12 @@ public class FacturaMB {
 
         }
 
-        //habilitarDEescuento Manual
-        System.out.println("Sesion" + sesion);
-//        System.out.println("Usuario Login "+sesion.getUsuarioLogin());
-//        System.out.println("PerfilBuscado "+ sesion.getPerfilBuscado().getTipo());
-//        
         if (sesion.getPerfilBuscado().getTipo().equals("admin")) {
             mostrarDescuentoManual = true;
         } else {
             mostrarDescuentoManual = false;
         }
+        //verificarUsuario();
 
         //variable correo
         estadoCorreo = true;
@@ -323,6 +319,23 @@ public class FacturaMB {
     /**
      * **************************************************PostConstuct**********************************************************************
      */
+    public String verificarUsuario() {
+        //habilitarDEescuento Manual
+        //System.out.println("Sesion" + sesion);
+        if (sesion.getPerfilBuscado() != null) {
+            System.out.println("Si hay login");
+            if (sesion.getPerfilBuscado().getTipo().equals("admin")) {
+                mostrarDescuentoManual = true;
+            } else {
+                mostrarDescuentoManual = false;
+            }
+        } else {
+            System.out.println("no hay login");
+            return "login";
+        }
+        return null;
+    }
+
     public void cambiarEstadoCorreo() {
         if (estadoCorreo == true) {
             estadoCorreo = true;
@@ -1328,6 +1341,8 @@ public class FacturaMB {
 
             }
         }
+        cantidadComprar = 1;
+        codPEspe = "";
         // }
     }
 

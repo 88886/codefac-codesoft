@@ -252,6 +252,16 @@
             <from-outcome>reporteVenta</from-outcome>
             <to-view-id>/admin/venta/reporte/reporteVenta.xhtml</to-view-id>
         </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>respaldo</from-outcome>
+            <to-view-id>/admin/backup/backup.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>gestionarAbonos</from-outcome>
+            <to-view-id>/admin/venta/gestionarAbono.xhtml</to-view-id>
+        </navigation-case>
 
                 
     </navigation-rule>

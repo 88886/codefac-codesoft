@@ -17,6 +17,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /*
@@ -46,6 +48,9 @@ public class gestionarAbonoMB implements Serializable {
     private Cliente clienteSeleccionado;
     private Boolean mostrarBotonBuscar;
     Integer bandera;
+    private Boolean enNnuevo;
+    private Boolean enEditar;
+    Boolean activarEditar;
 
     @EJB
     private FacturaServicio facturaServicio;
@@ -61,6 +66,9 @@ public class gestionarAbonoMB implements Serializable {
         clientesLista = clienteServicio.obtenerTodos();
         mostrarAbono = false;
         mostrarBotonBuscar = true;
+        enNnuevo = true;
+        enEditar = false;
+        activarEditar=true;
     }
 
     public void escojerFiltro() {
@@ -76,11 +84,11 @@ public class gestionarAbonoMB implements Serializable {
 
     public BigDecimal obtenerSaldoAnterior(Integer fila) {
 
-        List<AbonoVentaCredito> abonoTem=new ArrayList<AbonoVentaCredito>();
-        abonoTem=creditoFacturaSeleccionada.getAbonoVentaCreditoList();
-        BigDecimal saldoAnterior=new BigDecimal("0.0");
+        List<AbonoVentaCredito> abonoTem = new ArrayList<AbonoVentaCredito>();
+        abonoTem = creditoFacturaSeleccionada.getAbonoVentaCreditoList();
+        BigDecimal saldoAnterior = new BigDecimal("0.0");
         for (int i = 0; i <= fila; i++) {
-            saldoAnterior=saldoAnterior.add(abonoTem.get(i).getCantidad());
+            saldoAnterior = saldoAnterior.add(abonoTem.get(i).getCantidad());
         }
         return saldoAnterior;
     }
@@ -139,18 +147,56 @@ public class gestionarAbonoMB implements Serializable {
         System.out.println("deseleccionando ...");
     }
 
-    public void guardarAbono() {
-        System.out.println("Guardar Abono");
-        nuevoAbono.setCodigoFacturaCredito(creditoFacturaSeleccionada);
-        nuevoAbono.setFecha(new Date());
-        nuevoAbono.setCodigoAbono(0);
-        System.out.println("Abono" + nuevoAbono.toString());
-        facturaServicio.guardarAbono(nuevoAbono);
-        buscarDatos();
-        System.out.println("Lista " + facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
-        creditoFacturaSeleccionada.setAbonoVentaCreditoList(facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
-        RequestContext.getCurrentInstance().execute("PF('dlgNuevoAbono').hide()");
+    public void onRowSelectAbono(SelectEvent event) {
+        System.out.println("EntroAbono");
+        enNnuevo=false;
+        activarEditar=false;
+        System.out.println(abonoVentaSeleccionada.toString());
+        nuevoAbono=abonoVentaSeleccionada;
 
+    }
+    
+
+    public void onRowUnSelectAbono(SelectEvent event) {
+        System.out.println("deseleccionando ...");
+        enNnuevo=true;
+    }
+    
+    public void activarEditar(){
+        enNnuevo=false;
+        System.out.println("Entro Editar");
+    }
+    public void activarNuevo(){
+        enNnuevo=true;
+        System.out.println("Entro Nuevo");
+    }
+
+    public void guardarAbono() {
+
+        if (enNnuevo) {
+            System.out.println("Guardar Abono");
+            nuevoAbono.setCodigoFacturaCredito(creditoFacturaSeleccionada);
+            nuevoAbono.setFecha(new Date());
+            nuevoAbono.setCodigoAbono(0);
+            System.out.println("Abono" + nuevoAbono.toString());
+            facturaServicio.guardarAbono(nuevoAbono);
+            buscarDatos();
+            System.out.println("Lista " + facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
+            creditoFacturaSeleccionada.setAbonoVentaCreditoList(facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
+            RequestContext.getCurrentInstance().execute("PF('dlgNuevoAbono').hide()");
+            nuevoAbono=new AbonoVentaCredito();
+        }else{
+            facturaServicio.editarAbono(nuevoAbono);
+            RequestContext.getCurrentInstance().execute("PF('dlgNuevoAbono').hide()");
+            nuevoAbono=new AbonoVentaCredito();
+        }
+    }
+    
+    public void eliminarAbono(AbonoVentaCredito abonoEliminar){
+        facturaServicio.eliminarAbono(abonoEliminar);
+        creditoFacturaSeleccionada.getAbonoVentaCreditoList().remove(abonoEliminar);
+        buscarDatos();
+        
     }
 
     public BigDecimal sumarAbonos() {
@@ -163,8 +209,34 @@ public class gestionarAbonoMB implements Serializable {
         return sumaAbono;
 
     }
-    public void imprimir(){
+
+    public void imprimir() {
         System.out.println("imprimir");
+    }
+
+    /**
+     * editar las celdas de la tabla abono
+     *
+     * @param event
+     */
+    public void onRowEdit(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Abono Editado", ((AbonoVentaCredito) event.getObject()).getCodigoAbono().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edición Cancelada", ((AbonoVentaCredito) event.getObject()).getCodigoAbono().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+
+        if (newValue != null && !newValue.equals(oldValue)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dato cambiado", "Aniguo: " + oldValue + ", Nuevo:" + newValue);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     /**
@@ -267,5 +339,14 @@ public class gestionarAbonoMB implements Serializable {
     public void setMostrarBotonBuscar(Boolean mostrarBotonBuscar) {
         this.mostrarBotonBuscar = mostrarBotonBuscar;
     }
+
+    public Boolean getActivarEditar() {
+        return activarEditar;
+    }
+
+    public void setActivarEditar(Boolean activarEditar) {
+        this.activarEditar = activarEditar;
+    }
+    
 
 }

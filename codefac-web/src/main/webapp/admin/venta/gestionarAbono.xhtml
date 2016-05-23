@@ -29,7 +29,7 @@ and open the template in the editor.
                                      placeholder="#{gestionarAbonoMB.placeHolder}" 
                                      id="codigoBuscar" required="true"
                                      onkeypress="return validarEnter(event, 'btnBuscarCliente');"/>
-                        <p:remoteCommand name="btnBuscarCliente" actionListener="#{gestionarAbonoMB.buscarDatos()}" update=":form,:deudas,:frmAbonos"/>
+                        <p:remoteCommand name="btnBuscarCliente" actionListener="#{gestionarAbonoMB.buscarDatos()}" update=":form,:deudas,:frmAbonos,msgs"/>
 
                         <p:commandButton  id="btnBuscarCli" icon="fa fa-search"  
                                           styleClass="btn_verde"  
@@ -54,10 +54,10 @@ and open the template in the editor.
                                      emptyMessage="El Cliente no registra facturas a Crédito">
                             <p:ajax event="rowSelect" listener="#{gestionarAbonoMB.onRowSelect(event)}" update=":frmAbonos"/>
                             <p:ajax event="rowUnselect" listener="#{gestionarAbonoMB.onRowUnSelect(event)}"/>
-                            <p:column headerText="Factura N "  >
+                            <p:column headerText="Factura N " style="width: 60px">
                                 <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
                             </p:column>
-                            <p:column headerText="Fecha Inicio">
+                            <p:column headerText="Fecha Inicio" >
                                 <h:outputText value="#{deudas.fechaInicio}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText>
@@ -67,13 +67,13 @@ and open the template in the editor.
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Abono"  >
+                            <p:column headerText="Abono" style="width: 60px"  >
                                 <h:outputText value="#{deudas.toStringAbonos()}" />
                             </p:column>
-                            <p:column headerText="Total"  >
+                            <p:column headerText="Total" style="width: 60px"  >
                                 <h:outputText value="#{deudas.codigoFactura.total}" />
                             </p:column>
-                            <p:column headerText="Deuda"  >
+                            <p:column headerText="Deuda" style="width: 60px" >
                                 <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
                             </p:column>
 
@@ -85,14 +85,18 @@ and open the template in the editor.
                 <h:form id="frmAbonos">
                     <p:panel header="Detalle Abonos"  styleClass="titleBarVerde panelNoBorder" style="width: 100%" 
                              rendered="#{gestionarAbonoMB.mostrarAbono}" id="panelAbonos">
-                        <p:panel header="Deuda Total #{gestionarAbonoMB.creditoFacturaSeleccionada.codigoFactura.total}"
+                        <p:panel header="Deuda Total #{gestionarAbonoMB.creditoFacturaSeleccionada.codigoFactura.total} -- AbonoTotal #{gestionarAbonoMB.sumarAbonos()}"
                                  styleClass="titleBarMint panelNoBorder" style="width: 100%">
 
                             <p:dataTable var="abono" value="#{gestionarAbonoMB.creditoFacturaSeleccionada.abonoVentaCreditoList}"
                                          id="tableAbonos"
                                          rowKey="#{abono.codigoAbono}"
+                                         selectionMode="single"
                                          selection="#{gestionarAbonoMB.abonoVentaSeleccionada}"
                                          emptyMessage="No existen Abonos Registrados" rowIndexVar="fila">
+                                <p:ajax event="rowSelect" listener="#{gestionarAbonoMB.onRowSelectAbono(event)}"  update=":frmAbonos,:deudas,:frmNuevoAbono"/>
+                                <p:ajax event="rowUnselect" listener="#{gestionarAbonoMB.onRowUnSelectAbono(event)}"/>
+
                                 <p:column headerText="Código"  >
                                     <h:outputText value="#{abono.codigoAbono}" />
                                 </p:column>
@@ -101,7 +105,7 @@ and open the template in the editor.
                                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                     </h:outputText>
                                 </p:column>
-                                <p:column headerText="Cantiddad"  >
+                                <p:column headerText="Cantidad"  >
                                     <h:outputText value="#{abono.cantidad}" />
                                 </p:column>
                                 <p:column headerText="Descripción"  >
@@ -116,12 +120,19 @@ and open the template in the editor.
                                         styleClass="btn_mint"
                                         icon="fa fa-print"                                
                                         actionListener="#{gestionarAbonoMB.imprimir()}">
-                                        <p:confirm header="Confirmar" message="Estas seguro que quieres anular la orden de trabajo !los cambios son irreversibles!?" icon="ui-icon-alert" />
-                                    </p:commandButton> 
+                                    </p:commandButton>
+                                    <p:commandButton
+                                        title="Eliminar"
+                                        styleClass="btn_tomate"
+                                        icon="fa fa-trash"                                
+                                        actionListener="#{gestionarAbonoMB.eliminarAbono(abono)}" 
+                                        update="deudas,:frmAbonos">
+                                        <p:confirm header="Confirmar" message="Seguro quieres quitar el Abono?" icon="ui-icon-alert"/>
+                                    </p:commandButton>
                                 </p:column>
                                 <f:facet name="footer" >                               
-                                    <p:commandButton id="btnNuevoAbono" styleClass="btn_azul" icon="fa fa-plus-circle" onclick="PF('dlgNuevoAbono').show();" title="Agregar Abono" />  
-                                    <p:commandButton id="btnEditarAbono" styleClass="btn_tomate" icon="fa fa-pencil"  title="Editar Abono"/>                          
+                                    <p:commandButton id="btnNuevoAbono" styleClass="btn_azul" icon="fa fa-plus-circle" onclick="PF('dlgNuevoAbono').show();" action="#{gestionarAbonoMB.activarNuevo()}" title="Agregar Abono" />  
+                                    <p:commandButton id="btnEditarAbono" styleClass="btn_tomate" icon="fa fa-pencil"  onclick="PF('dlgNuevoAbono').show();" action="#{gestionarAbonoMB.activarEditar()}" title="Editar Abono" disabled="#{gestionarAbonoMB.activarEditar}"/>                          
                                 </f:facet>
                             </p:dataTable>
                         </p:panel>
@@ -208,6 +219,19 @@ and open the template in the editor.
                 </p:dataTable>
             </h:form>
         </p:overlayPanel>
+
+        <!--Dialogo Confirmacion-->
+        <h:form>
+            <p:confirmDialog 
+                global="true" 
+                showEffect="fade" 
+                hideEffect="explode">
+                <div style="text-align: center">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" update=":deudas,:frmAbonos" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </div>
+            </p:confirmDialog>
+        </h:form>
 
     </ui:define>
 </ui:composition>

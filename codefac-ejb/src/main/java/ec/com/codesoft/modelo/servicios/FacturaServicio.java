@@ -43,7 +43,7 @@ import javax.ejb.TransactionAttributeType;
 @LocalBean
 @Stateless
 public class FacturaServicio {
-    
+
     @EJB
     CompraFacade compraFacade;
 
@@ -52,7 +52,7 @@ public class FacturaServicio {
 
     @EJB
     ProductoGeneralCompraFacade productoGeneralFacade;
-    
+
     @EJB
     ProductoGeneralVentaFacade productoGeneralVentaFacade;
 
@@ -64,30 +64,30 @@ public class FacturaServicio {
 
     @EJB
     VentaFacade ventaFacade;
-    
+
     @EJB
     InteresesFacade interesFacade;
-    
+
     @EJB
     BancoFacade bancofacade;
-    
+
     @EJB
     DetalleVentaOrdenTrabajoFacade detalleVentaOrdenTrabajoFacade;
-    
+
     @EJB
     DetalleOrdenTrabajoFacade detalleOrdenFacade;
-    
+
     @EJB
     CreditoFacturaFacade creditoFacturaFacade;
-    
+
     @EJB
-    AbonoVentaCreditoFacade abonoVentaCreditoFacade ;
-    
-    
+    AbonoVentaCreditoFacade abonoVentaCreditoFacade;
+
     /**
      * Busca los productos con especifico y devuelve la cantidad disponible
+     *
      * @param codP
-     * @return 
+     * @return
      */
     public int devolverStockIndividual(String codP) {
         return (productoIndividualFacade.findStockIndividual(codP).intValue());
@@ -95,8 +95,9 @@ public class FacturaServicio {
 
     /**
      * Busca los producto con codigo general y devuelve la cantidad disponible
+     *
      * @param codP
-     * @return 
+     * @return
      */
     public ProductoGeneralVenta devolverStockGeneral(String codP) {
 
@@ -109,15 +110,14 @@ public class FacturaServicio {
             detalleIndividualFacade.create(detalles.get(i));
         }
     }
-    
+
     /**
      * Insertar detalleIndividual Venta Diaria
      */
-     public void insertarDetalleProductoIndividual(DetalleProductoIndividual detalle) {
+    public void insertarDetalleProductoIndividual(DetalleProductoIndividual detalle) {
 
-        
-            detalleIndividualFacade.create(detalle);
-        
+        detalleIndividualFacade.create(detalle);
+
     }
 
     public void insertarDetallesFacturaProductoGeneral(List<DetalleProductoGeneral> detalles) {
@@ -126,76 +126,61 @@ public class FacturaServicio {
             detalleGeneralFacade.create(detalles.get(i));
         }
     }
-    
+
     /**
      * Insertar detalleIndividual Venta Diaria
      */
     public void insertarDetalleFacturaProductoGeneral(DetalleProductoGeneral detalle) {
 
+        detalleGeneralFacade.create(detalle);
 
-            detalleGeneralFacade.create(detalle);
-        
     }
-    
-    public void editarVentaDiaria(Venta venta){
+
+    public void editarVentaDiaria(Venta venta) {
         ventaFacade.edit(venta);
     }
-    
-    
-    
+
     public void insertarDetallesVentaOrdenTrabajo(List<DetalleVentaOrdenTrabajo> detalles) {
 
         for (int i = 0; i < detalles.size(); i++) {
             detalleVentaOrdenTrabajoFacade.create(detalles.get(i));
         }
     }
-    
-    
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void anularVenta(Venta venta)
-    {
-        venta.setEstado("anulado");        
+    public void anularVenta(Venta venta) {
+        venta.setEstado("anulado");
         ventaFacade.edit(venta);
-        
-        List<DetalleProductoGeneral> listaGeneral=venta.getDetalleProductoGeneralList();
-        for (DetalleProductoGeneral detalle : listaGeneral) 
-        {
-            ProductoGeneralVenta productoGeneralVenta=detalle.getCodigoProducto().getProductoGeneralVenta();
-            productoGeneralVenta.addStock(detalle.getCantidad());   
+
+        List<DetalleProductoGeneral> listaGeneral = venta.getDetalleProductoGeneralList();
+        for (DetalleProductoGeneral detalle : listaGeneral) {
+            ProductoGeneralVenta productoGeneralVenta = detalle.getCodigoProducto().getProductoGeneralVenta();
+            productoGeneralVenta.addStock(detalle.getCantidad());
             productoGeneralVentaFacade.edit(productoGeneralVenta);
-           
+
         }
-        
-        List<DetalleProductoIndividual> listaEspecifico=venta.getDetalleProductoIndividualList();
-        
-        for (DetalleProductoIndividual detalle : listaEspecifico) 
-        {
-            ProductoIndividualCompra productoIndividual=detalle.getProductoIndividualCompra();
+
+        List<DetalleProductoIndividual> listaEspecifico = venta.getDetalleProductoIndividualList();
+
+        for (DetalleProductoIndividual detalle : listaEspecifico) {
+            ProductoIndividualCompra productoIndividual = detalle.getProductoIndividualCompra();
             productoIndividualFacade.edit(productoIndividual);
-            
+
         }
-        
-        
-        
-        
+
     }
-    
+
     /**
      * Busca la factura por el codigo principal
      */
-    public Venta buscarVentaById(Integer id)
-    {
+    public Venta buscarVentaById(Integer id) {
         return ventaFacade.find(id);
     }
-    
+
     ///////////////////////METODOS GET AND SET
-
   //  public int obtenerProductoIndivudualCantidad(String codP) {
-
       //  return detalleIndividualFacade.findProductosIndividualCantidad(cantidad, codP);
-        
    // }
-
     public ProductoIndividualCompra devolverIndividualCod(String cod, String codCat) {
         return productoIndividualFacade.findProdIndividual(cod, codCat);
     }
@@ -204,134 +189,136 @@ public class FacturaServicio {
 
         ventaFacade.create(venta);
     }
-    
-    public void actulizarStockGeneral(ProductoGeneralVenta productoGeneral){
+
+    public void actulizarStockGeneral(ProductoGeneralVenta productoGeneral) {
         productoGeneralVentaFacade.edit(productoGeneral);
     }
-    
-    public void actulizarStocIndividual(ProductoIndividualCompra prodIndividual){
-       
+
+    public void actulizarStocIndividual(ProductoIndividualCompra prodIndividual) {
+
         productoIndividualFacade.edit(prodIndividual);
     }
-    
-    public ProductoIndividualCompra devolverProductoIndividual(String codUnico){
-        
+
+    public ProductoIndividualCompra devolverProductoIndividual(String codUnico) {
+
         return productoIndividualFacade.findProdIndividualCodUnico(codUnico);
     }
-    
-    
+
     /**
      * Obtiene todas las ventas realizadas
-     * @return 
+     *
+     * @return
      */
-    public List<Venta> obtenerVentas()
-    {
+    public List<Venta> obtenerVentas() {
         return ventaFacade.getVentas();
         //return ventaFacade.findAll();
     }
-    
+
     /**
      * Obtiene el codigo de la siguiente factura
-     * @return 
+     *
+     * @return
      */
-    public Integer getCodigoFactura(String tipo)
-    {
-        if(tipo.equals("Factura"))
-        {
-            Integer codigo=ventaFacade.getCodigoUltimaFactura();
-            if(codigo==null)
+    public Integer getCodigoFactura(String tipo) {
+        if (tipo.equals("Factura")) {
+            Integer codigo = ventaFacade.getCodigoUltimaFactura();
+            if (codigo == null) {
                 return 1;
-            else            
-                return codigo+1;          
-            
+            } else {
+                return codigo + 1;
+            }
+
         }
-        
-        if(tipo.equals("Nota"))
-        {
-            Integer codigo=ventaFacade.getCodigoUltimaNota();
-            if(codigo==null)
+
+        if (tipo.equals("Nota")) {
+            Integer codigo = ventaFacade.getCodigoUltimaNota();
+            if (codigo == null) {
                 return 1;
-            else            
-                return codigo+1;          
-            
+            } else {
+                return codigo + 1;
+            }
+
         }
-        
+
         return 0;
-        
-        
+
     }
-    
+
     /**
      * Busca una factura segun el numero del documento de la venta
-     * @return 
+     *
+     * @return
      */
-    public Venta buscarPorCodigoDocumento(Integer codigo)
-    {
+    public Venta buscarPorCodigoDocumento(Integer codigo) {
         return ventaFacade.findCodigoDocumento(codigo);
     }
-    
-    public List<Intereses> devolverIntereses(){
+
+    public List<Intereses> devolverIntereses() {
         return interesFacade.findAll();
-    } 
-    
-    public List<Banco> devolverBancos(){
+    }
+
+    public List<Banco> devolverBancos() {
         return bancofacade.findAll();
-    } 
-    public Banco devolverInteresBanco(String nombre){
+    }
+
+    public Banco devolverInteresBanco(String nombre) {
         return bancofacade.findInteresesBanco(nombre);
     }
-    
-    
-    public Venta devolverDetallesVentasDiarias(String fecha){
-        
+
+    public Venta devolverDetallesVentasDiarias(String fecha) {
+
         return ventaFacade.findFacturaVentasDiariasFecha(fecha);
     }
-    
-    public List<DetalleProductoGeneral> devolverVentaDiariaDetallesGeneral(int cod){
+
+    public List<DetalleProductoGeneral> devolverVentaDiariaDetallesGeneral(int cod) {
         return ventaFacade.findFDetalleGeneralVentasDiariasCod(cod);
     }
-    
-    public List<DetalleProductoIndividual> devolverVentaDiariaDetallesIndividual(int cod){
+
+    public List<DetalleProductoIndividual> devolverVentaDiariaDetallesIndividual(int cod) {
         return ventaFacade.findFDetalleIndividualVentasDiariasCod(cod);
     }
-    
-     public List<DetalleVentaOrdenTrabajo> devolverVentaDiariaDetallesOrdenTrabajo(int cod){
+
+    public List<DetalleVentaOrdenTrabajo> devolverVentaDiariaDetallesOrdenTrabajo(int cod) {
         return ventaFacade.findFDetalleOrdenTrabajoCod(cod);
     }
-    
-    
-    public List<Venta> devolverVentasIntervalo(String fecha1, String fecha2){
-        
+
+    public List<Venta> devolverVentasIntervalo(String fecha1, String fecha2) {
+
         return ventaFacade.findVentasIntervalo(fecha1, fecha2);
     }
-    
-    public void actualizarDetalleOrden(DetalleOrdenTrabajo detalle){
+
+    public void actualizarDetalleOrden(DetalleOrdenTrabajo detalle) {
         detalleOrdenFacade.edit(detalle);
     }
-    
-    public void guardarCreditoFactura(CreditoFactura credito){
+
+    public void guardarCreditoFactura(CreditoFactura credito) {
         creditoFacturaFacade.create(credito);
     }
-    
-    public void guardarAbonos(AbonoVentaCredito abono){
+
+    public void guardarAbonos(AbonoVentaCredito abono) {
         abonoVentaCreditoFacade.create(abono);
-    } 
-    
-    public List<Venta> obtenerVentaTipo(String cedula, String tipoPago){
+    }
+
+    public List<Venta> obtenerVentaTipo(String cedula, String tipoPago) {
         return ventaFacade.findVentaTipo(cedula, tipoPago);
     }
-    
-    public CreditoFactura obtenerCreditoFactura(Integer codFactura,String estado){
+
+    public CreditoFactura obtenerCreditoFactura(Integer codFactura, String estado) {
         return ventaFacade.findCreditoFactura(codFactura, estado);
     }
-    
-    public void guardarAbono(AbonoVentaCredito abono){
+
+    public void guardarAbono(AbonoVentaCredito abono) {
         abonoVentaCreditoFacade.create(abono);
     }
-     public List<AbonoVentaCredito> obtenerAbonosCredito(Integer codigo){
+
+    public List<AbonoVentaCredito> obtenerAbonosCredito(Integer codigo) {
         return ventaFacade.findAbonoCredito(codigo);
-     }
-     
-    
-    
+    }
+    public void editarAbono(AbonoVentaCredito abono){
+        abonoVentaCreditoFacade.edit(abono);
+    }
+    public void eliminarAbono(AbonoVentaCredito abono){
+        abonoVentaCreditoFacade.remove(abono);
+    }
+
 }

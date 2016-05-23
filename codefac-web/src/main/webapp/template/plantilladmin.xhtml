@@ -16,6 +16,7 @@ and open the template in the editor.
 
         <h:outputStylesheet library="css" name="estiloUsuario.css"/>
         <h:outputScript name="validacionesJS.js" library="js" target="form"/>
+        <h:outputScript name="descarga.js" library="js" target="form"/>
     </h:head>
     <h:body>
         <div id="cabecera">
@@ -35,54 +36,56 @@ and open the template in the editor.
             <h:form id="menu" >
                 <p:growl id="messages"/>
                 <p:menubar>
-                    <p:submenu label="Clientes" icon="ui-icon-pencil">
-                        <p:menuitem value="Gestionar" outcome="cliente"  icon="ui-icon-arrowreturnthick-1-e"/>
-                        <p:menuitem value="Buscar" outcome="buscarCliente" icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:menuitem value="Reportes" outcome="reporteCliente" icon="ui-icon-arrowreturnthick-1-e" />
+                    <p:submenu label="Clientes" icon="fa fa-user">
+                        <p:menuitem value="Gestionar" outcome="cliente"  icon="fa fa-pencil-square-o"/>
+                        <p:menuitem value="Buscar" outcome="buscarCliente" icon="fa fa-search" />
+                        <p:menuitem value="Reportes" outcome="reporteCliente" icon="fa fa-pie-chart" />
                     </p:submenu>
 
-                    <p:submenu label="Distribuidores" icon="ui-icon-pencil">
-                        <p:menuitem value="Gestionar" outcome="distribuidor"  icon="ui-icon-arrowreturnthick-1-e" />
+                    <p:submenu label="Distribuidores" icon="fa fa-truck">
+                        <p:menuitem value="Gestionar" outcome="distribuidor"  icon="fa fa-pencil-square-o" />
                     </p:submenu>
 
-                    <p:submenu label="Productos" icon="ui-icon-pencil">
-                        <p:menuitem value="Gestionar" outcome="productoGestion" icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:menuitem value="Agregar Inventario" outcome="editarInventario" icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:menuitem value="Combos" outcome="gestionarCombo"  icon="ui-icon-arrowreturnthick-1-e"/>
-                        <p:menuitem value="Reportes" outcome="reporteCatalogo"  icon="ui-icon-arrowreturnthick-1-e" />
+                    <p:submenu label="Productos" icon="fa fa-shopping-basket">
+                        <p:menuitem value="Gestionar" outcome="productoGestion" icon="fa fa-pencil-square-o" />
+                        <p:menuitem value="Agregar Inventario" outcome="editarInventario" icon="fa fa-plus-square" />
+                        <p:menuitem value="Combos" outcome="gestionarCombo"  icon="fa fa-archive"/>
+                        <p:menuitem value="Reportes" outcome="reporteCatalogo"  icon="fa fa-pie-chart" />
                     </p:submenu>
 
-                    <p:submenu label="Compras" icon="ui-icon-pencil">
-                        <p:menuitem value="Nuevo" outcome="compraAdmin"  icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:menuitem value="Gestionar" outcome="gestionarCompra"  icon="ui-icon-arrowreturnthick-1-e" />
+                    <p:submenu label="Compras" icon="fa fa-shopping-cart">
+                        <p:menuitem value="Nuevo" outcome="compraAdmin"  icon="fa fa-plus-square" />
+                        <p:menuitem value="Gestionar" outcome="gestionarCompra"  icon="fa fa-pencil-square-o" />
                     </p:submenu>
 
-                    <p:submenu label="Factura" icon="ui-icon-pencil" >
-                        <p:menuitem value="Nuevo" outcome="facturaAdmin"  icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:menuitem value="Devolucion" outcome="notaCredito"  icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:menuitem value="Gestionar" outcome="gestionarVenta"  icon="ui-icon-arrowreturnthick-1-e" />
+                    <p:submenu label="Factura" icon="fa fa-sticky-note" >
+                        <p:menuitem value="Nueva" outcome="facturaAdmin"  icon="fa fa-plus-square" />
+                        <p:menuitem value="Devolución" outcome="notaCredito"  icon="fa fa-undo" />
+                        <p:menuitem value="Gestionar Facturas" outcome="gestionarVenta"  icon="fa fa-pencil-square-o" />
+                        <p:menuitem value="Gestionar Créditos" outcome="gestionarAbonos"  icon="fa fa-money" />
                     </p:submenu>
 
-                    <p:submenu label="Orden Trabajo" icon="ui-icon-pencil">
-                        <p:menuitem value="Nuevo" outcome="ordenTrabajo"  icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:menuitem value="Gestionar" outcome="gestionarOrdenTrabajo"  icon="ui-icon-arrowreturnthick-1-w" />
+                    <p:submenu label="Orden Trabajo" icon="fa fa-sticky-note">
+                        <p:menuitem value="Nueva" outcome="ordenTrabajo"  icon="fa fa-plus-square" />
+                        <p:menuitem value="Gestionar" outcome="gestionarOrdenTrabajo"  icon="fa fa-pencil-square-o" />
 
                     </p:submenu>
 
-                    <p:submenu label="Proforma" icon="ui-icon-pencil">
-                        <p:menuitem value="Nueva" outcome="proformaAdmn"  icon="ui-icon-arrowreturnthick-1-e" />
+                    <p:submenu label="Proforma" icon="fa fa-sticky-note">
+                        <p:menuitem value="Nueva" outcome="proformaAdmn"  icon="fa fa-plus-square" />
                     </p:submenu>
 
-                    <p:submenu label="Reportes" icon="ui-icon-note">
-                        <p:menuitem value="Ventas Diarias" outcome="reporteVenta"  icon="ui-icon-arrowreturnthick-1-e" />
-
+                    <p:submenu label="Reportes" icon="fa fa-pie-chart">
+                        <p:menuitem value="Ventas Diarias" outcome="reporteVenta"  icon="fa fa-line-chart" />
                     </p:submenu>
-                    
-                    <p:menuitem value="Configuración" icon=" ui-icon-gear" outcome="configuracion"/>
 
+                    <p:submenu label="Configuración" icon="fa fa-cogs">
+                        <p:menuitem value="General" icon="fa fa-sliders" outcome="configuracion"/>
+                        <p:menuitem value="Respaldos" icon="fa fa-dropbox" outcome="respaldo"/>
+                    </p:submenu>
                     <f:facet name="options">
                         <p:inputText style="margin-right:10px" placeholder="Search"/>
-                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="ui-icon-extlink" />
+                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="fa fa-sign-out" />
                     </f:facet>
                 </p:menubar>
             </h:form>
@@ -137,7 +140,7 @@ and open the template in the editor.
                                 style="width: 140px;background-color:darkslategray ;color: white" 
                                 value="#{calcuUtilMB.textoCalculadora}" >                               
                             </p:inputTextarea>
-                            
+
                             <p:remoteCommand name="evaluarCalcuJS" actionListener="#{calcuUtilMB.evaluar()}" update="idResultadoCalcu" />
                             <p:inputText id="idResultadoCalcu" style="width: 140px;background-color:darkslategray ;color: white;text-align: right" value="#{calcuUtilMB.resultado}" />
                         </h:panelGrid>
@@ -430,7 +433,8 @@ and open the template in the editor.
         <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFacturaVentas" modal="true" >
             <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
                 <h:form style="margin: 0 auto" target="_blank">
-                    <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();PF('dlgDetallesVentasDiariasFactura').hide()" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
+                    <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();
+                            PF('dlgDetallesVentasDiariasFactura').hide()" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
                 </h:form>
                 <h:form>
                     <p:commandButton onclick="PF('confirmarFacturaVentas').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>

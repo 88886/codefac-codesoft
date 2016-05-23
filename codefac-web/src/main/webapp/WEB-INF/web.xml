@@ -31,17 +31,22 @@
     
     <session-config>
         <session-timeout>
-            7200
+            60
         </session-timeout>
     </session-config>
     
     <welcome-file-list>
         <welcome-file>login.xhtml</welcome-file>
     </welcome-file-list>
-    
+        
     <error-page>
         <error-code>404</error-code>
         <location>/errorPage/paginaNoEncontrada.xhtml</location>
     </error-page>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/login.xhtml</location>
+    </error-page>
+   
 
 </web-app>

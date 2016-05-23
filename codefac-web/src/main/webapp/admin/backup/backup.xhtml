@@ -19,12 +19,37 @@ and open the template in the editor.
 
 
         <div style="text-align: center">
-            <h:form>
-                <p:outputLabel value="#{backupMB.lblMessage}"/>
-                <p:separator/>
-                <p:commandButton value="copiar" actionListener="#{backupMB.backup()}" update="@form"/>
+            <h:form> 
+                <p:panel header="Respaldo de la Base de Datos" style="width:60%;margin: 0 auto" styleClass="customTitleBar">
+                    <p:fieldset legend="Respaldo DB">
+                        <h:outputText style="resize: none" value="En este apartado puede realizar el respaldo de la Base de Datos del Sistema Codefac, 
+                                      La ubicación del archivo de Respaldo es la especificada por el Administrador,
+                                      Si presenta algun inconveniente comuníquese con el Administrador del Sistema"/>
+                    </p:fieldset>
+                    <p:separator/>
+                </p:panel>
+
+                <p:spacer/>
+                <p:commandButton value="Obtener Respaldos" 
+                                 actionListener="#{backupMB.descargar()}" 
+                                 update="@form"
+                                 styleClass="ui-botonAzul"
+                                 icon="fa fa-dropbox"
+                                 ajax="false"
+                                 onclick="PrimeFaces.monitorDownload(start, stop);">
+                    <p:fileDownload value="#{backupMB.file}" />
+                </p:commandButton>
+                <p:spacer/>
+                <p:panel header="Detalles" style="width:60%;margin: 0 auto"  styleClass="titleBarVerde panelNoBorder" >                 
+                    <p:outputLabel value="#{backupMB.lblMessage}" style="font-weight: bold"/>
+                </p:panel>
             </h:form>
+
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                <p:graphicImage library="image" name="/util/waitIcon.gif" />
+            </p:dialog>
         </div>
 
     </ui:define>
 </ui:composition>
+

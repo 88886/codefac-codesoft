@@ -14,53 +14,55 @@ and open the template in the editor.
 
 
     <ui:define name="contenido" >
-        <h:form>
-            <p:panel id="panelVentas" style="z-index: 0" header="R E P O R T E -- V E N T A S  --> #{reporteVenta.devolverFechaActual()}">
-                <p:spacer/>
-                <p:dataTable
-                    style="height: 100%"
-                    id="tablaVentas"
-                    var="venta" 
-                    value="#{reporteVenta.ventas}"
-                    scrollable="true" 
-                    rowKey="#{venta.codigoFactura}"
-                    widgetVar="tableVenta">
+        <p:panel id="panelVentas" styleClass="customTitleBar panelNoBorder" style="width: 70%;margin: 0 auto" header="Facturas  #{reporteVenta.devolverFechaActual()}">
+            <div style="width: 100%;text-align: center">                
+                <h:form>
+                    <p:dataTable
+                        id="tablaVentas"
+                        var="venta" 
+                        value="#{reporteVenta.ventas}"
+                        scrollable="true" 
+                        rowKey="#{venta.codigoFactura}"
+                        widgetVar="tableVenta">
 
 
-                    <f:facet name="header">
-                        <p:outputPanel>
-                            <h:outputText value="Buscar por todos los campos: " />
-                            <p:inputText id="globalFilter" onkeyup="PF('tableVenta').filter()" style="width:150px" placeholder="Ingrese el texto:"/>
-                        </p:outputPanel>
-                    </f:facet>
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Buscar por todos los campos: " />
+                                <p:inputText id="globalFilter" onkeyup="PF('tableVenta').filter()" style="width:150px" placeholder="Ingrese el texto:"/>
+                            </p:outputPanel>
+                        </f:facet>
 
-                    <p:column headerText="Código Factura " filterBy="#{venta.codigoFactura}" filterMatchMode="contains" >
-                        <h:outputText value="#{venta.codigoFactura}" />
-                    </p:column>
-                    <p:column headerText="Cliente " filterBy="#{venta.cedulaRuc.nombre}" filterFunction="#{clienteMB.filterByName}" filterMatchMode="contains" style="width:350px" >
-                        <h:outputText value="#{venta.cedulaRuc.nombre}"   />
-                    </p:column>
-                    <p:column headerText="Hora " >
-                        <h:outputText value="#{venta.fecha.hours} : #{venta.fecha.minutes}" />
-                    </p:column>
-                    <p:column headerText="Tipo " >
-                        <h:outputText value="#{venta.tipoDocumento}" />
-                    </p:column>
+                        <p:column headerText="Código Factura " filterBy="#{venta.codigoFactura}" filterMatchMode="contains" >
+                            <h:outputText value="#{venta.codigoFactura}" />
+                        </p:column>
+                        <p:column headerText="Cliente " filterBy="#{venta.cedulaRuc.nombre}" filterFunction="#{clienteMB.filterByName}" filterMatchMode="contains" style="width:350px" >
+                            <h:outputText value="#{venta.cedulaRuc.nombre}"   />
+                        </p:column>
+                        <p:column headerText="Hora " >
+                            <h:outputText value="#{venta.fecha.hours} : #{venta.fecha.minutes}" />
+                        </p:column>
+                        <p:column headerText="Tipo " >
+                            <h:outputText value="#{venta.tipoDocumento}" />
+                        </p:column>
 
-                    <p:column headerText="Total " >
-                        <h:outputText value="#{calculosMB.redondeoSuperior(venta.total)}" />
-                    </p:column>
-                </p:dataTable>
-            </p:panel>
-            <p:spacer/>
-            <p:separator/>
-            <p:spacer/>
-            <p:panel style="width: 70%;text-align: left;margin: 0 auto;" >
-                <p:chart type="line" model="#{reporteVenta.lineModel}" style="height:300px;"/>
+                        <p:column headerText="Total " >
+                            <h:outputText value="#{calculosMB.redondeoSuperior(venta.total)}" />
+                        </p:column>
+                    </p:dataTable>
 
-            </p:panel>
-            <p:commandButton styleClass="ui-botonCeleste" value="HOla"/>
-        </h:form>     
+
+
+                    <p:separator/>
+
+                    <p:panel style="width: 70%;text-align: left;margin: 0 auto;" header="Reporte" styleClass="titleBarMint panelNoBorder">
+                        <p:chart type="line" model="#{reporteVenta.lineModel}" style="height:300px;"/>
+                    </p:panel>
+
+                </h:form> 
+            </div>
+        </p:panel>
+
     </ui:define>
 
 </ui:composition>
