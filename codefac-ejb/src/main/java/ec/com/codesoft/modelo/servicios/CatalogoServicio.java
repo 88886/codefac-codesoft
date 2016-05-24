@@ -104,5 +104,11 @@ public class CatalogoServicio {
     {
         return productoGCFacade.listaCostosProductoGeneral(codigo);
     }
+    
+    public List<CatalagoProducto> obtenerProductosDistribuidor(String codDistribuidor){
+        return productoGCFacade.obtenerProductosDistribuidor(codDistribuidor);
+    }
+    
+    
 
 }
