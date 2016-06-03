@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h:form id="form">
+            <p:panel id="panelFactura" header="Productos por Distribuidor" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
+                <div style="text-align: center">
+                    <ui:repeat value="#{reporteDistribuidorMB.distribuidores}" 
+                               var="distribuidor" id="tablaDescargar">
+
+                        <p:panel style="width:100%" styleClass="titleBarVerde panelNoBorder">
+                            <p:outputLabel value="#{distribuidor.nombre}" style="font-weight: bold;color: #0000ff"/>
+                        </p:panel>
+                        <p:panel style="width: 100%;text-align: left">
+                            <p:dataTable  
+                                value="#{reporteDistribuidorMB.devolverProductos(distribuidor)}" 
+                                var="productos"
+                                rows="5"
+                                rowKey="#{productos.codigoProducto}"
+                                id="tablaProductos">
+
+                                <p:column headerText="Distribuidor">
+                                    <p:outputLabel value="#{distribuidor.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Código">
+                                    <p:outputLabel value="#{productos.codigoProducto}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{productos.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <p:outputLabel value="#{productos.precio}"/>
+                                </p:column>
+                                <p:column headerText="Descripción">
+                                    <p:outputLabel value="#{productos.descripcion}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <div style="text-align: center">
+                                <h:commandLink>
+                                    <p:graphicImage height="20px" width="20px" name="/img/iconos/excel_icono.png" />
+                                    <p:dataExporter type="xls" target="tablaProductos" fileName="distribuidores" pageOnly="true"/>
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage height="20px" width="20px" name="/img/iconos/pdf_icono.png" />
+                                    <p:dataExporter type="pdf" target="tablaProductos" fileName="distribuidores" pageOnly="true" />
+                                </h:commandLink>
+                            </div>
+                            <p:separator/>
+                        </p:panel>
+                    </ui:repeat>
+                </div>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

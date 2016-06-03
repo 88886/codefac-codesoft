@@ -5,11 +5,10 @@
  */
 package ec.com.codesoft.modelo.facade;
 
+import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -71,6 +70,20 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             }
 
             return lista;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+    public List<CatalagoProducto> obtenerProductosDistribuidor(String codigo){
+        try {
+            //String queryString = "SELECT p FROM ProductoGeneralVenta p where p.codigoProducto='"+codP+"'";
+            String queryString = "SELECT c FROM CatalagoProducto c WHERE c.codigoDistribuidor=?1";
+            Query query = em.createQuery(queryString);
+//            System.out.println(queryString);
+            query.setParameter(1, codigo);
+            List<CatalagoProducto> catalogo = (List<CatalagoProducto>) query.getResultList();
+            return catalogo;
         } catch (NoResultException e) {
             return null;
         }

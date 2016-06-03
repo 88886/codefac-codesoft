@@ -449,6 +449,10 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         //catalogoSeleccionado = new CatalagoProducto();
 
     }
+    
+    public void onRowUnSelect(SelectEvent event){
+        
+    }
 
     public void venta() {
         System.out.println(cantidadComprar + "--" + stock);

@@ -213,59 +213,61 @@ and open the template in the editor.
         <!-- Dialogo de las Ventas -->
         <p:dialog  widgetVar="dlgVentas"
                    minHeight="40"
-                   width="300px" 
-                   style="font-size:12px;background-color: #ffff99;background-image: none;padding: 0px;margin: 0px" 
+                   width="500px" 
+                   style="font-size:12px;padding: 0px;margin: 0px" 
                    header="Ventas Diarias">
             <h:form id="formCompraV">
-                <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;font-size: 10px">
-                    <p:dataTable var="catalogo" value="#{ventasDiariasMB.catalogosLista}"
-                                 rows="10"
-                                 selectionMode="single" 
-                                 scrollable="true" 
-                                 scrollHeight="100"  
-                                 rowKey="#{catalogo.codigoProducto}"
-                                 selection="#{ventasDiariasMB.catalogoSeleccionado}">
-                        <p:ajax event="rowSelect" listener="#{ventasDiariasMB.onRowSelect(event)}" update=":formGeneralV,:formEspecificoV"/>
-                        <p:ajax event="rowUnselect" listener="#{ventasDiariasMB.onRowUnSelect(event)}"/>
 
-                        <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                            <h:outputText value="#{catalogo.codigoProducto}" />
-                        </p:column>
-                        <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                            <h:outputText value="#{catalogo.nombre}" />
-                        </p:column>
-                        <p:column headerText="Precio">
-                            <h:outputText value="#{catalogo.precio}" />
-                        </p:column>
-                    </p:dataTable>
-                </p:panelGrid>
+                <p:dataTable var="catalogo" value="#{ventasDiariasMB.catalogosLista}"
+                             rows="10"
+                             selectionMode="single" 
+                             scrollable="true" 
+                             scrollHeight="100"  
+                             rowKey="#{catalogo.codigoProducto}"
+                             selection="#{ventasDiariasMB.catalogoSeleccionado}">
+                    <p:ajax event="rowSelect" listener="#{ventasDiariasMB.onRowSelect(event)}" update=":formGeneralV,:formEspecificoV"/>
+                    <p:ajax event="rowUnselect" listener="#{ventasDiariasMB.onRowUnSelect(event)}"/>
+
+                    <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                        <h:outputText value="#{catalogo.codigoProducto}" />
+                    </p:column>
+                    <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                        <h:outputText value="#{catalogo.nombre}" />
+                    </p:column>
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{catalogo.precio}" />
+                    </p:column>
+                </p:dataTable>
+
             </h:form>
 
-            <p:dialog  id="dlgInformacion" header="Ingrese la Cantidad" widgetVar="infProducto" height="auto">
+            <p:dialog  id="dlgInformacionV" header="Ingrese la Cantidad" widgetVar="infProducto" height="auto">
                 <h:form id="formGeneralV">
                     <h:panelGrid columns="5" styleClass="panelNoBorder" >
                         <p:outputLabel  value="Stock : #{ventasDiariasMB.stock}"/>
                         <p:inputText id="cantidadP" value="#{ventasDiariasMB.cantidadComprar}" required="true" />
-                        <p:commandButton  icon="ui-icon-plusthick" 
+                        <p:commandButton  icon="fa fa-plus-square"
+                                          styleClass="btn_azul" 
                                           actionListener="#{ventasDiariasMB.venta()}" ajax="true" update=":formGeneralV,:formDetallesV,:formDetallesVentas:idDetallesFactura,:formDetallesVentasFactura:idDetallesFacturaFactura,:formDetallesVentas:panelTotales"/>
                         <p:outputLabel value="#{ventasDiariasMB.msjStock}" style="color: darkred"/>
-                        <p:commandButton icon="ui-icon-close" onclick="PF('dlgInformacion').hide()" style="background-image: none;background-color: indianred" />
+                        
                     </h:panelGrid>
                 </h:form>
             </p:dialog>
 
 
 
-            <p:dialog  id="dlgInformacionE" header="Agregar Código Único" widgetVar="infProductoE" height="auto">
+            <p:dialog  id="dlgInformacionVE" header="Agregar Código Único" widgetVar="infProductoE" height="auto">
                 <h:form id="formEspecificoV">
                     <h:panelGrid columns="6" styleClass="panelNoBorder" >
                         <p:outputLabel  value="Código Único : "/>
                         <p:inputText id="codPEspec" value="#{ventasDiariasMB.codPEspe}" required="true"/>
-                        <p:commandButton  icon="ui-icon-plusthick" 
+                        <p:commandButton  icon="fa fa-plus-square"
+                                          styleClass="btn_azul" 
                                           actionListener="#{ventasDiariasMB.venta()}" ajax="false" />
                         <p:outputLabel  value="#{ventasDiariasMB.msjCodUnico}" style="color: darkred"/>
                         <p:message for="codPEspec" />
-                        <p:commandButton icon="ui-icon-close" onclick="PF('dlgInformacionE').hide()" />
+                        <p:commandButton icon="fa fa-times" styleClass="btn_tomate" onclick="PF('dlgInformacionVE').hide()" />
                     </h:panelGrid>
                 </h:form>
             </p:dialog>
@@ -286,11 +288,11 @@ and open the template in the editor.
                 <h:panelGrid columns="2" styleClass="panelNoBorder" cellpadding="0" cellspacing="1" style="background-color: white">
                     <h:panelGrid columns="2" cellpadding="1" cellspacing="0">
                         <f:facet name="header">
-                            <p:commandButton icon="ui-icon-plusthick" style="width: 100%;height: 35px" onclick="PF('dlgVentas').show();"  />
+                            <p:commandButton styleClass="btn_verde" title="Agregar Productos" icon="fa fa-plus-square" style="width: 100%;height: 35px" onclick="PF('dlgVentas').show();"  />
                         </f:facet>
 
-                        <p:commandButton icon="ui-icon-clipboard" style="background-image: none;background-color: #009966;height: 30px" onclick="PF('dlgDetallesVentasDiariasFactura').show();"/>
-                        <p:commandButton icon="ui-icon-search" style="background-image: none;background-color: tomato;height: 30px" onclick="PF('dlgDetallesVentasDiarias').show();" />
+                        <p:commandButton icon="fa fa-sticky-note-o" title="Facturar Ventas Diarias" styleClass="btn_tomate" style="background-image: none;background-color: #009966;height: 30px" onclick="PF('dlgDetallesVentasDiariasFactura').show();"/>
+                        <p:commandButton icon="fa fa-search" title="Detalles Ventas Diarias" styleClass="btn_mint" style="background-image: none;background-color: tomato;height: 30px" onclick="PF('dlgDetallesVentasDiarias').show();" />
 
                     </h:panelGrid>
 
@@ -330,7 +332,7 @@ and open the template in the editor.
                                  scrollable="true" 
                                  scrollHeight="150"> 
 
-                        <p:column headerText="Cantidad" style="text-align: left;width:50px">
+                        <p:column headerText="Cantidad" style="text-align: left;width:70px">
                             <h:outputText value="#{detallesVenta.cantidad}" />
                         </p:column>
                         <p:column headerText="Código" style="text-align: left">
@@ -349,19 +351,19 @@ and open the template in the editor.
 
                     <p:spacer/>
 
-                    <h:panelGrid  id="panelTotales" columns="2" style="margin-left:60%;" styleClass="panelNoBorder">
-                        <p:outputLabel  value="Subtotal:"/>
-                        <h:outputText id="subTotal" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" />
+                    <h:panelGrid  id="panelTotales" columns="2" style="margin-left:80%;" styleClass="panelNoBorder">
+                        <p:outputLabel  value="Subtotal:" style="font-weight: bold"/>
+                        <p:outputLabel id="subTotal" style="font-weight: bold" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" />
 
-                        <p:outputLabel  value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
-                        <h:outputText id="iva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}" />
+                        <p:outputLabel  style="font-weight: bold" value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
+                        <p:outputLabel style="font-weight: bold" id="iva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}" />
 
-                        <p:outputLabel  value="Total + Iva : "/>
-                        <h:outputText id="totalIva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}"/>
+                        <p:outputLabel style="font-weight: bold" value="Total + Iva : "/>
+                        <p:outputLabel style="font-weight: bold" id="totalIva" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}"/>
 
 
-                        <p:outputLabel  value="Total a Pagar : "/>
-                        <h:outputText id="totalPagar" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.totalPagar)}"/>
+                        <p:outputLabel  style="font-weight: bold" value="Total a Pagar : "/>
+                        <p:outputLabel  style="font-weight: bold" id="totalPagar" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.totalPagar)}"/>
                     </h:panelGrid>
                 </p:panel>
 
@@ -386,45 +388,45 @@ and open the template in the editor.
                                  scrollable="true" 
                                  scrollHeight="150"> 
 
-                        <p:column headerText="Cantidad" style="text-align: left;width:50px">
-                            <h:outputText value="#{detallesVenta.cantidad}" />
+                        <p:column headerText="Cantidad" style="text-align: left;width:70px">
+                            <p:outputLabel  value="#{detallesVenta.cantidad}" />
                         </p:column>
                         <p:column headerText="Código" style="text-align: left">
-                            <h:outputText value="#{detallesVenta.codigo}" />
+                            <p:outputLabel  value="#{detallesVenta.codigo}" />
                         </p:column>
                         <p:column headerText="Descripción" style="text-align: left">
-                            <h:outputText value="#{detallesVenta.nombre}" />
+                            <p:outputLabel  value="#{detallesVenta.nombre}" />
                         </p:column>
                         <p:column headerText="P. Unitario" style="text-align: left;width:50px" id="descuentoIndividual">
-                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
+                            <p:outputLabel  value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
                         </p:column>
                         <p:column headerText="Total" style="text-align: left;width:50px" id="totalDescuento">
-                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
+                            <p:outputLabel  value="#{calculosMB.redondeoInferior(detallesVenta.total)}" />
                         </p:column>
                     </p:dataTable>
 
                     <p:spacer/>
 
-                    <h:panelGrid  id="panelTotalesFactura" columns="2" style="margin-left:60%;" styleClass="panelNoBorder">
-                        <p:outputLabel  value="Subtotal:"/>
-                        <h:outputText id="subTotalFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" />
+                    <h:panelGrid  id="panelTotalesFactura" columns="2" style="margin-left:80%;" styleClass="panelNoBorder">
+                        <p:outputLabel style="font-weight: bold" value="Subtotal:"/>
+                        <p:outputLabel  style="font-weight: bold" id="subTotalFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.subtotal)}" />
 
-                        <p:outputLabel  value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
-                        <h:outputText id="ivaFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}" />
+                        <p:outputLabel  style="font-weight: bold"  value="Iva #{ventasDiariasMB.ivaMostrar.intValue()}%:"/>
+                        <p:outputLabel style="font-weight: bold" id="ivaFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.iva)}" />
 
-                        <p:outputLabel  value="Total + Iva : "/>
-                        <h:outputText id="totalIvaFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}"/>
+                        <p:outputLabel style="font-weight: bold"  value="Total + Iva : "/>
+                        <p:outputLabel style="font-weight: bold" id="totalIvaFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.total)}"/>
 
 
-                        <p:outputLabel  value="Total a Pagar : "/>
-                        <h:outputText id="totalPagarFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.totalPagar)}"/>
+                        <p:outputLabel style="font-weight: bold" value="Total a Pagar : "/>
+                        <p:outputLabel style="font-weight: bold" id="totalPagarFactura" value="#{calculosMB.redondeoSuperior(ventasDiariasMB.totalPagar)}"/>
                     </h:panelGrid>
                 </p:panel>
 
 
                 <p:panelGrid columns="3" style="margin: 0 auto;">
-                    <p:commandButton  partialSubmit="true" value="F A C T U R A R" style="background-image: none;background-color: darkorange " onclick="PF('confirmarFacturaVentas').show();" />
-                    <p:commandButton value="C A N C E L A R" style="background-image: none;background-color: brown" onclick="PF('dlgDetallesVentasDiariasFactura').hide()" ajax="false"/>                    
+                    <p:commandButton title="Facturar"  value="Facturar" partialSubmit="true" icon="fa fa-money" styleClass="btn_azul" onclick="PF('confirmarFacturaVentas').show();" />
+                    <p:commandButton title="Cancelar"  value="Cancelar" icon="fa fa-times" styleClass="btn_tomate"  onclick="PF('dlgDetallesVentasDiariasFactura').hide()" ajax="false"/>                    
                 </p:panelGrid>
             </h:form>
         </p:dialog>
@@ -434,10 +436,11 @@ and open the template in the editor.
             <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
                 <h:form style="margin: 0 auto" target="_blank">
                     <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();
-                            PF('dlgDetallesVentasDiariasFactura').hide()" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
+                            PF('dlgDetallesVentasDiariasFactura').hide()" icon="fa fa-floppy-o"
+                             styleClass="btn_azul"  actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
                 </h:form>
                 <h:form>
-                    <p:commandButton onclick="PF('confirmarFacturaVentas').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>
+                    <p:commandButton onclick="PF('confirmarFacturaVentas').hide();" value="Cancelar" icon="fa fa-ban" styleClass="btn_rojo"/>
                 </h:form>
             </p:panelGrid>
         </p:dialog>

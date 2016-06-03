@@ -202,7 +202,6 @@ and open the template in the editor.
             </h:form>
             <h:form id="formCompra">
                 <p:panel id="idAgregar" styleClass="titleBarMint panelNoBorder" visible="true" header="Tipo de Detalle">
-                    <p:panelGrid columns="6" styleClass="panelNoBorder" style="width: 100%;margin-left: 5%">
                         <p:commandButton id="btnAgregarProd" value="Productos " title="Agregar Productos a la Factura" icon="fa fa-shopping-cart" styleClass="btn_mint" />  
                         <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
                             <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
@@ -278,7 +277,7 @@ and open the template in the editor.
                                 </p:column>
                             </p:dataTable>
                         </p:overlayPanel>
-                    </p:panelGrid>
+                    
                 </p:panel>
             </h:form>
 
@@ -296,7 +295,8 @@ and open the template in the editor.
                         </p:inputText>
                         <p:message for="cantidadP" display="icon" />
 
-                        <p:commandButton  icon="ui-icon-plusthick" 
+                        <p:commandButton  icon="fa fa-plus-square"
+                                          styleClass="btn_azul"
                                           validateClient="true"
                                           actionListener="#{facturaMB.venta()}" ajax="true" update="@form,
                                           :formDetalles:tablaDetallesFactura,
@@ -452,7 +452,8 @@ and open the template in the editor.
                     styleClass="btn_azul"
                     onstart="PF('statusEnvioCorreo').show()" 
                     onsuccess="PF('statusEnvioCorreo').hide()"
-                    actionListener="#{facturaMB.facturar()}"> 
+                    actionListener="#{facturaMB.facturar()}"
+                    title="Facturar"> 
                 </p:commandButton>
                 <p:commandButton onclick="PF('confirmarFactura').hide();" icon="fa fa-ban" styleClass="btn_rojo"/>
             </p:panelGrid>

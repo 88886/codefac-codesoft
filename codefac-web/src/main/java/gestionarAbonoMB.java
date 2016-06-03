@@ -184,6 +184,14 @@ public class gestionarAbonoMB implements Serializable {
             System.out.println("Lista " + facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
             creditoFacturaSeleccionada.setAbonoVentaCreditoList(facturaServicio.obtenerAbonosCredito(creditoFacturaSeleccionada.getCodigoFacturaCredito()));
             RequestContext.getCurrentInstance().execute("PF('dlgNuevoAbono').hide()");
+            System.out.println("Total "+creditoFacturaSeleccionada.getCodigoFactura().getTotal());
+            System.out.println("Sumar Abono"+ sumarAbonos());
+            if(creditoFacturaSeleccionada.getCodigoFactura().getTotal().compareTo(sumarAbonos())==1 ||creditoFacturaSeleccionada.getCodigoFactura().getTotal().equals(sumarAbonos())){
+                //editar el estado
+                creditoFacturaSeleccionada.setEstado("Completa");
+                facturaServicio.editarCredito(creditoFacturaSeleccionada);
+                System.out.println("Completo el credito");
+            }
             nuevoAbono=new AbonoVentaCredito();
         }else{
             facturaServicio.editarAbono(nuevoAbono);

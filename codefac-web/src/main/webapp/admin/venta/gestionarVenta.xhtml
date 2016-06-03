@@ -76,16 +76,18 @@ and open the template in the editor.
                             <p:outputLabel value="#{venta.total}"/>
                         </p:column>
 
-                        <p:column headerText="Acciones" style="width: 180px;" >
-                            <p:commandButton action="#{gestionarVentaMB.imprimir(venta)}" value="Imprimir" ajax="false" />
+                        <p:column headerText="Acciones" style="width: 120px;">
+                            <div style="text-align: center">
+                                <p:commandButton action="#{gestionarVentaMB.imprimir(venta)}" icon="fa fa-print" styleClass="btn_azul"  ajax="false" title="Imprimir" />
 
-                            <p:commandButton style="background-image: none;background-color: coral" value="Anular" actionListener="#{gestionarVentaMB.anular(venta)}" update="@form" disabled="#{venta.estado eq 'anulado'?'true':'false'}" >
-                                <p:confirm header="Confirmar" message="Estas seguro que quieres anular la factura !los cambios son irreversibles!?" icon="ui-icon-alert" />
-                            </p:commandButton> 
+                                <p:commandButton  icon="fa fa-exclamation-triangle" styleClass="btn_tomate" actionListener="#{gestionarVentaMB.anular(venta)}" update="@form" disabled="#{venta.estado eq 'anulado'?'true':'false'}" title="Anular" >
+                                    <p:confirm header="Confirmar" message="Estas seguro que quieres anular la factura !los cambios son irreversibles!?" icon="ui-icon-alert" />
+                                </p:commandButton> 
 
-                            <p:commandButton action="verVenta" icon="ui-icon-search" style="background-color: darkgreen;background-image: none" >
-                                <f:param name="id" value="#{venta.codigoFactura}" />
-                            </p:commandButton>
+                                <p:commandButton action="verVenta" icon="fa fa-search" styleClass="btn_mint" title="Buscar" >
+                                    <f:param name="id" value="#{venta.codigoFactura}" />
+                                </p:commandButton>
+                            </div>
                         </p:column>
 
 

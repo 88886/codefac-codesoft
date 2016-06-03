@@ -203,6 +203,9 @@ public class FacturaServicio {
 
         return productoIndividualFacade.findProdIndividualCodUnico(codUnico);
     }
+    public void editarCredito(CreditoFactura credito){
+        creditoFacturaFacade.edit(credito);
+    }
 
     /**
      * Obtiene todas las ventas realizadas

@@ -299,12 +299,12 @@ public class FacturaMB {
 
         }
 
-        if (sesion.getPerfilBuscado().getTipo().equals("admin")) {
-            mostrarDescuentoManual = true;
-        } else {
-            mostrarDescuentoManual = false;
-        }
-        //verificarUsuario();
+//        if (sesion.getPerfilBuscado().getTipo().equals("admin")) {
+//            mostrarDescuentoManual = true;
+//        } else {
+//            mostrarDescuentoManual = false;
+//        }
+        verificarUsuario();
 
         //variable correo
         estadoCorreo = true;
@@ -543,6 +543,7 @@ public class FacturaMB {
                     creditoTemporal = facturaServicio.obtenerCreditoFactura(ventasTipoPago.get(i).getCodigoFactura(), "Proceso");
                     //System.out.println("Credito"+creditoTemporal);
                     if (creditoTemporal != null) {
+                        creditoTemporal.setAbonoVentaCreditoList(facturaServicio.obtenerAbonosCredito(creditoTemporal.getCodigoFacturaCredito()));
                         creditoFacturaObtenidos.add(creditoTemporal);
                     }
                 }

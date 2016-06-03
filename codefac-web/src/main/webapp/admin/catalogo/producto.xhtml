@@ -240,9 +240,7 @@ and open the template in the editor.
                 <p:panel styleClass="panelNoBorder">
                     <p:panelGrid columns="6" styleClass="panelNoBorder">
                         <p:outputLabel for="txtCodigoCatalogo" value="Codigo: "/>
-                        <p:inputText id="txtCodigoCatalogo" value="#{gestionProductoMB.catalogoSeleccionado.codigoProducto}" required="">
-                            <p:clientValidator event="keyup"/>
-                        </p:inputText>
+                        <p:outputLabel id="txtCodigoCatalogo" value="#{gestionProductoMB.catalogoSeleccionado.codigoProducto}" style="font-weight: bold"/>
                         <p:message for="txtCodigoCatalogo" display="icon" />
 
                         <p:outputLabel value="Codigo Distribuidor: "/>

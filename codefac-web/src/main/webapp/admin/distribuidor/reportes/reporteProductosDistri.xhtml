@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h:form id="form">
+            <p:panel id="panelFactura" header="Productos por Distribuidor" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
+                <div style="text-align: center">
+                    <ui:repeat value="#{productoDistribuidorMB.distribuidores}" 
+                               var="distribuidor" id="tablaDescargar">
+
+                        <p:panel style="width:100%" styleClass="titleBarVerde panelNoBorder">
+                            <p:outputLabel value="#{distribuidor.nombre}" style="font-weight: bold;color: #0000ff"/>
+                        </p:panel>
+                    </ui:repeat>
+                </div>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

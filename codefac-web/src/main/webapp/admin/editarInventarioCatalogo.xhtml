@@ -56,26 +56,26 @@ and open the template in the editor.
                 <p:dialog modal="true" widgetVar="widInventario" header="Editar Inventario">
                     <p:panel styleClass="panelNoBorder">
                         <p:panelGrid columns="2">
-                            <p:outputLabel value="codigo"/>
-                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.codigoProducto}" />
+                            <p:outputLabel value="Código" style="font-weight: bold"/>
+                            <p:outputLabel value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.codigoProducto}" style="font-weight: bold"  />
 
-                            <p:outputLabel value="nombre"/>
-                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.nombre}" />
+                            <p:outputLabel value="Nombre" style="font-weight: bold"/>
+                            <p:outputLabel value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.nombre}" style="font-weight: bold" />
 
-                            <p:outputLabel value="descripcion"/>
-                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.descripcion}" />
+                            <p:outputLabel value="Descripción" style="font-weight: bold"/>
+                            <p:outputLabel value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.descripcion}" style="font-weight: bold" />
 
 
-                            <p:outputLabel value="stock"/>
-                            <p:inputText value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.productoGeneralVenta.cantidadDisponible}"/>                       
+                            <p:outputLabel value="Stock" style="font-weight: bold"/>
+                            <p:outputLabel value="#{inventarioCatalogoMB.catalogoProductoSeleccionado.productoGeneralVenta.cantidadDisponible}" style="font-weight: bold"/>                       
 
                         </p:panelGrid>
 
                         <p:separator/>
                         
                         <p:panelGrid columns="2">
-                            <p:commandButton value="Agregar" action="#{inventarioCatalogoMB.agregarCantidadProducto}" update="@form" />
-                            <p:inputText value="#{inventarioCatalogoMB.cantidad}"/>
+                            <p:commandButton style="font-weight: bold" value="Agregar" action="#{inventarioCatalogoMB.agregarCantidadProducto}" update="@form" />
+                            <p:inputText value="#{inventarioCatalogoMB.cantidad}" style="font-weight: bold"/>
                         </p:panelGrid>
                         
                     </p:panel>
