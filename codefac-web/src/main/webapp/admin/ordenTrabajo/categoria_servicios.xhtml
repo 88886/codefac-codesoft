@@ -29,8 +29,8 @@ and open the template in the editor.
 
                     <f:facet name="header" > 
                         <p:commandButton
-                            actionListener="#{categoriaServiciosMB.abrirNuevoCatalogo}"
-                            update="idNuevoCatalogo"
+                            actionListener="#{categoriaServiciosMB.abrirNuevoCatalogo()}"
+                            update=":idNuevoCatalogo"
                             title="Nuevo Servicio"
                             styleClass="btn_azul" 
                             icon="fa fa-plus-circle" />
@@ -69,7 +69,7 @@ and open the template in the editor.
 
                     <p:column headerText="Accion" style="width: 6%" >
                         <p:commandButton
-                            actionListener="#{catalogoServiciosMB.eliminar(servicio)}" 
+                            actionListener="#{categoriaServiciosMB.eliminar(servicio)}" 
                             update="@form"
                             style="font-size: 13px;padding: 0px"
                             ajax="true"
@@ -87,17 +87,28 @@ and open the template in the editor.
         </p:panel>
 
         <!-- Dialogo para crear un nuevo Catalogo -->
-        <p:dialog id="idNuevoCatalogo" widgetVar="widgetNuevoCatalogo" header="Nueva Categoria" modal="true" showEffect="explode" hideEffect="explode" >
-            <h:form>
-                <p:panel styleClass="panelNoBorder">
+        <p:dialog widgetVar="widgetNuevoCatalogo" header="Nueva Categoria" modal="true" showEffect="explode" hideEffect="explode" >
+            <h:form id="formNuevoCatalogo">
+                <p:panel styleClass="panelNoBorder" >
                     <p:messages id="msgNuevoCatalogo" />
-                    <p:panelGrid columns="6">
+                    <p:panelGrid columns="6" id="gridNuevoCatalogo">
 
                         <p:outputLabel value="Servicio:" />
-                        <p:selectOneMenu id="cmbServicio" value="#{categoriaServiciosMB.idServicioSeleccionado}" style="width:125px">
-                            <f:selectItem itemLabel="Seleccione un servicio" itemValue="" />
-                            <f:selectItems value="#{categoriaServiciosMB.serviciosList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.codigoServicio}" />
-                        </p:selectOneMenu>
+                        <p:panelGrid columns="2">
+                            <p:selectOneMenu id="cmbServicio" value="#{categoriaServiciosMB.idServicioSeleccionado}" style="width:125px">
+                                <f:selectItem itemLabel="Seleccione un servicio" itemValue="" />
+                                <f:selectItems value="#{categoriaServiciosMB.serviciosList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.codigoServicio}" />
+                            </p:selectOneMenu>
+                            <p:commandButton
+                                immediate="true"
+                                actionListener="#{categoriaServiciosMB.abrirNuevoServicio()}"
+                                value="valor"
+                                style="padding: 0px"
+                                title="Agregar nuevo servicio"
+                                styleClass="btn_verde"
+                                icon="fa fa-plus"/>
+                        </p:panelGrid>
+                        
                         <p:message for="cmbServicio" display="icon" />
 
                         <p:outputLabel value="Nombre:" />
@@ -139,7 +150,7 @@ and open the template in the editor.
                                 </p:commandButton>
 
                                 <p:commandButton
-                                    onclick="PF('widgetNuevoServicio').hide();"
+                                    onclick="PF('widgetNuevoCatalogo').hide();"
                                     immediate="true"
                                     icon="fa fa-ban"
                                     styleClass="btn_tomate"
@@ -154,34 +165,54 @@ and open the template in the editor.
         </p:dialog>
 
         <!-- Dialogo para editar los servicios -->
-        <p:dialog id="idEditarServicio" widgetVar="widgetEditarServicio"  header="Editar Servicio" modal="true" showEffect="explode" hideEffect="explode" >
+        <p:dialog id="idEditarServicio" widgetVar="widgetEditarServicio"  header="Editar Categoria" modal="true" showEffect="explode" hideEffect="explode" >
             <h:form>
                 <p:panel styleClass="panelNoBorder">
-                    <p:messages id="msgNuevoServicio" />
-                    <p:panelGrid columns="3">
+                    <p:messages id="msgNuevoCatalogo" />
+                    <p:panelGrid columns="6">
+
+                        <p:outputLabel value="Servicio:" />
+                        <p:selectOneMenu id="cmbServicio" value="#{categoriaServiciosMB.idServicioSeleccionado}"  style="width:125px">
+                            <f:selectItem itemLabel="Seleccione un servicio" itemValue="" />
+                            <f:selectItems value="#{categoriaServiciosMB.serviciosList}" var="categoria" itemLabel="#{categoria.nombre}" itemValue="#{categoria.codigoServicio}" />
+                        </p:selectOneMenu>
+                        <p:message for="cmbServicio" display="icon" />
+
                         <p:outputLabel value="Nombre:" />
-                        <p:inputText value="#{catalogoServiciosMB.servicioSeleccionado.nombre}" id="txtNombre" required="true" requiredMessage="Un nombre es nesario para grabar">
+                        <p:inputText value="#{categoriaServiciosMB.categoriaSeleccionada.nombre}" id="txtNombre" required="true" requiredMessage="Un nombre es nesario para grabar">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="txtNombre" display="icon" />
 
+                        <p:outputLabel value="Precio:"/>
+                        <p:inputText value="#{categoriaServiciosMB.categoriaSeleccionada.precio}" id="txtPrecio" required="true" requiredMessage="Un nombre es nesario para grabar">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtPrecio" display="icon" />
+
                         <p:outputLabel value="Descripcion:" />
-                        <p:inputTextarea id="txtDescripcion" value="#{catalogoServiciosMB.servicioSeleccionado.descripcion}">
+                        <p:inputTextarea id="txtDescripcion" value="#{categoriaServiciosMB.categoriaSeleccionada.descripcion}">
                             <p:clientValidator event="keyup"/>
                         </p:inputTextarea>
                         <p:message for="txtDescripcion" display="icon"/>
 
+                        <p:outputLabel value="Trabajo a realizar:" />
+                        <p:inputTextarea id="txtTrabajoRealizar" value="#{categoriaServiciosMB.categoriaSeleccionada.descripcion}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtTrabajoRealizar" display="icon"/>
+
                         <f:facet name="footer" class="ui-panelgrid">
                             <div style="text-align: center">
                                 <p:commandButton 
-                                    actionListener="#{catalogoServiciosMB.editarServicio}"
-                                    update=":formPrincipal:tablaServicios,msgNuevoServicio"                                    
+                                    actionListener="#{categoriaServiciosMB.editarCategoria}"
+                                    update=":formPrincipal:tablaServicios,msgNuevoCatalogo"                                    
                                     validateClient="true"
                                     icon="fa fa-floppy-o"
                                     styleClass="btn_azul"                                    
                                     value="Grabar">
 
-                                    <p:confirm header="Confirmar" message="Desea editar el servicio?" icon="ui-icon-alert" />
+                                    <p:confirm header="Confirmar" message="Desea editar la categoria?" icon="ui-icon-alert" />
 
                                 </p:commandButton>
 
@@ -199,6 +230,54 @@ and open the template in the editor.
                 </p:panel>
             </h:form>
         </p:dialog>
+
+        <!-- Dialogo para crear un nuevo Servicio -->
+        <p:dialog id="idNuevoServicio" widgetVar="widgetNuevoServicio" header="Nuevo Servicio" modal="true" showEffect="explode" hideEffect="explode" >
+            <h:form>
+                <p:panel styleClass="panelNoBorder">
+                    <p:messages id="msgNuevoServicio" />
+                    <p:panelGrid columns="3">
+                        <p:outputLabel value="Nombre:" />
+                        <p:inputText value="#{categoriaServiciosMB.servicioCrear.nombre}" id="txtNombre" required="true" requiredMessage="Un nombre es nesario para grabar">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtNombre" display="icon" />
+
+                        <p:outputLabel value="Descripcion:" />
+                        <p:inputTextarea id="txtDescripcion" value="#{categoriaServiciosMB.servicioCrear.descripcion}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtDescripcion" display="icon"/>
+
+                        <f:facet name="footer" class="ui-panelgrid">
+                            <div style="text-align: center">
+                                <p:commandButton 
+                                    actionListener="#{categoriaServiciosMB.guardarServicio}"
+                                    update=":formNuevoCatalogo , msgNuevoServicio"                                    
+                                    validateClient="true"
+                                    icon="fa fa-floppy-o"
+                                    styleClass="btn_azul"                                    
+                                    value="Grabar">
+
+                                    <p:confirm header="Confirmar" message="Desea guardar el servicio?" icon="ui-icon-alert" />
+
+                                </p:commandButton>
+
+                                <p:commandButton
+                                    onclick="PF('widgetNuevoServicio').hide();"
+                                    immediate="true"
+                                    icon="fa fa-ban"
+                                    styleClass="btn_tomate"
+                                    value="Cancelar"/>
+
+                            </div>
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
 
         <!-- Dialogo para las confirmaciones -->
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

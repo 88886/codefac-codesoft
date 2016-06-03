@@ -64,7 +64,12 @@ and open the template in the editor.
                 </p:column>
 
                 <p:column style="width: 50px" >
-                    <p:commandButton icon="fa fa-search" styleClass="btn_verde" actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" update=":formDialogProductoDistri" />
+                    <p:commandButton 
+                        style="padding: 0px"
+                        icon="fa fa-search" 
+                        styleClass="btn_verde" 
+                        actionListener="#{gestionProductoMB.mostrarPreciosDistribuidor(catalogo)}" 
+                        update=":formDialogProductoDistri" />
                 </p:column>
 
                 <p:column headerText="PVP " style="width: 50px" >
@@ -94,6 +99,7 @@ and open the template in the editor.
 
                 <p:column headerText="" style="width: 50px">
                     <p:commandButton 
+                        style="padding: 0px"
                         icon="fa fa-trash-o"
                         styleClass="btn_rojo"
                         title="Eliminar Producto"

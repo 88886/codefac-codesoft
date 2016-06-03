@@ -32,7 +32,6 @@ and open the template in the editor.
                                     placeholder="RUC del distribuidor"
                                     onkeypress="return validarEnter(event, 'buscarDistribuidorJS');"  
                                     value="#{comprarMB.compra.ruc.ruc}" 
-
                                     />
 
                                 <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
@@ -75,17 +74,17 @@ and open the template in the editor.
                         <p:separator/>
                         <!-- Datos del distribuidor para mostrar	 -->
                         <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%;text-align: left">
-                            <p:outputLabel value="Nombre: " style="font-weight: lighter" />
-                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}"  />
+                            <p:outputLabel value="Nombre: "  />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}" style="font-weight: bold" />
 
-                            <p:outputLabel value="Direccion: " style="font-weight: lighter" />
-                            <p:outputLabel value="#{comprarMB.compra.ruc.direccion}"  />
+                            <p:outputLabel value="Direccion: "  />
+                            <p:outputLabel value="#{comprarMB.compra.ruc.direccion}" style="font-weight: bold"  />
 
-                            <p:outputLabel value="Telefono: " style="font-weight: lighter" />
-                            <p:outputLabel value="#{comprarMB.compra.ruc.telefono}"  />
+                            <p:outputLabel value="Telefono: "  />
+                            <p:outputLabel value="#{comprarMB.compra.ruc.telefono}" style="font-weight: bold"  />
 
-                            <p:outputLabel value="Email: " style="font-weight: lighter" />
-                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}"  />
+                            <p:outputLabel value="Email: "  />
+                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}" style="font-weight: bold" />
 
                         </p:panelGrid>
 
