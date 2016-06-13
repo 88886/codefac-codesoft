@@ -1192,6 +1192,7 @@ public class FacturaMB {
                 msjStock = "";
                 //msjStock = "";
                 System.out.println("Si hay stock");
+                System.out.println("TipoProducto " + catalogoSeleccionado.getTipoProducto());
                 if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
 
                     System.out.println("En venta");
@@ -1264,19 +1265,25 @@ public class FacturaMB {
                 } else {
                     System.out.println("Especifico");
                     detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
-                    // System.err.println(detalleIndividual);
+                    //System.err.println(detalleIndividual);
+                    //System.out.println("Estado PRod" + detalleIndividual.getEstadoProceso());
                     if (detalleIndividual == null) {
-                        msjCodUnico = "No existe Producto con ese código";
+                        //msjCodUnico = "No existe Producto con ese código";
+                        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "No existe Producto con ese código!");
+                        RequestContext.getCurrentInstance().showMessageInDialog(message);
                         codPEspe = "";
                         // RequestContext.getCurrentInstance().execute("PF('infProductoE').show()");
                         System.out.println("No existe ese codigo");
 
                     } else if (detalleIndividual.getEstadoProceso().equals("Vendido")) {
-                        msjCodUnico = "Producto con ese código  ya se vendió";
+                        //msjCodUnico = "Producto con ese código  ya vendido";
+                        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "Producto con ese código  ya vendido!");
+                        RequestContext.getCurrentInstance().showMessageInDialog(message);
                         codPEspe = "";
                         //RequestContext.getCurrentInstance().execute("PF('infProductoE').show()");
                         System.out.println("Ya se vendio");
                     } else {
+                        System.out.println("Else");
                         cantidadComprar = 1;
                         //cerrarDialogo();
                         msjCodUnico = "";
@@ -1313,6 +1320,7 @@ public class FacturaMB {
                         } else {
                             detalles.setCosto(catalogoSeleccionado.getPrecio());
                         }
+
                         Descuentos precioMayorista = new Descuentos("Prec Mayorista", catalogoSeleccionado.getPrecioMayorista());
                         Descuentos precioDescuento = new Descuentos("PVP", catalogoSeleccionado.getPrecio());
                         Descuentos dcto = new Descuentos("dctoPVP", catalogoSeleccionado.getDescuento());
@@ -1335,6 +1343,8 @@ public class FacturaMB {
                         detalle.setSubtotal(subtotalRegistro);
                         detalle.setPrecioIndividual(detalles.getCosto());
                         detallesIndividualVenta.add(detalle);
+                        System.out.println("Termino");
+                       // RequestContext.getCurrentInstance().execute("PF('dlgInformacionE').hide()");
                         //det
 
                     }

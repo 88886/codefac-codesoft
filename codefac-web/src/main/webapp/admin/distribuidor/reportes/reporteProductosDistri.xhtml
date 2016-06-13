@@ -18,14 +18,49 @@ and open the template in the editor.
             <p:panel id="panelFactura" header="Productos por Distribuidor" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
                 <div style="text-align: center">
                     <ui:repeat value="#{productoDistribuidorMB.distribuidores}" 
-                               var="distribuidor" id="tablaDescargar">
+                               var="distribuidor" id="tablaDescargar" >
 
-                        <p:panel style="width:100%" styleClass="titleBarVerde panelNoBorder">
-                            <p:outputLabel value="#{distribuidor.nombre}" style="font-weight: bold;color: #0000ff"/>
-                        </p:panel>
+                        <h:panelGrid columns="2">
+                            <p:panel style="width: 100%;text-align: left">
+                                <p:dataTable  
+                                    value="#{productoDistribuidorMB.devolverProductos(distribuidor)}" 
+                                    var="productos"
+                                    rows="5"
+                                    rowKey="#{productos.codigoProducto}"
+                                    id="tablaProductos">
+
+                                    <f:facet name="header">
+                                        <p:outputLabel value="#{distribuidor.nombre}" style="font-weight: bold;color: #0000ff"/>
+                                    </f:facet> 
+                                    <p:column headerText="Código">
+                                        <p:outputLabel value="#{productos.codigoProducto.codigoProducto}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre">
+                                        <p:outputLabel value="#{productos.codigoProducto.nombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Costo">
+                                        <p:outputLabel value="#{productos.costoIndividual}"/>
+                                    </p:column>
+                                    <p:column headerText="Descripción">
+                                        <p:outputLabel value="#{productos.codigoProducto.descripcion}"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <div style="text-align: center">
+                                    <h:commandLink>
+                                        <p:graphicImage height="20px" width="20px" name="/img/iconos/excel_icono.png" />
+                                        <p:dataExporter type="xls" target="tablaProductos" fileName="distribuidores" pageOnly="true"/>
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+                                        <p:graphicImage height="20px" width="20px" name="/img/iconos/pdf_icono.png" />
+                                        <p:dataExporter type="pdf" target="tablaProductos" fileName="distribuidores" pageOnly="true" />
+                                    </h:commandLink>
+                                </div>
+                                <p:separator/>
+                            </p:panel>
+                        </h:panelGrid>
                     </ui:repeat>
                 </div>
-
             </p:panel>
         </h:form>
     </ui:define>

@@ -36,7 +36,8 @@ and open the template in the editor.
                                  styleClass="ui-botonAzul"
                                  icon="fa fa-dropbox"
                                  ajax="false"
-                                 onclick="PrimeFaces.monitorDownload(start, stop);">
+                                 onstart="PF('statusDialog').show()" 
+                                 onsuccess="PF('statusDialog').hide()">
                     <p:fileDownload value="#{backupMB.file}" />
                 </p:commandButton>
                 <p:spacer/>
@@ -47,6 +48,7 @@ and open the template in the editor.
 
             <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
                 <p:graphicImage library="image" name="/util/waitIcon.gif" />
+                <p:outputLabel value="Procesando ..." />
             </p:dialog>
         </div>
 

@@ -75,17 +75,29 @@ and open the template in the editor.
                         <p:separator/>
                         <!-- Datos del distribuidor para mostrar	 -->
                         <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%;text-align: left">
-                            <p:outputLabel value="Nombre: " style="font-weight: lighter" />
-                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}"  />
+                            <p:panel styleClass="panelNoBorder">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <p:outputLabel  value=" Nombre:"  />
+                            </p:panel>
+                            <p:outputLabel style="font-weight: bold"  value="#{comprarMB.compra.ruc.nombre}"  />
 
-                            <p:outputLabel value="Direccion: " style="font-weight: lighter" />
-                            <p:outputLabel value="#{comprarMB.compra.ruc.direccion}"  />
+                            <p:panel styleClass="panelNoBorder">
+                                <i class="fa fa-home" aria-hidden="true"></i>
+                                <p:outputLabel style="font-weight: bold"  value=" Dirección:" />
+                            </p:panel>
+                            <p:outputLabel style="font-weight: bold" value="#{comprarMB.compra.ruc.direccion}"  />
 
-                            <p:outputLabel value="Telefono: " style="font-weight: lighter" />
-                            <p:outputLabel value="#{comprarMB.compra.ruc.telefono}"  />
+                            <p:panel styleClass="panelNoBorder">
+                                <i class="fa fa-mobile" aria-hidden="true"></i>
+                                <p:outputLabel style="font-weight: bold"  value=" Celular:" />
+                            </p:panel>
+                            <p:outputLabel style="font-weight: bold" value="#{comprarMB.compra.ruc.telefono}"  />
 
-                            <p:outputLabel value="Email: " style="font-weight: lighter" />
-                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}"  />
+                            <p:panel styleClass="panelNoBorder">
+                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                <p:outputLabel style="font-weight: bold" value=" Correo:"/>
+                            </p:panel>
+                            <p:outputLabel style="font-weight: bold" value="#{comprarMB.compra.ruc.correo}"  />
 
                         </p:panelGrid>
 
@@ -94,14 +106,14 @@ and open the template in the editor.
                         <!-- Panel para mostrar datos de la compra -->
                         <p:panel >
                             <p:panelGrid columns="4">
-                                <p:outputLabel value="No Documento: "/>
+                                <p:outputLabel value="No Documento: " style="font-weight: bold"/>
                                 <p:inputText 
                                     placeholder="Numero de Documento"
                                     id="txtNumeroDocumento" 
                                     onkeypress="return noProcesar(event);" 
-                                    value="#{comprarMB.compra.codigoDocumento}" />
+                                    value="#{comprarMB.compra.codigoDocumento}"  />
 
-                                <p:outputLabel value="Fecha Compra:" />
+                                <p:outputLabel value="Fecha Compra:" style="font-weight: bold" />
                                 <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="MM/dd/yyyy HH:mm:ss" value="#{comprarMB.compra.fechaIngreso}" title="Fecha cuando se realizo la compra" />
 
                             </p:panelGrid>
@@ -117,7 +129,7 @@ and open the template in the editor.
                     <h:form id="formBuscarProducto">
                         <p:panelGrid columns="5" style="margin: 0 auto;height: 100%">
 
-                            <p:outputLabel value="Codigo General:  "/>
+                            <p:outputLabel value="Código General:  " style="font-weight: bold"/>
                             <p:inputText 
                                 placeholder="Codigo del Producto"
                                 id="txtCodigoDetalle" 
@@ -142,14 +154,14 @@ and open the template in the editor.
 
                         <p:panelGrid columns="9" style="width: 100%">
 
-                            <p:outputLabel value="Nombre:"/>
+                            <p:outputLabel value="Nombre:" style="font-weight: bold"/>
                             <p:outputLabel id='lblNombreProducto' value="#{comprarMB.catalogo.nombre}" style="font-weight: lighter" />
 
-                            <p:outputLabel value="Tipo:"/>
+                            <p:outputLabel value="Tipo:" style="font-weight: bold"/>
                             <p:outputLabel id='lblTipoProducto' value="#{comprarMB.catalogo.tipoProducto=='G'?'General':comprarMB.catalogo.tipoProducto=='E'?'Individual':''}" style="font-weight: lighter" />
 
                             <p:panelGrid columnClasses="2">
-                                <p:outputLabel value="PVP:" style="width: 100px"/>
+                                <p:outputLabel value="PVP:" style="width: 100px;font-weight: bold"/>
                                 <p:commandButton 
                                     style="font-size: 12px;"
                                     id="btnCambiarPrecio" 
@@ -158,14 +170,14 @@ and open the template in the editor.
                                     styleClass="ui-botonEsmeralda" 
                                     update="@form,:dialogEditPrecio" 
                                     title="Cambiar el precio del producto" />
-                                
+
                             </p:panelGrid>
                             <p:outputLabel id='lblPVP' value="#{calculosMB.incluirIva(comprarMB.catalogo.precio)}" style="font-weight: lighter" />
 
                             <p:tooltip style="font-size: 11px" id="toolTipGrow3" for=":formBuscarProducto:btnCambiarPrecio" value="Cambiar el precio de Venta al publico"
                                        showEffect="clip" hideEffect="explode" />
 
-                            <p:outputLabel value="Stock" />
+                            <p:outputLabel value="Stock" style="font-weight: bold" />
                             <p:outputLabel id="lblStock" value="#{comprarMB.stockProductoSeleccionado}" style="font-weight: lighter" />
 
                         </p:panelGrid>
@@ -182,14 +194,14 @@ and open the template in the editor.
 
                         <p:panelGrid id="panelGridDetalle" columns="7" style="margin: 0 auto;height: 100%">
 
-                            <p:outputLabel value="Cantidad:"/>
+                            <p:outputLabel value="Cantidad:" style="font-weight: bold"/>
                             <p:inputText required="true" id="txtCantidadDetalle" value="#{comprarMB.cantidadDetalle}" style="width: 50px;" >
                                 <p:clientValidator event="keyup"/>
                             </p:inputText>
 
                             <p:message for="txtCantidadDetalle" display="icon" />
 
-                            <p:outputLabel value="Costo:"/>
+                            <p:outputLabel value="Costo:" style="font-weight: bold"/>
                             <p:inputText id="txtCostoDetalle" value="#{comprarMB.costoDetalle}" style="width: 70px;" required="true" />
                             <p:message for="txtCostoDetalle" display="icon" />
 
@@ -234,7 +246,7 @@ and open the template in the editor.
                         </p:column>
 
                         <p:column headerText="">
-                            <p:commandButton value="Eliminar" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form,:formTotales"/>
+                            <p:commandButton icon="fa fa-trash" styleClass="btn_tomate" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form,:formTotales"/>
                         </p:column>
 
                     </p:dataTable>
@@ -247,22 +259,22 @@ and open the template in the editor.
                         <p:panel id="panelTotales" style="width: 250px;float: right"  styleClass="panelNoBorder">
                             <p:panelGrid columns="2" style="text-align: left">
                                 <p:outputLabel value="Subtotal: "  />
-                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
+                                <p:inputText disabled="true" onkeypress="return noProcesar(event);" value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
                                 <p:outputLabel value="Descuento: "/>
-                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.compra.descuento}" style="width: 80px;" >
+                                <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.descuento}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
                                 <p:outputLabel value="Iva: "/>
-                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" >
+                                <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText> 
 
                                 <p:outputLabel id="txtTotalCompra" value="Total: "/>
-                                <p:inputText onkeypress="return noProcesar(event);" id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
+                                <p:inputText disabled="true" onkeypress="return noProcesar(event);" id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
                             </p:panelGrid>
                         </p:panel>
                     </div>
@@ -306,8 +318,9 @@ and open the template in the editor.
                     <p:dialog header="Nueva Compra" widgetVar="dialogNuevaCompra" modal="true">
                         <h:form>
                             <h2>Desea realizar otra compra?</h2>
-                            <p:commandButton  value="Nueva" action="compra" ajax="false"/>
-                            <p:commandButton value="Salir" action="compra" ajax="false" />      
+                            <p:commandButton  icon="fa fa-plus-square"
+                                              styleClass="btn_azul" value="Nueva" title="Nueva" action="compra" ajax="false"/>
+                            <p:commandButton icon="fa fa-ban" value="Salir" styleClass="btn_rojo" title="Salir" action="compra" ajax="false" />      
                         </h:form>
                     </p:dialog>
 
@@ -390,10 +403,10 @@ and open the template in the editor.
                             value="Editar"  
                             styleClass="btn_azul"
                             update=":formBuscarProducto:lblPVP,:overlayCatalogoID,:formDialgBuscarProductos">
-                            
+
                             <p:confirm header="Confirmar" message="Estas seguro que quieres editar el PVP?" icon="ui-icon-alert" />
                         </p:commandButton>
-                        
+
                         <p:commandButton 
                             styleClass="btn_tomate"
                             onclick="PF('widCambiarPrecio').hide();" 

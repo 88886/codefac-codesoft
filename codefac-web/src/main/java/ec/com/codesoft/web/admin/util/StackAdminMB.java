@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.web.admin.util;
 
+import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.web.widget.CommonWidGet;
 import ec.com.codesoft.web.widget.VentasDiariasMB;
 import java.io.Serializable;
@@ -38,11 +39,14 @@ public class StackAdminMB implements Serializable {
     
     @ManagedProperty(value = "#{ventasDiariasMB}")
     private VentasDiariasMB ventasDiariasMB;
+    
+    @EJB
+    private CatalogoServicio catalogoServicio;
 
     @PostConstruct
     public void postConstruct() {
+        ventasDiariasMB.setCatalogosLista(catalogoServicio.obtenerTodos());
         listaWidGet = new CopyOnWriteArrayList<CommonWidGet>();
-
         listaWidGet.add(notaUtilMB);
         listaWidGet.add(calcuUtilMB);
         listaWidGet.add(calendarioUtilMB);

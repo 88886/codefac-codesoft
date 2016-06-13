@@ -31,6 +31,10 @@
             <to-view-id>/admin/compraEditar.xhtml</to-view-id>
         </navigation-case>
               
+        <navigation-case>
+            <from-outcome>reporDistriProd</from-outcome>
+            <to-view-id>/admin/distribuidor/reportes/reporteProductosDistri.xhtml</to-view-id>
+        </navigation-case>
         
         <navigation-case>
             <from-outcome>compra</from-outcome>

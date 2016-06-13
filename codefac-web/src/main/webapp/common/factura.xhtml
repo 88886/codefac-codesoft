@@ -33,7 +33,6 @@ and open the template in the editor.
             </h:form>
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true" />
-
                 <p:panel id="infDistr" styleClass=" titleBarVerde panelNoBorder" rendered="true" header="Información Cliente" style="width: 100%">
                     <p:panel style="width: 100%">
                         <p:panelGrid columns="6" style="margin: 0 auto;width: 60%;text-align: center" >
@@ -298,7 +297,8 @@ and open the template in the editor.
                         <p:commandButton  icon="fa fa-plus-square"
                                           styleClass="btn_azul"
                                           validateClient="true"
-                                          actionListener="#{facturaMB.venta()}" ajax="true" update="@form,
+                                          actionListener="#{facturaMB.venta()}" ajax="true" 
+                                          update="@form,
                                           :formDetalles:tablaDetallesFactura,
                                           :formDetalles:panelTotales,
                                           msgsC"/>
@@ -320,7 +320,10 @@ and open the template in the editor.
                         </p:inputText>
                         <p:commandButton  icon="ui-icon-plusthick" 
                                           validateClient="true"
-                                          update="msgsEspe,:formEspecifico:lblMsj,:formEspecifico:codPEspec"
+                                          update="@form,msgsEspe,
+                                          :formEspecifico:lblMsj,
+                                          :formDetalles:tablaDetallesFactura,
+                                          :formDetalles:panelTotales"
                                           actionListener="#{facturaMB.venta()}"/>
                         <p:outputLabel  value="#{facturaMB.msjCodUnico}" style="color: darkred" id="lblMsj"/>
                         <p:message for="codPEspec" />
@@ -407,11 +410,12 @@ and open the template in the editor.
                 <div >
                     <p:panelGrid columns="2" style="margin-left: 70%">
                         <p:outputLabel value="Recibo" style="font-weight: bold"/>
-                        <p:inputText id="recibo" value="#{facturaMB.recibo}">
+                        <p:inputText id="recibo" value="#{facturaMB.recibo}" placeholder="0.0">
                             <p:ajax event="keyup" listener="#{facturaMB.darVuelto()}" update="vuelto"/>
                         </p:inputText>
                         <p:outputLabel value="Vuelto" style="font-weight: bold"/>
-                        <p:inputText id="vuelto" value="#{calculosMB.redondeoInferiorMostar(facturaMB.vuelto)}"/>
+                        <p:inputText id="vuelto" 
+                                     value="#{calculosMB.redondeoInferiorMostar(facturaMB.vuelto)}" placeholder="0.0"/>
                     </p:panelGrid>
                 </div>
 
@@ -518,7 +522,7 @@ and open the template in the editor.
     <p:dialog widgetVar="statusEnvioCorreo" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
         <p:panelGrid columns="2" styleClass="panelNoBorder">
             <p:graphicImage library="img"  name="/util/waitIcon.gif" />
-            <p:outputLabel value="enviando correo ..." />
+            <p:outputLabel value="Procesando ..." />
         </p:panelGrid>
     </p:dialog>
 
