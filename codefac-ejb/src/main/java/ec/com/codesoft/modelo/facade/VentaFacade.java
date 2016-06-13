@@ -6,11 +6,16 @@
 package ec.com.codesoft.modelo.facade;
 
 import ec.com.codesoft.model.AbonoVentaCredito;
+import ec.com.codesoft.model.Compra;
 import ec.com.codesoft.model.CreditoFactura;
+import ec.com.codesoft.model.Declaraciones;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
 import ec.com.codesoft.model.Venta;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -212,6 +217,118 @@ public class VentaFacade extends AbstractFacade<Venta> {
             query.setParameter(1, codcredito);
             List<AbonoVentaCredito> credito = (List<AbonoVentaCredito>) query.getResultList();
             return credito;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+
+    public List<Venta> findVentasSubtotales(Date fechaF) {
+        try {
+            String queryStringSub = "SELECT  d from Declaraciones d order by d.idDeclaracion desc";
+            Query querySub = em.createQuery(queryStringSub);
+            Declaraciones declaracion = (Declaraciones) querySub.setMaxResults(1).getSingleResult();
+            SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
+            System.out.println("Fecha " + formateador.format(declaracion.getFechaFinal()));
+
+            String fechaI = "";
+            fechaI = formateador.format(declaracion.getFechaFinal());
+
+            //suamar 1 dia a la fecha para q obtega <=
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaF);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            fechaF = calendar.getTime();
+
+            String fechaFinal = "";
+            fechaFinal = formateador.format(fechaF);
+            System.out.println("Fecha Final" + fechaFinal);
+
+            String queryString = "SELECT v FROM Venta v where v.fecha between '" + fechaI + "' and '" + fechaFinal + "' and v.codigoDocumento > '" + declaracion.getFacturaFinal() + "'  ";
+            Query query = em.createQuery(queryString);
+//            query.setParameter(1, fechaI);
+//            query.setParameter(2, fechaFinal);
+            List<Venta> ventas = (List<Venta>) query.getResultList();
+            return ventas;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+
+    public List<Venta> findNotasTotales(Date fechaF) {
+        try {
+            String queryStringSub = "SELECT  d from Declaraciones d order by d.idDeclaracion desc";
+            Query querySub = em.createQuery(queryStringSub);
+            Declaraciones declaracion = (Declaraciones) querySub.setMaxResults(1).getSingleResult();
+            SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
+            System.out.println("Fecha " + formateador.format(declaracion.getFechaFinal()));
+
+            String fechaI = "";
+            fechaI = formateador.format(declaracion.getFechaFinal());
+
+            //suamar 1 dia a la fecha para q obtega <=
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaF);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            fechaF = calendar.getTime();
+
+            String fechaFinal = "";
+            fechaFinal = formateador.format(fechaF);
+            System.out.println("Fecha Final" + fechaFinal);
+
+            String queryString = "SELECT v FROM Venta v where v.fecha between "
+                    + "'" + fechaI + "' and '" + fechaFinal + "' "
+                    + "and v.codigoDocumento > '" + declaracion.getNotaFinal() + "' and v.tipoDocumento='Nota' ";
+            Query query = em.createQuery(queryString);
+//            query.setParameter(1, fechaI);
+//            query.setParameter(2, fechaFinal);
+            List<Venta> ventas = (List<Venta>) query.getResultList();
+            return ventas;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+
+    public Declaraciones findUltimaDeclaracion() {
+        try {
+            String queryStringSub = "SELECT  d from Declaraciones d order by d.idDeclaracion desc";
+            Query querySub = em.createQuery(queryStringSub);
+            Declaraciones declaracion = (Declaraciones) querySub.setMaxResults(1).getSingleResult();
+            return declaracion;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Compra> findComprasSubtotales(Date fechaF) {
+        try {
+            String queryStringSub = "SELECT  d from Declaraciones d order by d.idDeclaracion desc";
+            Query querySub = em.createQuery(queryStringSub);
+            Declaraciones declaracion = (Declaraciones) querySub.setMaxResults(1).getSingleResult();
+            SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
+            System.out.println("Fecha " + formateador.format(declaracion.getFechaFinal()));
+
+            String fechaI = "";
+            fechaI = formateador.format(declaracion.getFechaFinal());
+
+            //suamar 1 dia a la fecha para q obtega <=
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaF);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            fechaF = calendar.getTime();
+
+            String fechaFinal = "";
+            fechaFinal = formateador.format(fechaF);
+            System.out.println("Fecha Final" + fechaFinal);
+
+            String queryString = "SELECT v FROM Compra v where v.fecha between '" + fechaI + "' and '" + fechaFinal + "'";
+            Query query = em.createQuery(queryString);
+//            query.setParameter(1, fechaI);
+//            query.setParameter(2, fechaFinal);
+            List<Compra> compras = (List<Compra>) query.getResultList();
+            return compras;
         } catch (NoResultException e) {
             return null;
         }

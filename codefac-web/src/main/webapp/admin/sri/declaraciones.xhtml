@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
+                template="/template/plantilladmin.xhtml">
+
+    <ui:define name="contenido" >
+        <div style="text-align:center">
+            <p:panel id="panel" header="Declaraciones" style="width:60%;margin: 0 auto" styleClass="customTitleBar" >
+                <h:form id="frmBuscar">
+                    <p:panelGrid columns="5" style="width: 70%;margin-left: 5%" styleClass="panelNoBorder">
+                        <p:outputLabel value="Fecha Final a declarar" style="font-weight: bold"/>
+                        <p:panel styleClass="panelNoBorder">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <p:calendar style="width: 30%" value="#{declaracionesMB.fechaFinal}" title="Fecha Final"/>
+                        </p:panel>
+                        <p:commandButton icon="fa fa-search" 
+                                         actionListener="#{declaracionesMB.buscarDatos()}" 
+                                         styleClass="btn_verde" value="Buscar" title="Buscar"
+                                         update="frmDatos"/>
+                    </p:panelGrid>
+                </h:form>
+
+                <p:separator/>
+
+                <p:panel header="Detalles" style="width:100%;margin: 0 auto" styleClass="titleBarVerde">
+                    <h:form id="frmDatos">
+                        <h:panelGrid style="width: 100%;text-align: center" columns="4" styleClass="panelNoBorder">
+                            <p:outputLabel value="SubTotal Ventas" title="Campo 401" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.declaraciones.subtotalVentas} " />
+
+                            <p:outputLabel value="SubTotal Compras" title="Campo 500" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.declaraciones.subtotalCompras} "/>
+
+                            <p:outputLabel value="Total Notas" title="Campo 507" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.declaraciones.subTotalNotas} "/>
+
+                            <p:outputLabel value="Suma de Iva Compras" title="Campo 564" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.ivaCompras} "/>
+
+                            <p:outputLabel value="Iva a Favor" title="Campo 602" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.ivaFavor} "/>
+
+                            <p:outputLabel value="Iva a Favor Mes Anterior" title="Campo 605" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.declaracionAnterior.ivaGenerado} "/>
+
+                            <p:outputLabel value="Iva Retenido Mes Anterior" title="Campo 607" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.declaracionAnterior.ivaRetenido} "/>
+
+                            <p:outputLabel value="Campo 615" title="Campo 615" style="font-weight: bold"/>
+                            <p:inputText style="width: 30%" value="#{declaracionesMB.declaracionAnterior.ivaGenerado} "/>
+
+
+                            <p:panel style="margin: 0 auto" styleClass="panelNoBorder" rendered="#{declaracionesMB.mostrarCampo601}">
+                                <p:spacer/>
+                                <p:outputLabel value="Impuesto Causado" title="Campo 601" style="font-weight: bold"/>
+                                <p:inputText placeholder="0.0" style="width: 30%" value="#{declaracionesMB.declaraciones.ivaGenerado} "/>
+                            </p:panel>
+                            <f:facet name="footer">
+                                <p:commandButton value="Generar" 
+                                                 action="#{declaracionesMB.generarXML()}" 
+                                                 update=":frmDatos"
+                                                 immediate="true"/>
+                                
+                                <p:commandButton value="Modificar" 
+                                                 action="#{declaracionesMB.modificarFichero()}" 
+                                                 update=":frmDatos"
+                                                 immediate="true"/>
+
+                            </f:facet>
+                        </h:panelGrid>
+
+                    </h:form>    
+                </p:panel> 
+
+
+            </p:panel>
+
+        </div>
+    </ui:define>
+</ui:composition>

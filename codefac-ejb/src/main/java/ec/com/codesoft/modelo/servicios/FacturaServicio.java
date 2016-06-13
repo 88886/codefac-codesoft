@@ -7,7 +7,9 @@ package ec.com.codesoft.modelo.servicios;
 
 import ec.com.codesoft.model.AbonoVentaCredito;
 import ec.com.codesoft.model.Banco;
+import ec.com.codesoft.model.Compra;
 import ec.com.codesoft.model.CreditoFactura;
+import ec.com.codesoft.model.Declaraciones;
 import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
@@ -29,6 +31,7 @@ import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
 import ec.com.codesoft.modelo.facade.ProductoIndividualCompraFacade;
 import ec.com.codesoft.modelo.facade.VentaFacade;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -178,9 +181,9 @@ public class FacturaServicio {
     }
 
     ///////////////////////METODOS GET AND SET
-  //  public int obtenerProductoIndivudualCantidad(String codP) {
-      //  return detalleIndividualFacade.findProductosIndividualCantidad(cantidad, codP);
-   // }
+    //  public int obtenerProductoIndivudualCantidad(String codP) {
+    //  return detalleIndividualFacade.findProductosIndividualCantidad(cantidad, codP);
+    // }
     public ProductoIndividualCompra devolverIndividualCod(String cod, String codCat) {
         return productoIndividualFacade.findProdIndividual(cod, codCat);
     }
@@ -203,7 +206,8 @@ public class FacturaServicio {
 
         return productoIndividualFacade.findProdIndividualCodUnico(codUnico);
     }
-    public void editarCredito(CreditoFactura credito){
+
+    public void editarCredito(CreditoFactura credito) {
         creditoFacturaFacade.edit(credito);
     }
 
@@ -317,11 +321,31 @@ public class FacturaServicio {
     public List<AbonoVentaCredito> obtenerAbonosCredito(Integer codigo) {
         return ventaFacade.findAbonoCredito(codigo);
     }
-    public void editarAbono(AbonoVentaCredito abono){
+
+    public void editarAbono(AbonoVentaCredito abono) {
         abonoVentaCreditoFacade.edit(abono);
     }
-    public void eliminarAbono(AbonoVentaCredito abono){
+
+    public void eliminarAbono(AbonoVentaCredito abono) {
         abonoVentaCreditoFacade.remove(abono);
     }
+
+    public List<Venta> obtnerSubtotalesVentas(Date fechaF) {
+        return ventaFacade.findVentasSubtotales(fechaF);
+    }
+    
+    public List<Compra> obtnerSubtotalesCompras(Date fechaF) {
+        return ventaFacade.findComprasSubtotales(fechaF);
+    }
+    
+    public List<Venta> obtnerTotalesNotas(Date fechaF) {
+        return ventaFacade.findNotasTotales(fechaF);
+    }
+    
+    public Declaraciones obtenerUltimaDeclaracion(){
+        return ventaFacade.findUltimaDeclaracion();
+    }
+    
+    
 
 }

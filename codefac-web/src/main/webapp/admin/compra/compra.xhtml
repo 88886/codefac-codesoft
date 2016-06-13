@@ -206,14 +206,14 @@ and open the template in the editor.
 
                         <p:panelGrid id="panelGridDetalle" columns="7" style="margin: 0 auto;height: 100%">
 
-                            <p:outputLabel value="Cantidad:"/>
+                            <p:outputLabel value="Cantidad:" style="font-weight: bold"/>
                             <p:inputText required="true" id="txtCantidadDetalle" value="#{comprarMB.cantidadDetalle}" style="width: 50px;" >
                                 <p:clientValidator event="keyup"/>
                             </p:inputText>
 
                             <p:message for="txtCantidadDetalle" display="icon" />
 
-                            <p:outputLabel value="Costo:"/>
+                            <p:outputLabel value="Costo:" style="font-weight: bold"/>
                             <p:inputText id="txtCostoDetalle" value="#{comprarMB.costoDetalle}" style="width: 70px;" required="true" />
                             <p:message for="txtCostoDetalle" display="icon" />
 
@@ -258,7 +258,7 @@ and open the template in the editor.
                         </p:column>
 
                         <p:column headerText="">
-                            <p:commandButton value="Eliminar" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form,:formTotales"/>
+                            <p:commandButton icon="fa fa-trash" styleClass="btn_tomate" actionListener="#{comprarMB.eliminarDetalle(detalle)}" update="@form,:formTotales"/>
                         </p:column>
 
                     </p:dataTable>
@@ -271,29 +271,20 @@ and open the template in the editor.
                         <p:panel id="panelTotales" style="width: 300px;float: right"  styleClass="panelNoBorder">
                             <p:panelGrid columns="2" style="text-align: left">
                                 <p:outputLabel value="Subtotal: "  />
-                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
+                                <p:inputText disabled="true" onkeypress="return noProcesar(event);" value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
                                 <p:outputLabel value="Descuento: "/>
-                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.compra.descuento}" style="width: 80px;" >
+                                <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.descuento}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
-                                <p:panelGrid columns="2" styleClass="panelSinPadding"> 
-                                    <p:outputLabel value="Iva: "/>
-                                    <p:inputText value="#{comprarMB.iva}" style="width: 20px;">
-                                        <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
-                                    </p:inputText>
-
-                                </p:panelGrid>
-
-                                <p:inputText onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText> 
 
                                 <p:outputLabel id="txtTotalCompra" value="Total: "/>
-                                <p:inputText onkeypress="return noProcesar(event);" id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
+                                <p:inputText disabled="true" onkeypress="return noProcesar(event);" id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
                             </p:panelGrid>
                         </p:panel>
                     </div>
@@ -337,8 +328,9 @@ and open the template in the editor.
                     <p:dialog header="Nueva Compra" widgetVar="dialogNuevaCompra" modal="true">
                         <h:form>
                             <h2>Desea realizar otra compra?</h2>
-                            <p:commandButton  value="Nueva" action="compra" ajax="false"/>
-                            <p:commandButton value="Salir" action="compra" ajax="false" />      
+                            <p:commandButton  icon="fa fa-plus-square"
+                                              styleClass="btn_azul" value="Nueva" title="Nueva" action="compra" ajax="false"/>
+                            <p:commandButton icon="fa fa-ban" value="Salir" styleClass="btn_rojo" title="Salir" action="compra" ajax="false" />      
                         </h:form>
                     </p:dialog>
 

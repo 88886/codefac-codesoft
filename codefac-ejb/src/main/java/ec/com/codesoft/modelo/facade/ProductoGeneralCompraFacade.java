@@ -88,6 +88,20 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             return null;
         }
     }
+    
+    public List<String> obtenerProductos(String codigoDistribuidor){
+        try {
+            //String queryString = "SELECT p FROM ProductoGeneralVenta p where p.codigoProducto='"+codP+"'";
+            String queryString = "SELECT DISTINCT(c.codigoProducto.codigoProducto) FROM ProductoGeneralCompra c WHERE c.codigoCompra.ruc.ruc=?1";
+            Query query = em.createQuery(queryString);
+//            System.out.println(queryString);
+            query.setParameter(1, codigoDistribuidor);
+            List<String> codproductos = (List<String>) query.getResultList();
+            return codproductos;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
     /**
      * Obtiene la lista de los productos comprados con los ultimos precios
@@ -175,6 +189,33 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
                 return null;
             }
             return lista.get(0).getCostoIndividual();
+
+        } catch (NoResultException e) {
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+
+    }
+    
+    //obtner Ultimoproducto
+    public ProductoGeneralCompra getUltimoProductoByDistribuidor(String idProducto, String rucDistribuidor) {
+
+        try {
+            String queryString2 = "SELECT MAX(p.codigoCompra.fecha) FROM ProductoGeneralCompra p where p.codigoCompra.ruc.ruc=?2 AND p.codigoProducto.codigoProducto=?1  ";
+            String queryString = "SELECT p2 FROM ProductoGeneralCompra p2 where p2.codigoCompra.ruc.ruc=?2 AND p2.codigoProducto.codigoProducto=?1 AND p2.codigoCompra.fecha=(" + queryString2 + ")";
+            //String queryString = "SELECT p.costoIndividual FROM ProductoGeneralCompra p WHERE p.codigoCompra.ruc=?1 AND p.codigoProducto.codigoProducto=?2";
+
+            Query query = em.createQuery(queryString);
+            query.setParameter(2, rucDistribuidor);
+            query.setParameter(1, idProducto);
+
+            List<ProductoGeneralCompra> lista = (List<ProductoGeneralCompra>) query.getResultList();
+     
+            if (lista.size() == 0) {
+                return null;
+            }
+            return lista.get(0);
 
         } catch (NoResultException e) {
             return null;

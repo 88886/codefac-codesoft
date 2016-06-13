@@ -186,7 +186,7 @@ public class gestionarAbonoMB implements Serializable {
             RequestContext.getCurrentInstance().execute("PF('dlgNuevoAbono').hide()");
             System.out.println("Total "+creditoFacturaSeleccionada.getCodigoFactura().getTotal());
             System.out.println("Sumar Abono"+ sumarAbonos());
-            if(creditoFacturaSeleccionada.getCodigoFactura().getTotal().compareTo(sumarAbonos())==1 ||creditoFacturaSeleccionada.getCodigoFactura().getTotal().equals(sumarAbonos())){
+            if((creditoFacturaSeleccionada.getCodigoFactura().getTotal().compareTo(sumarAbonos())==0) ||creditoFacturaSeleccionada.getCodigoFactura().getTotal().equals(sumarAbonos())){
                 //editar el estado
                 creditoFacturaSeleccionada.setEstado("Completa");
                 facturaServicio.editarCredito(creditoFacturaSeleccionada);

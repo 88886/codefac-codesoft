@@ -28,7 +28,7 @@ public class CatalogoServicio {
 
     @EJB
     private ProductoGeneralCompraFacade productoGCFacade;
-    
+
     @EJB
     private CatalagoProductoFacade catalogoFacade;
 
@@ -39,7 +39,7 @@ public class CatalogoServicio {
     public void insertar(CatalagoProducto catalogo) {
         //verifica si el producto es general o inididual
         this.catalogoFacade.create(catalogo);
-        
+
         if (catalogo.getTipoProducto().toString().toUpperCase().equals("G")) {
             ProductoGeneralVenta productoGeneral = new ProductoGeneralVenta();
             productoGeneral.setCantidadBaja(0);
@@ -47,21 +47,19 @@ public class CatalogoServicio {
             productoGeneral.setCantidadDisponible(0);
             productoGeneral.setCantidadRobado(0);
             productoGeneral.setCantidadVendida(0);
-            productoGeneral.setCatalagoProducto(catalogo);    
+            productoGeneral.setCatalagoProducto(catalogo);
            // productoGeneral.setCodigoProducto(catalogo.getCodigoProducto());
             //productoGeneral.setCodigo(Integer.SIZE);
-           // System.out.println("CODIGO: "+productoGeneral.getCodigoProducto()); 
-           this.productoGeneralFacade.create(productoGeneral);
-           
-           catalogo.setProductoGeneralVenta(productoGeneral);
+            // System.out.println("CODIGO: "+productoGeneral.getCodigoProducto()); 
+            this.productoGeneralFacade.create(productoGeneral);
+
+            catalogo.setProductoGeneralVenta(productoGeneral);
         }
-        
+
        // this.catalogoFacade.refresh(catalogo);
-        
     }
-    
-    public void agregarCantidadProductoGeneral(ProductoGeneralVenta producto,int cantidad)
-    {
+
+    public void agregarCantidadProductoGeneral(ProductoGeneralVenta producto, int cantidad) {
         producto.agregarProductos(cantidad);
         productoGeneralFacade.edit(producto);
     }
@@ -83,32 +81,35 @@ public class CatalogoServicio {
         return catalogoFacade.findCatalogo(codigoP);
 
     }
-    
-    public boolean  verificarExisteProducto(String codigoP)
-    {
-        if(catalogoFacade.findCatalogo(codigoP)==null)
-        {
+
+    public boolean verificarExisteProducto(String codigoP) {
+        if (catalogoFacade.findCatalogo(codigoP) == null) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
-    
+
     /**
      * Obtiene un listado de los productos generales por cada distribuidor
-     * @return 
+     *
+     * @return
      */
-    public List<ProductoGeneralCompra> listaPreciosProductosGCompra(String codigo)
-    {
+    public List<ProductoGeneralCompra> listaPreciosProductosGCompra(String codigo) {
         return productoGCFacade.listaCostosProductoGeneral(codigo);
     }
-    
-    public List<CatalagoProducto> obtenerProductosDistribuidor(String codDistribuidor){
+
+    public List<CatalagoProducto> obtenerProductosDistribuidor(String codDistribuidor) {
         return productoGCFacade.obtenerProductosDistribuidor(codDistribuidor);
     }
-    
-    
 
+    public List<String> buscarProdutos(String codDistri) {
+        return productoGCFacade.obtenerProductos(codDistri);
+
+    }
+
+    public ProductoGeneralCompra obtenerUltimoProductoDistribuidor(String codPRoducto,String ruc) {
+        return productoGCFacade.getUltimoProductoByDistribuidor(codPRoducto,ruc);
+
+    }
 }

@@ -6,8 +6,11 @@
 package ec.com.codesoft.web.admin.distribuidor;
 
 import ec.com.codesoft.model.Distribuidor;
+import ec.com.codesoft.model.ProductoGeneralCompra;
+import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,9 +30,23 @@ public class productoDistribuidorMB implements Serializable {
     @EJB
     private DistribuidorServicio distribuidorServicio;
 
+    @EJB
+    private CatalogoServicio catalogoServicio;
+
     @PostConstruct
     public void inicializar() {
         distribuidores = distribuidorServicio.obtenerTodos();
+    }
+
+    public List<ProductoGeneralCompra> devolverProductos(Distribuidor distri) {
+        List<ProductoGeneralCompra> productosDevolver = new ArrayList<ProductoGeneralCompra>();
+        
+        for (String productos : catalogoServicio.buscarProdutos(distri.getRuc())) {
+            //catalogoServicio.obtenerUltimoProductoDistribuidor(productos, distri.getRuc());
+            productosDevolver.add(catalogoServicio.obtenerUltimoProductoDistribuidor(productos, distri.getRuc()));
+        }
+        return productosDevolver;
+
     }
 
     public DistribuidorServicio getDistribuidorServicio() {
@@ -43,6 +60,5 @@ public class productoDistribuidorMB implements Serializable {
     public List<Distribuidor> getDistribuidores() {
         return distribuidores;
     }
-    
 
 }
