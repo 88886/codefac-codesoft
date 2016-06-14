@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.web.util;
 
+import ec.com.codesoft.web.seguridad.SistemaMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 /**
@@ -20,14 +22,22 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean
 public class CalculosMB implements Serializable {
 
+     @ManagedProperty(value = "#{sistemaMB}")
+    /**
+     * Variable para obtener las variables del sistema
+     */
+    private SistemaMB sistemaMB;
+    
     /**
      * Metodo que me permite agregar el precio a un valor
      *
      * @return
      */
-    public BigDecimal incluirIva(BigDecimal valor) {
+    public BigDecimal incluirIva(BigDecimal valor) 
+    {
         if (valor != null) {
-            BigDecimal respuesta = valor.multiply(new BigDecimal("1.12"));
+            BigDecimal iva=sistemaMB.getConfiguracion().getIva().divide(new BigDecimal("100"),RoundingMode.DOWN).add(new BigDecimal("1"));
+            BigDecimal respuesta = valor.multiply(iva);
             respuesta = respuesta.setScale(2, BigDecimal.ROUND_UP);
             return respuesta;
         }
@@ -67,5 +77,15 @@ public class CalculosMB implements Serializable {
         }
         return new BigDecimal(0);
     }
+
+    public SistemaMB getSistemaMB() {
+        return sistemaMB;
+    }
+
+    public void setSistemaMB(SistemaMB sistemaMB) {
+        this.sistemaMB = sistemaMB;
+    }
+     
+     
 
 }
