@@ -43,8 +43,8 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             Query query = em.createQuery(queryString);
 //            System.out.println(queryString);
             query.setParameter(1, codP);
-            ProductoGeneralVenta producto = (ProductoGeneralVenta) query.getSingleResult();
-            return producto;
+            List<ProductoGeneralVenta> producto = (List<ProductoGeneralVenta>) query.getResultList();
+            return producto.get(0);//cambiar solo x la Julie
         } catch (NoResultException e) {
             return null;
         }
