@@ -422,8 +422,8 @@ h1 , h2
 
 .filaCeleste
 {
-    background-color: #2fadd3;
-    color: white;
+    background-color: #2fadd3 !important;
+    color: white!important;
 }
 
 .filaRoja
@@ -436,15 +436,16 @@ h1 , h2
 .filaVerde
 {
     background: none repeat scroll 0 0 ;
-    background-color: #459b45;
-    font-weight: bold;
-    color: white;
+    background-color: #459b45!important;
+    font-weight: lighter!important;
+    color: white!important;
 }
 
 .filaAzul
 {
-    background-color: #2b6598;
-    color: white;
+    background-color: #2b6598!important;
+    color: white!important;
+    font-weight: lighter!important;
 }
 
 .filaNaranja
@@ -658,5 +659,23 @@ h1 , h2
     font-weight: lighter;
     background-image: none;
     font-size: 14px;
+}
+
+.panelSinPadding .ui-widget-content .ui-panelgrid-cell
+{    
+    padding: 2px 4px 2px 2px !important;
+    
+}
+
+
+.bordePanel2 .ui-accordion .ui-accordion-header.ui-state-default {
+    margin-bottom: 2px;
+    border: 1px solid #E5E5E5;
+    background-color: black;
+}
+
+.tablaSinPadding tbody td{
+    padding: 1px !important;
+ 
 }
 

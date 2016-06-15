@@ -15,8 +15,10 @@ import ec.com.codesoft.modelo.servicios.CompraServicio;
 import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.modelo.servicios.ProductoGeneralCompraServicio;
+import ec.com.codesoft.web.seguridad.SistemaMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.Digits;
@@ -125,6 +128,15 @@ public class comprarMB implements Serializable {
     private FacturaServicio facturaServicio;
     
     
+    @ManagedProperty(value = "#{sistemaMB}")
+    /**
+     * Variable para obtener las variables del sistema
+     */
+    private SistemaMB sistemaMB;
+    
+    private Integer iva;
+    
+    
 
     //ejb que me permiten cominucarme entre beans
     //@ManagedProperty("#{gestionarCompraMB}")
@@ -132,6 +144,7 @@ public class comprarMB implements Serializable {
     @PostConstruct
     public void postConstruct() {
         System.out.println("reiniciando ...");
+        iva=sistemaMB.getConfiguracion().getIva().intValueExact();
 
         // Map params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         // String id = (String) params.get("id");
@@ -150,7 +163,7 @@ public class comprarMB implements Serializable {
         this.compra.setFechaIngreso(new Date());
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
-        this.compra.setIva(new BigDecimal("12"));
+        this.compra.setIva(new BigDecimal("0"));
         listaDistribuidores = distribServicio.obtenerTodos();
         sumaTotalCompra = new BigDecimal(0);
 
@@ -293,12 +306,16 @@ public class comprarMB implements Serializable {
         BigDecimal calculo = sumaTotalCompra.subtract(compra.getDescuento());
         //System.out.println(calculo);
         System.out.println(calculo);
-        System.out.println(compra.getIva());
-        // System.out.println(calculo);
-        // System.out.println(calculo);
+        //Valor en porcenaje para calcular el iva
+        BigDecimal ivaPorcentaje=new BigDecimal(iva);
+        
+        
+        //System.out.println(compra.getIva());
 
-        compra.setTotal(calculo.multiply(compra.getIva().divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
+        compra.setTotal(calculo.multiply(ivaPorcentaje.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
         compra.setTotal(compra.getTotal().divide(new BigDecimal(1), 2, RoundingMode.HALF_UP));
+        compra.setIva(compra.getTotal().subtract(compra.getTotal().multiply(ivaPorcentaje.divide(new BigDecimal("100")))));
+        System.out.println("iva:"+compra.getIva() );
     }
 
     /**
@@ -746,6 +763,22 @@ public class comprarMB implements Serializable {
 
     public void setStockProductoSeleccionado(Integer stockProductoSeleccionado) {
         this.stockProductoSeleccionado = stockProductoSeleccionado;
+    }
+
+    public SistemaMB getSistemaMB() {
+        return sistemaMB;
+    }
+
+    public void setSistemaMB(SistemaMB sistemaMB) {
+        this.sistemaMB = sistemaMB;
+    }
+
+    public Integer getIva() {
+        return iva;
+    }
+
+    public void setIva(Integer iva) {
+        this.iva = iva;
     }
     
     

@@ -10,7 +10,6 @@ and open the template in the editor.
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:b="http://bootsfaces.net/ui"
                 template="/template/plantilladmin.xhtml">
 
 
@@ -24,101 +23,84 @@ and open the template in the editor.
                     <!-- Ecabezado para buscar el ruc del distribuidos-->
                     <p:panel header="Datos De la Compra" styleClass="panelNoBorder titleBarVerde">
                         <div style="text-align: center">
-                            <p:panelGrid columns="3" style="margin: 0 auto" >
+                            <p:panelGrid  style="margin: 0 auto;width: 100%" >
+                                <p:row>
+                                    <p:column style="width: 150px">
+                                        <p:panelGrid columns="1" styleClass="tablaSinPadding">
+                                            <p:inputText
+                                                size="20"
+                                                id="txtRuc" 
+                                                placeholder="CI/RUC"
+                                                onkeypress="return validarEnter(event, 'buscarDistribuidorJS');"  
+                                                value="#{comprarMB.compra.ruc.ruc}" 
+                                                />
 
-                                <p:inputText
-                                    size="20"
-                                    id="txtRuc" 
-                                    placeholder="RUC del distribuidor"
-                                    onkeypress="return validarEnter(event, 'buscarDistribuidorJS');"  
-                                    value="#{comprarMB.compra.ruc.ruc}" 
+                                            <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
 
-                                    />
+                                            <p:commandButton 
+                                                id="btnEncontrarDitribuidor"                                    
+                                                icon="fa fa-search" 
+                                                style="width: 100%"
+                                                styleClass="btn_verde" />     
+                                        </p:panelGrid>
+                                    </p:column>
+                                    <p:column>
 
-                                <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
+                                        <!-- Datos del distribuidor para mostrar	 -->
+                                        <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%;text-align: left">
+                                            <p:outputLabel value="Nombre: "  />
+                                            <p:outputLabel  value="#{comprarMB.compra.ruc.nombre}" style="font-weight: bold" />
 
-                                <p:commandButton 
-                                    id="btnEncontrarDitribuidor"                                    
-                                    icon="fa fa-search" 
-                                    styleClass="btn_verde" />
+                                            <p:outputLabel value="Telefono: "  />
+                                            <p:outputLabel value="#{comprarMB.compra.ruc.telefono}" style="font-weight: bold"  />
 
-                                <p:tooltip style="font-size: 11px" id="toolTipGrow" for=":formDetalleDistribuidor:btnEncontrarDitribuidor" value="Buscar distribuidores"
-                                           showEffect="clip" hideEffect="explode" />
-                                <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
-                                    <p:dataTable value="#{comprarMB.listaDistribuidores}" 
-                                                 rows="10"
-                                                 var="distribuidor"
-                                                 scrollable="true"
-                                                 selectionMode="single"
-                                                 selection="#{comprarMB.distribuidorSeleccionado}"
-                                                 rowKey="#{distribuidor.ruc}"
-                                                 scrollHeight="300">
+                                            <p:outputLabel value="Direccion: "  />
+                                            <p:outputLabel value="#{comprarMB.compra.ruc.direccion}" style="font-weight: bold"  />
 
-                                        <p:ajax event="rowSelect" listener="${comprarMB.filaSeleccionadaDistribuidor}" update=":formDetalleDistribuidor:gridDatosCompra,:formDetalleDistribuidor:txtRuc" />
 
-                                        <p:column headerText="Ruc" filterBy="#{distribuidor.ruc}" >
-                                            <p:outputLabel value="#{distribuidor.ruc}" />
-                                        </p:column>
+                                            <p:outputLabel value="Email: "  />
+                                            <p:outputLabel  value="#{comprarMB.compra.ruc.correo}" style="font-weight: bold" />
 
-                                        <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}" filterFunction="#{filtroMB.filterByName}" >
-                                            <p:outputLabel value="#{distribuidor.nombre}"/>
-                                        </p:column>
-
-                                    </p:dataTable>
-
-                                </p:overlayPanel>
+                                        </p:panelGrid>
+                                    </p:column>
+                                </p:row>
 
                             </p:panelGrid>
+
+                            <p:overlayPanel widgetVar="overlayDistribuidor" for="btnEncontrarDitribuidor" hideEffect="fade" dynamic="true" style="width: 400px" >
+                                <p:dataTable value="#{comprarMB.listaDistribuidores}" 
+                                             rows="10"
+                                             var="distribuidor"
+                                             scrollable="true"
+                                             selectionMode="single"
+                                             selection="#{comprarMB.distribuidorSeleccionado}"
+                                             rowKey="#{distribuidor.ruc}"
+                                             style="text-align: left"
+                                             scrollHeight="300">
+
+                                    <p:ajax event="rowSelect" listener="${comprarMB.filaSeleccionadaDistribuidor}" update=":formDetalleDistribuidor:gridDatosCompra,:formDetalleDistribuidor:txtRuc" />
+
+                                    <p:column headerText="Ruc" filterBy="#{distribuidor.ruc}" >
+                                        <p:outputLabel value="#{distribuidor.ruc}" />
+                                    </p:column>
+
+                                    <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}" filterFunction="#{filtroMB.filterByName}" >
+                                        <p:outputLabel value="#{distribuidor.nombre}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                            </p:overlayPanel>
 
                         </div>
 
-                        <p:separator/>
-                        <!-- Datos del distribuidor para mostrar	 -->
-                        <p:panelGrid id="gridDatosCompra" columns="4" style="width: 100%;text-align: left">
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                <p:outputLabel  value=" Nombre:"  />
-                            </p:panel>
-                            <p:outputLabel style="font-weight: bold"  value="#{comprarMB.compra.ruc.nombre}"  />
 
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-home" aria-hidden="true"></i>
-                                <p:outputLabel style="font-weight: bold"  value=" Dirección:" />
-                            </p:panel>
-                            <p:outputLabel style="font-weight: bold" value="#{comprarMB.compra.ruc.direccion}"  />
 
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-mobile" aria-hidden="true"></i>
-                                <p:outputLabel style="font-weight: bold"  value=" Celular:" />
-                            </p:panel>
-                            <p:outputLabel style="font-weight: bold" value="#{comprarMB.compra.ruc.telefono}"  />
 
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                                <p:outputLabel style="font-weight: bold" value=" Correo:"/>
-                            </p:panel>
-                            <p:outputLabel style="font-weight: bold" value="#{comprarMB.compra.ruc.correo}"  />
 
-                        </p:panelGrid>
+                        <p:spacer height="5px" />
 
-                        <p:spacer height="15px" />
 
-                        <!-- Panel para mostrar datos de la compra -->
-                        <p:panel >
-                            <p:panelGrid columns="4">
-                                <p:outputLabel value="No Documento: " style="font-weight: bold"/>
-                                <p:inputText 
-                                    placeholder="Numero de Documento"
-                                    id="txtNumeroDocumento" 
-                                    onkeypress="return noProcesar(event);" 
-                                    value="#{comprarMB.compra.codigoDocumento}"  />
-
-                                <p:outputLabel value="Fecha Compra:" style="font-weight: bold" />
-                                <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="MM/dd/yyyy HH:mm:ss" value="#{comprarMB.compra.fechaIngreso}" title="Fecha cuando se realizo la compra" />
-
-                            </p:panelGrid>
-
-                        </p:panel>
 
                     </p:panel>
                 </h:form>
@@ -127,24 +109,82 @@ and open the template in the editor.
 
                 <p:panel header="Agregar Detalles compra" style="text-align: center" styleClass="panelNoBorder titleBarVerdeSuave">
                     <h:form id="formBuscarProducto">
-                        <p:panelGrid columns="5" style="margin: 0 auto;height: 100%">
+                        <p:panelGrid style="margin: 0 auto;height: 100%;width: 100%">
+                            <p:row>
 
-                            <p:outputLabel value="Código General:  " style="font-weight: bold"/>
-                            <p:inputText 
-                                placeholder="Codigo del Producto"
-                                id="txtCodigoDetalle" 
-                                onkeypress="return validarEnter(event, 'btnValidar');" 
-                                value="#{comprarMB.codigoDetalle}" />
+                                <p:column style="width: 80px;">
+                                    <!-- Panel para mostrar datos de la compra -->
 
 
-                            <p:commandButton 
-                                styleClass="btn_mint"
-                                oncomplete="PF('widgetVarCatalogo').loadContents()" 
-                                id="btnEncontrarCatalogo" 
-                                icon="fa fa-search" />
 
-                            <p:tooltip style="font-size: 11px" id="toolTipGrow" for="btnEncontrarCatalogo" value="Buscar Productos"
-                                       showEffect="clip" hideEffect="explode" />
+                                    <p:panelGrid columns="1" style="width: 100%">
+                                        <p:inputText 
+                                            placeholder="Codigo del Producto"
+                                            id="txtCodigoDetalle" 
+                                            onkeypress="return validarEnter(event, 'btnValidar');" 
+                                            value="#{comprarMB.codigoDetalle}" />
+
+
+                                        <p:commandButton 
+                                            style="width: 100%"
+                                            styleClass="btn_mint"
+                                            oncomplete="PF('widgetVarCatalogo').loadContents()" 
+                                            id="btnEncontrarCatalogo" 
+                                            icon="fa fa-search" />
+
+                                    </p:panelGrid>
+
+
+                                </p:column>
+
+                                <p:column>
+                                    <p:panelGrid columns="1" >
+
+                                        <p:panelGrid columns="3">
+                                            
+                                            <p:inputText 
+                                                placeholder="Numero de Documento"
+                                                id="txtNumeroDocumento" 
+                                                onkeypress="return noProcesar(event);" 
+                                                value="#{comprarMB.compra.codigoDocumento}" />
+
+                                            <p:outputLabel value="Fecha Compra:" />
+                                            <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="dd/MM/yyyy HH:mm:ss" value="#{comprarMB.compra.fechaIngreso}" title="Fecha cuando se realizo la compra" />
+
+                                        </p:panelGrid>
+
+                                        <p:panelGrid columns="9" style="width: 100%">
+
+                                            <p:outputLabel value="Nombre:"/>
+                                            <p:outputLabel id='lblNombreProducto' value="#{comprarMB.catalogo.nombre}" style="font-weight: bold" />
+
+                                            <p:outputLabel value="Tipo:"/>
+                                            <p:outputLabel id='lblTipoProducto' value="#{comprarMB.catalogo.tipoProducto=='G'?'General':comprarMB.catalogo.tipoProducto=='E'?'Individual':''}" style="font-weight: bold" />
+
+                                            <p:panelGrid columnClasses="2">
+                                                <p:outputLabel value="PVP:" style="width: 100px"/>
+                                                <p:commandButton 
+                                                    style="font-size: 12px;"
+                                                    id="btnCambiarPrecio" 
+                                                    icon="ui-icon-pencil" 
+                                                    actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" 
+                                                    styleClass="ui-botonEsmeralda" 
+                                                    update="@form,:dialogEditPrecio" 
+                                                    title="Cambiar el precio del producto" />
+
+                                            </p:panelGrid>
+                                            <p:outputLabel id='lblPVP' value="#{calculosMB.incluirIva(comprarMB.catalogo.precio)}" style="font-weight: bold" />
+
+
+
+                                            <p:outputLabel value="Stock" />
+                                            <p:outputLabel id="lblStock" value="#{comprarMB.stockProductoSeleccionado}" style="font-weight: bold" />
+
+                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                </p:column>
+                            </p:row>
+
 
                             <p:remoteCommand name="btnValidar" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,lblTipoProducto,lblPVP,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:txtCodigoDetalle"/>
 
@@ -152,35 +192,7 @@ and open the template in the editor.
 
                         <p:separator/>
 
-                        <p:panelGrid columns="9" style="width: 100%">
 
-                            <p:outputLabel value="Nombre:" style="font-weight: bold"/>
-                            <p:outputLabel id='lblNombreProducto' value="#{comprarMB.catalogo.nombre}" style="font-weight: lighter" />
-
-                            <p:outputLabel value="Tipo:" style="font-weight: bold"/>
-                            <p:outputLabel id='lblTipoProducto' value="#{comprarMB.catalogo.tipoProducto=='G'?'General':comprarMB.catalogo.tipoProducto=='E'?'Individual':''}" style="font-weight: lighter" />
-
-                            <p:panelGrid columnClasses="2">
-                                <p:outputLabel value="PVP:" style="width: 100px;font-weight: bold"/>
-                                <p:commandButton 
-                                    style="font-size: 12px;"
-                                    id="btnCambiarPrecio" 
-                                    icon="ui-icon-pencil" 
-                                    actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" 
-                                    styleClass="ui-botonEsmeralda" 
-                                    update="@form,:dialogEditPrecio" 
-                                    title="Cambiar el precio del producto" />
-
-                            </p:panelGrid>
-                            <p:outputLabel id='lblPVP' value="#{calculosMB.incluirIva(comprarMB.catalogo.precio)}" style="font-weight: lighter" />
-
-                            <p:tooltip style="font-size: 11px" id="toolTipGrow3" for=":formBuscarProducto:btnCambiarPrecio" value="Cambiar el precio de Venta al publico"
-                                       showEffect="clip" hideEffect="explode" />
-
-                            <p:outputLabel value="Stock" style="font-weight: bold" />
-                            <p:outputLabel id="lblStock" value="#{comprarMB.stockProductoSeleccionado}" style="font-weight: lighter" />
-
-                        </p:panelGrid>
 
 
                     </h:form>
@@ -256,7 +268,7 @@ and open the template in the editor.
                 <!-- Panel para agrupar los totales -->
                 <h:form id="formTotales" >
                     <div style="text-align: center;height:140px">
-                        <p:panel id="panelTotales" style="width: 250px;float: right"  styleClass="panelNoBorder">
+                        <p:panel id="panelTotales" style="width: 300px;float: right"  styleClass="panelNoBorder">
                             <p:panelGrid columns="2" style="text-align: left">
                                 <p:outputLabel value="Subtotal: "  />
                                 <p:inputText disabled="true" onkeypress="return noProcesar(event);" value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
@@ -268,8 +280,6 @@ and open the template in the editor.
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
-                                <p:outputLabel value="Iva: "/>
-                                <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText> 
 
@@ -290,8 +300,8 @@ and open the template in the editor.
                             <p:commandButton 
                                 icon="fa fa-floppy-o"
                                 styleClass="btn_azul"
-                                process="@this,:formDetalleDistribuidor:txtNumeroDocumento,:formDetalleDistribuidor:txtFechaIngreso"                                              
-                                update=":formDetalleDistribuidor:txtNumeroDocumento"
+                                process="@this,:formBuscarProducto:txtNumeroDocumento,:formBuscarProducto:txtFechaIngreso"                                              
+                                update=":formBuscarProducto:txtNumeroDocumento"
                                 value="Comprar" 
 
                                 actionListener="#{comprarMB.ejecutarCompra()}"  >
@@ -422,6 +432,7 @@ and open the template in the editor.
                 <p:overlayPanel widgetVar="widgetVarCatalogo" id="overlayCatalogoID" for=":formBuscarProducto:btnEncontrarCatalogo" hideEffect="fade" dynamic="true" style="width:600px">
                     <h:form id="formDialgBuscarProductos">
                         <p:dataTable 
+                            style="text-align: left"
                             rows="10"
                             value="#{comprarMB.listaCatalogos}" 
                             var="catalogo"
