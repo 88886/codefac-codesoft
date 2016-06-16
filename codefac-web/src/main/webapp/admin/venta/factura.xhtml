@@ -13,11 +13,44 @@ and open the template in the editor.
                 template="/template/plantilladmin.xhtml">
 
     <ui:define name="ayuda">
-        <p:outputLabel value="Factura" style="font-weight: bold"/> 
-        <h:panelGrid columns="2" styleClass="panelNoBorder">
-            <p:graphicImage library="img" name="capturasSistema/buscarCliente.PNG"/>
-            <p:outputLabel value="Ingrese la cédula y pulse enter, Caso contrario puede buscar clientes por medio del ícono en forma de lupa."/>
-        </h:panelGrid>
+        <h:form>
+            <p:tabView>
+                <p:tab title="Clientes">
+                    <h:panelGrid columns="2" styleClass="panelNoBorder"> 
+                        <p:graphicImage  library="img" name="capturasSistema/buscarCliente.PNG" width="92%" />
+                        <p:outputLabel value="Ingrese la cédula y pulse enter, Caso contrario puede buscar clientes por medio del ícono en forma de lupa."/>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Deudas">
+                    <h:panelGrid columns="2" styleClass="panelNoBorder">
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/deudas.PNG')}">
+                            <p:graphicImage  library="img" name="capturasSistema/deudas.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="Al momento de realizar la búsqueda de un cliente y si este registrara alguna deuda sobre alguna venta(s)
+                                       automáticamente el sistema la mostrará"/>
+
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Tipos Pagos">
+                    <h:panelGrid columns="2" styleClass="panelNoBorder">
+                        <p:graphicImage library="img" name="capturasSistema/tipoPago.PNG" width="100%"/>
+                        <p:outputLabel value="En esta sección escojerá el tipo de Pago que realizará el cliente 
+                                       como Efectivo, Banco(Meses del banco seleccionado), Crédito otorgado por el establecimiento
+                                       o Cheque"/>
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+        <p:dialog widgetVar="dlgImagen" modal="true">
+            <h:form id="frmImagen">
+                <p:panel>
+                    <p:graphicImage library="img" name="#{facturaMB.rutaImagenAgrandar}" />
+                </p:panel>
+            </h:form>    
+        </p:dialog>
+
+
+
     </ui:define>
     <ui:define name="contenido">
         <ui:include src="../../common/factura.xhtml" />

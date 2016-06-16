@@ -178,6 +178,9 @@ public class FacturaMB {
     private List<CreditoFactura> creditoFacturaObtenidos;
     private List<Venta> ventasTipoPago;
     private boolean mostrarDeudas;
+    
+    //imagen para agrandar en la Ayuda
+    private String rutaImagenAgrandar;
 
     @EJB
     ClienteServicio clienteServicio;
@@ -213,6 +216,7 @@ public class FacturaMB {
      */
     @PostConstruct
     public void inicializar() {
+        rutaImagenAgrandar=" ";
         estadoDialogo = false;
         estadoDialogoGeneral = false;
         msjCliente = "";
@@ -1881,6 +1885,14 @@ public class FacturaMB {
         interesTarjeta = new BigDecimal("0.0");
         totalPagar = total;
     }
+    
+    //Agrandar la imagen en el dialogo
+    public void agrandarImagen(String ruta){
+        rutaImagenAgrandar=ruta;
+        RequestContext.getCurrentInstance().execute("PF('dlgImagen').show()");
+        
+    }
+    
 
     ////////////////////METODOS GET Y SET /////////////////////
     public boolean getEstadoDialogo() {
@@ -2452,5 +2464,14 @@ public class FacturaMB {
     public void setMostrarDeudas(boolean mostrarDeudas) {
         this.mostrarDeudas = mostrarDeudas;
     }
+
+    public String getRutaImagenAgrandar() {
+        return rutaImagenAgrandar;
+    }
+
+    public void setRutaImagenAgrandar(String rutaImagenAgrandar) {
+        this.rutaImagenAgrandar = rutaImagenAgrandar;
+    }
+    
 
 }
