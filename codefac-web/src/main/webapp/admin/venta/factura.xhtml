@@ -12,6 +12,13 @@ and open the template in the editor.
                 xmlns:p="http://primefaces.org/ui"
                 template="/template/plantilladmin.xhtml">
 
+    <ui:define name="ayuda">
+        <p:outputLabel value="Factura" style="font-weight: bold"/> 
+        <h:panelGrid columns="2" styleClass="panelNoBorder">
+            <p:graphicImage library="img" name="capturasSistema/buscarCliente.PNG"/>
+            <p:outputLabel value="Ingrese la cédula y pulse enter, Caso contrario puede buscar clientes por medio del ícono en forma de lupa."/>
+        </h:panelGrid>
+    </ui:define>
     <ui:define name="contenido">
         <ui:include src="../../common/factura.xhtml" />
     </ui:define>
