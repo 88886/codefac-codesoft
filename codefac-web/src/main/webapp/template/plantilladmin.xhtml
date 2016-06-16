@@ -93,31 +93,34 @@ and open the template in the editor.
 
 
                     <f:facet name="options">
-                        <p:inputText style="margin-right:10px" placeholder="Search"/>
+                        <p:inputText style="margin-right:10px" placeholder="Buscar"/>
                         <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="fa fa-sign-out" />
                         <p:spacer width="22px"/>
 
                         <p:graphicImage id="content" library="img" name="ayudaCodefac.png" style="width: 23px" />
 
-                        <p:tooltip id="toolTipContent" for="content" >
-                            <p:panel>
-                                <f:facet name="header" >
-                                    <p:graphicImage library="img" name="ayudaCodefac.png" style="width: 25px" />
-                                    <p:outputLabel value="Ayuda" style="font-size: 25px;padding-left: 15px" />
-                                </f:facet>
+                        <p:overlayPanel id="toolTipContent" for="content" showEffect="blind" hideEffect="explode" showEvent="mouseover" hideEvent="mousedown"
+                                        dismissable="false" showCloseIcon="true" style="margin-right: 10px;margin-top: 20px;width: 600px"  >
+                            <p:panel style="text-align: left">
+
+                                <p:graphicImage library="img" name="ayudaCodefac.png" style="width: 25px" />
+                                <p:outputLabel value="Ayuda" style="font-size: 25px;padding-left: 15px" />
                                 
+                                <div style="height: 3px;background-color: #5eaade;margin-top: 3px" />
+
+
                                 <ui:insert name="ayuda"/>
-                                
+
                                 <f:facet name="footer" >
                                     <p:outputLabel 
-                                        
+
                                         style="color: #485798;font-weight: bold;font-size: 11px"
                                         value="Si desea mas información detallada puede visitar la seccion de ayuda." />
                                 </f:facet>
-                                
+
                             </p:panel>
 
-                        </p:tooltip>
+                        </p:overlayPanel>
 
                     </f:facet>
 
