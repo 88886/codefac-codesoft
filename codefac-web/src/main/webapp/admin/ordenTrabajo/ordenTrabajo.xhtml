@@ -398,8 +398,8 @@ and open the template in the editor.
             <p:dialog header="Agregar Cliente" widgetVar="confirmarCliente" modal="true">
                 <h:form>
                     <h2>El cliente no existe</h2>
-                    <p:commandButton onclick="PF('confirmarCliente').hide();" value="Aceptar"/>
-                    <p:commandButton actionListener="#{ordenTrabajoMB.crearNuevoCliente()}"  style="background-image: none;background-color: forestgreen" value="Nuevo Cliente">
+                    <p:commandButton onclick="PF('confirmarCliente').hide();" value="Aceptar" styleClass="btn_azul"/>
+                    <p:commandButton actionListener="#{ordenTrabajoMB.crearNuevoCliente()}"  style="background-image: none;background-color: forestgreen" value="Nuevo Cliente" styleClass="btn_azul">
                         <p:ajax event="dialogReturn" listener="#{ordenTrabajoMB.onClientChosen}" update=":formPrincipal" />
                     </p:commandButton>                        
 

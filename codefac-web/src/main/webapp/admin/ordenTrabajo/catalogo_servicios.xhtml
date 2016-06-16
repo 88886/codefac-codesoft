@@ -12,9 +12,14 @@ and open the template in the editor.
                 xmlns:p="http://primefaces.org/ui"
                 template="/template/plantilladmin.xhtml">
 
+    <ui:define name="ayuda">
+        <p>En esta seccion puede gestionar los servicios que ofrese su empresa.</p>
+    </ui:define>
 
     <ui:define name="contenido" >
         <h4 class="titulo" style="text-align: center">Catalogo de Servicios</h4>
+        
+ 
 
         <p:panel>
             <h:form id="formPrincipal">
@@ -65,7 +70,7 @@ and open the template in the editor.
                             icon="fa fa-times"                             
                             >
                             <p:confirm header="Confirmar" message="Desea eliminar el servicio?" icon="ui-icon-alert" />
-                            
+
                         </p:commandButton>
                     </p:column>
 

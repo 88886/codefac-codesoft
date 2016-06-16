@@ -45,7 +45,7 @@ and open the template in the editor.
                     <p:submenu label="Distribuidores" icon="fa fa-truck">
                         <p:menuitem value="Gestionar" outcome="distribuidor"  icon="fa fa-pencil-square-o" />
                         <p:submenu label="Reportes" icon="fa fa-pie-chart">
-                                <p:menuitem value="Productos" outcome="reporDistriProd" icon="fa fa-shopping-basket"/>
+                            <p:menuitem value="Productos" outcome="reporDistriProd" icon="fa fa-shopping-basket"/>
                         </p:submenu>
                     </p:submenu>
 
@@ -71,6 +71,8 @@ and open the template in the editor.
                     <p:submenu label="Orden Trabajo" icon="fa fa-sticky-note">
                         <p:menuitem value="Nueva" outcome="ordenTrabajo"  icon="fa fa-plus-square" />
                         <p:menuitem value="Gestionar" outcome="gestionarOrdenTrabajo"  icon="fa fa-pencil-square-o" />
+                        <p:menuitem value="Servicios" outcome="serviciosOrdenTrabajo"  icon="ui-icon-script" />
+
 
                     </p:submenu>
 
@@ -86,10 +88,43 @@ and open the template in the editor.
                         <p:menuitem value="General" icon="fa fa-sliders" outcome="configuracion"/>
                         <p:menuitem value="Respaldos" icon="fa fa-dropbox" outcome="respaldo"/>
                     </p:submenu>
+
+
+
+
                     <f:facet name="options">
                         <p:inputText style="margin-right:10px" placeholder="Search"/>
                         <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="fa fa-sign-out" />
+                        <p:spacer width="22px"/>
+
+                        <p:graphicImage id="content" library="img" name="ayudaCodefac.png" style="width: 23px" />
+
+                        <p:tooltip id="toolTipContent" for="content" >
+                            <p:panel>
+                                <f:facet name="header" >
+                                    <p:graphicImage library="img" name="ayudaCodefac.png" style="width: 25px" />
+                                    <p:outputLabel value="Ayuda" style="font-size: 25px;padding-left: 15px" />
+                                </f:facet>
+                                
+                                <ui:insert name="ayuda"/>
+                                
+                                <f:facet name="footer" >
+                                    <p:outputLabel 
+                                        
+                                        style="color: #485798;font-weight: bold;font-size: 11px"
+                                        value="Si desea mas información detallada puede visitar la seccion de ayuda." />
+                                </f:facet>
+                                
+                            </p:panel>
+
+                        </p:tooltip>
+
                     </f:facet>
+
+                    <f:facet name="options"> 
+
+                    </f:facet>
+
                 </p:menubar>
             </h:form>
         </div>
@@ -253,7 +288,7 @@ and open the template in the editor.
                                           styleClass="btn_azul" 
                                           actionListener="#{ventasDiariasMB.venta()}" ajax="true" update=":formGeneralV,:formDetallesV,:formDetallesVentas:idDetallesFactura,:formDetallesVentasFactura:idDetallesFacturaFactura,:formDetallesVentas:panelTotales"/>
                         <p:outputLabel value="#{ventasDiariasMB.msjStock}" style="color: darkred"/>
-                        
+
                     </h:panelGrid>
                 </h:form>
             </p:dialog>
@@ -440,7 +475,7 @@ and open the template in the editor.
                 <h:form style="margin: 0 auto" target="_blank">
                     <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();
                             PF('dlgDetallesVentasDiariasFactura').hide()" icon="fa fa-floppy-o"
-                             styleClass="btn_azul"  actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
+                                      styleClass="btn_azul"  actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
                 </h:form>
                 <h:form>
                     <p:commandButton onclick="PF('confirmarFacturaVentas').hide();" value="Cancelar" icon="fa fa-ban" styleClass="btn_rojo"/>

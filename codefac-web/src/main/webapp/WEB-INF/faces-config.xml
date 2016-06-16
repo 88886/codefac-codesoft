@@ -41,7 +41,7 @@
             <to-view-id>/admin/compra/compra.xhtml</to-view-id>
         </navigation-case>
         
-         <navigation-case>
+        <navigation-case>
             <from-outcome>configuracion</from-outcome>
             <to-view-id>/admin/configuracion/configuracion.xhtml</to-view-id>
         </navigation-case>
@@ -257,7 +257,7 @@
             <to-view-id>/admin/venta/reporte/reporteVenta.xhtml</to-view-id>
         </navigation-case>
         
-         <navigation-case>
+        <navigation-case>
             <from-outcome>respaldo</from-outcome>
             <to-view-id>/admin/backup/backup.xhtml</to-view-id>
         </navigation-case>
@@ -265,6 +265,11 @@
         <navigation-case>
             <from-outcome>gestionarAbonos</from-outcome>
             <to-view-id>/admin/venta/gestionarAbono.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>serviciosOrdenTrabajo</from-outcome>
+            <to-view-id>/admin/ordenTrabajo/catalogo_servicios.xhtml</to-view-id>
         </navigation-case>
 
                 
