@@ -526,6 +526,7 @@ public class FacturaMB {
 
             System.out.println("Encontrado");
             msjCliente = "Cliente Encontrado";
+            RequestContext.getCurrentInstance().execute("PF('acordionCliente').unselect(0)");
             if (clienteEncontrado.getTipo().equals("Distribuidor")) {
                 cliMayorista = " --> Distribuidor";
             } else {

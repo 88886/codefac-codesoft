@@ -18,21 +18,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
-import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -258,54 +261,45 @@ public class declaracionesMB implements Serializable {
 
     }
 
-    public void modificarFichero() {
+    public void modificarFichero() throws TransformerConfigurationException, TransformerException, IOException, SAXException {
 
-        System.out.println("Modificando");
-        Document document = null;
         try {
-            System.out.println("Try entro");
-            //Cargamos el document del fichero XML existente
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            document = db.parse(new File("C:\\Users\\Suco\\Desktop\\02-06-2016_12-22-32.xml"));
-            document.getDocumentElement().normalize();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/dim/prueba.xml")));
 
-        //Obtenemos todas las habitaciones de la casa
-        System.out.println("Documento"+ document.toString());
-        NodeList listaNodos = document.getDocumentElement().getElementsByTagName("Detalle");
-        Node nodo;
-        System.out.println("listaNodos "+listaNodos.getLength());
-        System.out.println("Antes del 1 for");
-        for (int i = 0; i < listaNodos.getLength(); i++) {
-            System.out.println("Dentro del 1 for"+i);
-            nodo = listaNodos.item(i);
-            
-            //Obtenemos una lista de todas las características de cada habitación
-            NodeList listaCaracteristicas = nodo.getChildNodes();
-            Node caracteristica;
+            //Obtenemos todas las habitaciones de la casa
+            System.out.println("Documento" + document);
+            NodeList listaNodos = document.getDocumentElement().getElementsByTagName("Detalle");
+            Node nodo;
+            System.out.println("listaNodos " + listaNodos.getLength());
+            System.out.println("Antes del 1 for");
+            for (int i = 0; i < listaNodos.getLength(); i++) {
+                System.out.println("Dentro del 1 for" + i);
+                nodo = listaNodos.item(i);
 
-            for (int z = 0; z < listaCaracteristicas.getLength(); z++) {
-                System.out.println("Entro al for");
-                //Obtenemos cada característica individual
-                caracteristica = listaCaracteristicas.item(z);
-                //Si la característica es el color y su valor es azul la eliminamos
-                if (caracteristica.getNodeName().equals("campo") && caracteristica.getTextContent().equals("[102]")) {
-                    //El padre del nodo es Habitación y su padre Casa. Eliminamos Habitación de Casa.
-                    Element c101 = (Element) document.createElement("campo");
-                    c101.appendChild(document.createTextNode("hooooooooola cambie"));
-                    Attr attrc101 = document.createAttribute("numero");
-                    attrc101.setValue("101");
-                    c101.setAttributeNode(attrc101);
-                    caracteristica.getParentNode().getParentNode().replaceChild(c101, nodo); //removeChild(caracteristica.getParentNode());
+                //Obtenemos una lista de todas las características de cada habitación
+                NodeList listaCaracteristicas = nodo.getChildNodes();
+                Node caracteristica;
+
+                for (int z = 0; z < listaCaracteristicas.getLength(); z++) {
+                    System.out.println("Entro al for");
+                    //Obtenemos cada característica individual
+                    caracteristica = listaCaracteristicas.item(z);
+                    //Si la característica es el color y su valor es azul la eliminamos
+                    if (caracteristica.getNodeName().equals("campo") && caracteristica.getTextContent().equals("[102]")) {
+                        //El padre del nodo es Habitación y su padre Casa. Eliminamos Habitación de Casa.
+                        Element c101 = (Element) document.createElement("campo");
+                        c101.appendChild(document.createTextNode("hooooooooola cambie"));
+                        Attr attrc101 = document.createAttribute("numero");
+                        attrc101.setValue("101");
+                        c101.setAttributeNode(attrc101);
+                        caracteristica.getParentNode().getParentNode().replaceChild(c101, nodo); //removeChild(caracteristica.getParentNode());
+                    }
                 }
             }
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(declaracionesMB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

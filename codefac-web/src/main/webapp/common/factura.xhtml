@@ -24,7 +24,7 @@ and open the template in the editor.
                             <p:selectOneButton value="#{facturaMB.tipoCliente}" >
                                 <f:selectItem itemLabel=" Nota de Entrega " itemValue="C"/>
                                 <f:selectItem itemLabel=" Factura " itemValue="F" />
-                                <p:ajax event="change" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:infDistr"/>
+                                <p:ajax event="change" listener="#{facturaMB.escojerTipoCLiente()}" update=":form:acorPanel:infDistr"/>
                             </p:selectOneButton>
                         </h:panelGrid>
                     </div>
@@ -33,73 +33,73 @@ and open the template in the editor.
             </h:form>
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true" />
-                <p:panel id="infDistr" styleClass=" titleBarVerde panelNoBorder" rendered="true" header="Información Cliente" style="width: 100%">
-                    <p:panel style="width: 100%">
-                        <p:panelGrid columns="6" style="margin: 0 auto;width: 60%;text-align: center" >
-                            <p:commandButton  id="btnBuscarCli" icon="fa fa-search"  styleClass="btn_verde"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
-                            <p:outputLabel for="cedCliente" value="Cédula/RUC:" style="font-weight: bold" />
-                            <p:inputText id="cedCliente" 
-                                         value="#{facturaMB.cedCliente}" 
-                                         required="true" 
-                                         requiredMessage="Campo necesario"
-                                         onkeypress="return validarEnter(event, 'btnBuscarCliente');"
-                                         placeholder="Ingrese la cedula o RUC"/>
-                            <p:message for="cedCliente" />
-                            <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form"/>
+                <p:accordionPanel id="acorPanel" widgetVar="acordionCliente">
+                    <p:tab id="infDistr" rendered="true" title="Cliente:  #{facturaMB.clienteEncontrado.nombre} -- Dirección: #{facturaMB.clienteEncontrado.direccion}  #{facturaMB.cliMayorista}">
+                        <p:panel style="width: 100%" styleClass="panelNoBorder">
+                                <p:panelGrid styleClass="panelNoBorder" columns="6" style="margin: 0 auto;width: 60%;text-align: center" >
+                                    <p:commandButton  id="btnBuscarCli" icon="fa fa-search"  styleClass="btn_verde"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
+                                    <p:outputLabel for="cedCliente" value="Cédula/RUC:" style="font-weight: bold" />
+                                    <p:inputText id="cedCliente" 
+                                                 value="#{facturaMB.cedCliente}" 
+                                                 required="true" 
+                                                 requiredMessage="Campo necesario"
+                                                 onkeypress="return validarEnter(event, 'btnBuscarCliente');"
+                                                 placeholder="Ingrese la cedula o RUC"/>
+                                    <p:message for="cedCliente" />
+                                    <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form"/>
 
-                            <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" style="font-weight: bold" />
-                        </p:panelGrid>
-                    </p:panel>
-                    <p:spacer style="background-image: none;background-color: #009966"/>
-                    <p:separator/>
-                    <p:outputLabel  value="Codigo Documento: " style="color: #0087ca;font-weight: bold"/>
-                    <p:inputText value="#{facturaMB.codigoDocumento}" style="width:10%"  />
-                    <p:separator/>
-                    <p:panel style="width: 100%">
-                        <p:panelGrid columns="4" id="panelGridDistr" style="width:100%;text-align: left" >
-
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                <p:outputLabel  value=" Nombre:"  />
+                                    <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" style="font-weight: bold" />
+                                </p:panelGrid>
                             </p:panel>
-                            <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
+                            <p:spacer style="background-image: none;background-color: #009966"/>
+                            <p:separator/>
+                            <p:outputLabel  value="Codigo Documento: " style="color: #0087ca;font-weight: bold"/>
+                            <p:inputText value="#{facturaMB.codigoDocumento}" style="width:10%"  />
+                            <p:separator/>
+                            <p:panel style="width: 100%" styleClass="panelNoBorder">
+                                <p:panelGrid columns="4" styleClass="panelNoBorder" id="panelGridDistr" style="width:100%;text-align: left" >
 
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-phone" aria-hidden="true"></i>
-                                <p:outputLabel value=" Teléfono:" />
+                                    <p:panel styleClass="panelNoBorder">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <p:outputLabel  value=" Nombre:"  />
+                                    </p:panel>
+                                    <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
+
+                                    <p:panel styleClass="panelNoBorder">
+                                        <i class="fa fa-phone" aria-hidden="true"></i>
+                                        <p:outputLabel value=" Teléfono:" />
+                                    </p:panel>
+                                    <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
+
+                                    <p:panel styleClass="panelNoBorder">
+                                        <i class="fa fa-mobile" aria-hidden="true"></i>
+                                        <p:outputLabel  value=" Celular:" />
+                                    </p:panel>
+                                    <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
+
+                                    <p:panel styleClass="panelNoBorder">
+                                        <i class="fa fa-home" aria-hidden="true"></i>
+                                        <p:outputLabel  value=" Dirección:" />
+                                    </p:panel>
+                                    <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
+
+                                    <p:panel styleClass="panelNoBorder">
+                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        <p:outputLabel value=" Correo:"/>
+                                    </p:panel>
+                                    <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
+
+
+                                    <p:panel styleClass="panelNoBorder">
+                                        <i class="fa fa-book" aria-hidden="true"></i>
+                                        <p:outputLabel  value=" Notas" />
+                                    </p:panel>
+                                    <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" readonly="true" />
+                                </p:panelGrid>
                             </p:panel>
-                            <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
+                    </p:tab>
+                </p:accordionPanel> 
 
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-mobile" aria-hidden="true"></i>
-                                <p:outputLabel  value=" Celular:" />
-                            </p:panel>
-                            <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
-
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-home" aria-hidden="true"></i>
-                                <p:outputLabel  value=" Dirección:" />
-                            </p:panel>
-                            <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
-
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                                <p:outputLabel value=" Correo:"/>
-                            </p:panel>
-                            <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
-
-
-                            <p:panel styleClass="panelNoBorder">
-                                <i class="fa fa-book" aria-hidden="true"></i>
-                                <p:outputLabel  value=" Notas" />
-                            </p:panel>
-                            <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" readonly="true" />
-                        </p:panelGrid>
-                    </p:panel>
-                </p:panel>
-
-                <p:separator/>
-                
                 <p:panel header="Deudas Cliente" styleClass="titleBarVerde panelNoBorder" style="width: 100%" rendered="#{facturaMB.mostrarDeudas}">
                     <p:dataTable var="deudas" value="#{facturaMB.creditoFacturaObtenidos}"
                                  id="tableDeudas">
@@ -129,7 +129,7 @@ and open the template in the editor.
 
                     </p:dataTable>
                 </p:panel>
-                <p:separator/>
+                
 
                 <p:panel style="width:100%"> 
                     <p:panelGrid columns="6" style="text-align: left;width:100%" styleClass="panelNoBorder">
@@ -142,7 +142,7 @@ and open the template in the editor.
                             <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
                             <f:selectItem itemLabel="Credito" itemValue="Credito" />
                             <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
-                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":formDetalles:panelTotales,@form"/>        
+                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":formDetalles:panelTotales"/>        
                         </p:selectOneMenu>
 
                         <p:outputLabel/>
@@ -151,7 +151,7 @@ and open the template in the editor.
                                 <p:outputLabel for="tipoBanco"  value="Banco :" />
                                 <p:selectOneMenu  id="tipoBanco" value="#{facturaMB.nombreBanco}" style="font-weight: bold  ">
                                     <f:selectItems var="banco" value="#{facturaMB.bancos}" itemLabel="#{banco.nombre}" itemValue="#{banco.nombre}" />
-                                    <p:ajax event="change" listener="#{facturaMB.devolverBancoNombre()}" update=":form:infDistr"/>        
+                                    <p:ajax event="change" listener="#{facturaMB.devolverBancoNombre()}" update=":form:acorPanel:infDistr"/>        
                                 </p:selectOneMenu>  
                             </p:panelGrid>
 
@@ -201,82 +201,82 @@ and open the template in the editor.
             </h:form>
             <h:form id="formCompra">
                 <p:panel id="idAgregar" styleClass="titleBarMint panelNoBorder" visible="true" header="Tipo de Detalle">
-                        <p:commandButton id="btnAgregarProd" value="Productos " title="Agregar Productos a la Factura" icon="fa fa-shopping-cart" styleClass="btn_mint" />  
-                        <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
-                            <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
-                                         rows="10"
-                                         selectionMode="single" 
-                                         scrollable="true" 
-                                         scrollHeight="200"  
-                                         rowKey="#{catalogo.codigoProducto}"
-                                         selection="#{facturaMB.catalogoSeleccionado}">
-                                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
-                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+                    <p:commandButton id="btnAgregarProd" value="Productos " title="Agregar Productos a la Factura" icon="fa fa-shopping-cart" styleClass="btn_mint" />  
+                    <p:overlayPanel id="movieAgregarP" for="btnAgregarProd" hideEffect="fade" dynamic="true" style="width:600px">
+                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                     rows="10"
+                                     selectionMode="single" 
+                                     scrollable="true" 
+                                     scrollHeight="200"  
+                                     rowKey="#{catalogo.codigoProducto}"
+                                     selection="#{facturaMB.catalogoSeleccionado}">
+                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
+                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
 
-                                <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                    <h:outputText value="#{catalogo.codigoProducto}" />
-                                </p:column>
-                                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                    <h:outputText value="#{catalogo.nombre}" />
-                                </p:column>
-                                <p:column headerText="Precio">
-                                    <h:outputText value="#{catalogo.precio}" />
-                                </p:column>
-                            </p:dataTable>
-                        </p:overlayPanel>
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                <h:outputText value="#{catalogo.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <h:outputText value="#{catalogo.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{catalogo.precio}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
 
-                        <p:commandButton id="btnAgregarOrden" value="Servicios"  title="Agregar Servicio a la Factura"  icon="fa fa-truck" styleClass="btn_mint"/>  
-                        <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
-                            <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
-                                         rows="10"
-                                         selectionMode="single" 
-                                         scrollable="true" 
-                                         scrollHeight="200"  
-                                         rowKey="#{catalogo.codigoProducto}"
-                                         selection="#{facturaMB.catalogoSeleccionado}">
-                                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
-                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
+                    <p:commandButton id="btnAgregarOrden" value="Servicios"  title="Agregar Servicio a la Factura"  icon="fa fa-truck" styleClass="btn_mint"/>  
+                    <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
+                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
+                                     rows="10"
+                                     selectionMode="single" 
+                                     scrollable="true" 
+                                     scrollHeight="200"  
+                                     rowKey="#{catalogo.codigoProducto}"
+                                     selection="#{facturaMB.catalogoSeleccionado}">
+                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
+                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
 
-                                <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                    <h:outputText value="#{catalogo.codigoProducto}" />
-                                </p:column>
-                                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                    <h:outputText value="#{catalogo.nombre}" />
-                                </p:column>
-                                <p:column headerText="Precio">
-                                    <h:outputText value="#{catalogo.precio}" />
-                                </p:column>
-                            </p:dataTable>
-                        </p:overlayPanel>
+                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                <h:outputText value="#{catalogo.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <h:outputText value="#{catalogo.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{catalogo.precio}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
 
-                        <p:commandButton id="btnAgregarServicio" value="O.Trabajo"  title="Agregar Ordenes de Trabajo a la Factura" icon="fa fa-suitcase" styleClass="btn_mint" />  
-                        <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
-                            <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
-                                         rows="10"
-                                         selectionMode="single" 
-                                         scrollable="true" 
-                                         scrollHeight="200"  
-                                         rowKey="#{ordenes.idOrdenTrabajo}"
-                                         selection="#{facturaMB.ordenTrabajoSeleccionada}">
-                                <p:ajax event="rowSelect" listener="#{facturaMB.mostrarDialogoDetallesOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
-                                        :formDetalles:panelTotales,frmDetallesOrden:tablaDetallesOrden" />  
-                                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden}"/>
+                    <p:commandButton id="btnAgregarServicio" value="O.Trabajo"  title="Agregar Ordenes de Trabajo a la Factura" icon="fa fa-suitcase" styleClass="btn_mint" />  
+                    <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
+                        <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
+                                     rows="10"
+                                     selectionMode="single" 
+                                     scrollable="true" 
+                                     scrollHeight="200"  
+                                     rowKey="#{ordenes.idOrdenTrabajo}"
+                                     selection="#{facturaMB.ordenTrabajoSeleccionada}">
+                            <p:ajax event="rowSelect" listener="#{facturaMB.mostrarDialogoDetallesOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
+                                    :formDetalles:panelTotales,frmDetallesOrden:tablaDetallesOrden" />  
+                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden}"/>
 
-                                <p:column headerText="Código" filterBy="#{ordenes.idOrdenTrabajo}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                    <h:outputText value="#{ordenes.idOrdenTrabajo}" />
-                                </p:column>
-                                <p:column headerText="Cliente" filterBy="#{ordenes.cedulaRuc.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                    <h:outputText value="#{ordenes.cedulaRuc.nombre}" />
-                                </p:column>
-                                <p:column headerText="Equipos" filterBy="#{ordenes.toStringDetalle()}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                    <h:outputText value="#{ordenes.toStringDetalle()}" />
-                                </p:column>
-                                <p:column headerText="Precio">
-                                    <h:outputText value="#{ordenes.total}" />
-                                </p:column>
-                            </p:dataTable>
-                        </p:overlayPanel>
-                    
+                            <p:column headerText="Código" filterBy="#{ordenes.idOrdenTrabajo}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                <h:outputText value="#{ordenes.idOrdenTrabajo}" />
+                            </p:column>
+                            <p:column headerText="Cliente" filterBy="#{ordenes.cedulaRuc.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                                <h:outputText value="#{ordenes.cedulaRuc.nombre}" />
+                            </p:column>
+                            <p:column headerText="Equipos" filterBy="#{ordenes.toStringDetalle()}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                                <h:outputText value="#{ordenes.toStringDetalle()}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{ordenes.total}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
+
                 </p:panel>
             </h:form>
 
@@ -492,7 +492,7 @@ and open the template in the editor.
     </p:dialog>
 
 
-    <p:overlayPanel widgetVar="overLayBuscarCliente"  for=":form:btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
+    <p:overlayPanel widgetVar="overLayBuscarCliente"  for=":form:acorPanel:btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
         <h:form>
             <p:dataTable var="cliente" 
                          value="#{facturaMB.clientesLista}"
