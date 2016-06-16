@@ -1427,6 +1427,7 @@ public class FacturaMB {
                         List<AbonoVentaCredito> abonos = new ArrayList<AbonoVentaCredito>();
                         AbonoVentaCredito abonoGuardar = new AbonoVentaCredito();
                         abonoGuardar.setCodigoAbono(0);
+                        System.out.println("Abono "+ abono);
                         abonoGuardar.setCantidad(abono);
                         abonoGuardar.setCodigoFacturaCredito(creditoFactura);
                         abonoGuardar.setFecha(new Date());

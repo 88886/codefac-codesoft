@@ -34,103 +34,107 @@ and open the template in the editor.
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true" />
                 <p:accordionPanel id="acorPanel" widgetVar="acordionCliente">
-                    <p:tab id="infDistr" rendered="true" title="Cliente:  #{facturaMB.clienteEncontrado.nombre} -- Dirección: #{facturaMB.clienteEncontrado.direccion}  #{facturaMB.cliMayorista}">
+                    <p:tab id="infDistr" rendered="true" title="#{facturaMB.clienteEncontrado.nombre} , #{facturaMB.clienteEncontrado.direccion} , #{facturaMB.clienteEncontrado.telefono} #{facturaMB.cliMayorista}">
                         <p:panel style="width: 100%" styleClass="panelNoBorder">
-                                <p:panelGrid styleClass="panelNoBorder" columns="6" style="margin: 0 auto;width: 60%;text-align: center" >
-                                    <p:commandButton  id="btnBuscarCli" icon="fa fa-search"  styleClass="btn_verde"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
-                                    <p:outputLabel for="cedCliente" value="Cédula/RUC:" style="font-weight: bold" />
-                                    <p:inputText id="cedCliente" 
-                                                 value="#{facturaMB.cedCliente}" 
-                                                 required="true" 
-                                                 requiredMessage="Campo necesario"
-                                                 onkeypress="return validarEnter(event, 'btnBuscarCliente');"
-                                                 placeholder="Ingrese la cedula o RUC"/>
-                                    <p:message for="cedCliente" />
-                                    <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form"/>
+                            <p:panelGrid styleClass="panelNoBorder" columns="6" style="margin: 0 auto;width: 60%;text-align: center" >
+                                <p:commandButton  id="btnBuscarCli" icon="fa fa-search"  styleClass="btn_verde"  title="Buscar un Cliente en la Base de Datos" oncomplete="PF('overLayBuscarCliente').loadContents()"/>  
+                                <p:outputLabel for="cedCliente" value="Cédula/RUC:" style="font-weight: bold" />
+                                <p:inputText id="cedCliente" 
+                                             value="#{facturaMB.cedCliente}" 
+                                             required="true" 
+                                             requiredMessage="Campo necesario"
+                                             onkeypress="return validarEnter(event, 'btnBuscarCliente');"
+                                             placeholder="Ingrese la cedula o RUC"/>
+                                <p:message for="cedCliente" />
+                                <p:remoteCommand name="btnBuscarCliente" actionListener="#{facturaMB.buscarCliente()}" update=":form,:frmDeudasCliente,:frmDeudasCliente:acorDeudas"/>
 
-                                    <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" style="font-weight: bold" />
-                                </p:panelGrid>
-                            </p:panel>
-                            <p:spacer style="background-image: none;background-color: #009966"/>
-                            <p:separator/>
-                            <p:outputLabel  value="Codigo Documento: " style="color: #0087ca;font-weight: bold"/>
-                            <p:inputText value="#{facturaMB.codigoDocumento}" style="width:10%"  />
-                            <p:separator/>
-                            <p:panel style="width: 100%" styleClass="panelNoBorder">
-                                <p:panelGrid columns="4" styleClass="panelNoBorder" id="panelGridDistr" style="width:100%;text-align: left" >
+                                <p:outputLabel  value="#{facturaMB.msjCliente}#{facturaMB.cliMayorista}" style="font-weight: bold" />
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:spacer style="background-image: none;background-color: #009966"/>
+                        <p:separator/>
+                        <p:outputLabel  value="Codigo Documento: " style="color: #0087ca;font-weight: bold"/>
+                        <p:inputText value="#{facturaMB.codigoDocumento}" style="width:10%"  />
+                        <p:separator/>
+                        <p:panel style="width: 100%" styleClass="panelNoBorder">
+                            <p:panelGrid columns="4" styleClass="panelNoBorder" id="panelGridDistr" style="width:100%;text-align: left" >
 
-                                    <p:panel styleClass="panelNoBorder">
-                                        <i class="fa fa-user" aria-hidden="true"></i>
-                                        <p:outputLabel  value=" Nombre:"  />
-                                    </p:panel>
-                                    <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
+                                <p:panel styleClass="panelNoBorder">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    <p:outputLabel  value=" Nombre:"  />
+                                </p:panel>
+                                <p:outputLabel id="nombreD" value="#{facturaMB.clienteEncontrado.nombre}" style="font-weight: bold"/>
 
-                                    <p:panel styleClass="panelNoBorder">
-                                        <i class="fa fa-phone" aria-hidden="true"></i>
-                                        <p:outputLabel value=" Teléfono:" />
-                                    </p:panel>
-                                    <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
+                                <p:panel styleClass="panelNoBorder">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                    <p:outputLabel value=" Teléfono:" />
+                                </p:panel>
+                                <p:outputLabel id="telefonoD" value="#{facturaMB.clienteEncontrado.telefono}" style="font-weight: bold"/>
 
-                                    <p:panel styleClass="panelNoBorder">
-                                        <i class="fa fa-mobile" aria-hidden="true"></i>
-                                        <p:outputLabel  value=" Celular:" />
-                                    </p:panel>
-                                    <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
+                                <p:panel styleClass="panelNoBorder">
+                                    <i class="fa fa-mobile" aria-hidden="true"></i>
+                                    <p:outputLabel  value=" Celular:" />
+                                </p:panel>
+                                <p:outputLabel id="celularC" value="#{facturaMB.clienteEncontrado.celular}" style="font-weight: bold" />
 
-                                    <p:panel styleClass="panelNoBorder">
-                                        <i class="fa fa-home" aria-hidden="true"></i>
-                                        <p:outputLabel  value=" Dirección:" />
-                                    </p:panel>
-                                    <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
+                                <p:panel styleClass="panelNoBorder">
+                                    <i class="fa fa-home" aria-hidden="true"></i>
+                                    <p:outputLabel  value=" Dirección:" />
+                                </p:panel>
+                                <p:outputLabel id="direccionD" value="#{facturaMB.clienteEncontrado.direccion}" style="font-weight: bold" />
 
-                                    <p:panel styleClass="panelNoBorder">
-                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                                        <p:outputLabel value=" Correo:"/>
-                                    </p:panel>
-                                    <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
+                                <p:panel styleClass="panelNoBorder">
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                    <p:outputLabel value=" Correo:"/>
+                                </p:panel>
+                                <p:outputLabel id="correoD" value="#{facturaMB.clienteEncontrado.correo}" style="font-weight: bold"/>
 
 
-                                    <p:panel styleClass="panelNoBorder">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <p:outputLabel  value=" Notas" />
-                                    </p:panel>
-                                    <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" readonly="true" />
-                                </p:panelGrid>
-                            </p:panel>
+                                <p:panel styleClass="panelNoBorder">
+                                    <i class="fa fa-book" aria-hidden="true"></i>
+                                    <p:outputLabel  value=" Notas" />
+                                </p:panel>
+                                <p:inputTextarea id="notasD" value="#{facturaMB.clienteEncontrado.notas}" readonly="true" />
+                            </p:panelGrid>
+                        </p:panel>
                     </p:tab>
                 </p:accordionPanel> 
+            </h:form>
 
-                <p:panel header="Deudas Cliente" styleClass="titleBarVerde panelNoBorder" style="width: 100%" rendered="#{facturaMB.mostrarDeudas}">
-                    <p:dataTable var="deudas" value="#{facturaMB.creditoFacturaObtenidos}"
-                                 id="tableDeudas">
-                        <p:column headerText="Factura N "  >
-                            <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
-                        </p:column>
-                        <p:column headerText="Fecha Inicio">
-                            <h:outputText value="#{deudas.fechaInicio}" >
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="Fecha Max Pago "  >
-                            <h:outputText value="#{deudas.fechaFin}" >
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="Abono"  >
-                            <h:outputText value="#{deudas.toStringAbonos()}" />
-                        </p:column>
-                        <p:column headerText="Total"  >
-                            <h:outputText value="#{deudas.codigoFactura.total}" />
-                        </p:column>
-                        <p:column headerText="Deuda"  >
-                            <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
-                        </p:column>
+            <h:form id="frmDeudasCliente">
+                <p:accordionPanel id="acorDeudas" widgetVar="acordionDeudas" rendered="#{facturaMB.mostrarDeudas}">
+                    <p:tab title="Deudas Cliente" titleStyle="titleBarVerde" >
+                            <p:dataTable var="deudas" value="#{facturaMB.creditoFacturaObtenidos}"
+                                         id="tableDeudas">
+                                <p:column headerText="Factura N "  >
+                                    <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
+                                </p:column>
+                                <p:column headerText="Fecha Inicio">
+                                    <h:outputText value="#{deudas.fechaInicio}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Fecha Max Pago "  >
+                                    <h:outputText value="#{deudas.fechaFin}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Abono"  >
+                                    <h:outputText value="#{deudas.toStringAbonos()}" />
+                                </p:column>
+                                <p:column headerText="Total"  >
+                                    <h:outputText value="#{deudas.codigoFactura.total}" />
+                                </p:column>
+                                <p:column headerText="Deuda"  >
+                                    <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
+                                </p:column>
+                            </p:dataTable>
+                    </p:tab>
+                </p:accordionPanel>
+            </h:form>
 
 
-                    </p:dataTable>
-                </p:panel>
-                
-
+            <h:form id="frmTipoPago">
                 <p:panel style="width:100%"> 
                     <p:panelGrid columns="6" style="text-align: left;width:100%" styleClass="panelNoBorder">
                         <p:panel styleClass="panelNoBorder">
@@ -142,7 +146,7 @@ and open the template in the editor.
                             <f:selectItem itemLabel="Tarjeta Credito" itemValue="Tarjeta Credito" />
                             <f:selectItem itemLabel="Credito" itemValue="Credito" />
                             <f:selectItem itemLabel="Cheque" itemValue="Cheque" />
-                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":formDetalles:panelTotales"/>        
+                            <p:ajax event="change" listener="#{facturaMB.escojerTipoPago()}" update=":formDetalles:panelTotales,:frmTipoPago"/>        
                         </p:selectOneMenu>
 
                         <p:outputLabel/>
@@ -199,6 +203,7 @@ and open the template in the editor.
                     </p:panelGrid>
                 </p:panel>
             </h:form>
+
             <h:form id="formCompra">
                 <p:panel id="idAgregar" styleClass="titleBarMint panelNoBorder" visible="true" header="Tipo de Detalle">
                     <p:commandButton id="btnAgregarProd" value="Productos " title="Agregar Productos a la Factura" icon="fa fa-shopping-cart" styleClass="btn_mint" />  
@@ -425,7 +430,7 @@ and open the template in the editor.
                 <p:panelGrid columns="3" style="margin: 0 auto;">
 
 
-                    <p:commandButton  partialSubmit="true" process="@this,:form" value="Facturar" icon="fa fa-money" styleClass="btn_azul" 
+                    <p:commandButton  partialSubmit="true" process="@this,:form,:frmTipoPago" value="Facturar" icon="fa fa-money" styleClass="btn_azul" 
                                       onclick="PF('confirmarFactura').show();" />
                     <p:commandButton value="Nuevo" icon="fa fa-file-o" styleClass="btn_verde" action="factura" ajax="false"/>
 
@@ -437,7 +442,7 @@ and open the template in the editor.
         </div>
     </p:panel>
 
-    <p:dialog header="Segur@ ?" widgetVar="confirmarFactura" modal="true" showEffect="explode" hideEffect="bounce" height="120" >
+    <p:dialog header="Segur@?" widgetVar="confirmarFactura" modal="true" showEffect="explode" hideEffect="bounce" height="120" >
         <h:form>
             <p:panelGrid columns="2" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
                 <p:panel styleClass="panelNoBorder">
