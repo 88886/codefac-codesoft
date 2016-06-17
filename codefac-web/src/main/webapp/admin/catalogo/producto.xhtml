@@ -99,12 +99,14 @@ and open the template in the editor.
 
                 <p:column headerText="" style="width: 50px">
                     <p:commandButton 
+                        oncomplete="PF('widgetCatalogo').filter();"
+                        update="tablaCatalogo"
                         style="padding: 0px"
                         icon="fa fa-trash-o"
                         styleClass="btn_rojo"
                         title="Eliminar Producto"
                         actionListener="#{gestionProductoMB.eliminarDetalle(catalogo)}" 
-                        update="@form">
+                        ajax="true">
 
                         <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
                     </p:commandButton>

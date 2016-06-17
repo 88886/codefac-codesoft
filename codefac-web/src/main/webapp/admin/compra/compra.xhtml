@@ -353,8 +353,15 @@ and open the template in the editor.
                 <p:dialog header="Agregar Distribuidor" widgetVar="confirmarDistribuidor" modal="true">
                     <h:form>
                         <h2>El distribuidor no existe</h2>
-                        <p:commandButton onclick="PF('confirmarDistribuidor').hide();" value="Aceptar"/>
-                        <p:commandButton actionListener="#{comprarMB.crearNuevoDistribuidor()}"  style="background-image: none;background-color: forestgreen" value="Crear Distribuidor">
+                        <p:commandButton 
+                            styleClass="btn_azul"
+                            onclick="PF('confirmarDistribuidor').hide();" 
+                            value="Aceptar"/>
+                        
+                        <p:commandButton 
+                            actionListener="#{comprarMB.crearNuevoDistribuidor()}"  
+                            styleClass="btn_verde"
+                            value="Crear Distribuidor">
                             <p:ajax event="dialogReturn" listener="#{comprarMB.recibirDatos}" update=":formDetalleDistribuidor" />
                         </p:commandButton>                        
 

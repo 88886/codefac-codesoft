@@ -25,6 +25,7 @@ and open the template in the editor.
                 <p:growl id="growl" showDetail="true" sticky="false" life="2000" />  
 
                 <p:dataTable
+                    widgetVar="widTablaDistribuidor"
                     id="tablaDistribuidor"
                     rows="15"
                     rowsPerPageTemplate="15,20,25"
@@ -44,7 +45,7 @@ and open the template in the editor.
                         <p:commandButton title="Editar Distribuidor" icon="fa fa-pencil" styleClass="btn_tomate" actionListener="#{distribuidorGestionMB.mostrarEditarDistribuidor()}" update=":formEditar" />
                     </f:facet>
 
-                    <p:column headerText="RUC" style="width: 100px">
+                    <p:column headerText="RUC" filterBy="#{distribuidor.ruc}" filterMatchMode="contains"  style="width: 100px">
                         <p:outputLabel value="#{distribuidor.ruc}" />
                     </p:column>
 
@@ -71,6 +72,7 @@ and open the template in the editor.
                     <p:column style="width: 60px">
                         <p:commandButton 
                             style="padding: 0px"
+                            oncomplete="PF('widTablaDistribuidor').filter();"
                             styleClass="btn_rojo"
                             icon="fa fa-trash-o"
                             title="Eliminar Distribuidor"

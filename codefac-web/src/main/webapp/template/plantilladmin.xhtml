@@ -93,11 +93,102 @@ and open the template in the editor.
 
 
                     <f:facet name="options">
-                        <p:inputText style="margin-right:10px" placeholder="Buscar"/>
-                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="fa fa-sign-out" />
+
+                        <p:selectOneMenu id="city" value="#{adminMenuMB.opcionSeleccionado}" style="width:80px" >
+                            <p:ajax listener="#{adminMenuMB.cambiarOpciones()}" update="panelTablaProductos,panelTablaDistribuidor,panelTablaCliente" />
+                            <f:selectItem itemLabel="Productos" itemValue="producto" />                            
+                            <f:selectItem itemLabel="Cliente" itemValue="cliente" />                            
+                            <f:selectItem itemLabel="Distribuidor" itemValue="distribuidor" />                            
+                        </p:selectOneMenu>
+
+                        <p:commandButton
+                            id="movieBtn"
+                            styleClass="btn_verde"
+                            style="padding: 0px;vertical-align: top"
+                            icon="fa fa-search" />
+
+                        <p:overlayPanel id="moviePanel" for="movieBtn" hideEffect="fade" dynamic="true" style="width:600px" >
+
+                            <!-- Tabla de los productos !-->
+                            <p:panel id="panelTablaProductos" visible="#{adminMenuMB.opcionSeleccionado eq 'producto'?'true':'false'}" styleClass="panelNoBorder">
+                                <p:dataTable                                    
+                                    style="text-align: left;vertical-align: top"
+                                    rows="10"
+                                    value="#{adminMenuMB.catalagoProductoList}" 
+                                    var="catalogo" >
+
+                                    <p:column headerText="Codigo"  filterBy="#{catalogo.codigoProducto}" filterMatchMode="contains" style="width: 120px">
+                                        <p:outputLabel value="#{catalogo.codigoProducto}" />
+                                    </p:column>
+
+                                    <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterMatchMode="contains" >
+                                        <p:outputLabel value="#{catalogo.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="PVP" style="width: 60px"  >
+                                        <p:outputLabel value="#{calculosMB.incluirIva(catalogo.precio)}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+
+                            <!-- Tabla de los Distribuidores!-->
+                            <p:panel id="panelTablaDistribuidor" visible="#{adminMenuMB.opcionSeleccionado eq 'distribuidor'?'true':'false'}" styleClass="panelNoBorder">
+                                <p:dataTable                                    
+                                    style="text-align: left;vertical-align: top"
+                                    rows="10"
+                                    value="#{adminMenuMB.distribuidorList}" 
+                                    var="distribuidor" >
+
+                                    <p:column headerText="RUC"  filterBy="#{distribuidor.ruc}" filterMatchMode="contains" style="width: 120px">
+                                        <p:outputLabel value="#{distribuidor.ruc}" />
+                                    </p:column>
+
+                                    <p:column headerText="Nombre" filterBy="#{distribuidor.nombre}" filterMatchMode="contains" >
+                                        <p:outputLabel value="#{distribuidor.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="Telefono" style="width: 80px"  >
+                                        <p:outputLabel value="#{distribuidor.telefono}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+
+                            <!-- Tabla de los clientes !-->
+                            <p:panel id="panelTablaCliente" visible="#{adminMenuMB.opcionSeleccionado eq 'cliente'?'true':'false'}" styleClass="panelNoBorder">
+                                <p:dataTable                                    
+                                    style="text-align: left;vertical-align: top"
+                                    rows="10"
+                                    value="#{adminMenuMB.clienteList}" 
+                                    var="cliente" >
+
+                                    <p:column headerText="Cedula/RUC"  filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" style="width: 120px">
+                                        <p:outputLabel value="#{cliente.cedulaRuc}" />
+                                    </p:column>
+
+                                    <p:column headerText="Nombre" filterBy="#{cliente.nombre}" filterMatchMode="contains" >
+                                        <p:outputLabel value="#{cliente.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="Telefono" style="width: 80px"  >
+                                        <p:outputLabel value="#{cliente.telefono}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+                        </p:overlayPanel>
+
+                        <p:commandButton                            
+                            action="#{sessionMB.cerrarSesion()}"  
+                            value="Salir"
+                            style="padding: 0px;vertical-align: top"
+                            styleClass="btn_rojo"
+                            icon="fa fa-sign-out" />
+
                         <p:spacer width="22px"/>
 
-                        <p:graphicImage id="content" library="img" name="ayudaCodefac.png" style="width: 23px" />
+                        <p:graphicImage id="content" library="img" name="ayudaCodefac.png" style="width: 23px;vertical-align: top" />
 
                         <p:overlayPanel id="toolTipContent" for="content" showEffect="blind" hideEffect="explode" showEvent="mouseover" hideEvent="mousedown"
                                         dismissable="false" showCloseIcon="true" style="margin-right: 10px;margin-top: 20px;width: 600px"  >
@@ -105,7 +196,7 @@ and open the template in the editor.
 
                                 <p:graphicImage library="img" name="ayudaCodefac.png" style="width: 25px" />
                                 <p:outputLabel value="Ayuda" style="font-size: 25px;padding-left: 15px" />
-                                
+
                                 <div style="height: 3px;background-color: #5eaade;margin-top: 3px" />
 
 
