@@ -55,6 +55,7 @@ public class comprarMB implements Serializable {
      */
     private String codigoDetalle;
     private Integer cantidadDetalle;
+    private String focus;
 
     /**
      * Variable temporal para modificar el precio de venta final del producto
@@ -144,6 +145,7 @@ public class comprarMB implements Serializable {
     @PostConstruct
     public void postConstruct() {
         System.out.println("reiniciando ...");
+        focus="formDetalleDistribuidor:txtRuc";
         iva=sistemaMB.getConfiguracion().getIva().intValueExact();
 
         // Map params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -250,8 +252,11 @@ public class comprarMB implements Serializable {
         if (distribuidoAux != null) {
             this.compra.setRuc(distribuidoAux);
             System.out.println(distribuidoAux);
+
+            focus="formBuscarProducto:txtCodigoDetalle";
         } else {
             //cuando el distribuidor no existe mostrar un dialogo para crear un nuevo Ditribuidor
+            focus="formAgregarDistribuidor";
             RequestContext.getCurrentInstance().execute("PF('confirmarDistribuidor').show()");
             //confirmarDistribuidor
         }
@@ -463,6 +468,7 @@ public class comprarMB implements Serializable {
             RequestContext.getCurrentInstance().showMessageInDialog(message);
         } //procede a agregar los detalles cuando ya esta escogido el distribuidor
         else {
+            focus="formDetalleCompra:txtCantidadDetalle";
             cantidadDetalle = 1;
             costoDetalle = new BigDecimal("0");
             costoDetalle = costoDetalle.setScale(3, RoundingMode.DOWN);
@@ -610,6 +616,13 @@ public class comprarMB implements Serializable {
         //pro = clienteSeleccionado;
         //System.out.println(cliente.getNombre());
         verificarProducto();
+    }
+    
+     public void cambiarfocus(String id)
+    {
+        
+        focus=id;
+       
     }
 
     public void onRowUnSelect(SelectEvent event) {
@@ -780,6 +793,15 @@ public class comprarMB implements Serializable {
     public void setIva(Integer iva) {
         this.iva = iva;
     }
+
+    public String getFocus() {
+        return focus;
+    }
+
+    public void setFocus(String focus) {
+        this.focus = focus;
+    }
+    
     
     
 

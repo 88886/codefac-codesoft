@@ -30,3 +30,10 @@ function mensaje()
     alert('mensaje');
 }
 
+function focusField(id)
+{
+   alert(id);
+   document.getElementById(id).focus();
+  
+}
+

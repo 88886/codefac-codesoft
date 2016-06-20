@@ -16,7 +16,9 @@ and open the template in the editor.
     <ui:define name="contenido" >
 
         <div style="text-align:center">
-            <p:panel header="Nueva Compra"  style="width: 70%;margin: 0 auto" styleClass="titleBarAzul" > 
+            <p:panel header="Nueva Compra"  style="width: 70%;margin: 0 auto" styleClass="titleBarAzul" >
+                <!--  Focus Global para empezar en el ingreso del distribuidor  !-->
+                <p:focus id="focus" for="#{comprarMB.focus}"/>
                 <!-- Formulario para controlar el encabezado de la compra -->
                 <h:form id="formDetalleDistribuidor">
 
@@ -29,13 +31,14 @@ and open the template in the editor.
                                         <p:panelGrid columns="1" styleClass="tablaSinPadding">
                                             <p:inputText
                                                 size="20"
+                                                onkeyup="$('formBuscarProducto:txtCodigoDetalle.focus();').focus();"
                                                 id="txtRuc" 
                                                 placeholder="CI/RUC"
                                                 onkeypress="return validarEnter(event, 'buscarDistribuidorJS');"  
                                                 value="#{comprarMB.compra.ruc.ruc}" 
                                                 />
 
-                                            <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra" />
+                                            <p:remoteCommand name="buscarDistribuidorJS" actionListener="#{comprarMB.consultarDistribuidor()}" update="gridDatosCompra,:formBuscarProducto:txtCodigoDetalle,:focus" />
 
                                             <p:commandButton 
                                                 id="btnEncontrarDitribuidor"                                    
@@ -106,7 +109,6 @@ and open the template in the editor.
                             <p:row>
                                 <p:column style="width: 80px;">
                                     <!-- Panel para mostrar datos de la compra -->
-
                                     <p:panelGrid columns="1" style="width: 100%">
                                         <p:inputText 
                                             placeholder="Codigo del Producto"
@@ -154,11 +156,11 @@ and open the template in the editor.
                                             <p:panelGrid columnClasses="2">
                                                 <p:outputLabel value="PVP:" style="width: 100px"/>
                                                 <p:commandButton 
-                                                    style="font-size: 12px;"
+                                                    style="padding: 0px"
                                                     id="btnCambiarPrecio" 
-                                                    icon="ui-icon-pencil" 
+                                                    icon="fa fa-pencil" 
                                                     actionListener="#{comprarMB.abrirDialogoCambiarPrecio()}" 
-                                                    styleClass="ui-botonEsmeralda" 
+                                                    styleClass="btn_tomate" 
                                                     update="@form,:dialogEditPrecio" 
                                                     title="Cambiar el precio del producto" />
 
@@ -176,7 +178,7 @@ and open the template in the editor.
                             </p:row>
 
 
-                            <p:remoteCommand name="btnValidar" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,lblTipoProducto,lblPVP,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:txtCodigoDetalle"/>
+                            <p:remoteCommand name="btnValidar" actionListener="#{comprarMB.verificarProducto()}"  update="lblNombreProducto,lblTipoProducto,lblPVP,:formDetalleCompra:panelAgregarProducto,:formBuscarProducto:txtCodigoDetalle,:focus"/>
 
                         </p:panelGrid>
 
@@ -331,7 +333,7 @@ and open the template in the editor.
                 <!-- Dialogo para agregar el producto especifico-->
                 <p:dialog header="Ingreso de producto" widgetVar="dlgProductoGeneral" modal="true" height="100">
                     <h:form id="formAgregarProductoEspecifico">
-                        <p:focus id="focus" for="txtCodigoDetalle"/>
+                        
                         <p:panel styleClass="panelNoBorder">
                             <p:panelGrid columns="3">
                                 <p:outputLabel  value="Ingrese el codigo Especifico:"/>
@@ -351,14 +353,16 @@ and open the template in the editor.
 
                 <!-- Dialogo de confirmacion para agregar un nuevo Distribuidor -->
                 <p:dialog header="Agregar Distribuidor" widgetVar="confirmarDistribuidor" modal="true">
-                    <h:form>
-                        <h2>El distribuidor no existe</h2>
+                    <h:form id="formAgregarDistribuidor">
+                        <p:defaultCommand target="btnNuevoDistribuidor" />
+                        <h2>El distribuidor no existe</h2>                        
                         <p:commandButton 
                             styleClass="btn_azul"
                             onclick="PF('confirmarDistribuidor').hide();" 
                             value="Aceptar"/>
                         
                         <p:commandButton 
+                            id="btnNuevoDistribuidor"
                             actionListener="#{comprarMB.crearNuevoDistribuidor()}"  
                             styleClass="btn_verde"
                             value="Crear Distribuidor">
@@ -372,9 +376,10 @@ and open the template in the editor.
 
                 <p:dialog header="Agregar Producto en el Catalogo"  widgetVar="confirmarProducto" modal="true">
                     <h:form>
+                        
                         <h2>El Producto no existe en el catologo</h2>
-                        <p:commandButton onclick="PF('confirmarProducto').hide();" value="Aceptar"/>
-                        <p:commandButton actionListener="#{comprarMB.crearNuevoCatalogo()}"  style="background-image: none;background-color: forestgreen" value="Crear Producto">
+                        <p:commandButton  onclick="PF('confirmarProducto').hide();" styleClass="btn_azul" value="Aceptar"/>
+                        <p:commandButton id="btnNuevoProducto" actionListener="#{comprarMB.crearNuevoCatalogo()}" styleClass="btn_verde"  style="background-image: none;background-color: forestgreen" value="Crear Producto">
                             <p:ajax event="dialogReturn" listener="#{comprarMB.recibirCatalogo}" update=":formBuscarProducto:lblNombreProducto" />
                         </p:commandButton>                        
 

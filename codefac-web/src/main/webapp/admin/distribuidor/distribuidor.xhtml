@@ -91,7 +91,7 @@ and open the template in the editor.
                     <p:panelGrid columns="6" id="panelGrid" styleClass="panelNoBorder">
                         <p:outputLabel for="disRuc" value="RUC :" />
 
-                        <p:inputText id="disRuc" value="#{distribuidorGestionMB.distribuidor.ruc}" required="true" requiredMessage="RUC necesario">
+                        <p:inputText id="disRuc" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.ruc}" required="true" requiredMessage="RUC necesario">
                             <p:ajax event="blur" listener="#{distribuidorGestionMB.verificarDistribuidorExiste()}"  />
                             <p:ajax  event="keyup" />
                         </p:inputText>
@@ -99,26 +99,26 @@ and open the template in the editor.
                         <p:message for="disRuc" display="icon" />                  
 
                         <p:outputLabel for="disNombre" value="Nombre:" />
-                        <p:inputText id="disNombre" value="#{distribuidorGestionMB.distribuidor.nombre}" required="true" requiredMessage="Nombre necesario" >
+                        <p:inputText id="disNombre" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.nombre}" required="true" requiredMessage="Nombre necesario" >
                             <p:ajax  event="keyup" />
                         </p:inputText>
                         <p:message for="disNombre" display="icon" /> 
 
                         <p:outputLabel for="disCiudad" value="Ciudad" />
-                        <p:inputText id="disCiudad" value="#{distribuidorGestionMB.distribuidor.ciudad}" />
+                        <p:inputText id="disCiudad" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.ciudad}" />
                         <p:message for="disCiudad" display="icon" />
 
                         <p:outputLabel for="disDireccion" value="Direccion:" />
-                        <p:inputText id="disDireccion" value="#{distribuidorGestionMB.distribuidor.direccion}" />
+                        <p:inputText id="disDireccion" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.direccion}" />
                         <p:message for="disDireccion" display="icon" />   
 
                         <p:outputLabel for="disTelefono" value="Telefono :" />
-                        <p:inputText id="disTelefono" value="#{distribuidorGestionMB.distribuidor.telefono}" required="true" requiredMessage="Telefono necesario"/>
+                        <p:inputText id="disTelefono" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.telefono}" required="true" requiredMessage="Telefono necesario"/>
                         <p:message for="disTelefono" display="icon" />
 
 
                         <p:outputLabel for="disContacto" value="Contacto :" />
-                        <p:inputText id="disContacto" value="#{distribuidorGestionMB.distribuidor.contacto}" />
+                        <p:inputText id="disContacto" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.contacto}" />
                         <p:message for="disContacto" display="icon" />
 
 
@@ -130,11 +130,11 @@ and open the template in the editor.
                         <p:message for="tipoPago" display="icon" />  
 
                         <p:outputLabel for="disCorreo" value="Correo :" />
-                        <p:inputText id="disCorreo" value="#{distribuidorGestionMB.distribuidor.correo}"/>
+                        <p:inputText id="disCorreo" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.correo}"/>
                         <p:message for="disCorreo" display="icon" />
 
                         <p:outputLabel for="disNotas" value="Notas" />
-                        <p:inputTextarea id="disNotas" value="#{distribuidorGestionMB.distribuidor.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:inputTextarea id="disNotas" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidor.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
                         <p:message for="disNotas" display="icon" />
 
                     </p:panelGrid>
@@ -170,30 +170,30 @@ and open the template in the editor.
                     <p:panelGrid columns="6" id="panelGrid" styleClass="panelNoBorder">
                         <p:outputLabel for="disRuc" value="RUC :" />
 
-                        <p:inputText id="disRuc" value="#{distribuidorGestionMB.distribuidorSeleccionado.ruc}" required="true" requiredMessage="RUC necesario" readonly="true">
+                        <p:inputText id="disRuc" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.ruc}" required="true" requiredMessage="RUC necesario" readonly="true">
                         </p:inputText>
 
                         <p:message for="disRuc" />                  
 
                         <p:outputLabel for="disNombre" value="Nombre:" />
-                        <p:inputText id="disNombre" value="#{distribuidorGestionMB.distribuidorSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario"/>
+                        <p:inputText id="disNombre" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario"/>
                         <p:message for="disNombre" /> 
 
                         <p:outputLabel for="disCiudad" value="Ciudad" />
-                        <p:inputText id="disCiudad" value="#{distribuidorGestionMB.distribuidorSeleccionado.ciudad}"  />
+                        <p:inputText id="disCiudad" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.ciudad}"  />
                         <p:message for="disCiudad" />
 
                         <p:outputLabel for="disDireccion" value="Direccion:" />
-                        <p:inputText id="disDireccion" value="#{distribuidorGestionMB.distribuidorSeleccionado.direccion}" />
+                        <p:inputText id="disDireccion" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.direccion}" />
                         <p:message for="disDireccion" />   
 
                         <p:outputLabel for="disTelefono" value="Telefono :" />
-                        <p:inputText id="disTelefono" value="#{distribuidorGestionMB.distribuidorSeleccionado.telefono}" required="true" requiredMessage="Telefono necesario"/>
+                        <p:inputText id="disTelefono" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.telefono}" required="true" requiredMessage="Telefono necesario"/>
                         <p:message for="disTelefono" />
 
 
                         <p:outputLabel for="disContacto" value="Contacto :" />
-                        <p:inputText id="disContacto" value="#{distribuidorGestionMB.distribuidorSeleccionado.contacto}" />
+                        <p:inputText id="disContacto" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.contacto}" />
                         <p:message for="disContacto" />
 
 
@@ -205,11 +205,11 @@ and open the template in the editor.
                         <p:message for="tipoPago" />  
 
                         <p:outputLabel for="disCorreo" value="Correo :" />
-                        <p:inputText id="disCorreo" value="#{distribuidorGestionMB.distribuidorSeleccionado.correo}" />
+                        <p:inputText id="disCorreo" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.correo}" />
                         <p:message for="disCorreo" />
 
                         <p:outputLabel for="disNotas" value="Notas" />
-                        <p:inputTextarea id="disNotas" value="#{distribuidorGestionMB.distribuidorSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:inputTextarea id="disNotas" onkeypress="return noProcesar(event);" value="#{distribuidorGestionMB.distribuidorSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
                         <p:message for="disNotas" />
 
                     </p:panelGrid>
