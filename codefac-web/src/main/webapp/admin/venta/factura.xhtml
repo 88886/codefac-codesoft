@@ -13,17 +13,19 @@ and open the template in the editor.
                 template="/template/plantilladmin.xhtml">
 
     <ui:define name="ayuda">
-        <h:form>
+        <h:form id="frmTab">
             <p:tabView>
                 <p:tab title="Clientes">
                     <h:panelGrid columns="2" styleClass="panelNoBorder"> 
-                        <p:graphicImage  library="img" name="capturasSistema/buscarCliente.PNG" width="92%" />
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/buscarCliente.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage  library="img" name="capturasSistema/buscarCliente.PNG" width="92%" />
+                        </p:commandLink>
                         <p:outputLabel value="Ingrese la cédula y pulse enter, Caso contrario puede buscar clientes por medio del ícono en forma de lupa."/>
                     </h:panelGrid>
                 </p:tab>
                 <p:tab title="Deudas">
                     <h:panelGrid columns="2" styleClass="panelNoBorder">
-                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/deudas.PNG')}">
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/deudas.PNG')}" update=":menu:frmTab,:menu:frmImagen">
                             <p:graphicImage  library="img" name="capturasSistema/deudas.PNG" width="100%"/>
                         </p:commandLink>
                         <p:outputLabel value="Al momento de realizar la búsqueda de un cliente y si este registrara alguna deuda sobre alguna venta(s)
@@ -33,18 +35,97 @@ and open the template in the editor.
                 </p:tab>
                 <p:tab title="Tipos Pagos">
                     <h:panelGrid columns="2" styleClass="panelNoBorder">
-                        <p:graphicImage library="img" name="capturasSistema/tipoPago.PNG" width="100%"/>
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/tipoPago.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/tipoPago.PNG" width="100%"/>
+                        </p:commandLink>
                         <p:outputLabel value="En esta sección escojerá el tipo de Pago que realizará el cliente 
                                        como Efectivo, Banco(Meses del banco seleccionado), Crédito otorgado por el establecimiento
                                        o Cheque"/>
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/ventraCredito.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/ventraCredito.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="Si el método de pago es por medio del crédito directo del establecimiento
+                                       debemos ingresar el abono inicial del cliente si no lo hace por defecto será 0
+                                       y la fecha límite de pago para que el sistema le pueda recordar sobre dicha deuda"/>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Agregar Detalles Factura">
+                    <h:panelGrid columns="2" styleClass="panelNoBorder">
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/productos.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/productos.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="Si desea agregar algún producto, servicio u orden de trabajo 
+                                       solo debe dar clic en el botón deseado, desplegará una tabla
+                                       con los detalles a agregar, los cuales los puede filtrar por código 
+                                       o nombre"/>
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/prodGeneral.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/prodGeneral.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="Si desea agregar productos en la tabla mostrada busque su producto por nombre 
+                                       o por código una  vez encontrado de clic sobre el producto, si el producto
+                                       seleccionado es un producto general deberà ingresar la cantidad por defecto 
+                                       estará 1"/>
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/prodEspecifico.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/prodEspecifico.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="Si el producto a agregar es un producto específico
+                                       es decir que su código no se puede repetir, por su garantía
+                                       costo, etc. Deberá ingresar el código especifico del mismo"/>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Descuentos">
+                    <h:panelGrid columns="2" styleClass="panelNoBorder">
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/descuento.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/descuento.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="En esta sección podemos agregar descuentos por producto
+                                       el descuento que se applica es el especificado por el usuario con los
+                                       permisos respectivos, sólo debemos escojer 'Si' y el descuento será aplicado
+                                       a ese producto si no deseamos descuento solo escojemos 'No' y su precio
+                                       regresará a su valor normal"/>
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/descuentoManual.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/descuentoManual.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="Si ingresamos al sistema con los permisos respectivos (administrador) podremos realizar
+                                       descuentos manuales solo debemos escojer 'Si' y en lado derecho
+                                       nos saldrá el descuento por defecto pero con la opción
+                                       que podemos cambiar dicho descuento de forma manual"/>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Utilidades">
+                    <h:panelGrid columns="2" styleClass="panelNoBorder">
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/calculadora.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/calculadora.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="En esta sección podemos realizar descuentos a toda la factura 
+                                       por porcentaje o directo (es decir restarle el valor directo a la factura en $dólares).
+                                       También podremos conocer el vuelto que debemos darle al cliente
+                                       tan sólo ingresando el valor que el cliente nos de"/>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Facturar">
+                    <h:panelGrid columns="2" styleClass="panelNoBorder">
+                        <p:commandLink actionListener="#{facturaMB.agrandarImagen('capturasSistema/correo.PNG')}" update=":menu:frmTab,:menu:frmImagen">
+                            <p:graphicImage library="img" name="capturasSistema/correo.PNG" width="100%"/>
+                        </p:commandLink>
+                        <p:outputLabel value="Una vez que ingresemos todos los datos sobre la factura
+                                       ya podremos facturar, en la ventana que nos muestra
+                                       nos pedirá confirmación y aquí podemos seleccionar
+                                       si queremos que la factura se envie al correo del cliente,
+                                       si no deseamos que se envie al correo del cliente
+                                       solo deseleccionamos dicha opción"/>
                     </h:panelGrid>
                 </p:tab>
             </p:tabView>
         </h:form>
-        <p:dialog widgetVar="dlgImagen" modal="true">
+        <p:dialog widgetVar="dlgImagen" modal="false">
             <h:form id="frmImagen">
                 <p:panel>
                     <p:graphicImage library="img" name="#{facturaMB.rutaImagenAgrandar}" />
+                    <f:facet name="footer">
+                        <p:commandButton value="Aceptar" icon="fa fa-ban" styleClass="btn_mint" onclick="PF('dlgImagen').hide();"/>
+                    </f:facet>
+
                 </p:panel>
             </h:form>    
         </p:dialog>

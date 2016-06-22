@@ -1030,6 +1030,9 @@ public class FacturaMB {
     public void onRowSelectCliente(SelectEvent event) {
         System.out.println("En sleccion");
         //clienteEncontrado = clienteSeleccionado;
+        
+        //ocultar el panel hacia arriba
+        RequestContext.getCurrentInstance().execute("PF('acordionCliente').unselect(0)");
         clienteEncontrado = (Cliente) event.getObject();
         cedCliente = clienteEncontrado.getCedulaRuc();
         System.out.println("Encontrado");
