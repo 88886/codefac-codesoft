@@ -8,6 +8,7 @@ package ec.com.codesoft.web.operador;
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.util.CalculosMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -47,7 +48,7 @@ public class GestionProductoMB implements Serializable {
     private List<CatalagoProducto> catalagoProductosFiltrados;
 
     private List<ProductoGeneralCompra> preciosProveedor;
-    
+
     /**
      * Variable para poder crear un nuevo catalago
      */
@@ -58,17 +59,24 @@ public class GestionProductoMB implements Serializable {
      */
     private Boolean dialogoAbierto;
     private Boolean dialogoEditAbierto;
-    
+
     /**
      * Variables para saber si el precios incluyen o no incluyen iva
      */
     private String ivaCosto;
     private String ivaMayorista;
-    
+
+    //iva
+    private BigDecimal ivaTotal; //iva traido de la configuracion
+    private BigDecimal ivaSubTotal; //iva traido de la configuracion
+    private BigDecimal ivaMostrar;
 
     @EJB
     private CatalogoServicio catalogoServicio;
-    
+
+    @EJB
+    private SistemaServicio sistemaServicio;
+
     @ManagedProperty("#{calculosMB}")
     private CalculosMB calculosMB;
     //private gestionarCompraMB gestionarCompra;
@@ -80,7 +88,11 @@ public class GestionProductoMB implements Serializable {
         catalagoProductos = catalogoServicio.obtenerTodos();
         catalagoProducto = new CatalagoProducto();
         dialogoAbierto = false;
-        this.dialogoEditAbierto=false;
+        this.dialogoEditAbierto = false;
+        //iva obtenido de la base de datos
+        ivaMostrar = sistemaServicio.getConfiguracion().getIva();
+        ivaSubTotal = (sistemaServicio.getConfiguracion().getIva()).divide(new BigDecimal("100"));
+        ivaTotal = ivaSubTotal.add(new BigDecimal("1"));
     }
 
     ///////////////////////////METODOS/////////////////////////
@@ -90,14 +102,14 @@ public class GestionProductoMB implements Serializable {
     public void mostrarNuevoProducto() {
         System.out.println("abriendo el dialogo ...");
         catalagoProducto = new CatalagoProducto();
-        
+
         catalagoProducto.setPrecioMayorista(new BigDecimal("0.00"));
         catalagoProducto.setPrecio(new BigDecimal("0.00"));
-        
+
         catalagoProducto.setDescuento(new BigDecimal("0.00"));
         catalagoProducto.setDescuentoMayorista(new BigDecimal("0.00"));
         catalagoProducto.setCosto(new BigDecimal("0.00"));
-        
+
         System.out.println(catalagoProducto);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProducto').show()");
         dialogoAbierto = true;
@@ -112,7 +124,7 @@ public class GestionProductoMB implements Serializable {
         //catalogoSeleccionado.setPrecio(calculosMB.incluirIva(catalogoSeleccionado.getPrecio()));
         //catalogoSeleccionado.setPrecioMayorista(catalogoSeleccionado.getPrecioMayorista().multiply(new BigDecimal("1.12")).setScale(0,RoundingMode.UP));
         //catalogoSeleccionado.setPrecioMayorista(calculosMB.incluirIva(catalogoSeleccionado.getPrecioMayorista()));
-        
+
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').show()");
         dialogoEditAbierto = true;
     }
@@ -125,130 +137,117 @@ public class GestionProductoMB implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProducto').hide()");
         catalagoProducto = new CatalagoProducto();
         dialogoAbierto = false;
-        catalagoProductos=catalogoServicio.obtenerTodos();
-        mostrarMensaje("Cancelado","El proceso de grabar fue cancelado");
+        catalagoProductos = catalogoServicio.obtenerTodos();
+        mostrarMensaje("Cancelado", "El proceso de grabar fue cancelado");
     }
 
     public void cancelarEditar() {
         System.out.println("cancelando editar ...");
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').hide()");
-        dialogoEditAbierto=false;
-        catalagoProductos=catalogoServicio.obtenerTodos();
-        mostrarMensaje("Cancelado","El proceso de editar fue cancelado");
+        dialogoEditAbierto = false;
+        catalagoProductos = catalogoServicio.obtenerTodos();
+        mostrarMensaje("Cancelado", "El proceso de editar fue cancelado");
     }
 
     public void grabarCatalogo() {
         System.out.println("Grabando el catalago ...");
-        
+
         //verificar si el precio viene con o sin iva
-        if(ivaCosto.equals("+"))
-        {
-            System.out.println(catalagoProducto.getPrecio().setScale(3,BigDecimal.ROUND_DOWN));
+        if (ivaCosto.equals("+")) {
+            System.out.println(catalagoProducto.getPrecio().setScale(3, BigDecimal.ROUND_DOWN));
             //BigDecimal iva=new BigDecimal("1.12");
-            BigDecimal valor=catalagoProducto.getPrecio().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
+            BigDecimal valor = catalagoProducto.getPrecio().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
             //System.out.println("si:"+valor);
-            
-            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+
+            valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
             catalagoProducto.setPrecio(valor);
-            
+
         }
-        
-        if(ivaMayorista.equals("+"))
-        {
-            BigDecimal valor=catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
-            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+
+        if (ivaMayorista.equals("+")) {
+            BigDecimal valor = catalagoProducto.getPrecioMayorista().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
+            valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
             catalagoProducto.setPrecioMayorista(valor);
             //catalagoProducto.setPrecioMayorista(catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12")).setScale(2,BigDecimal.ROUND_UP));
         }
-        
-        
-        
+
         catalogoServicio.insertar(catalagoProducto);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProducto').hide()");
         catalagoProducto = new CatalagoProducto();
         catalagoProductos = catalogoServicio.obtenerTodos();
-        dialogoAbierto=false;
-        mostrarMensaje("Producto Grabado ..","El catalogo fue grabado");
-        
-        catalagoProducto=catalogoServicio.buscarCatalogo(catalagoProducto.getCodigoProducto());        
+        dialogoAbierto = false;
+        mostrarMensaje("Producto Grabado ..", "El catalogo fue grabado");
+
+        catalagoProducto = catalogoServicio.buscarCatalogo(catalagoProducto.getCodigoProducto());
 //        System.out.println(catalagoProducto.getProductoGeneralVenta().getCantidadDisponible());
-        
+
     }
 
     public void editarCatalago() {
         System.out.println("Editando el catalogo ...");
-        
+
         //verificar si el precio viene con o sin iva
-        if(ivaCosto.equals("+"))
-        {
-            
-            System.out.println(catalogoSeleccionado.getPrecio().setScale(3,BigDecimal.ROUND_DOWN));
+        if (ivaCosto.equals("+")) {
+
+            System.out.println(catalogoSeleccionado.getPrecio().setScale(3, BigDecimal.ROUND_DOWN));
             //BigDecimal iva=new BigDecimal("1.12");
-            BigDecimal valor=catalogoSeleccionado.getPrecio().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
+            BigDecimal valor = catalogoSeleccionado.getPrecio().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
             //System.out.println("si:"+valor);
-            
-            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+
+            valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
             catalogoSeleccionado.setPrecio(valor);
-            
+
         }
-        
-        if(ivaMayorista.equals("+"))
-        {
-            BigDecimal valor=catalogoSeleccionado.getPrecioMayorista().divide(new BigDecimal("1.12"),3,BigDecimal.ROUND_DOWN);
-            valor=valor.setScale(3,BigDecimal.ROUND_DOWN);
+
+        if (ivaMayorista.equals("+")) {
+            BigDecimal valor = catalogoSeleccionado.getPrecioMayorista().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
+            valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
             catalogoSeleccionado.setPrecioMayorista(valor);
             //catalagoProducto.setPrecioMayorista(catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12")).setScale(2,BigDecimal.ROUND_UP));
         }
-        
+
         catalogoServicio.actualizar(catalogoSeleccionado);
         RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').hide()");
-        dialogoEditAbierto=false;
-        mostrarMensaje("Producto Editado","El catalogo fue editado");
+        dialogoEditAbierto = false;
+        mostrarMensaje("Producto Editado", "El catalogo fue editado");
     }
 
     /**
      * Verifica al inicio si el dialogo esta abierto o cerrado
      */
-    public void verificarDialogo() 
-    {
+    public void verificarDialogo() {
         System.out.println("Verificando si el dialogo se encuentra abierto ...");
         if (dialogoAbierto) {
             RequestContext.getCurrentInstance().execute("PF('dialogNuevoProducto').show()");
         }
-        
-        if(dialogoEditAbierto)
-        {
+
+        if (dialogoEditAbierto) {
             RequestContext.getCurrentInstance().execute("PF('dialogNuevoProductoEdit').show()");
         }
     }
 
-    public void mostrarMensaje(String titulo,String mensaje)
-    {
+    public void mostrarMensaje(String titulo, String mensaje) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(titulo,mensaje));
+        context.addMessage(null, new FacesMessage(titulo, mensaje));
     }
-    
-    public void verificarExisteCatalogoProducto()
-    {
-        boolean noexiste=catalogoServicio.verificarExisteProducto(catalagoProducto.getCodigoProducto());
-        if(noexiste)
-        {
+
+    public void verificarExisteCatalogoProducto() {
+        boolean noexiste = catalogoServicio.verificarExisteProducto(catalagoProducto.getCodigoProducto());
+        if (noexiste) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "El producto ya existe", "!porfavor revise los datos!");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
         }
-        
+
     }
-    
-    public void eliminarDetalle(CatalagoProducto catalogo) 
-    {
-        
+
+    public void eliminarDetalle(CatalagoProducto catalogo) {
+
         catalagoProductos.remove(catalogo);
-        
+
         catalogoServicio.eliminar(catalogo);
     }
-    
-    public boolean filterByName(Object value, Object filter, Locale locale) 
-    {
+
+    public boolean filterByName(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if (filterText == null || filterText.equals("")) {
             return true;
@@ -261,20 +260,17 @@ public class GestionProductoMB implements Serializable {
         String carName = value.toString().toUpperCase();
         filterText = filterText.toUpperCase();
 
-        if (carName.contains(filterText)) 
-        {
+        if (carName.contains(filterText)) {
             return true;
-        } else 
-        {
+        } else {
             return false;
         }
     }
-    
-    public void mostrarPreciosDistribuidor(CatalagoProducto catalogo)
-    {
-         RequestContext.getCurrentInstance().execute("PF('dialogProductoDistri').show()");
-         preciosProveedor=catalogoServicio.listaPreciosProductosGCompra(catalogo.getCodigoProducto());
-         System.out.println("tam: "+preciosProveedor.size());
+
+    public void mostrarPreciosDistribuidor(CatalagoProducto catalogo) {
+        RequestContext.getCurrentInstance().execute("PF('dialogProductoDistri').show()");
+        preciosProveedor = catalogoServicio.listaPreciosProductosGCompra(catalogo.getCodigoProducto());
+        System.out.println("tam: " + preciosProveedor.size());
     }
 
     //////////////////////METODOS GET Y SET ///////////////////
@@ -341,7 +337,29 @@ public class GestionProductoMB implements Serializable {
     public void setPreciosProveedor(List<ProductoGeneralCompra> preciosProveedor) {
         this.preciosProveedor = preciosProveedor;
     }
-    
-    
+
+    public BigDecimal getIvaTotal() {
+        return ivaTotal;
+    }
+
+    public void setIvaTotal(BigDecimal ivaTotal) {
+        this.ivaTotal = ivaTotal;
+    }
+
+    public BigDecimal getIvaSubTotal() {
+        return ivaSubTotal;
+    }
+
+    public void setIvaSubTotal(BigDecimal ivaSubTotal) {
+        this.ivaSubTotal = ivaSubTotal;
+    }
+
+    public BigDecimal getIvaMostrar() {
+        return ivaMostrar;
+    }
+
+    public void setIvaMostrar(BigDecimal ivaMostrar) {
+        this.ivaMostrar = ivaMostrar;
+    }
 
 }

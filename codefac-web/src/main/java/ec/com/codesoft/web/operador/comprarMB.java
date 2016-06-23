@@ -15,6 +15,7 @@ import ec.com.codesoft.modelo.servicios.CompraServicio;
 import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.modelo.servicios.ProductoGeneralCompraServicio;
+import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.seguridad.SistemaMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -108,6 +109,13 @@ public class comprarMB implements Serializable {
      * Variable para mostrar el Stock seleccionado del catalogo
      */
     private Integer stockProductoSeleccionado;
+    
+    /**
+     * ivas
+     */
+    private BigDecimal ivaTotal; //iva traido de la configuracion
+    private BigDecimal ivaSubTotal; //iva traido de la configuracion
+    private BigDecimal ivaMostrar;
 
     /*
      Servicios para consultar del distribuidor
@@ -126,6 +134,9 @@ public class comprarMB implements Serializable {
     
     @EJB
     private FacturaServicio facturaServicio;
+    
+    @EJB
+    private SistemaServicio sistemaServicio;
     
     
     @ManagedProperty(value = "#{sistemaMB}")
@@ -169,6 +180,11 @@ public class comprarMB implements Serializable {
 
         //iniciar la tabla del catalogo servicio
         this.listaCatalogos = catalogoServicio.obtenerTodos();
+        
+        //iva obtenido de la base de datos
+        ivaMostrar = sistemaServicio.getConfiguracion().getIva();
+        ivaSubTotal = (sistemaServicio.getConfiguracion().getIva()).divide(new BigDecimal("100"));
+        ivaTotal = ivaSubTotal.add(new BigDecimal("1"));
 
     }
 
@@ -204,12 +220,12 @@ public class comprarMB implements Serializable {
     {
         if (ivaCosto.equals("+")) 
         {
-            cambiarCosto=cambiarCosto.multiply(new BigDecimal("1.12"));
+            cambiarCosto=cambiarCosto.multiply(ivaTotal);
             cambiarCosto=cambiarCosto.setScale(3,RoundingMode.UP);
         }
         else
         {
-            cambiarCosto=cambiarCosto.divide(new BigDecimal("1.12"),3,RoundingMode.UP);
+            cambiarCosto=cambiarCosto.divide(ivaTotal,3,RoundingMode.UP);
         }
     }
         /**
@@ -219,7 +235,7 @@ public class comprarMB implements Serializable {
         System.out.println("abriendo dialogo editar ...");
         cambiarCosto = new BigDecimal(catalogo.getPrecio().toString());
         System.out.println("aumentado el iva al costo del producto");
-        cambiarCosto = cambiarCosto.multiply(new BigDecimal("1.12"));
+        cambiarCosto = cambiarCosto.multiply(ivaTotal);
         cambiarCosto=cambiarCosto.setScale(3,RoundingMode.UP);
 
         RequestContext.getCurrentInstance().execute("PF('widCambiarPrecio').show()");
@@ -231,7 +247,7 @@ public class comprarMB implements Serializable {
         System.out.println("editando el precio del producto ...");
         if (ivaCosto.equals("+")) 
         {
-            catalogo.setPrecio(cambiarCosto.divide(new BigDecimal("1.12"),4,RoundingMode.DOWN));
+            catalogo.setPrecio(cambiarCosto.divide(ivaTotal,4,RoundingMode.DOWN));
             catalogoServicio.actualizar(catalogo);
         }
         else
@@ -780,6 +796,31 @@ public class comprarMB implements Serializable {
     public void setIva(Integer iva) {
         this.iva = iva;
     }
+
+    public BigDecimal getIvaTotal() {
+        return ivaTotal;
+    }
+
+    public void setIvaTotal(BigDecimal ivaTotal) {
+        this.ivaTotal = ivaTotal;
+    }
+
+    public BigDecimal getIvaSubTotal() {
+        return ivaSubTotal;
+    }
+
+    public void setIvaSubTotal(BigDecimal ivaSubTotal) {
+        this.ivaSubTotal = ivaSubTotal;
+    }
+
+    public BigDecimal getIvaMostrar() {
+        return ivaMostrar;
+    }
+
+    public void setIvaMostrar(BigDecimal ivaMostrar) {
+        this.ivaMostrar = ivaMostrar;
+    }
+    
     
     
 
