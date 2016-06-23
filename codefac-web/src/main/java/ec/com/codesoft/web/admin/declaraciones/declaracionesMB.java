@@ -223,6 +223,7 @@ public class declaracionesMB implements Serializable {
             formulario.appendChild(detalle);
 
             //elementos de detalle
+            //anio
             Element c102 = (Element) doc.createElement("campo");
             c102.appendChild(doc.createTextNode(String.valueOf(fecha.getYear())));
             detalle.appendChild(c102);
@@ -230,12 +231,61 @@ public class declaracionesMB implements Serializable {
             attrc102.setValue("102");
             c102.setAttributeNode(attrc102);
 
+            //mes
             Element c101 = (Element) doc.createElement("campo");
             c101.appendChild(doc.createTextNode(String.valueOf(fecha.getMonth() + 1)));
             detalle.appendChild(c101);
             Attr attrc101 = doc.createAttribute("numero");
             attrc101.setValue("101");
             c101.setAttributeNode(attrc101);
+            
+            //campo 31 //tipo de documento (original o sustitutivo)
+            Element c31 = (Element) doc.createElement("campo");
+            c31.appendChild(doc.createTextNode("O"));
+            detalle.appendChild(c31);
+            Attr attrc31 = doc.createAttribute("numero");
+            attrc31.setValue("31");
+            c31.setAttributeNode(attrc31);
+            
+            //campo 201 ruc
+            Element c201 = (Element) doc.createElement("campo");
+            c201.appendChild(doc.createTextNode(sistemaMB.getEmpresa().getRucEmpresa()));
+            detalle.appendChild(c201);
+            Attr attrc201 = doc.createAttribute("numero");
+            attrc201.setValue("201");
+            c201.setAttributeNode(attrc201);
+            
+            //campo 202 nombre del sujeto
+            Element c202 = (Element) doc.createElement("campo");
+            c202.appendChild(doc.createTextNode(sistemaMB.getEmpresa().getNombre()));
+            detalle.appendChild(c202);
+            Attr attrc202 = doc.createAttribute("numero");
+            attrc202.setValue("202");
+            c202.setAttributeNode(attrc202);
+            
+            //campo 411 suma de las ventas
+            Element c411 = (Element) doc.createElement("campo");
+            c411.appendChild(doc.createTextNode(subTotalVentas.toString()));
+            detalle.appendChild(c411);
+            Attr attrc411 = doc.createAttribute("numero");
+            attrc411.setValue("411");
+            c411.setAttributeNode(attrc411);
+            
+            //campo 421 //iva generado de las ventas
+            Element c421 = (Element) doc.createElement("campo");
+            c421.appendChild(doc.createTextNode(ivaVentas.toString()));
+            detalle.appendChild(c421);
+            Attr attrc421 = doc.createAttribute("numero");
+            attrc421.setValue("421");
+            c421.setAttributeNode(attrc421);
+            
+            //campo 401 //suma de todas las ventas subtotales
+            Element c401 = (Element) doc.createElement("campo");
+            c401.appendChild(doc.createTextNode(subTotalVentas.toString()));
+            detalle.appendChild(c401);
+            Attr attrc401 = doc.createAttribute("numero");
+            attrc401.setValue("401");
+            c401.setAttributeNode(attrc401);
 
             // escribimos el contenido en un archivo .xml
             TransformerFactory transformerFactory = TransformerFactory.newInstance();

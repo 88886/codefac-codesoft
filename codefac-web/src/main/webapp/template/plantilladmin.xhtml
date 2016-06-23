@@ -380,7 +380,7 @@ and open the template in the editor.
                         <p:inputText id="cantidadP" value="#{ventasDiariasMB.cantidadComprar}" required="true" />
                         <p:commandButton  icon="fa fa-plus-square"
                                           styleClass="btn_azul" 
-                                          actionListener="#{ventasDiariasMB.venta()}" ajax="true" update=":formGeneralV,:formDetallesV,:formDetallesVentas:idDetallesFactura,:formDetallesVentasFactura:idDetallesFacturaFactura,:formDetallesVentas:panelTotales"/>
+                                          actionListener="#{ventasDiariasMB.ventaNota()}" ajax="true" update=":formGeneralV,:formDetallesV,:formDetallesVentas:idDetallesFactura,:formDetallesVentasFactura:idDetallesFacturaFactura,:formDetallesVentas:panelTotales"/>
                         <p:outputLabel value="#{ventasDiariasMB.msjStock}" style="color: darkred"/>
 
                     </h:panelGrid>
@@ -396,7 +396,7 @@ and open the template in the editor.
                         <p:inputText id="codPEspec" value="#{ventasDiariasMB.codPEspe}" required="true"/>
                         <p:commandButton  icon="fa fa-plus-square"
                                           styleClass="btn_azul" 
-                                          actionListener="#{ventasDiariasMB.venta()}" ajax="false" />
+                                          actionListener="#{ventasDiariasMB.ventaNota()}" ajax="false" />
                         <p:outputLabel  value="#{ventasDiariasMB.msjCodUnico}" style="color: darkred"/>
                         <p:message for="codPEspec" />
                         <p:commandButton icon="fa fa-times" styleClass="btn_tomate" onclick="PF('dlgInformacionVE').hide()" />
@@ -569,7 +569,7 @@ and open the template in the editor.
                 <h:form style="margin: 0 auto" target="_blank">
                     <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();
                             PF('dlgDetallesVentasDiariasFactura').hide()" icon="fa fa-floppy-o"
-                                      styleClass="btn_azul"  actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
+                            styleClass="btn_azul"  actionListener="#{ventasDiariasMB.facturarNota()}" action="factura" ajax="false" update=":formDetallesV" />
                 </h:form>
                 <h:form>
                     <p:commandButton onclick="PF('confirmarFacturaVentas').hide();" value="Cancelar" icon="fa fa-ban" styleClass="btn_rojo"/>
