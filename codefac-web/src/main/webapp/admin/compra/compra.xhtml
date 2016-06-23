@@ -272,7 +272,7 @@ and open the template in the editor.
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
-                                <p:outputLabel value="Iva: "/>
+                                <p:outputLabel value="Iva #{comprarMB.ivaMostrar}: "/>
                                 <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText> 
