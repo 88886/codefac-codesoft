@@ -530,7 +530,9 @@ public class FacturaMB {
 
             System.out.println("Encontrado");
             msjCliente = "Cliente Encontrado";
+            System.out.println("ocultando el panel");
             RequestContext.getCurrentInstance().execute("PF('acordionCliente').unselect(0)");
+            
             if (clienteEncontrado.getTipo().equals("Distribuidor")) {
                 cliMayorista = " --> Distribuidor";
             } else {

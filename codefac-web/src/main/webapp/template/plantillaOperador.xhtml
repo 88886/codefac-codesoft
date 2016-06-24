@@ -14,6 +14,9 @@ and open the template in the editor.
         <title>Codefac</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="estiloUsuario.css"/>
+        <h:outputScript name="validacionesJS.js" library="js" target="form"/>
+        <h:outputScript name="descarga.js" library="js" target="form"/>
+        <h:outputStylesheet library="css" name="estiloUsuario.css"/>
     </h:head>
     <h:body>
         <div id="cabecera">
@@ -40,13 +43,40 @@ and open the template in the editor.
 
                     <p:menuitem value="Proforma" outcome="proformaOperador"  icon="ui-icon-pencil" />
 
-
-
-
-
                     <f:facet name="options">
-                        <p:inputText style="margin-right:10px" placeholder="Search"/>
-                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="ui-icon-extlink" />
+                        <p:inputText style="margin-right:10px" placeholder="Buscar"/>
+                        <p:commandButton action="#{sessionMB.cerrarSesion()}"  value="Salir" icon="fa fa-sign-out" />
+                        <p:spacer width="22px"/>
+
+                        <p:graphicImage id="content" library="img" name="ayudaCodefac.png" style="width: 23px" />
+
+                        <p:overlayPanel id="toolTipContent" for="content" showEffect="blind" hideEffect="explode" showEvent="mouseover" hideEvent="mousedown"
+                                        dismissable="false" showCloseIcon="true" style="margin-right: 10px;margin-top: 20px;width: 600px"  >
+                            <p:panel style="text-align: left">
+
+                                <p:graphicImage library="img" name="ayudaCodefac.png" style="width: 25px" />
+                                <p:outputLabel value="Ayuda" style="font-size: 25px;padding-left: 15px" />
+
+                                <div style="height: 3px;background-color: #5eaade;margin-top: 3px" />
+
+
+                                <ui:insert name="ayuda"/>
+
+                                <f:facet name="footer" >
+                                    <p:outputLabel 
+
+                                        style="color: #485798;font-weight: bold;font-size: 11px"
+                                        value="Si desea mas información detallada puede visitar la seccion de ayuda." />
+                                </f:facet>
+
+                            </p:panel>
+
+                        </p:overlayPanel>
+
+                    </f:facet>
+
+                    <f:facet name="options"> 
+
                     </f:facet>
                 </p:menubar>
             </h:form>
@@ -355,7 +385,8 @@ and open the template in the editor.
         <p:dialog header="Seguro desea Facturar ?" widgetVar="confirmarFacturaVentas" modal="true" >
             <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
                 <h:form style="margin: 0 auto" target="_blank">
-                    <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();PF('dlgDetallesVentasDiariasFactura')" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
+                    <p:commandButton  value="Facturar" onclick="PF('confirmarFacturaVentas').hide();
+                            PF('dlgDetallesVentasDiariasFactura')" style="background-image: none;background-color: darkorange " actionListener="#{ventasDiariasMB.facturar()}" action="factura" ajax="false" update=":formDetallesV" />
                 </h:form>
                 <h:form>
                     <p:commandButton onclick="PF('confirmarFacturaVentas').hide();" value="Cancelar" style="background-image: none;background-color: brown"/>

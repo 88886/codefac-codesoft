@@ -204,7 +204,7 @@ public class comprarMB implements Serializable {
         System.out.println("-->" + id + "<--");
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
-        this.compra.setIva(new BigDecimal("12"));
+        this.compra.setIva(ivaMostrar);
 
         if (id != null) {
             compra = compraServicio.findCompra(Integer.parseInt(id));
