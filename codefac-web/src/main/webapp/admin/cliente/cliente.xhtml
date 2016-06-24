@@ -20,6 +20,7 @@ and open the template in the editor.
             <p:growl id="msgs" showDetail="true" />
             <p:panel id="panelTablaClientes" style="z-index: 0">
                 <p:dataTable
+                    widgetVar="widTablaClientes"
                     rows="15"
                     rowsPerPageTemplate="15,20,25"
                     paginator="true"
@@ -71,7 +72,8 @@ and open the template in the editor.
                             style="padding: 0px"
                             icon="fa fa-trash-o"
                             styleClass="btn_rojo"
-                            title="Eliminar Cliente" 
+                            title="Eliminar Cliente"
+                            oncomplete="PF('widTablaClientes').filter()"
                             actionListener="#{clienteMB.eliminarDetalle(cliente)}" 
                             update="@form" >
 
@@ -93,12 +95,18 @@ and open the template in the editor.
 
         <h:form id="formDialogo">
             <!-- Dialogo para grabar un nuevo cliente -->
-            <p:dialog  id="dlgCliente" header="Administracion Cliente" widgetVar="nuevoCliente" modal="true" height="auto">
+            <p:dialog  id="dlgCliente" header="Nuevo Cliente" widgetVar="nuevoCliente" modal="true" height="auto">
                 <p:messages id="msgCliNombre" />
                 <p:panelGrid columns="6" id="panelGrid" styleClass="panelNoBorder">   
                     <p:outputLabel for="cliCedula" value="Cédula:" />
 
-                    <p:inputText id="cliCedula" value="#{clienteMB.cliente.cedulaRuc}" required="true" requiredMessage="Cedula necesario">
+                    <p:inputText 
+                        id="cliCedula" 
+                        onkeypress="return noProcesar(event);"
+                        value="#{clienteMB.cliente.cedulaRuc}" 
+                        required="true" 
+                        requiredMessage="Cedula necesario">
+                        
                         <p:ajax event="blur" listener="#{clienteMB.verificarClienteExiste()}"  />
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
@@ -106,24 +114,41 @@ and open the template in the editor.
                     <p:message for="cliCedula" display="icon" />                  
 
                     <p:outputLabel for="cliNombre" value="Nombre:" />
-                    <p:inputText id="cliNombre" value="#{clienteMB.cliente.nombre}" required="true" requiredMessage="Nombre necesario">
+                    <p:inputText 
+                        onkeypress="return noProcesar(event);"
+                        id="cliNombre" 
+                        value="#{clienteMB.cliente.nombre}" 
+                        required="true" 
+                        requiredMessage="Nombre necesario">
+                        
                         <f:validateLength minimum="2" />
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
                     <p:message for="cliNombre" display="icon" />                                
 
                     <p:outputLabel for="cliTelefono" value="Telefono:" />
-                    <p:inputText id="cliTelefono" value="#{clienteMB.cliente.telefono}" required="true" requiredMessage="Telefono necesario">
+                    <p:inputText 
+                        id="cliTelefono" 
+                        onkeypress="return noProcesar(event);"
+                        value="#{clienteMB.cliente.telefono}" 
+                        required="true" 
+                        requiredMessage="Telefono necesario">
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
                     <p:message for="cliTelefono" display="icon" />                
 
                     <p:outputLabel for="cliDireccion" value="Direccion:" />
-                    <p:inputText id="cliDireccion" value="#{clienteMB.cliente.direccion}" />
+                    <p:inputText 
+                        id="cliDireccion" 
+                        onkeypress="return noProcesar(event);"
+                        value="#{clienteMB.cliente.direccion}" />
                     <p:message for="cliDireccion" display="icon" />    
 
                     <p:outputLabel for="cliCorreo" value="Correo:" />
-                    <p:inputText id="cliCorreo" value="#{clienteMB.cliente.correo}" />
+                    <p:inputText 
+                        id="cliCorreo" 
+                        onkeypress="return noProcesar(event);"
+                        value="#{clienteMB.cliente.correo}" />
                     <p:message for="cliCorreo" display="icon" />  
 
                     <p:outputLabel  value="Tipo Cliente" />
@@ -134,7 +159,12 @@ and open the template in the editor.
                     <p:message for="tipoCliente" display="icon" /> 
 
                     <p:outputLabel for="notas" value="Notas" />
-                    <p:inputTextarea id="notas" value="#{clienteMB.cliente.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                    <p:inputTextarea 
+                        id="notas" 
+                        onkeypress="return noProcesar(event);"
+                        value="#{clienteMB.cliente.notas}" 
+                        style="width: 250px;" 
+                        readonly="#{pruebaBean.enDetalles}"/>
                     <p:message for="notas" display="icon" />
                 </p:panelGrid>
 
@@ -170,30 +200,30 @@ and open the template in the editor.
                 <p:panelGrid columns="6" id="panelGrid2" styleClass="panelNoBorder">   
                     <p:outputLabel for="cliCedula2" value="Cédula:" />
 
-                    <p:inputText id="cliCedula2" value="#{clienteMB.clienteSeleccionado.cedulaRuc}" required="true" requiredMessage="Cedula necesario" readonly="true">   
+                    <p:inputText id="cliCedula2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.cedulaRuc}" required="true" requiredMessage="Cedula necesario" readonly="true">   
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
 
                     <p:message for="cliCedula2" />                  
 
                     <p:outputLabel for="cliNombre2" value="Nombre:" />
-                    <p:inputText id="cliNombre2" value="#{clienteMB.clienteSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario">
+                    <p:inputText id="cliNombre2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.nombre}" required="true" requiredMessage="Nombre necesario">
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
                     <p:message for="cliNombre2" />                                
 
                     <p:outputLabel for="cliTelefono2" value="Telefono:" />
-                    <p:inputText id="cliTelefono2" value="#{clienteMB.clienteSeleccionado.telefono}" required="true" requiredMessage="Telefono necesario">
+                    <p:inputText id="cliTelefono2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.telefono}" required="true" requiredMessage="Telefono necesario">
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
                     <p:message for="cliTelefono2" />                
 
                     <p:outputLabel for="cliDireccion2" value="Direccion:" />
-                    <p:inputText id="cliDireccion2" value="#{clienteMB.clienteSeleccionado.direccion}" />
+                    <p:inputText id="cliDireccion2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.direccion}" />
                     <p:message for="cliDireccion2" />    
 
                     <p:outputLabel for="cliCorreo2" value="Correo:" />
-                    <p:inputText id="cliCorreo2" value="#{clienteMB.clienteSeleccionado.correo}" />
+                    <p:inputText id="cliCorreo2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.correo}" />
                     <p:message for="cliCorreo2" />  
 
                     <p:outputLabel   value="Tipo Cliente" />
@@ -205,7 +235,7 @@ and open the template in the editor.
 
 
                     <p:outputLabel for="notas2" value="Notas" />
-                    <p:inputTextarea id="notas2" value="#{clienteMB.clienteSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                    <p:inputTextarea id="notas2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
                     <p:message for="notas2" />
                 </p:panelGrid>
 

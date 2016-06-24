@@ -239,9 +239,10 @@ public class GestionProductoMB implements Serializable {
         }
 
     }
-
-    public void eliminarDetalle(CatalagoProducto catalogo) {
-
+    
+    public void eliminarDetalle(CatalagoProducto catalogo) 
+    {
+        System.out.println("eliminando producto...");
         catalagoProductos.remove(catalogo);
 
         catalogoServicio.eliminar(catalogo);

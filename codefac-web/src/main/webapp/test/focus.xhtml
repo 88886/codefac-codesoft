@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantilladmin.xhtml">
+
+
+    <ui:define name="contenido" >
+        <h:form id="formulario">
+            <p:panel>
+                
+                <p:inputText id="campo1" />
+                <p:commandButton id="btn_cambiar" onclick="focusField('123')" actionListener="#{ejemplo.cambiarfocus('formulario:campo1')}"  value="cambiarFocus"  />
+                <p:commandButton id="btn_cambiar2" value="imprimir" actionListener="#{ejemplo.imprimir()}"  />
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
