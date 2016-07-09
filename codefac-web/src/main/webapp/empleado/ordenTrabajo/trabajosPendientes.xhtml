@@ -247,8 +247,7 @@ and open the template in the editor.
                             <p:message for="txtDiagnostico" display="icon" />
 
                             <p:outputLabel value="Estado:"/>
-                            <p:selectOneMenu id="cmbEstado" style="width:100%">
-
+                            <p:selectOneMenu id="cmbEstado" style="width:100%" value="#{trabajosPendientesMB.repararTarea.estado}">
                                 <f:selectItem itemLabel="Seleccione el estado" itemValue="" />
                                 <f:selectItem itemLabel="Recibido" itemValue="recibido" />
                                 <f:selectItem itemLabel="En proceso" itemValue="procesano" />
@@ -284,7 +283,8 @@ and open the template in the editor.
                                     onstart="PF('statusEnvioCorreo').show()" 
                                     onsuccess="PF('statusEnvioCorreo').hide()"
                                     styleClass="ui-botonAzul" 
-                                    actionListener="#{trabajosPendientesMB.revisarTarea()}" />
+                                    actionListener="#{trabajosPendientesMB.revisarTarea()}" 
+                                    update=":formPrincipal"/>
 
                                 <p:spacer width="20px"/>
                                 <p:commandButton value="Cancelar" immediate="true" styleClass="ui-botonRojo" actionListener="#{trabajosPendientesMB.cerrarRepararTarea()}" />

@@ -61,10 +61,20 @@ public class AdminMenuMB implements Serializable
         distribuidorList=distribuidorServicio.obtenerTodos();
     }
     
+    public void actualizarValores()
+    {
+        catalagoProductoList=catalogoServicio.obtenerTodos();
+        clienteList=clienteServicio.obtenerTodos();
+        distribuidorList=distribuidorServicio.obtenerTodos();
+    }
+    
     public void cambiarOpciones()
     {
         actualizarDatos();
         System.out.println("cambiando opciones ...");
+        catalagoProductoList=catalogoServicio.obtenerTodos();
+        clienteList=clienteServicio.obtenerTodos();
+        distribuidorList=distribuidorServicio.obtenerTodos();
     }
     
     public void cargarDatosBusqueda()
