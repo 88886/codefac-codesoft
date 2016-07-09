@@ -18,64 +18,131 @@ and open the template in the editor.
 
     <ui:define name="contenido" >
         <h4 class="titulo" style="text-align: center">Catalogo de Servicios</h4>
-        
- 
+
+
 
         <p:panel>
-            <h:form id="formPrincipal">
-                <p:dataTable
-                    id="tablaServicios"
-                    value="#{catalogoServiciosMB.serviciosList}"
-                    var="servicio"
-                    selectionMode="single"
-                    selection="#{catalogoServiciosMB.servicioSeleccionado}"
-                    rowKey="#{servicio.codigoServicio}"
-                    >
-
-                    <f:facet name="header" > 
-                        <p:commandButton
-                            actionListener="#{catalogoServiciosMB.abrirNuevoServicio}"
-                            update="idNuevoServicio"
-                            title="Nuevo Servicio"
-                            styleClass="btn_azul" 
-                            icon="fa fa-plus-circle" />
-                        <p:commandButton 
-                            actionListener="#{catalogoServiciosMB.abrirEditarServicio}"
-                            update="idEditarServicio"
-                            title="Editar Servicio"
-                            styleClass="btn_tomate" 
-                            icon="fa fa-pencil-square-o" />
-                    </f:facet>
-
-                    <p:column headerText="Codigo" style="width: 10%" >
-                        <p:outputLabel value="#{servicio.codigoServicio}" />
-                    </p:column>
-
-                    <p:column headerText="Nombre" style="width: 30%" >
-                        <p:outputLabel value="#{servicio.nombre}" />
-                    </p:column>
-
-                    <p:column headerText="Detalle" style="width: 55%" >
-                        <p:outputLabel value="#{servicio.descripcion}" />
-                    </p:column>
-
-                    <p:column headerText="Accion" style="width: 5%" >
-                        <p:commandButton
-                            actionListener="#{catalogoServiciosMB.eliminar(servicio)}" 
-                            update="@form"
-                            style="font-size: 13px;padding: 0px"
-                            ajax="true"
-                            styleClass="btn_rojo"
-                            title="Eliminar Servicio"                        
-                            icon="fa fa-times"                             
+            <h:panelGrid columns="2" styleClass="panelNoBorder">
+                <h:form id="formPrincipal">
+                    <p:panel header="Servicios">
+                        <p:dataTable
+                            id="tablaServicios"
+                            value="#{catalogoServiciosMB.serviciosList}"
+                            var="servicio"
+                            selectionMode="single"
+                            selection="#{catalogoServiciosMB.servicioSeleccionado}"
+                            rowKey="#{servicio.codigoServicio}"
                             >
-                            <p:confirm header="Confirmar" message="Desea eliminar el servicio?" icon="ui-icon-alert" />
+                            <p:ajax event="rowSelect" listener="#{catalogoServiciosMB.onRowSelect(event)}" update=":frmSubCat"/>
+                            <p:ajax event="rowUnselect" listener="#{catalogoServiciosMB.onRowUnSelect(event)}"/>
 
-                        </p:commandButton>
-                    </p:column>
+                            <f:facet name="header" >
+                                <p:commandButton
+                                    actionListener="#{catalogoServiciosMB.abrirNuevoServicio}"
+                                    update="idNuevoServicio"
+                                    title="Nuevo Servicio"
+                                    styleClass="btn_azul" 
+                                    icon="fa fa-plus-circle" />
+                                <p:commandButton 
+                                    actionListener="#{catalogoServiciosMB.abrirEditarServicio}"
+                                    update="idEditarServicio"
+                                    title="Editar Servicio"
+                                    styleClass="btn_tomate" 
+                                    icon="fa fa-pencil-square-o" />
+                            </f:facet>
 
-                </p:dataTable>
-            </h:form>
+                            <p:column headerText="Codigo" style="width: 10%" >
+                                <p:outputLabel value="#{servicio.codigoServicio}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre" style="width: 30%" >
+                                <p:outputLabel value="#{servicio.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Detalle" style="width: 55%" >
+                                <p:outputLabel value="#{servicio.descripcion}" />
+                            </p:column>
+
+                            <p:column headerText="Accion" style="width:15%" >
+                                <p:commandButton
+                                    actionListener="#{catalogoServiciosMB.eliminar(servicio)}" 
+                                    update="@form"
+                                    style="font-size: 13px;padding: 0px"
+                                    ajax="true"
+                                    styleClass="btn_rojo"
+                                    title="Eliminar Servicio"                        
+                                    icon="fa fa-times"                             
+                                    >
+                                    <p:confirm header="Confirmar" message="Desea eliminar el servicio?" icon="ui-icon-alert" />
+
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <h:form id="frmSubCat">
+                    <p:panel header="Categorías Servicios">
+                        <p:dataTable
+                            id="tablaCategorias"
+                            value="#{catalogoServiciosMB.categorias}"
+                            var="categoria"
+                            selectionMode="single"
+                            selection="#{catalogoServiciosMB.categoriaSeleccionada}"
+                            rowKey="#{categoria.idCategoriaTrabajo}"
+                            emptyMessage="Seleccione un Servicio">
+                            <p:ajax event="rowSelect" listener="#{catalogoServiciosMB.onRowSelectCat(event)}" update=":frmSubCat,:frmNuevaCat"/>
+                            <p:ajax event="rowUnselect" listener="#{catalogoServiciosMB.onRowUnSelectCat(event)}"/>
+
+                            <f:facet name="header" >
+                                <p:commandButton
+                                    actionListener="#{catalogoServiciosMB.abrirNuevaCategoria()}"
+                                    update=":frmNuevaCat"
+                                    title="Nueva Categoria"
+                                    styleClass="btn_azul" 
+                                    icon="fa fa-plus-circle"
+                                    disabled="#{catalogoServiciosMB.guardar}"/>
+                                <p:commandButton 
+                                    actionListener="#{catalogoServiciosMB.editarNuevaCategoria()}"
+                                    update=":frmNuevaCat"
+                                    title="Editar Categoria"
+                                    styleClass="btn_tomate" 
+                                    icon="fa fa-pencil-square-o"
+                                    disabled="#{catalogoServiciosMB.editar}"/>
+                            </f:facet>
+
+                            <p:column headerText="Nombre" style="width: 30%" >
+                                <p:outputLabel value="#{categoria.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Trabajo a Realizar" style="width: 30%" >
+                                <p:outputLabel value="#{categoria.trabajoRealizar}"/>
+                            </p:column>
+                            <p:column headerText="Precio" style="width: 30%" >
+                                <p:outputLabel value="#{categoria.precio}"/>
+                            </p:column>
+                            <p:column headerText="Problema" style="width: 30%" >
+                                <p:outputLabel value="#{categoria.descripcion}"/>
+                            </p:column>
+
+                            <p:column headerText="Accion" style="width:15%" >
+                                <p:commandButton
+                                    actionListener="#{catalogoServiciosMB.eliminarCategoria(categoria)}" 
+                                    update=":frmSubCat"
+                                    style="font-size: 13px;padding: 0px"
+                                    ajax="true"
+                                    styleClass="btn_rojo"
+                                    title="Eliminar Servicio"                        
+                                    icon="fa fa-times"                             
+                                    >
+                                    <p:confirm header="Confirmar" message="Desea eliminar el servicio?" icon="ui-icon-alert" />
+
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+
+                </h:form>
+            </h:panelGrid>
         </p:panel>
 
         <!-- Dialogo para crear un nuevo Servicio -->
@@ -171,6 +238,83 @@ and open the template in the editor.
                 </p:panel>
             </h:form>
         </p:dialog>
+
+        <!-- Dialogo para crear un nuevo Categoria -->
+        <p:dialog id="idNuevaCategoria" widgetVar="widgetNuevaCategoria" header="Nueva Categoria" modal="true" showEffect="explode" hideEffect="explode" >
+            <h:form id="frmNuevaCat">
+                <p:panel styleClass="panelNoBorder">
+                    <p:messages id="msgNuevaCategoria" />
+                    <p:panelGrid columns="3">
+                        <p:outputLabel value="Nombre:" />
+                        <p:inputText value="#{catalogoServiciosMB.categoriaNueva.nombre}" id="txtNombreC" required="true" requiredMessage="Un nombre es nesario para grabar">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="txtNombreC" display="icon" />
+
+                        <p:outputLabel value="Trabajo a Realizar:" />
+                        <p:inputTextarea id="txtTrabajoC" value="#{catalogoServiciosMB.categoriaNueva.trabajoRealizar}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtTrabajoC" display="icon"/>
+
+                        <p:outputLabel value="Precio :" />
+                        <p:inputTextarea id="txtPrecio" value="#{catalogoServiciosMB.categoriaNueva.precio}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtPrecio" display="icon"/>
+
+                        <p:outputLabel value="Problema" />
+                        <p:inputTextarea id="txtDescripcionC" value="#{catalogoServiciosMB.categoriaNueva.descripcion}">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputTextarea>
+                        <p:message for="txtDescripcionC" display="icon"/>
+
+                        <f:facet name="footer" class="ui-panelgrid">
+                            <div style="text-align: center">
+                                <p:commandButton 
+                                    actionListener="#{catalogoServiciosMB.guardarCategoria()}"
+                                    update="msgNuevaCategoria,:frmSubCat"                                    
+                                    validateClient="true"
+                                    icon="fa fa-floppy-o"
+                                    styleClass="btn_azul"                                    
+                                    value="Grabar">
+
+                                    <p:confirm header="Confirmar" message="Desea guardar la Categoria?" icon="ui-icon-alert" />
+
+                                </p:commandButton>
+
+                                <p:commandButton
+                                    onclick="PF('widgetNuevaCategoria').hide();"
+                                    immediate="true"
+                                    icon="fa fa-ban"
+                                    styleClass="btn_tomate"
+                                    value="Cancelar"/>
+                            </div>
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Mensaje" widgetVar="widgetMensaje">
+            <p:panel>
+                <f:facet name="footer" class="ui-panelgrid">
+                    <div style="text-align: center">
+                        <p:outputLabel value="Proceso Ejecutado Correctamente" />
+                        <p:commandButton
+                            onclick="PF('widgetMensaje').hide();"
+                            immediate="true"
+                            icon="fa fa-ban"
+                            styleClass="btn_mint"
+                            value="Aceptar"/>
+                    </div>
+                </f:facet>
+
+            </p:panel>
+        </p:dialog>
+
+
 
         <!-- Dialogo para las confirmaciones -->
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

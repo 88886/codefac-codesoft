@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.modelo.servicios;
 
+import ec.com.codesoft.model.CategoriaTrabajo;
 import ec.com.codesoft.model.Servicios;
+import ec.com.codesoft.modelo.facade.CategoriaTrabajoFacade;
 import ec.com.codesoft.modelo.facade.ServiciosFacade;
 import java.util.List;
 import javax.ejb.EJB;
@@ -22,6 +24,9 @@ public class ServiciosServicio
 {
     @EJB
     private ServiciosFacade servicioFacade;
+    
+    @EJB
+    private CategoriaTrabajoFacade categoriaTrabajoFacade;
     
     /***
      * Obtiene todos los servicios
@@ -52,5 +57,20 @@ public class ServiciosServicio
     public Servicios buscarPorID(Integer codigo)
     {
         return servicioFacade.find(codigo);
+    }
+    
+    public List<CategoriaTrabajo> obtenerCategoriasTrabajo(Integer codServicio){
+        return servicioFacade.getCatTrabajo(codServicio);
+    }
+    
+    public void guardarCategoria(CategoriaTrabajo categoria){
+        categoriaTrabajoFacade.create(categoria);
+    }
+    public void editarCategoria(CategoriaTrabajo categoria){
+        
+        categoriaTrabajoFacade.edit(categoria);
+    }
+    public void eliminarCategoria(CategoriaTrabajo categoria){
+        categoriaTrabajoFacade.remove(categoria);
     }
 }

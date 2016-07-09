@@ -817,6 +817,31 @@ public class comprarMB implements Serializable {
     public void setFocus(String focus) {
         this.focus = focus;
     }
+
+    public BigDecimal getIvaTotal() {
+        return ivaTotal;
+    }
+
+    public void setIvaTotal(BigDecimal ivaTotal) {
+        this.ivaTotal = ivaTotal;
+    }
+
+    public BigDecimal getIvaSubTotal() {
+        return ivaSubTotal;
+    }
+
+    public void setIvaSubTotal(BigDecimal ivaSubTotal) {
+        this.ivaSubTotal = ivaSubTotal;
+    }
+
+    public BigDecimal getIvaMostrar() {
+        return ivaMostrar;
+    }
+
+    public void setIvaMostrar(BigDecimal ivaMostrar) {
+        this.ivaMostrar = ivaMostrar;
+    }
+    
     
     
     
