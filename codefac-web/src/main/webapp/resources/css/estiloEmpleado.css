@@ -310,36 +310,36 @@ h1 , h2
 
 .filaCeleste
 {
-    background-color: #2fadd3;
-    color: white;
+    background-color: #2fadd3 !important;
+    color: white!important;
 }
 
 .filaRoja
 {
-    background: none repeat scroll 0 0 ;
-    background-color: #c3322e;
+    background-color: #c3322e ;
     color: white;
 }
 
 .filaVerde
 {
     background: none repeat scroll 0 0 ;
-    background-color: #459b45;
-    font-weight: bold;
-    color: white;
+    background-color: #459b45!important;
+    font-weight: lighter!important;
+    color: white!important;
 }
 
 .filaAzul
 {
-    background-color: #2b6598;
-    color: white;
+    background-color: #2b6598!important;
+    color: white!important;
+    font-weight: lighter!important;
 }
 
 .filaNaranja
 {
     background-color: #ec9922;
     color: white;
-    
+
 }
 
 .filaNegra
