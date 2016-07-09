@@ -51,6 +51,11 @@ public class AdminMenuMB implements Serializable
     {
         opcionSeleccionado="producto";
         System.out.println("iniciando busqueda de las listas");
+        actualizarDatos();
+    }
+    
+    private void actualizarDatos()
+    {
         catalagoProductoList=catalogoServicio.obtenerTodos();
         clienteList=clienteServicio.obtenerTodos();
         distribuidorList=distribuidorServicio.obtenerTodos();
@@ -58,7 +63,13 @@ public class AdminMenuMB implements Serializable
     
     public void cambiarOpciones()
     {
+        actualizarDatos();
         System.out.println("cambiando opciones ...");
+    }
+    
+    public void cargarDatosBusqueda()
+    {
+        actualizarDatos();
     }
     
     /////////////////////METODOS GET AND SET///////////////////

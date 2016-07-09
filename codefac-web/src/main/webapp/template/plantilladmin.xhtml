@@ -102,12 +102,13 @@ and open the template in the editor.
                         </p:selectOneMenu>
 
                         <p:commandButton
-                            id="movieBtn"
+                            id="btnBuscarGeneral"
+                            actionListener="#{adminMenuMB.cargarDatosBusqueda()}"
                             styleClass="btn_verde"
                             style="padding: 0px;vertical-align: top"
                             icon="fa fa-search" />
 
-                        <p:overlayPanel id="moviePanel" for="movieBtn" hideEffect="fade" dynamic="true" style="width:600px" >
+                        <p:overlayPanel id="moviePanel" for="btnBuscarGeneral" hideEffect="fade" dynamic="true" style="width:600px" >
 
                             <!-- Tabla de los productos !-->
                             <p:panel id="panelTablaProductos" visible="#{adminMenuMB.opcionSeleccionado eq 'producto'?'true':'false'}" styleClass="panelNoBorder">
