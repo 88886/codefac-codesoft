@@ -183,7 +183,7 @@ public class trabajosPendientesMB implements Serializable {
      */
     public void revisarTarea() {
         //ordenTrabajoSeleccionados.setEstado("reparado");
-        repararTarea.setEstado("reparado");
+        //repararTarea.setEstado("reparado");
         ordenTrabajoServicio.reparar(repararTarea);
 
         if (confirmarCorreo) {
