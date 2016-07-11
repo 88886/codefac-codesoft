@@ -19,7 +19,6 @@ import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.seguridad.SistemaMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
@@ -117,6 +116,7 @@ public class comprarMB implements Serializable {
     private BigDecimal ivaTotal; //iva traido de la configuracion
     private BigDecimal ivaSubTotal; //iva traido de la configuracion
     private BigDecimal ivaMostrar;
+    private BigDecimal baseImponibleIva; //subtotal 2 descontal
 
     /*
      Servicios para consultar del distribuidor
@@ -173,18 +173,19 @@ public class comprarMB implements Serializable {
         Distribuidor distribuidorVacio = new Distribuidor();
         distribuidorVacio.setRuc("");
         this.compra.setRuc(distribuidorVacio);
-        this.compra.setFechaIngreso(new Date());
+        //this.compra.setFechaIngreso(new Date());
         this.compra.setTotal(new BigDecimal("0.0"));
         this.compra.setDescuento(new BigDecimal("0.0"));
         this.compra.setIva(new BigDecimal("0"));
         listaDistribuidores = distribServicio.obtenerTodos();
         sumaTotalCompra = new BigDecimal(0);
+        baseImponibleIva=new BigDecimal(0);
 
         //iniciar la tabla del catalogo servicio
         this.listaCatalogos = catalogoServicio.obtenerTodos();
         
         //iva obtenido de la base de datos
-        ivaMostrar = sistemaServicio.getConfiguracion().getIva();
+        ivaMostrar = sistemaServicio.getConfiguracion().getIva().setScale(0);
         ivaSubTotal = (sistemaServicio.getConfiguracion().getIva()).divide(new BigDecimal("100"));
         ivaTotal = ivaSubTotal.add(new BigDecimal("1"));
 
@@ -214,6 +215,11 @@ public class comprarMB implements Serializable {
         }
 
     }
+    
+    //public void cambiarIva()
+    //{
+        
+    //}
 
     /**
      * Funcion que me permite editar el precio al momento de editar
@@ -324,18 +330,29 @@ public class comprarMB implements Serializable {
 
     public void actualizarValoresTotales() {
         //BigDecimal calculo = sumaTotalCompra.divide(compra.getDescuento().divide(new BigDecimal(100)).add(new BigDecimal(1)), 2, RoundingMode.HALF_UP);
-        BigDecimal calculo = sumaTotalCompra.subtract(compra.getDescuento());
-        //System.out.println(calculo);
-        System.out.println(calculo);
-        //Valor en porcenaje para calcular el iva
-        BigDecimal ivaPorcentaje=new BigDecimal(iva);
         
+//Subtotal2 del subtotal menos el desuento
+        BigDecimal calculo = sumaTotalCompra.subtract(compra.getDescuento());
+        baseImponibleIva=calculo.setScale(2,RoundingMode.HALF_UP);
+        
+        compra.setSubtotal(sumaTotalCompra.setScale(2, RoundingMode.HALF_UP));
+        
+        compra.setDescuento(compra.getDescuento().setScale(2,RoundingMode.HALF_UP));
+        System.out.println("bi="+calculo.multiply(new BigDecimal("0.12")));
+        System.out.println("bi="+calculo.multiply(new BigDecimal("0.12")).setScale(2,RoundingMode.HALF_UP));
+        //System.out.println(calculo);
+        //Valor en porcenaje para calcular el iva
+        //BigDecimal ivaPorcentaje=new BigDecimal(iva);
+        BigDecimal ivaPorcentaje=ivaMostrar;
+                
         
         //System.out.println(compra.getIva());
 
-        compra.setTotal(calculo.multiply(ivaPorcentaje.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).add(new BigDecimal("1"))));
-        compra.setTotal(compra.getTotal().divide(new BigDecimal(1), 2, RoundingMode.HALF_UP));
-        compra.setIva(compra.getTotal().subtract(compra.getTotal().multiply(ivaPorcentaje.divide(new BigDecimal("100")))));
+        compra.setTotal(calculo.multiply(ivaPorcentaje.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).add(new BigDecimal("1"))).setScale(2,RoundingMode.HALF_UP));
+        //compra.setTotal(compra.getTotal().divide(new BigDecimal(1), 2, RoundingMode.HALF_UP));
+        //compra.setIva(compra.getTotal().subtract(compra.getTotal().multiply(ivaPorcentaje.divide(new BigDecimal("100")))));
+        compra.setIva(compra.getTotal().subtract(compra.getSubtotal().subtract(compra.getDescuento())));
+        
         System.out.println("iva:"+compra.getIva() );
     }
 
@@ -818,22 +835,6 @@ public class comprarMB implements Serializable {
         this.focus = focus;
     }
 
-    public BigDecimal getIvaTotal() {
-        return ivaTotal;
-    }
-
-    public void setIvaTotal(BigDecimal ivaTotal) {
-        this.ivaTotal = ivaTotal;
-    }
-
-    public BigDecimal getIvaSubTotal() {
-        return ivaSubTotal;
-    }
-
-    public void setIvaSubTotal(BigDecimal ivaSubTotal) {
-        this.ivaSubTotal = ivaSubTotal;
-    }
-
     public BigDecimal getIvaMostrar() {
         return ivaMostrar;
     }
@@ -841,7 +842,14 @@ public class comprarMB implements Serializable {
     public void setIvaMostrar(BigDecimal ivaMostrar) {
         this.ivaMostrar = ivaMostrar;
     }
-    
+
+    public BigDecimal getBaseImponibleIva() {
+        return baseImponibleIva;
+    }
+
+    public void setBaseImponibleIva(BigDecimal baseImponibleIva) {
+        this.baseImponibleIva = baseImponibleIva;
+    }
     
     
     

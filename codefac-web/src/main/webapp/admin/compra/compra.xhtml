@@ -133,7 +133,7 @@ and open the template in the editor.
                                     <p:panelGrid columns="1" style="width: 100%" >
 
                                         <p:panelGrid columns="3">
-                                            
+
                                             <p:inputText 
                                                 placeholder="Numero de Documento"
                                                 id="txtNumeroDocumento" 
@@ -263,7 +263,7 @@ and open the template in the editor.
                         <p:panel id="panelTotales" style="width: 300px;float: right"  styleClass="panelNoBorder">
                             <p:panelGrid columns="2" style="text-align: left">
                                 <p:outputLabel value="Subtotal: "  />
-                                <p:inputText disabled="true" onkeypress="return noProcesar(event);" value="#{comprarMB.sumaTotalCompra}" style="width: 80px;" >
+                                <p:inputText disabled="true" onkeypress="return noProcesar(event);" value="#{calculosMB.redondeoSuperior(comprarMB.sumaTotalCompra)}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
 
@@ -271,10 +271,21 @@ and open the template in the editor.
                                 <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.descuento}" style="width: 80px;" >
                                     <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
                                 </p:inputText>
-                                <p:outputLabel value="Iva : #{comprarMB.ivaMostrar.intValue()} %"/>
-                                <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" >
-                                    <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
-                                </p:inputText> 
+
+                                <p:outputLabel id="lblBaseIva" value="Base Imponible #{comprarMB.ivaMostrar}%: "/>
+                                <p:inputText disabled="true"  onkeypress="return noProcesar(event);" value="#{comprarMB.baseImponibleIva}" style="width: 80px;" readonly="true" />                                    
+                                
+
+                                <p:panelGrid columns="2" styleClass="panelSinPadding">
+                                    <p:outputLabel value="Iva"/>
+                                    <p:inputText                                        
+                                        style="width: 25px"
+                                        value="#{comprarMB.ivaMostrar}">
+                                        <p:ajax event="blur" listener="#{comprarMB.actualizarValoresTotales()}" update="@form" />
+                                    </p:inputText>
+                                </p:panelGrid>
+
+                                <p:inputText  onkeypress="return noProcesar(event);" value="#{comprarMB.compra.iva}" style="width: 80px;" disabled="true" /> 
 
                                 <p:outputLabel id="txtTotalCompra" value="Total: "/>
                                 <p:inputText disabled="true" onkeypress="return noProcesar(event);" id="total" value="#{comprarMB.compra.total}" style="width: 80px;" />
@@ -332,7 +343,7 @@ and open the template in the editor.
                 <!-- Dialogo para agregar el producto especifico-->
                 <p:dialog header="Ingreso de producto" widgetVar="dlgProductoGeneral" modal="true" height="100">
                     <h:form id="formAgregarProductoEspecifico">
-                        
+
                         <p:panel styleClass="panelNoBorder">
                             <p:panelGrid columns="3">
                                 <p:outputLabel  value="Ingrese el codigo Especifico:"/>
@@ -343,8 +354,17 @@ and open the template in the editor.
                             <p:spacer height="15px" />
 
                             <div>
-                                <p:commandButton value="Aceptar" process="@this,txtCodigoDetalle" actionListener="#{comprarMB.agregarProductoEspecifico()}" update=":formDetalleCompra,txtCodigoDetalle,focus,:formTotales,:formAgregarProductoEspecifico" />
-                                <p:commandButton value="Salir" onclick="PF('dlgProductoGeneral').hide();" />
+                                <p:commandButton 
+                                    value="Aceptar" 
+                                    process="@this,txtCodigoDetalle" 
+                                    actionListener="#{comprarMB.agregarProductoEspecifico()}" 
+                                    styleClass="btn_verde"
+                                    update=":formDetalleCompra,txtCodigoDetalle,focus,:formTotales,:formAgregarProductoEspecifico" />
+
+                                <p:commandButton 
+                                    value="Salir" 
+                                    styleClass="btn_rojo"
+                                    onclick="PF('dlgProductoGeneral').hide();" />
                             </div>
                         </p:panel>
                     </h:form>
@@ -359,7 +379,7 @@ and open the template in the editor.
                             styleClass="btn_azul"
                             onclick="PF('confirmarDistribuidor').hide();" 
                             value="Aceptar"/>
-                        
+
                         <p:commandButton 
                             id="btnNuevoDistribuidor"
                             actionListener="#{comprarMB.crearNuevoDistribuidor()}"  
@@ -375,7 +395,7 @@ and open the template in the editor.
 
                 <p:dialog header="Agregar Producto en el Catalogo"  widgetVar="confirmarProducto" modal="true">
                     <h:form>
-                        
+
                         <h2>El Producto no existe en el catologo</h2>
                         <p:commandButton  onclick="PF('confirmarProducto').hide();" styleClass="btn_azul" value="Aceptar"/>
                         <p:commandButton id="btnNuevoProducto" actionListener="#{comprarMB.crearNuevoCatalogo()}" styleClass="btn_verde"  style="background-image: none;background-color: forestgreen" value="Crear Producto">

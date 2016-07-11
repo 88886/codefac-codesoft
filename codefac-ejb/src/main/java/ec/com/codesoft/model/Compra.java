@@ -62,6 +62,13 @@ public class Compra implements Serializable {
 
     @Column(name = "IVA")
     private BigDecimal iva;
+    
+    
+    @Column(name = "SUBTOTAL")
+    private BigDecimal subtotal;
+    
+    @Column(name = "IVA_PORCENTAJE")
+    private BigDecimal ivaPorcentaje;
 
     @JoinColumn(name = "RUC", referencedColumnName = "RUC")
     @ManyToOne
@@ -201,6 +208,22 @@ public class Compra implements Serializable {
 
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public BigDecimal getIvaPorcentaje() {
+        return ivaPorcentaje;
+    }
+
+    public void setIvaPorcentaje(BigDecimal ivaPorcentaje) {
+        this.ivaPorcentaje = ivaPorcentaje;
     }
     
     
