@@ -22,6 +22,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import net.sf.jasperreports.engine.JRException;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -38,6 +39,9 @@ public class GestionarOrdenTrabajoMB implements Serializable
     private List<OrdenTrabajo> ordenTrabajoList;
     private List<OrdenTrabajo> ordenTrabajoFiltro;
     
+    
+    private List<DetalleOrdenTrabajo> detalleOrdenTrabajo;
+    
     private OrdenTrabajo ordenTrabajo;
     
     @EJB
@@ -52,6 +56,14 @@ public class GestionarOrdenTrabajoMB implements Serializable
         }
         
     }
+    
+    public void devolverDetalleOrdenTrabajo(OrdenTrabajo ordenEnviada){
+        System.out.println("DEtalle");
+        detalleOrdenTrabajo=ordenEnviada.getDetalleOrdenTrabajoList();
+        RequestContext.getCurrentInstance().execute("PF('dlgDetallesOrdenTrabajo').show()");
+    }
+    
+    
     
     public void imprimir(OrdenTrabajo ordenTrabajo)
     {
@@ -124,6 +136,15 @@ public class GestionarOrdenTrabajoMB implements Serializable
     public void setOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
         this.ordenTrabajo = ordenTrabajo;
     }
+
+    public List<DetalleOrdenTrabajo> getDetalleOrdenTrabajo() {
+        return detalleOrdenTrabajo;
+    }
+
+    public void setDetalleOrdenTrabajo(List<DetalleOrdenTrabajo> detalleOrdenTrabajo) {
+        this.detalleOrdenTrabajo = detalleOrdenTrabajo;
+    }
+    
     
     
     

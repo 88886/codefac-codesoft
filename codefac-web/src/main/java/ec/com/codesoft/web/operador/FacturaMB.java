@@ -500,7 +500,7 @@ public class FacturaMB {
     }
 
     public void cerrarDialogo() {
-        RequestContext.getCurrentInstance().execute("PF('infProductoE).hide()");
+        RequestContext.getCurrentInstance().execute("PF('infProductoE').hide()");
         estadoDialogo = false;
     }
 

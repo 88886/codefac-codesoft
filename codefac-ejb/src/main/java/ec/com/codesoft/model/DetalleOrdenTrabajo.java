@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "detalle_orden_trabajo")
 public class DetalleOrdenTrabajo implements Serializable {
 
-    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -140,7 +139,11 @@ public class DetalleOrdenTrabajo implements Serializable {
     }
 
     public String getDiagnostico() {
+        if (this.diagnostico == null) {
+            diagnostico="S/R";
+        }
         return diagnostico;
+
     }
 
     public void setDiagnostico(String diagnostico) {
@@ -186,8 +189,6 @@ public class DetalleOrdenTrabajo implements Serializable {
     public void setUsuEmpleado(Usuario usuEmpleado) {
         this.usuEmpleado = usuEmpleado;
     }
-    
-    
 
     @XmlTransient
     public List<DetalleProductoOrdenTrabajo> getDetalleProductoOrdenTrabajoList() {
@@ -213,8 +214,6 @@ public class DetalleOrdenTrabajo implements Serializable {
     public void setAccesoriosOrdenTrabajoList(List<AccesoriosOrdenTrabajo> accesoriosOrdenTrabajoList) {
         this.accesoriosOrdenTrabajoList = accesoriosOrdenTrabajoList;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -240,9 +239,9 @@ public class DetalleOrdenTrabajo implements Serializable {
     public String toString() {
         return "modelo.DetalleOrdenTrabajo[ idDetalleOrdenTrabajo=" + idDetalleOrdenTrabajo + " ]";
     }
-    
-    public String devolverDetalles(){
-        return this.equipo+" "+this.diagnostico;
+
+    public String devolverDetalles() {
+        return this.equipo + " " + this.diagnostico;
     }
 
 }

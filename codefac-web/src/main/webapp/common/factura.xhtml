@@ -472,8 +472,7 @@ and open the template in the editor.
     <p:dialog header="Agregar Cliente" widgetVar="confirmarCliente" modal="true">
         <h:form>
             <h2>El Cliente no existe</h2>
-            <p:commandButton onclick="PF('c
-                            onfirmarCliente').hide();" value="Aceptar"/>
+            <p:commandButton onclick="PF('confirmarCliente').hide();" value="Aceptar"/>
             <p:commandButton actionListener="#{facturaMB.crearCliente()}"  style="background-image: none;background-color: forestgreen" value="Crear Cliente">
                 <p:ajax event="dialogReturn" listener="#{facturaMB.recibirDatos}" update=":form" />
             </p:commandButton>                        
