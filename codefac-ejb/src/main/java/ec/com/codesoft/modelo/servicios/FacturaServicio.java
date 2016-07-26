@@ -14,6 +14,7 @@ import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
+import ec.com.codesoft.model.DetallesServicio;
 import ec.com.codesoft.model.Intereses;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
@@ -26,6 +27,7 @@ import ec.com.codesoft.modelo.facade.DetalleOrdenTrabajoFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoGeneralFacade;
 import ec.com.codesoft.modelo.facade.DetalleProductoIndividualFacade;
 import ec.com.codesoft.modelo.facade.DetalleVentaOrdenTrabajoFacade;
+import ec.com.codesoft.modelo.facade.DetallesServicioFacade;
 import ec.com.codesoft.modelo.facade.InteresesFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
@@ -85,6 +87,9 @@ public class FacturaServicio {
 
     @EJB
     AbonoVentaCreditoFacade abonoVentaCreditoFacade;
+    
+    @EJB
+    DetallesServicioFacade detallesServiciosFacade;
 
     /**
      * Busca los productos con especifico y devuelve la cantidad disponible
@@ -136,6 +141,11 @@ public class FacturaServicio {
     public void insertarDetalleFacturaProductoGeneral(DetalleProductoGeneral detalle) {
 
         detalleGeneralFacade.create(detalle);
+
+    }
+     public void insertarDetalleServicio(DetallesServicio detalleServicio) {
+
+        detallesServiciosFacade.create(detalleServicio);
 
     }
 
@@ -279,6 +289,13 @@ public class FacturaServicio {
 
     public List<DetalleProductoGeneral> devolverVentaDiariaDetallesGeneral(int cod) {
         return ventaFacade.findFDetalleGeneralVentasDiariasCod(cod);
+    }
+    
+    public List<DetallesServicio> devolverVentaDiariaDetallesServicio(int cod) {
+        return ventaFacade.findServicioVentasDiariasCod(cod);
+    }
+    public List<DetalleVentaOrdenTrabajo> devolverVentaDiariaDetallesOrden(int cod) {
+        return ventaFacade.findDetallesOrdenTranajoVentasDiariasCod(cod);
     }
 
     public List<DetalleProductoIndividual> devolverVentaDiariaDetallesIndividual(int cod) {

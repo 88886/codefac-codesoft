@@ -7,6 +7,7 @@ package ec.com.codesoft.web.admin.venta;
 
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
+import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.web.operador.DetallesVenta;
@@ -78,6 +79,17 @@ public class VerVentaMB implements Serializable {
                     detalle.getPrecioIndividual(),
                     detalle.getSubtotal(),
                     detalle.getDescuento()));
+        }
+        
+         List<DetalleVentaOrdenTrabajo> listaDetallesOrden =venta.getDetalleVentaOrdenTrabajoList();
+        for (DetalleVentaOrdenTrabajo detalle : listaDetallesOrden) {
+            System.out.println("DetalleOrden"+ detalle.getIdDetalleOrdenTrabajo().getEquipo());
+            detalles.add(new DetallesVenta(
+                    1,
+                    detalle.getIdDetalleOrdenTrabajo().getIdOrdenTrabajo().getIdOrdenTrabajo().toString(),
+                    detalle.getIdDetalleOrdenTrabajo().getEquipo()+" -> "+detalle.getIdDetalleOrdenTrabajo().getEstado(),
+                    detalle.getIdDetalleOrdenTrabajo().getPrecio(),
+                    detalle.getIdDetalleOrdenTrabajo().getPrecio()));
         }
 
     }

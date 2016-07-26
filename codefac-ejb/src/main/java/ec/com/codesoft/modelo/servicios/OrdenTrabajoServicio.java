@@ -114,6 +114,10 @@ public class OrdenTrabajoServicio {
     public Servicios obtenerServicioPorCodigo(Integer codigo) {
         return servicios.find(codigo);
     }
+    
+    public List<CategoriaTrabajo> obtenerCategoriasPorServicio(Integer codServicio){
+        return ordenTrabajoFacade.getCategoriaOrdenServicio(codServicio);
+    }
 
     public CategoriaTrabajo obtenerCategoriaPorCodigo(Integer codigo) {
         return categoriaTrabajoFacade.find(codigo);
@@ -121,6 +125,9 @@ public class OrdenTrabajoServicio {
 
     public List<OrdenTrabajo> obtenerOrdenesTrabajo() {
         return ordenTrabajoFacade.findAllDesc();
+    }
+    public List<OrdenTrabajo> obtenerOrdenesTrabajoAll() {
+        return ordenTrabajoFacade.findAll();
     }
 
     /**

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
@@ -115,7 +116,9 @@ public class CatalogoServiciosMB implements Serializable {
         if (editar == false) {//false editar esta activo por el disabled del boton
             servicioServicios.editarCategoria(categoriaNueva);
             RequestContext.getCurrentInstance().execute("PF('widgetNuevaCategoria').hide()");
-            RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+            //RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proceso Ejecutado Correctamente");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
             editar = true;
         } else {
             //categoriaNueva.setIdCategoriaTrabajo(0);
@@ -123,16 +126,22 @@ public class CatalogoServiciosMB implements Serializable {
             categoriaNueva.setDetalleOrdenTrabajoList(new ArrayList<DetalleOrdenTrabajo>());
             categoriaNueva.setDetallesServicioList(new ArrayList<DetallesServicio>());
             servicioServicios.guardarCategoria(categoriaNueva);
-            categorias=servicioServicios.obtenerCategoriasTrabajo(servicioSeleccionado.getCodigoServicio());
+            //servicioSeleccionado.getCategoriaTrabajoList().add(categoriaNueva);//setear el objetol
+            categorias = servicioServicios.obtenerCategoriasTrabajo(servicioSeleccionado.getCodigoServicio());
             RequestContext.getCurrentInstance().execute("PF('widgetNuevaCategoria').hide()");
-            RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proceso Ejecutado Correctamente");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+            //RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
         }
 
     }
-    public void eliminarCategoria(CategoriaTrabajo categoria){
+
+    public void eliminarCategoria(CategoriaTrabajo categoria) {
         servicioServicios.eliminarCategoria(categoria);
-        categorias=servicioServicios.obtenerCategoriasTrabajo(servicioSeleccionado.getCodigoServicio());
-        RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+        categorias = servicioServicios.obtenerCategoriasTrabajo(servicioSeleccionado.getCodigoServicio());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proceso Ejecutado Correctamente");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
+        // RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
     }
 
     /**
@@ -142,8 +151,11 @@ public class CatalogoServiciosMB implements Serializable {
 
         System.out.println("grabando el servicio nuevo");
         servicioServicios.grabar(servicioNuevo);
+        serviciosList = servicioServicios.obtenerTodos();
         RequestContext.getCurrentInstance().execute("PF('widgetNuevoServicio').hide()");
-        RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+        //RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proceso Ejecutado Correctamente");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
 
     }
 
@@ -159,7 +171,9 @@ public class CatalogoServiciosMB implements Serializable {
     public void editarServicio() {
         servicioServicios.editar(servicioSeleccionado);
         RequestContext.getCurrentInstance().execute("PF('widgetEditarServicio').hide()");
-        RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+        //RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proceso Ejecutado Correctamente");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
 
     }
 
@@ -170,7 +184,9 @@ public class CatalogoServiciosMB implements Serializable {
         System.out.println("eliminando el servicio");
         servicioServicios.eliminar(servicio);
         serviciosList = servicioServicios.obtenerTodos();
-        RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+        //RequestContext.getCurrentInstance().execute("PF('widgetMensaje').show()");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proceso Ejecutado Correctamente");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
 
     //////////////////////METODOS GET AND SET ////////////////

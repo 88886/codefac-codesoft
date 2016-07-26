@@ -8,11 +8,13 @@ package ec.com.codesoft.web.admin.ordenTrabajo;
 import ec.com.codesoft.model.CategoriaTrabajo;
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.DetalleOrdenTrabajo;
+import ec.com.codesoft.model.DetallesServicio;
 import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.model.Servicios;
 import ec.com.codesoft.model.Usuario;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import ec.com.codesoft.modelo.servicios.OrdenTrabajoServicio;
+import ec.com.codesoft.modelo.servicios.ServiciosServicio;
 import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.reportes.ordenTrabajo.OrdenTrabajoDetalleReporte;
 import ec.com.codesoft.web.reportes.ordenTrabajo.OrdenTrabajoReporte;
@@ -71,6 +73,9 @@ public class OrdenTrabajoMB implements Serializable {
 
     @EJB
     private SistemaServicio sistemaServicio;
+    
+    @EJB
+    private ServiciosServicio servicioServicios;
 
     private List<CategoriaTrabajo> categorias;
     /**
@@ -85,7 +90,7 @@ public class OrdenTrabajoMB implements Serializable {
     private String nickEmpleadoSeleccionado;
     private String idServicioSeleccionado;
     private String idCategoriaSeleccionado;
-    
+
     /**
      * Valor para calcular el saldo anterior al momento de editar
      */
@@ -121,7 +126,6 @@ public class OrdenTrabajoMB implements Serializable {
            // Usuario empleado = ordenTrabajoServicio.getUsuarioByNick(nickEmpleadoSeleccionado);
 
             //ordenTrabajo.setUsuEmpleado(empleado);
-
             ordenTrabajo.setFechaEmision(new Date());
             ordenTrabajo.setSaldoAfavor(ordenTrabajo.getTotal().subtract(ordenTrabajo.getAdelanto()));
 
@@ -138,18 +142,17 @@ public class OrdenTrabajoMB implements Serializable {
      * Abre el dialogo que me permite realizar la edicion
      */
     public void abrirDialogoEditar(DetalleOrdenTrabajo detalle) {
-        
+
         detalleOrdenTrabajoEditar = detalle;
-        valorEditar=new BigDecimal(detalleOrdenTrabajoEditar.getPrecio().toString());
+        valorEditar = new BigDecimal(detalleOrdenTrabajoEditar.getPrecio().toString());
         System.out.println("abriendo dialogo de la edicion ...");
         RequestContext.getCurrentInstance().execute("PF('dlgDetalleEdit').show()");
-        idCategoriaSeleccionado=detalle.getIdCategoriaTrabajo().getIdCategoriaTrabajo().toString();
-        idServicioSeleccionado=detalle.getIdCategoriaTrabajo().getCodigoServicio().getCodigoServicio().toString();
-        nickEmpleadoSeleccionado=detalle.getUsuEmpleado().getNick();
-        
+        idCategoriaSeleccionado = detalle.getIdCategoriaTrabajo().getIdCategoriaTrabajo().toString();
+        idServicioSeleccionado = detalle.getIdCategoriaTrabajo().getCodigoServicio().getCodigoServicio().toString();
+        nickEmpleadoSeleccionado = detalle.getUsuEmpleado().getNick();
+
         cargarCategoriasServicios();
         cargarDatosCategoria();
-        
 
     }
 
@@ -215,43 +218,56 @@ public class OrdenTrabajoMB implements Serializable {
 //        System.out.println(detalleOrdenTrabajo.getEquipo());
 //        System.out.println(ordenTrabajo.getTotal());
         //ordenTrabajoServicio //obtnickEmpleadoSeleccionado;
-        Usuario empleado=ordenTrabajoServicio.getUsuarioByCodigo(nickEmpleadoSeleccionado);
-        
+        Usuario empleado = ordenTrabajoServicio.getUsuarioByCodigo(nickEmpleadoSeleccionado);
+
         detalleOrdenTrabajo.setUsuEmpleado(empleado);
-       
+
         ordenTrabajo.getDetalleOrdenTrabajoList().add(detalleOrdenTrabajo);
 
-        CategoriaTrabajo categoria = ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
-        detalleOrdenTrabajo.setIdCategoriaTrabajo(categoria);
-
+        /**
+         * validar que el categoria este creada caso contrario el sistema
+         * la crea sola
+         */
+        System.out.println("IdCategoria "+ idCategoriaSeleccionado);
+        if (!"".equals(idCategoriaSeleccionado)){
+            CategoriaTrabajo categoria = ordenTrabajoServicio.obtenerCategoriaPorCodigo(Integer.parseInt(idCategoriaSeleccionado));
+            detalleOrdenTrabajo.setIdCategoriaTrabajo(categoria);
+        } else {
+            Servicios servicioTemporal = ordenTrabajoServicio.obtenerServicioPorCodigo(Integer.parseInt(idServicioSeleccionado));
+            CategoriaTrabajo categoriaNueva = new CategoriaTrabajo();
+            categoriaNueva.setCodigoServicio(servicioTemporal);
+            categoriaNueva.setNombre("Creada Automáticamente");
+            categoriaNueva.setPrecio(detalleOrdenTrabajo.getPrecio());
+            categoriaNueva.setDescripcion(detalleOrdenTrabajo.getProblema());
+            categoriaNueva.setTrabajoRealizar(detalleOrdenTrabajo.getTrabajoRealizar());
+            servicioServicios.guardarCategoria(categoriaNueva);
+        }
         detalleOrdenTrabajo.getIdCategoriaTrabajo();
         System.out.println(detalleOrdenTrabajo.getPrecio());
 
         ordenTrabajo.setTotal(ordenTrabajo.getTotal().add(detalleOrdenTrabajo.getPrecio()));
-       // ordenTrabajo.setDescuento(new BigDecimal("12.00"));
+        // ordenTrabajo.setDescuento(new BigDecimal("12.00"));
 
         System.out.println(ordenTrabajo.getTotal());
         RequestContext.getCurrentInstance().execute("PF('dlgDetalle').hide()");
 
         detalleOrdenTrabajo = new DetalleOrdenTrabajo();
     }
-    
+
     /**
      * Metodo que me permite editar los items de la orden de trabajo
      */
-    public void editarDetalle()
-    {
-        Usuario empleado=ordenTrabajoServicio.getUsuarioByCodigo(nickEmpleadoSeleccionado);
+    public void editarDetalle() {
+        Usuario empleado = ordenTrabajoServicio.getUsuarioByCodigo(nickEmpleadoSeleccionado);
         detalleOrdenTrabajoEditar.setUsuEmpleado(empleado);
-        
-        BigDecimal nuevoTotal=ordenTrabajo.getTotal().subtract(valorEditar).add(detalleOrdenTrabajoEditar.getPrecio());
+
+        BigDecimal nuevoTotal = ordenTrabajo.getTotal().subtract(valorEditar).add(detalleOrdenTrabajoEditar.getPrecio());
         ordenTrabajo.setTotal(nuevoTotal);
-        
+
         System.out.println("editando el detalle");
         RequestContext.getCurrentInstance().execute("PF('dlgDetalleEdit').hide()");
-        
+
     }
-            
 
     public void eliminar(DetalleOrdenTrabajo detalle) {
         this.ordenTrabajo.getDetalleOrdenTrabajoList().remove(detalle);
@@ -275,7 +291,7 @@ public class OrdenTrabajoMB implements Serializable {
 
     public void crearNuevoCliente() {
         System.out.println("abriendo nuevo distribuidor ...");
-        
+
         RequestContext.getCurrentInstance().execute("PF('confirmarCliente').hide()");
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("modal", true);
@@ -304,11 +320,10 @@ public class OrdenTrabajoMB implements Serializable {
         System.out.println("Cliente llego " + cliente);
 
     }
-    
-    
+
     public void cargarCategoriasServicios() {
         Servicios servicioSeleccionado = ordenTrabajoServicio.obtenerServicioPorCodigo(Integer.parseInt(idServicioSeleccionado));
-        categorias = servicioSeleccionado.getCategoriaTrabajoList();
+        categorias = ordenTrabajoServicio.obtenerCategoriasPorServicio(servicioSeleccionado.getCodigoServicio());
         System.out.println("cargando categorias ...");
     }
 
@@ -320,8 +335,6 @@ public class OrdenTrabajoMB implements Serializable {
         detalleOrdenTrabajo.setTrabajoRealizar(categoria.getTrabajoRealizar());
         System.out.println("cargando categorias ..." + categoria.getPrecio());
     }
-    
-
 
     public void seleccionarEmpleado(Usuario usuario) {
         System.out.println("se llamo al usuario");
@@ -360,7 +373,6 @@ public class OrdenTrabajoMB implements Serializable {
     public void setEmpleados(List<Usuario> empleados) {
         this.empleados = empleados;
     }
-
 
     public List<Servicios> getServicios() {
         return servicios;
@@ -409,7 +421,5 @@ public class OrdenTrabajoMB implements Serializable {
     public void setNickEmpleadoSeleccionado(String nickEmpleadoSeleccionado) {
         this.nickEmpleadoSeleccionado = nickEmpleadoSeleccionado;
     }
-    
-    
 
 }

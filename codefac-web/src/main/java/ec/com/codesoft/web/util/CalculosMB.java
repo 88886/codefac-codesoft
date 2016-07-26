@@ -5,10 +5,14 @@
  */
 package ec.com.codesoft.web.util;
 
+import ec.com.codesoft.model.CatalagoProducto;
+import ec.com.codesoft.model.ProductoGeneralVenta;
+import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.web.seguridad.SistemaMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import javax.ejb.EJB;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -22,31 +26,29 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean
 public class CalculosMB implements Serializable {
 
-     @ManagedProperty(value = "#{sistemaMB}")
+    @ManagedProperty(value = "#{sistemaMB}")
     /**
      * Variable para obtener las variables del sistema
      */
     private SistemaMB sistemaMB;
-    
+    @EJB
+    FacturaServicio facturaServicio;
+
     /**
      * Metodo que me permite agregar el precio a un valor
      *
      * @return
      */
-    public BigDecimal incluirIva(BigDecimal valor) 
-    {
+    public BigDecimal incluirIva(BigDecimal valor) {
         if (valor != null) {
-            BigDecimal iva=sistemaMB.getConfiguracion().getIva().divide(new BigDecimal("100"),RoundingMode.DOWN).add(new BigDecimal("1"));
+            BigDecimal iva = sistemaMB.getConfiguracion().getIva().divide(new BigDecimal("100"), RoundingMode.DOWN).add(new BigDecimal("1"));
             BigDecimal respuesta = valor.multiply(iva);
             respuesta = respuesta.setScale(2, BigDecimal.ROUND_UP);
             return respuesta;
-        }
-        else
-        {
+        } else {
             return null;
         }
-        
-        
+
     }
 
     /**
@@ -62,6 +64,8 @@ public class CalculosMB implements Serializable {
         return new BigDecimal(0);
     }
 
+   
+
     public BigDecimal redondeoInferior(BigDecimal valor) {
         if (valor != null) {
             BigDecimal respuesta = valor.setScale(4, RoundingMode.DOWN);
@@ -69,8 +73,8 @@ public class CalculosMB implements Serializable {
         }
         return new BigDecimal(0);
     }
-    
-     public BigDecimal redondeoInferiorMostar(BigDecimal valor) {
+
+    public BigDecimal redondeoInferiorMostar(BigDecimal valor) {
         if (valor != null) {
             BigDecimal respuesta = valor.setScale(2, RoundingMode.DOWN);
             return respuesta;
@@ -85,7 +89,5 @@ public class CalculosMB implements Serializable {
     public void setSistemaMB(SistemaMB sistemaMB) {
         this.sistemaMB = sistemaMB;
     }
-     
-     
 
 }

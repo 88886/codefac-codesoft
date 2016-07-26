@@ -12,9 +12,12 @@ import ec.com.codesoft.modelo.servicios.SistemaServicio;
 import ec.com.codesoft.web.seguridad.SistemaMB;
 import ec.com.codesoft.web.util.CorreoMB;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -92,12 +95,15 @@ public class trabajosPendientesMB implements Serializable {
      */
     private Integer codigoOrdenTrabajoFind;
 
+    private String observaciones;
+
     @PostConstruct
     public void postConstruct() {
         tipoEstado = "revision";
         ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso("ASC", tipoEstado);
         tipoFiltro = "ingreso";
         tipoOrden = "ASC";
+        observaciones = "";
     }
 
     /**
@@ -128,6 +134,14 @@ public class trabajosPendientesMB implements Serializable {
         ordenTrabajoList = ordenTrabajoServicio.obtenerPorFechaIngreso("ASC", tipoEstado);
     }
 
+    public void actualizarOrden() {
+        ordenTrabajoServicio.actualizarOrdenTrabajo(ordenTrabajoSeleccionados);
+        System.out.println("Actuzalizado");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proceso Ejecutado Correctamente");
+        RequestContext.getCurrentInstance().execute("PF('widgetActualizarOrden').hide()");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
+    }
+
     /**
      * Contrala la reparacion rapida de la orden de trabajo
      */
@@ -135,7 +149,7 @@ public class trabajosPendientesMB implements Serializable {
         System.out.println("reparacion rapida..");
         //widgetEnviarCorreo
         //RequestContext.getCurrentInstance().execute("PF('dlgReparacion').show()");
-        RequestContext.getCurrentInstance().execute("PF('widgetEnviarCorreo').show()");
+        RequestContext.getCurrentInstance().execute("PF('widgetActualizarOrden').show()");
         ordenTrabajoSeleccionados = orden;
 
     }
@@ -167,6 +181,7 @@ public class trabajosPendientesMB implements Serializable {
     public void abrirRepararTarea(DetalleOrdenTrabajo detalle) {
         RequestContext.getCurrentInstance().execute("PF('widgetReparItem').show()");
         this.repararTarea = detalle;
+        this.repararTarea.setDiagnostico(detalle.getTrabajoRealizar());
 
     }
 
@@ -184,6 +199,14 @@ public class trabajosPendientesMB implements Serializable {
     public void revisarTarea() {
         //ordenTrabajoSeleccionados.setEstado("reparado");
         //repararTarea.setEstado("reparado");
+        System.out.println("Precio: "+ repararTarea.getPrecio());
+        BigDecimal costoTotal=new BigDecimal("0.0");
+        for (DetalleOrdenTrabajo ordenTrabajoList1 : repararTarea.getIdOrdenTrabajo().getDetalleOrdenTrabajoList()) {
+            costoTotal=costoTotal.add(ordenTrabajoList1.getPrecio());
+        }
+        repararTarea.getIdOrdenTrabajo().setTotal(costoTotal);
+       repararTarea.getIdOrdenTrabajo().setEstado("parcial");
+        ordenTrabajoServicio.actualizarOrdenTrabajo(repararTarea.getIdOrdenTrabajo());
         ordenTrabajoServicio.reparar(repararTarea);
 
         if (confirmarCorreo) {

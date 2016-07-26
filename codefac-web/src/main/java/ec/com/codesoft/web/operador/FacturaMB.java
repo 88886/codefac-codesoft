@@ -181,6 +181,9 @@ public class FacturaMB {
 
     //imagen para agrandar en la Ayuda
     private String rutaImagenAgrandar;
+    
+    //fecha actual
+    private Date fechaActual;
 
     @EJB
     ClienteServicio clienteServicio;
@@ -317,12 +320,22 @@ public class FacturaMB {
         abono = new BigDecimal("0.0");
         creditoFacturaObtenidos = new ArrayList<CreditoFactura>();
         mostrarDeudas = false;
+        
+        fechaActual=new Date();
 
     }
 
     /**
      * **************************************************PostConstuct**********************************************************************
      */
+    
+    //obtener la fecha actual
+    public String obtenerFechaActual() {
+        Date ahora = new Date();
+        SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
+        return formateador.format(ahora);
+    }
+    
     public String verificarUsuario() {
         //habilitarDEescuento Manual
         //System.out.println("Sesion" + sesion);
@@ -448,7 +461,7 @@ public class FacturaMB {
                     + "							<td><b>Nombre</b></td>\n"
                     + "							<td>" + clienteEncontrado.getNombre() + "</td>\n"
                     + "							<td><b>Fecha </b></td>\n"
-                    + "							<td>" + getFechaActual() + "</td>\n"
+                    + "							<td>" + obtenerFechaActual() + "</td>\n"
                     + "						</tr>\n"
                     + "\n"
                     + "		  </table>\n"
@@ -475,11 +488,7 @@ public class FacturaMB {
         }
     }
 
-    public String getFechaActual() {
-        Date ahora = new Date();
-        SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
-        return formateador.format(ahora);
-    }
+   
 
     public void devolverBancoNombre() {
 
@@ -831,13 +840,14 @@ public class FacturaMB {
 
     public void mostrarDialogoDetallesOrden(SelectEvent event) {
 
-        detallesOrdenMostrar = new ArrayList<DetalleOrdenTrabajo>();
+        detallesOrdenMostrar = new ArrayList<>();
         System.out.println("ordenesCargar" + ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList());
         for (int i = 0; i < ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().size(); i++) {
-            //if (ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("reparado")) {
-            System.out.println("Entro a FIltrar");
-            detallesOrdenMostrar.add(ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i));
-            //}
+            if (ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("reparado")||ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("devolver")||ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("facturado")) {
+                System.out.println("Entro a FIltrar "+ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).devolverDetalles());
+                
+                detallesOrdenMostrar.add(ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i));
+            }
 
         }
 
@@ -902,8 +912,14 @@ public class FacturaMB {
 //                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
 //                        ordenTrabajoSeleccionada.toStringDetalle(),
 //                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
+                    String estadoDetalle="";
+                    if(detallesOrdenSeleccionadas.get(i).getEstado().equals("devolver")){
+                        estadoDetalle="Devuelto";
+                    }else{
+                        estadoDetalle=detallesOrdenSeleccionadas.get(i).getEstado();
+                    }
                     DetallesVenta detalles = new DetallesVenta(1, detallesOrdenSeleccionadas.get(i).getIdDetalleOrdenTrabajo().toString(),
-                            detallesOrdenSeleccionadas.get(i).devolverDetalles(),
+                            detallesOrdenSeleccionadas.get(i).devolverDetalles()+" --> Estado: "+estadoDetalle,
                             totalRegistro, totalRegistro);
 
                     //descomentar para que coja el descuento con el precio sin iva
@@ -971,7 +987,7 @@ public class FacturaMB {
                 estadoDialogoGeneral = true;
 
                 //mostrarPanel = false;
-            } else {
+            } else if((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e')  {
                 System.out.println("Espe");
                 int numDetalles = 0;
                 for (int i = 0; i < detallesVenta.size(); i++) {
@@ -987,6 +1003,8 @@ public class FacturaMB {
                 System.out.println(stock + "individual");
                 //mostrarPanel = false;
 
+            }else{
+                System.out.println("Servicio");
             }
             // msjDistri = "Encontrado";
             // mostrarPanel = true;
@@ -1119,7 +1137,7 @@ public class FacturaMB {
             detalle.setCodigoDetallGeneral(0);
             detallesGeneralVenta.add(detalle);
 
-        } else {
+        } else if((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e') {
             System.out.println("Especifico");
             detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
             // System.err.println(detalleIndividual);
@@ -1165,6 +1183,8 @@ public class FacturaMB {
                 }
 
             }
+        }else{
+            System.out.println("Servicio");
         }
 
     }
@@ -1172,7 +1192,7 @@ public class FacturaMB {
     public void venta() {
         System.out.println(cantidadComprar + "--" + stock);
         if (cantidadComprar > stock) {
-            msjStock = "No existe suficiente Stock";
+            //msjStock = "No existe suficiente Stock";
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "No existe suficiente Stock..!");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
             //     System.out.println("No hay stock");
@@ -1274,7 +1294,7 @@ public class FacturaMB {
 
                         detallesGeneralVenta.add(detalle); //guardo los detalles 
 
-                    } else {
+                    } else if((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e')  {
                         System.out.println("Especifico");
                         detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
                         //System.err.println(detalleIndividual);
@@ -1360,6 +1380,9 @@ public class FacturaMB {
                             //det
 
                         }
+                    }else{
+                    
+                        System.out.println("Servicio");
                     }
 
                 }
@@ -1404,7 +1427,7 @@ public class FacturaMB {
                         venta.setTipoDocumento("Factura");
                     }
                     venta.setEstado("facturado");
-                    venta.setFecha(new Date());
+                    venta.setFecha(fechaActual);
                     venta.setTotal(total.setScale(2, BigDecimal.ROUND_UP));
                     venta.setDescuento(descuento);
                     venta.setCodigoDocumento(codigoDocumento);
@@ -1590,7 +1613,7 @@ public class FacturaMB {
                 }
             }
             if (bandera == detalle.size()) {
-                ordenesTrabajo.get(i).setEstado("Terminado");
+                ordenesTrabajo.get(i).setEstado("Facturada");
                 ordenTrabajoServicio.editar(ordenesTrabajo.get(i));
             }
         }
@@ -2479,5 +2502,20 @@ public class FacturaMB {
     public void setRutaImagenAgrandar(String rutaImagenAgrandar) {
         this.rutaImagenAgrandar = rutaImagenAgrandar;
     }
+
+    public Date getFechaActual() {
+        return fechaActual;
+    }
+
+    public void setFechaActual(Date fechaActual) {
+        this.fechaActual = fechaActual;
+    }
+    
+    
+     
+    
+    
+    
+    
 
 }

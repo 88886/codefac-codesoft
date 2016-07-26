@@ -8,9 +8,11 @@ package ec.com.codesoft.web.admin;
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.Distribuidor;
+import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
 import ec.com.codesoft.modelo.servicios.ClienteServicio;
 import ec.com.codesoft.modelo.servicios.DistribuidorServicio;
+import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -25,65 +27,80 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ApplicationScoped
-public class AdminMenuMB implements Serializable
-{
+public class AdminMenuMB implements Serializable {
+
     private List<Cliente> clienteList;
     private List<CatalagoProducto> catalagoProductoList;
     private List<Distribuidor> distribuidorList;
-    
+
     /**
      * Guarda la opcion seleccionada para buscar
      */
     private String opcionSeleccionado;
-    
-    
+    private Integer stock;
+
     @EJB
     private CatalogoServicio catalogoServicio;
-    
+
     @EJB
     private ClienteServicio clienteServicio;
-    
+
     @EJB
     private DistribuidorServicio distribuidorServicio;
-    
+
+    @EJB
+    FacturaServicio facturaServicio;
+
     @PostConstruct
-    public void init()
-    {
-        opcionSeleccionado="producto";
+    public void init() {
+        opcionSeleccionado = "producto";
         System.out.println("iniciando busqueda de las listas");
         actualizarDatos();
     }
-    
-    private void actualizarDatos()
-    {
-        catalagoProductoList=catalogoServicio.obtenerTodos();
-        clienteList=clienteServicio.obtenerTodos();
-        distribuidorList=distribuidorServicio.obtenerTodos();
+
+    private void actualizarDatos() {
+        catalagoProductoList = catalogoServicio.obtenerTodos();
+        clienteList = clienteServicio.obtenerTodos();
+        distribuidorList = distribuidorServicio.obtenerTodos();
     }
-    
-    public void actualizarValores()
-    {
-        catalagoProductoList=catalogoServicio.obtenerTodos();
-        clienteList=clienteServicio.obtenerTodos();
-        distribuidorList=distribuidorServicio.obtenerTodos();
+
+    public void actualizarValores() {
+        catalagoProductoList = catalogoServicio.obtenerTodos();
+        clienteList = clienteServicio.obtenerTodos();
+        distribuidorList = distribuidorServicio.obtenerTodos();
     }
-    
-    public void cambiarOpciones()
-    {
+
+    public Integer devolverStock(CatalagoProducto catalogoEnviado) {
+
+        if ((catalogoEnviado.getTipoProducto()) == 'G' || (catalogoEnviado.getTipoProducto()) == 'g') {
+            ProductoGeneralVenta productoGeneral = new ProductoGeneralVenta();
+            productoGeneral = facturaServicio.devolverStockGeneral(catalogoEnviado.getCodigoProducto());
+            if (productoGeneral == null) {
+                stock = 0;
+            } else {
+                stock = productoGeneral.getCantidadDisponible();
+            }
+            return stock;
+        } else {
+            stock = facturaServicio.devolverStockIndividual(catalogoEnviado.getCodigoProducto());
+            return stock;
+        }
+
+    }
+
+    public void cambiarOpciones() {
         actualizarDatos();
         System.out.println("cambiando opciones ...");
-        catalagoProductoList=catalogoServicio.obtenerTodos();
-        clienteList=clienteServicio.obtenerTodos();
-        distribuidorList=distribuidorServicio.obtenerTodos();
+        catalagoProductoList = catalogoServicio.obtenerTodos();
+        clienteList = clienteServicio.obtenerTodos();
+        distribuidorList = distribuidorServicio.obtenerTodos();
     }
-    
-    public void cargarDatosBusqueda()
-    {
+
+    public void cargarDatosBusqueda() {
         actualizarDatos();
     }
-    
-    /////////////////////METODOS GET AND SET///////////////////
 
+    /////////////////////METODOS GET AND SET///////////////////
     public List<CatalagoProducto> getCatalagoProductoList() {
         return catalagoProductoList;
     }
@@ -115,7 +132,13 @@ public class AdminMenuMB implements Serializable
     public void setOpcionSeleccionado(String opcionSeleccionado) {
         this.opcionSeleccionado = opcionSeleccionado;
     }
-    
-    
-    
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
 }

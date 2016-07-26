@@ -7,8 +7,10 @@ package ec.com.codesoft.web.widget;
 
 import ec.com.codesoft.model.Banco;
 import ec.com.codesoft.model.CatalagoProducto;
+import ec.com.codesoft.model.CategoriaTrabajo;
 import ec.com.codesoft.model.Cliente;
 import ec.com.codesoft.model.Creditobanco;
+import ec.com.codesoft.model.DetalleOrdenTrabajo;
 import ec.com.codesoft.model.DetalleProductoGeneral;
 import ec.com.codesoft.model.DetalleProductoIndividual;
 import ec.com.codesoft.model.DetalleVentaOrdenTrabajo;
@@ -17,6 +19,7 @@ import ec.com.codesoft.model.Intereses;
 import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
+import ec.com.codesoft.model.Servicios;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.servicios.BancoServicio;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
@@ -35,11 +38,11 @@ import ec.com.codesoft.web.seguridad.SessionMB;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +57,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
-import javax.xml.soap.Detail;
 import net.sf.jasperreports.engine.JRException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -99,6 +101,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
     private List<DetalleProductoIndividual> detallesIndividualVenta;
     private List<DetalleProductoGeneral> detallesGeneralVenta;
     private List<DetallesServicio> detallesServicio;
+    private List<DetalleVentaOrdenTrabajo> detallesVentaOrdenTrabajo;
     Integer codigoFactura;
     private List<Cliente> clientesLista;
     private Cliente clienteSeleccionado;
@@ -141,14 +144,22 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
     private Integer maxItemNota;
     private Integer maxItems;
     private boolean mostrarDescuentoManual;
+    private Integer cantidaServicio;
+    private BigDecimal precioServicio;
+    private List<Servicios> servicioLista; //lista de servicios disponibles
+    private Servicios servicioSeleccionado;
 
     //
     private BigDecimal descuentoManual;
 
     //ordenes de trabajo
+    private List<OrdenTrabajo> ordenesTemporal;
     private List<OrdenTrabajo> ordenesTrabajo;
     private OrdenTrabajo ordenTrabajoSeleccionada;
     private List<DetalleVentaOrdenTrabajo> detallesOrdenTrabajo;
+    private List<DetalleOrdenTrabajo> detallesOrdenMostrar;
+    private List<DetalleOrdenTrabajo> detallesOrdenSeleccionadas;
+    private List<DetalleOrdenTrabajo> detallesCambiarEstado;
 
     /**
      * venta Diarias
@@ -200,6 +211,10 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         cantidadComprar = 1;
         mostrarInformacion = false;
         catalogosLista = catalogoServicio.obtenerTodos();
+        servicioLista = new ArrayList<>();
+        servicioLista = catalogoServicio.obtenerServicios();//obtener los servicios
+        precioServicio = new BigDecimal("0.0");
+        servicioSeleccionado = new Servicios();
         catalogoSeleccionado = new CatalagoProducto();
         msjStock = "";
         todoPanel = false;
@@ -265,42 +280,113 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         } else {
             List<DetalleProductoGeneral> productosGeneral = facturaServicio.devolverVentaDiariaDetallesGeneral(ventaDiaria.getCodigoFactura());
             List<DetalleProductoIndividual> productosIndivudual = facturaServicio.devolverVentaDiariaDetallesIndividual(ventaDiaria.getCodigoFactura());
+            List<DetallesServicio> servicios = facturaServicio.devolverVentaDiariaDetallesServicio(ventaDiaria.getCodigoFactura());
+            List<DetalleVentaOrdenTrabajo> detallesOrdenTrabajo = facturaServicio.devolverVentaDiariaDetallesOrdenTrabajo(ventaDiaria.getCodigoFactura());
             System.out.println("Items " + productosGeneral.size());
             //System.out.println("Items " + productosIndivudual.size());
 
             codFactura = ventaDiaria.getCodigoFactura();// codigo de la factura
-            for (int i = 0; i < productosGeneral.size(); i++) {
-                DetallesVenta detalles = new DetallesVenta();
-                detalles.setCantidad(productosGeneral.get(i).getCantidad());
-                detalles.setCodigo(productosGeneral.get(i).getCodigoProducto().getCodigoProducto());
-                detalles.setCosto(productosGeneral.get(i).getPrecioIndividual());
-                detalles.setTotal(productosGeneral.get(i).getSubtotal());
-                detallesVenta.add(detalles);
-                DetalleProductoGeneral detalle = new DetalleProductoGeneral();
-                detalle.setCantidad(cantidadComprar);
-                detalle.setCodigoProducto(catalogoSeleccionado);
-                detalle.setSubtotal(subtotalRegistro);
-                detalle.setCodigoDetallGeneral(0);
-                detallesGeneralVenta.add(detalle);
+
+            if (productosGeneral.size() > 0) {
+                for (int i = 0; i < productosGeneral.size(); i++) {
+                    DetallesVenta detalles = new DetallesVenta();
+                    detalles.setCantidad(productosGeneral.get(i).getCantidad());
+                    detalles.setNombre(productosGeneral.get(i).getCodigoProducto().getNombre());
+                    detalles.setCodigo(productosGeneral.get(i).getCodigoProducto().getCodigoProducto());
+                    detalles.setCosto(productosGeneral.get(i).getPrecioIndividual());
+                    detalles.setTotal(productosGeneral.get(i).getSubtotal());
+                    detallesVenta.add(detalles);
+                    DetalleProductoGeneral detalle = new DetalleProductoGeneral();
+                    detalle.setCantidad(cantidadComprar);
+                    detalle.setCodigoProducto(catalogoSeleccionado);
+                    detalle.setSubtotal(subtotalRegistro);
+                    detalle.setCodigoDetallGeneral(0);
+                    detallesGeneralVenta.add(detalle);
+                }
             }
-            for (int i = 0; i < productosIndivudual.size(); i++) {
-                DetallesVenta detalles = new DetallesVenta();
-                detalles.setCantidad(1);
-                detalles.setCodigo(productosIndivudual.get(i).getProductoIndividualCompra().getCodigoUnico());
-                detalles.setCosto(productosIndivudual.get(i).getPrecioIndividual());
-                detalles.setTotal(productosIndivudual.get(i).getSubtotal());
-                detallesVenta.add(detalles);
-                DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                detalle.setProductoIndividualCompra(detalleIndividual);
-                detalle.setSubtotal(subtotalRegistro);
-                detalle.setPrecioIndividual(detalles.getCosto());
-                detallesIndividualVenta.add(detalle);
+
+            if (productosIndivudual.size() > 0) {
+                for (int i = 0; i < productosIndivudual.size(); i++) {
+                    DetallesVenta detalles = new DetallesVenta();
+                    detalles.setCantidad(1);
+                    detalles.setNombre(productosIndivudual.get(i).getProductoIndividualCompra().getCodigoProducto().getNombre());
+                    detalles.setCodigo(productosIndivudual.get(i).getProductoIndividualCompra().getCodigoUnico());
+                    detalles.setCosto(productosIndivudual.get(i).getPrecioIndividual());
+                    detalles.setTotal(productosIndivudual.get(i).getSubtotal());
+                    detallesVenta.add(detalles);
+                    DetalleProductoIndividual detalle = new DetalleProductoIndividual();
+                    detalle.setProductoIndividualCompra(detalleIndividual);
+                    detalle.setSubtotal(subtotalRegistro);
+                    detalle.setPrecioIndividual(detalles.getCosto());
+                    detallesIndividualVenta.add(detalle);
+                }
             }
+
+            if (servicios.size() > 0) {
+                for (int i = 0; i < servicios.size(); i++) {
+                    DetallesVenta detalles = new DetallesVenta();
+                    detalles.setCantidad(1);
+                    detalles.setNombre(servicios.get(i).getNombre());
+                    detalles.setCodigo(servicios.get(i).getCodDetalleServicio().toString());
+                    detalles.setCosto(servicios.get(i).getTotal());
+                    detalles.setTotal(servicios.get(i).getTotal());
+                    detallesVenta.add(detalles);
+                    detallesServicio.add(servicios.get(i));
+                }
+            }
+            
+            //  DetallesVenta detalles = new DetallesVenta(1, detallesOrdenSeleccionadas.get(i).getIdDetalleOrdenTrabajo().toString(),
+                      //      detallesOrdenSeleccionadas.get(i).devolverDetalles() + " --> Estado: " + estadoDetalle,
+                       //     totalRegistro, totalRegistro);
+            
+            if (detallesOrdenTrabajo.size() > 0) {
+                for (int i = 0; i < detallesOrdenTrabajo.size(); i++) {
+                    DetallesVenta detalles = new DetallesVenta();
+                    detalles.setCantidad(1);
+                    detalles.setNombre(detallesOrdenTrabajo.get(i).getIdDetalleOrdenTrabajo().getEquipo()+" --> Estado "+detallesOrdenTrabajo.get(i).getIdDetalleOrdenTrabajo().getEstado());
+                    detalles.setCodigo(detallesOrdenTrabajo.get(i).getIdDetalleOrdenTrabajo().getIdDetalleOrdenTrabajo().toString());
+                    detalles.setCosto(detallesOrdenTrabajo.get(i).getTotal());
+                    detalles.setTotal(detallesOrdenTrabajo.get(i).getTotal());
+                    detallesVenta.add(detalles);
+                    System.out.println("detalleorden "+detallesOrdenTrabajo.get(i));
+                   //detallesVentaOrdenTrabajo.add(detallesOrdenTrabajo.get(i));
+                }
+            }
+
+
             cargarDetalles();
 
         }
-        //inicializar total
 
+        //cantidad de los servicios
+        cantidaServicio = 1;
+
+        //exclusivo para ordenes de Trabajo
+        detallesCambiarEstado = new ArrayList<DetalleOrdenTrabajo>();
+        detallesOrdenTrabajo = new ArrayList<DetalleVentaOrdenTrabajo>();
+        //filtar por ordenes facturadas
+        ordenesTrabajo = new ArrayList<OrdenTrabajo>();
+        ordenesTemporal = ordenTrabajoServicio.obtenerOrdenesTrabajo();
+
+        for (int i = 0; i < ordenesTemporal.size(); i++) {
+            List<DetalleOrdenTrabajo> detallesOrden = new ArrayList<DetalleOrdenTrabajo>();
+            detallesOrden = ordenesTemporal.get(i).getDetalleOrdenTrabajoList(); //cargo los detalles orden trabajo
+            int verDetalles = 0; //verificar si existe algun detalle venta vacio
+            for (int j = 0; j < detallesOrden.size(); j++) {
+                List<DetalleVentaOrdenTrabajo> detallesVentaOrden = new ArrayList<DetalleVentaOrdenTrabajo>();
+                detallesVentaOrden = detallesOrden.get(j).getDetalleVentaOrdenTrabajoList();
+                if (detallesVentaOrden.isEmpty()) {
+                    verDetalles += 1;
+                }
+                //las ordenes estan facturadas
+            }
+            if (verDetalles != 0) {
+                ordenesTrabajo.add(ordenesTemporal.get(i));
+            }
+
+        }
+
+        //inicializar total
         //caragr detalles
         //position del widget
         setX(0);
@@ -351,7 +437,10 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
         for (int k = 0; k < detallesVenta.size(); k++) {
             //  System.out.println("Detalle " + k + detallesVenta.get(k).getTotal());
             //System.err.println("totalDetalle: "+detallesVenta.get(k).getTotal());
-            totalRegistro = detallesVenta.get(k).getTotal();
+
+            BigDecimal valor = detallesVenta.get(k).getTotal().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
+            valor = valor.setScale(3, BigDecimal.ROUND_DOWN); //quito el iva
+            totalRegistro = valor;
             subtotalRegistro = totalRegistro.multiply(ivaTotal);
             subtotal = subtotal.add(totalRegistro);
             if (tipoCliente.equals("C")) {
@@ -427,7 +516,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                 estadoDialogoGeneral = true;
 
                 //mostrarPanel = false;
-            } else {
+            } else if ((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e') {
                 System.out.println("Espe");
                 int numDetalles = 0;
                 for (int i = 0; i < detallesVenta.size(); i++) {
@@ -443,6 +532,9 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
                 System.out.println(stock + "individual");
                 //mostrarPanel = false;
 
+            } else {
+                System.out.println("Servicio");
+                RequestContext.getCurrentInstance().execute("PF('infProductoE').show()");
             }
             // msjDistri = "Encontrado";
             // mostrarPanel = true;
@@ -455,7 +547,18 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
     }
 
-    public void venta() {
+    public void onRowSelectService(SelectEvent event) {
+        //infEscojerServicioV
+        precioServicio = new BigDecimal("0.0");
+        RequestContext.getCurrentInstance().execute("PF('infEscojerServicioV').show()");
+    }
+
+    public void onRowUnSelectService(SelectEvent event) {
+
+    }
+
+    public void venta(String tipo) {
+
         System.out.println(cantidadComprar + "--" + stock);
 
         if (detallesVenta.size() <= 0) {
@@ -475,160 +578,211 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
             System.out.println("Se creo la factura xq no habian ventas Diarias");
 
         }
-        if (cantidadComprar > stock) {
-            //msjStock = "No existe suficiente Stock";
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "No existe suficiente Stock..!");
-            RequestContext.getCurrentInstance().showMessageInDialog(message);
-            //     System.out.println("No hay stock");
 
-        } else {
+        if (tipo.equals("catalogo")) {
 
-            if (tipoCliente == "" || tipoCliente == null) {
-                FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                cerrarDialogo();
-                cerrarDialogoG();
-            } else if (clienteEncontrado.getCedulaRuc() == null || clienteEncontrado.getCedulaRuc() == "") {
-                estadoDialogo = false;
-                estadoDialogoGeneral = false;
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "Ingrese el Cliente!");
+            if (cantidadComprar > stock) {
+                //msjStock = "No existe suficiente Stock";
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "No existe suficiente Stock..!");
                 RequestContext.getCurrentInstance().showMessageInDialog(message);
+                //     System.out.println("No hay stock");
+
             } else {
 
-                cerrarDialogoG();
-                msjCodUnico = "";
-                msjStock = "";
-                //msjStock = "";
-                System.out.println("Si hay stock");
-                if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
-
-                    System.out.println("En venta");
-                    System.out.println(clienteEncontrado.getTipo());
-                    if (clienteEncontrado.getTipo().equals("Distribuidor")) {
-                        totalRegistro = catalogoSeleccionado.getPrecioMayorista().multiply(new BigDecimal(cantidadComprar));
-                    } else {
-                        totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
-                    }
-                    System.out.println(totalRegistro + "totalRegistro");
-                    subtotalRegistro = totalRegistro.multiply(ivaTotal);
-                    subtotal = subtotal.add(totalRegistro);
-
-                    iva = subtotal.multiply(ivaSubTotal);
-                    total = subtotal.multiply(ivaTotal);
-                    totalPagar = total;
-
-                    System.out.println("Codigo General " + productoGeneral.getCatalagoProducto().getCodigoProducto());
-                    DetallesVenta detalles = new DetallesVenta(cantidadComprar,
-                            productoGeneral.getCatalagoProducto().getCodigoProducto() + "", catalogoSeleccionado.getNombre(),
-                            new BigDecimal("0.0"), totalRegistro);
-
-                    detalles.setCosto(catalogoSeleccionado.getPrecio());
-
-                    detalles.setValorVerdaderoMayorista(catalogoSeleccionado.getPrecioMayorista());
-                    detalles.setValorVerdaderoPVP(catalogoSeleccionado.getPrecio());
-                    detalles.setPrecioSeleccionado("PVP");
-                    detalles.setEscogerDescuento("No");
-                    detalles.setTipoDetalle("Producto");
-                    detallesVenta.add(detalles);
-
-                    DetalleProductoGeneral detalle = new DetalleProductoGeneral();
-                    detalle.setCantidad(cantidadComprar);
-                    detalle.setCodigoProducto(catalogoSeleccionado);
-                    detalle.setSubtotal(subtotalRegistro);
-                    detalle.setCodigoDetallGeneral(0);
-                    detalle.setPrecioIndividual(detalles.getCosto());
-                    detalle.setCodigoFactura(ventaDiaria);
-                    detallesGeneralVenta.add(detalle);
-                    //guardo los detalles 
-                    facturaServicio.insertarDetalleFacturaProductoGeneral(detalle);
-                    //actualizamos stock de producto general
-                    prodGeneral = new ProductoGeneralVenta();
-                    prodGeneral = facturaServicio.devolverStockGeneral(catalogoSeleccionado.getCodigoProducto());
-                    Integer cantidadStock = 0;
-                    cantidadStock = prodGeneral.getCantidadDisponible() - cantidadComprar;
-                    prodGeneral.setCantidadDisponible(cantidadStock);
-                    facturaServicio.actulizarStockGeneral(prodGeneral);
-
-                    System.out.println("Inserto detalle General");
-
+                if (tipoCliente == "" || tipoCliente == null) {
+                    FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                    cerrarDialogo();
+                    cerrarDialogoG();
+                } else if (clienteEncontrado.getCedulaRuc() == null || clienteEncontrado.getCedulaRuc() == "") {
+                    estadoDialogo = false;
+                    estadoDialogoGeneral = false;
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "Ingrese el Cliente!");
+                    RequestContext.getCurrentInstance().showMessageInDialog(message);
                 } else {
-                    System.out.println("Especifico");
-                    detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
-                    // System.err.println(detalleIndividual);
-                    if (detalleIndividual == null) {
-                        msjCodUnico = "No existe Producto con ese código";
 
-                    } else if (detalleIndividual.getEstadoProceso().equals("Vendido")) {
-                        msjCodUnico = "Producto con ese código  ya esta en Venta";
-                    } else {
-                        cantidadComprar = 1;
-                        cerrarDialogo();
-                        msjCodUnico = "";
-                    //cerrarDialogo();
+                    cerrarDialogoG();
+                    msjCodUnico = "";
+                    msjStock = "";
+                    //msjStock = "";
+                    System.out.println("Si hay stock");
+                    if ((catalogoSeleccionado.getTipoProducto()) == 'G' || (catalogoSeleccionado.getTipoProducto()) == 'g') {
 
-                        // productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, codPEspe);
+                        System.out.println("En venta");
+                        System.out.println(clienteEncontrado.getTipo());
                         if (clienteEncontrado.getTipo().equals("Distribuidor")) {
-                            System.out.println("precio Mayorista " + catalogoSeleccionado.getPrecioMayorista() + " Cantidad Comprar " + cantidadComprar);
                             totalRegistro = catalogoSeleccionado.getPrecioMayorista().multiply(new BigDecimal(cantidadComprar));
                         } else {
                             totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
                         }
-
+                        System.out.println(totalRegistro + "totalRegistro");
                         subtotalRegistro = totalRegistro.multiply(ivaTotal);
                         subtotal = subtotal.add(totalRegistro);
-                        if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
-//                            iva = new BigDecimal("0.0");
-//                            total = subtotal;
-//                            totalPagar = total;
-                            iva = subtotal.multiply(ivaSubTotal);
-                            total = subtotal.multiply(ivaTotal);
-                            totalPagar = total;
-                        } else {
-                            iva = subtotal.multiply(ivaSubTotal);
-                            total = subtotal.multiply(ivaTotal);
-                            totalPagar = total;
-                        }
 
-                        DetallesVenta detalles = new DetallesVenta(cantidadComprar, detalleIndividual.getCodigoUnico(),
-                                detalleIndividual.getCodigoProducto().getNombre(),
+                        iva = subtotal.multiply(ivaSubTotal);
+                        total = subtotal.multiply(ivaTotal);
+                        totalPagar = total;
+
+                        System.out.println("Codigo General " + productoGeneral.getCatalagoProducto().getCodigoProducto());
+                        DetallesVenta detalles = new DetallesVenta(cantidadComprar,
+                                productoGeneral.getCatalagoProducto().getCodigoProducto() + "", catalogoSeleccionado.getNombre(),
                                 new BigDecimal("0.0"), totalRegistro);
 
-                        if (clienteEncontrado.getTipo().equals("Distribuidor")) {
-                            detalles.setCosto(catalogoSeleccionado.getPrecioMayorista());
-                        } else {
-                            detalles.setCosto(catalogoSeleccionado.getPrecio());
-                        }
-                        Descuentos precioMayorista = new Descuentos("Prec Mayorista", catalogoSeleccionado.getPrecioMayorista());
-                        Descuentos precioDescuento = new Descuentos("PVP", catalogoSeleccionado.getPrecio());
-                        Descuentos dcto = new Descuentos("dctoPVP", catalogoSeleccionado.getDescuento());
-                        Descuentos dctoMayorista = new Descuentos("dctoMayorista", catalogoSeleccionado.getDescuentoMayorista());
-                        List<Descuentos> descuentos = new ArrayList<Descuentos>();
-                        descuentos.add(precioMayorista);
-                        descuentos.add(precioDescuento);
-                        descuentos.add(dcto);
-                        descuentos.add(dctoMayorista);
+                        detalles.setCosto(catalogoSeleccionado.getPrecio());
+
                         detalles.setValorVerdaderoMayorista(catalogoSeleccionado.getPrecioMayorista());
                         detalles.setValorVerdaderoPVP(catalogoSeleccionado.getPrecio());
-                        detalles.setDescuentos(descuentos);
                         detalles.setPrecioSeleccionado("PVP");
                         detalles.setEscogerDescuento("No");
                         detalles.setTipoDetalle("Producto");
                         detallesVenta.add(detalles);
-                        catalogoSeleccionado = new CatalagoProducto();
-                        DetalleProductoIndividual detalle = new DetalleProductoIndividual();
-                        detalle.setProductoIndividualCompra(detalleIndividual);
+
+                        DetalleProductoGeneral detalle = new DetalleProductoGeneral();
+                        detalle.setCantidad(cantidadComprar);
+                        detalle.setCodigoProducto(catalogoSeleccionado);
                         detalle.setSubtotal(subtotalRegistro);
+                        detalle.setCodigoDetallGeneral(0);
                         detalle.setPrecioIndividual(detalles.getCosto());
                         detalle.setCodigoFactura(ventaDiaria);
+                        detallesGeneralVenta.add(detalle);
+                        //guardo los detalles 
+                        facturaServicio.insertarDetalleFacturaProductoGeneral(detalle);
+                        //actualizamos stock de producto general
+                        prodGeneral = new ProductoGeneralVenta();
+                        prodGeneral = facturaServicio.devolverStockGeneral(catalogoSeleccionado.getCodigoProducto());
+                        Integer cantidadStock = 0;
+                        cantidadStock = prodGeneral.getCantidadDisponible() - cantidadComprar;
+                        prodGeneral.setCantidadDisponible(cantidadStock);
+                        facturaServicio.actulizarStockGeneral(prodGeneral);
 
-                        facturaServicio.insertarDetalleProductoIndividual(detalle);
-                        System.out.println("Inserto detalle Individual");
-                        detallesIndividualVenta.add(detalle);
+                        System.out.println("Inserto detalle General");
 
+                    } else {
+                        System.out.println("Especifico");
+                        detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
+                        // System.err.println(detalleIndividual);
+                        if (detalleIndividual == null) {
+                            msjCodUnico = "No existe Producto con ese código";
+
+                        } else if (detalleIndividual.getEstadoProceso().equals("Vendido")) {
+                            msjCodUnico = "Producto con ese código  ya esta en Venta";
+                        } else {
+                            cantidadComprar = 1;
+                            cerrarDialogo();
+                            msjCodUnico = "";
+                    //cerrarDialogo();
+
+                            // productosIndividualesDetalles = facturaServicio.obtenerProductoIndivudualCantidad(1, codPEspe);
+                            if (clienteEncontrado.getTipo().equals("Distribuidor")) {
+                                System.out.println("precio Mayorista " + catalogoSeleccionado.getPrecioMayorista() + " Cantidad Comprar " + cantidadComprar);
+                                totalRegistro = catalogoSeleccionado.getPrecioMayorista().multiply(new BigDecimal(cantidadComprar));
+                            } else {
+                                totalRegistro = catalogoSeleccionado.getPrecio().multiply(new BigDecimal(cantidadComprar));
+                            }
+
+                            subtotalRegistro = totalRegistro.multiply(ivaTotal);
+                            subtotal = subtotal.add(totalRegistro);
+                            if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
+//                            iva = new BigDecimal("0.0");
+//                            total = subtotal;
+//                            totalPagar = total;
+                                iva = subtotal.multiply(ivaSubTotal);
+                                total = subtotal.multiply(ivaTotal);
+                                totalPagar = total;
+                            } else {
+                                iva = subtotal.multiply(ivaSubTotal);
+                                total = subtotal.multiply(ivaTotal);
+                                totalPagar = total;
+                            }
+
+                            DetallesVenta detalles = new DetallesVenta(cantidadComprar, detalleIndividual.getCodigoUnico(),
+                                    detalleIndividual.getCodigoProducto().getNombre(),
+                                    new BigDecimal("0.0"), totalRegistro);
+
+                            if (clienteEncontrado.getTipo().equals("Distribuidor")) {
+                                detalles.setCosto(catalogoSeleccionado.getPrecioMayorista());
+                            } else {
+                                detalles.setCosto(catalogoSeleccionado.getPrecio());
+                            }
+                            Descuentos precioMayorista = new Descuentos("Prec Mayorista", catalogoSeleccionado.getPrecioMayorista());
+                            Descuentos precioDescuento = new Descuentos("PVP", catalogoSeleccionado.getPrecio());
+                            Descuentos dcto = new Descuentos("dctoPVP", catalogoSeleccionado.getDescuento());
+                            Descuentos dctoMayorista = new Descuentos("dctoMayorista", catalogoSeleccionado.getDescuentoMayorista());
+                            List<Descuentos> descuentos = new ArrayList<Descuentos>();
+                            descuentos.add(precioMayorista);
+                            descuentos.add(precioDescuento);
+                            descuentos.add(dcto);
+                            descuentos.add(dctoMayorista);
+                            detalles.setValorVerdaderoMayorista(catalogoSeleccionado.getPrecioMayorista());
+                            detalles.setValorVerdaderoPVP(catalogoSeleccionado.getPrecio());
+                            detalles.setDescuentos(descuentos);
+                            detalles.setPrecioSeleccionado("PVP");
+                            detalles.setEscogerDescuento("No");
+                            detalles.setTipoDetalle("Producto");
+                            detallesVenta.add(detalles);
+                            catalogoSeleccionado = new CatalagoProducto();
+                            DetalleProductoIndividual detalle = new DetalleProductoIndividual();
+                            detalle.setProductoIndividualCompra(detalleIndividual);
+                            detalle.setSubtotal(subtotalRegistro);
+                            detalle.setPrecioIndividual(detalles.getCosto());
+                            detalle.setCodigoFactura(ventaDiaria);
+
+                            facturaServicio.insertarDetalleProductoIndividual(detalle);
+                            System.out.println("Inserto detalle Individual");
+                            detallesIndividualVenta.add(detalle);
+
+                        }
                     }
-                }
 
+                }
             }
+        } else {
+            System.out.println("subtotal " + subtotal);
+            System.out.println("Servicio A facturar");
+
+            BigDecimal valor = precioServicio.divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
+            valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
+
+            totalRegistro = valor.multiply(new BigDecimal(1));
+            System.out.println(totalRegistro + "totalRegistroServicio");
+            subtotalRegistro = totalRegistro.multiply(ivaTotal);
+            subtotal = subtotal.add(totalRegistro);
+            System.out.println("NuevoSubtotal " + subtotal);
+            iva = subtotal.multiply(ivaSubTotal);
+            total = subtotal.multiply(ivaTotal);
+            totalPagar = total;
+
+            System.out.println("Codigo Servicio " + servicioSeleccionado.getCodigoServicio());
+            DetallesVenta detalles = new DetallesVenta(1,
+                    servicioSeleccionado.getCodigoServicio() + " ", servicioSeleccionado.getNombre(),
+                    new BigDecimal("0.0"), totalRegistro);
+
+            detalles.setCosto(precioServicio);
+
+            detalles.setValorVerdaderoMayorista(precioServicio);
+            detalles.setValorVerdaderoPVP(precioServicio);
+            detalles.setPrecioSeleccionado("PVP");
+            detalles.setEscogerDescuento("No");
+            detalles.setTipoDetalle("Servicio");
+            detallesVenta.add(detalles);
+
+            DetallesServicio detalleServicio = new DetallesServicio();
+            detalleServicio.setCodigoFactura(ventaDiaria);
+            detalleServicio.setDescripcion(servicioSeleccionado.getDescripcion());
+            CategoriaTrabajo ctTemporal = new CategoriaTrabajo();
+            ctTemporal.setIdCategoriaTrabajo(1);
+            detalleServicio.setIdCategoriaTrabajo(ctTemporal);
+            detalleServicio.setIva(iva);
+            //detalleServicio.setNick();
+            detalleServicio.setNombre(servicioSeleccionado.getNombre());
+            detalleServicio.setTotal(precioServicio);
+
+            detallesServicio.add(detalleServicio);
+            //guardo los detalles 
+            facturaServicio.insertarDetalleServicio(detalleServicio);
+            RequestContext.getCurrentInstance().execute("PF('infEscojerServicioV').hide()");
+            System.out.println("Inserto servicio");
+
         }
 
         /**
@@ -868,6 +1022,8 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 //        RequestContext.getCurrentInstance().execute("PF('confirmarFactura').hide()");
 //        RequestContext.getCurrentInstance().execute("PF('ok').show()");
         detallesVenta = new ArrayList< DetallesVenta>();
+        subtotal = new BigDecimal("0.0");
+        subtotalRegistro = new BigDecimal("0.0");
         total = new BigDecimal("0.0");
         totalPagar = new BigDecimal("0.0");
     }
@@ -909,7 +1065,7 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
         try {
             notaVenta.exportarPDF();
-                //detallesFactura.setCantidad(1);
+            //detallesFactura.setCantidad(1);
             //factura.agregarDetalle(detallesFactura);
             //factura.exportarPDF();
         } catch (JRException ex) {
@@ -926,6 +1082,204 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
     }
 
     public void imprimirFactura() {
+
+    }
+
+    //PRDENES DE TRABAJO METODOS
+    public void mostrarDialogoDetallesOrden(SelectEvent event) {
+
+        detallesOrdenMostrar = new ArrayList<DetalleOrdenTrabajo>();
+        System.out.println("ordenesCargar" + ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList());
+        for (int i = 0; i < ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().size(); i++) {
+            if (ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("reparado") || ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("devolver")){ //|| ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("facturado")) {
+                System.out.println("Entro a FIltrar");
+                detallesOrdenMostrar.add(ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i));
+            }
+
+        }
+
+        RequestContext.getCurrentInstance().execute("PF('dlgDetallesOrdenesTrabajo').show()");
+
+    }
+
+    public void onRowUnSelectOrden(SelectEvent event) {
+    }
+
+    public void devolverDescuento(BigDecimal descuentoCalcular) {
+        BigDecimal descuentoPorcentaje = descuentoCalcular.divide(new BigDecimal(100)).add(new BigDecimal(1));
+        System.out.println("porcetaje " + descuentoPorcentaje);
+        BigDecimal subTotalDescuento = subtotal.divide(descuentoPorcentaje, 2, BigDecimal.ROUND_FLOOR);
+        System.out.println(subTotalDescuento);
+        iva = subTotalDescuento.multiply(ivaSubTotal, MathContext.DECIMAL32);
+        iva = iva.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
+        total = subTotalDescuento.multiply(ivaTotal, MathContext.DECIMAL32);
+        total = total.divide(new BigDecimal(1), 2, BigDecimal.ROUND_UP);
+        totalPagar = total;
+    }
+
+    public void cambiarEstadoOrden() {
+
+        for (int i = 0; i < ordenesTrabajo.size(); i++) {
+            int bandera = 0;
+            List<DetalleOrdenTrabajo> detalle = new ArrayList<DetalleOrdenTrabajo>();
+            detalle = ordenesTrabajo.get(i).getDetalleOrdenTrabajoList();
+            for (int j = 0; j < detalle.size(); j++) {
+                if (detalle.get(j).getEstado().equals("facturado")) {
+                    bandera += 1;
+                }
+            }
+            if (bandera == detalle.size()) {
+                ordenesTrabajo.get(i).setEstado("Facturada");
+                ordenTrabajoServicio.editar(ordenesTrabajo.get(i));
+            }
+        }
+    }
+
+    public void onRowSelectOrden() {
+        //detallesOrden=detallesOrdenSeleccionadas;
+
+        if (detallesVenta.size() <= 0) {
+
+            ventaDiaria.setCedulaRuc(clienteEncontrado);
+            ventaDiaria.setEstado("Diaria");
+            ventaDiaria.setFecha(new Date());
+            ventaDiaria.setTipoDocumento("Nota");
+            ventaDiaria.setTipoPago("Efectivo");
+            ventaDiaria.setBanco("");
+            ventaDiaria.setCheque("");
+            ventaDiaria.setDescuento(new BigDecimal("0.0"));
+            ventaDiaria.setCodigoDocumento(codigoDocumento);
+            ventaDiaria.setDetalleProductoGeneralList(detallesGeneralVenta);
+            facturaServicio.guardarFactura(ventaDiaria);
+            codFactura = ventaDiaria.getCodigoFactura();
+            System.out.println("Se creo la factura xq no habian ventas Diarias");
+
+        }
+
+        System.out.println("Venta Orden");
+        if (detallesVenta.size() > maxItems - 1) {
+
+            estadoDialogo = false;
+            estadoDialogoGeneral = false;
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia...!", "Número Máximo de Detalles Alcanzado..!");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        } else {
+            if (tipoCliente == "" || tipoCliente == null) {
+                FacesMessage msg = new FacesMessage("Escoja el tipo de documento");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                cerrarDialogo();
+                cerrarDialogoG();
+            } else if (clienteEncontrado.getCedulaRuc() == null || clienteEncontrado.getCedulaRuc() == "") {
+                estadoDialogo = false;
+                estadoDialogoGeneral = false;
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "Ingrese el Cliente!");
+                RequestContext.getCurrentInstance().showMessageInDialog(message);
+            } else {
+
+                cerrarDialogoG();
+                //DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
+
+                //cargar a los detallesVenta los DetallesOrdenesTrabajo
+                System.out.println("Antes del for");
+                System.out.println(detallesOrdenSeleccionadas);
+
+                //FOR recorre lista de los detalles orden
+                for (int i = 0; i < detallesOrdenSeleccionadas.size(); i++) {
+                    System.out.println("Entro al for " + i);
+                    totalRegistro = detallesOrdenSeleccionadas.get(i).getPrecio().divide(ivaTotal, 2, BigDecimal.ROUND_FLOOR);
+                    subtotalRegistro = totalRegistro.multiply(ivaTotal);
+                    subtotal = subtotal.add(totalRegistro);
+                    if (tipoCliente.equals("C")) { //nota de venta C= tipo de documento
+                        iva = new BigDecimal("0.0");
+                        total = subtotal;
+                        totalPagar = total;
+                        devolverDescuento(new BigDecimal("0.0"));
+//                iva = subtotal.multiply(ivaSubTotal);
+//                total = subtotal.multiply(ivaTotal);
+//                totalPagar = total;
+                    } else {
+//                iva = subtotal.multiply(ivaSubTotal);
+//                total = subtotal.multiply(ivaTotal);
+//                totalPagar = total;
+                        iva = new BigDecimal("0.0");
+                        total = subtotal;
+                        totalPagar = total;
+                        devolverDescuento(new BigDecimal("0.0"));
+                    }
+
+                    //descomentar para que coja la orden sin el iva
+//                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
+//                        ordenTrabajoSeleccionada.toStringDetalle(),
+//                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
+                    String estadoDetalle = "";
+                    if (detallesOrdenSeleccionadas.get(i).getEstado().equals("devolver")) {
+                        estadoDetalle = "Devuelto";
+                    } else {
+                        estadoDetalle = detallesOrdenSeleccionadas.get(i).getEstado();
+                    }
+                    DetallesVenta detalles = new DetallesVenta(1, detallesOrdenSeleccionadas.get(i).getIdDetalleOrdenTrabajo().toString(),
+                            detallesOrdenSeleccionadas.get(i).devolverDetalles() + " --> Estado: " + estadoDetalle,
+                            totalRegistro, totalRegistro);
+
+                    //descomentar para que coja el descuento con el precio sin iva
+//                Descuentos precioMayorista = new Descuentos("Prec Mayorista", ordenTrabajoSeleccionada.getTotal());
+//                Descuentos precioDescuento = new Descuentos("PVP", ordenTrabajoSeleccionada.getTotal());
+                    Descuentos precioMayorista = new Descuentos("Prec Mayorista", totalRegistro);
+                    Descuentos precioDescuento = new Descuentos("PVP", totalRegistro);
+                    Descuentos dcto = new Descuentos("dctoPVP", new BigDecimal("0.0"));
+                    //System.out.println(catalogoSeleccionado.getDescuento());
+                    Descuentos dctoMayorista = new Descuentos("dctoMayorista", new BigDecimal("0.0"));
+                    List<Descuentos> descuentos = new ArrayList<Descuentos>();
+                    descuentos.add(precioMayorista);
+                    descuentos.add(precioDescuento);
+                    descuentos.add(dcto);
+                    descuentos.add(dctoMayorista);
+                    detalles.setValorVerdaderoMayorista(totalRegistro);
+                    detalles.setValorVerdaderoPVP(totalRegistro);
+                    detalles.setDescuentos(descuentos);
+                    detalles.setPrecioSeleccionado("PVP");
+                    detalles.setEscogerDescuento("No");
+                    detalles.setTipoDetalle("Orden Trabajo");
+                    //REVISAR
+                    //detalleOrdenTrabajo.setIdOrdenTrabajo(ordenTrabajoSeleccionada);
+                    detallesVenta.add(detalles);
+                    detallesCambiarEstado.add(detallesOrdenSeleccionadas.get(i));
+                    System.out.println("Detallles: " + detallesVenta);
+                }
+            }
+        }
+        //cambiar el estado y agregar los detalles
+        //insertarDetalles orden Trabajo
+        int numOrdenes = 0;
+        for (int i = 0; i < detallesCambiarEstado.size(); i++) {
+            // if (detallesVenta.get(i).getTipoDetalle().equals("Orden Trabajo")) {
+
+            DetalleVentaOrdenTrabajo detalleOrdenTrabajo = new DetalleVentaOrdenTrabajo();
+            detalleOrdenTrabajo.setCodigoFactura(ventaDiaria);
+            //detalleOrdenTrabajo.setIdOrdenTrabajo(0);
+            detalleOrdenTrabajo.setDescuento(detallesVenta.get(i).getValorDescuento());
+            detalleOrdenTrabajo.setEstado("Facturado");
+            detalleOrdenTrabajo.setIva(new BigDecimal("0.0"));
+            detallesCambiarEstado.get(i).setEstado("facturado");
+            facturaServicio.actualizarDetalleOrden(detallesCambiarEstado.get(i));
+
+            //REVISAR                           
+            detalleOrdenTrabajo.setIdDetalleOrdenTrabajo(detallesCambiarEstado.get(i));
+            //detalleOrdenTrabajo.setNick;
+            detalleOrdenTrabajo.setTotal(detallesVenta.get(i).getTotal());
+            System.out.println("DetalleOrden " + detalleOrdenTrabajo);
+            detallesOrdenTrabajo.add(detalleOrdenTrabajo);
+            numOrdenes = i + 1;
+
+        }
+        cambiarEstadoOrden(); //cambiarEstadoOrden
+
+        //guaradmos los detalles orden trabajo
+        if (numOrdenes >= 1) {
+            facturaServicio.insertarDetallesVentaOrdenTrabajo(detallesOrdenTrabajo);
+        }
+
+        RequestContext.getCurrentInstance().execute("PF('dlgDetallesOrden').hide()");
 
     }
 
@@ -1425,6 +1779,62 @@ public class VentasDiariasMB extends CommonWidGet implements Serializable {
 
     public void setVentaDiaria(Venta ventaDiaria) {
         this.ventaDiaria = ventaDiaria;
+    }
+
+    public Integer getCantidaServicio() {
+        return cantidaServicio;
+    }
+
+    public void setCantidaServicio(Integer cantidaServicio) {
+        this.cantidaServicio = cantidaServicio;
+    }
+
+    public List<Servicios> getServicioLista() {
+        return servicioLista;
+    }
+
+    public void setServicioLista(List<Servicios> servicioLista) {
+        this.servicioLista = servicioLista;
+    }
+
+    public Servicios getServicioSeleccionado() {
+        return servicioSeleccionado;
+    }
+
+    public void setServicioSeleccionado(Servicios servicioSeleccionado) {
+        this.servicioSeleccionado = servicioSeleccionado;
+    }
+
+    public BigDecimal getPrecioServicio() {
+        return precioServicio;
+    }
+
+    public void setPrecioServicio(BigDecimal precioServicio) {
+        this.precioServicio = precioServicio;
+    }
+
+    public List<DetalleVentaOrdenTrabajo> getDetallesOrdenTrabajo() {
+        return detallesOrdenTrabajo;
+    }
+
+    public void setDetallesOrdenTrabajo(List<DetalleVentaOrdenTrabajo> detallesOrdenTrabajo) {
+        this.detallesOrdenTrabajo = detallesOrdenTrabajo;
+    }
+
+    public List<DetalleOrdenTrabajo> getDetallesOrdenMostrar() {
+        return detallesOrdenMostrar;
+    }
+
+    public void setDetallesOrdenMostrar(List<DetalleOrdenTrabajo> detallesOrdenMostrar) {
+        this.detallesOrdenMostrar = detallesOrdenMostrar;
+    }
+
+    public List<DetalleOrdenTrabajo> getDetallesOrdenSeleccionadas() {
+        return detallesOrdenSeleccionadas;
+    }
+
+    public void setDetallesOrdenSeleccionadas(List<DetalleOrdenTrabajo> detallesOrdenSeleccionadas) {
+        this.detallesOrdenSeleccionadas = detallesOrdenSeleccionadas;
     }
 
 }

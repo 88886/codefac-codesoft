@@ -291,5 +291,6 @@ public class CatalagoProducto implements Serializable {
     public String toString() {
         return "ec.com.codesoft.model.CatalagoProducto[ codigoProducto=" + codigoProducto + " ]";
     }
+    
 
 }

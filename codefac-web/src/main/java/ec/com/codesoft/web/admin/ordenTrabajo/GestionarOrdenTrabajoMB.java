@@ -50,7 +50,7 @@ public class GestionarOrdenTrabajoMB implements Serializable
     @PostConstruct
     public void postCostruct()
     {
-        ordenTrabajoList=ordenTrabajoServicio.obtenerOrdenesTrabajo();
+        ordenTrabajoList=ordenTrabajoServicio.obtenerOrdenesTrabajoAll();
         for (OrdenTrabajo ordenTrabajoList1 : ordenTrabajoList) {
                System.out.println("Ordenes "+ ordenTrabajoList1.getEstado()); 
         }

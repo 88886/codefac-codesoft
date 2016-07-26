@@ -97,7 +97,7 @@ and open the template in the editor.
                         <p:messages autoUpdate="true" id="mensajeGeneral"/>
                         <p:panelGrid id="panelDatosOrdenTrabajo" columns="9" style="margin: 0 auto;width: 90%" >
                             <p:outputLabel value="Fecha Entrega:" />
-                            <p:calendar title="Fecha de Entrega del mantenimiento" onkeypress="return noProcesar(event);"  id="datetime"  pattern="MM/dd/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" >
+                            <p:calendar title="Fecha de Entrega del mantenimiento" onkeypress="return noProcesar(event);"  id="datetime"  pattern="dd/MM/yyyy HH:mm:ss" value="#{ordenTrabajoMB.ordenTrabajo.fechaEntrega}" >
                                 <p:clientValidator event="keyup"/>
                             </p:calendar>
 
@@ -275,8 +275,7 @@ and open the template in the editor.
                     <p:separator/>
                     <p:panelGrid columns="7" styleClass="panelNoBorder">
 
-                        <p:selectOneMenu id="cmbEmpleado" value="#{ordenTrabajoMB.nickEmpleadoSeleccionado}" required="true"  >
-                            <f:selectItem itemLabel="Asigne el empleado" itemValue="" />
+                        <p:selectOneMenu id="cmbEmpleado" value="#{ordenTrabajoMB.nickEmpleadoSeleccionado}" required="true">
                             <f:selectItems itemValue="#{empleado.nick}"  itemLabel="#{empleado.nick}" var="empleado" value="#{ordenTrabajoMB.empleados}" />                                
                         </p:selectOneMenu>
 
@@ -299,7 +298,7 @@ and open the template in the editor.
                             validateClient="true"  
                             partialSubmit="true" 
                             process=":formDialogoDetalle,:formPrincipal:txtTotal" 
-                            value="Agregar" 
+                            value="Agregar"
                             actionListener="#{ordenTrabajoMB.agregarDetalle()}" 
                             update=":formPrincipal:tablaDetalle,:formPrincipal:txtTotal,panelDetalleAgregar,mensajeGeneral2" />
                         <p:spacer width="20px" />
