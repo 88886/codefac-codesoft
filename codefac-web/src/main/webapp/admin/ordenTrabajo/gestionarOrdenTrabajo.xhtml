@@ -21,10 +21,12 @@ and open the template in the editor.
                     <p:dataTable 
                         value="#{gestionarOrdenTrabajoMB.ordenTrabajoList}"
                         var="orden"
-                        rowStyleClass="#{orden.estado eq 'anulado'?'filaRoja':'null'}"
+                        rowStyleClass="#{orden.estado eq 'anulado'?'filaRoja':orden.estado eq 'lista' ? 'filaAzul':orden.estado eq 'Facturada' ? 'filaVerde':orden.estado eq 'parcial' ? 'filaNaranja':'null'}"
                         emptyMessage="No existen datos disponibles"
                         filteredValue="#{gestionarOrdenTrabajoMB.ordenTrabajoFiltro}"
                         widgetVar="ventaTable"
+                        rows="15"
+                        paginator="true"
                         >
 
                         <p:column filterBy="#{orden.idOrdenTrabajo}" headerText="No" style="width: 60px;" filterMatchMode="contains">
@@ -44,21 +46,36 @@ and open the template in the editor.
                             <f:facet name="filter">
                                 <p:selectOneMenu onchange="PF('ventaTable').filter()" >
                                     <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItem itemLabel="Facturado" itemValue="facturado" />
+                                    <f:selectItem itemLabel="Lista" itemValue="lista" />
+                                    <f:selectItem itemLabel="Facturado" itemValue="Facturada" />
                                     <f:selectItem itemLabel="Revision" itemValue="revision" />
                                     <f:selectItem itemLabel="Devolver" itemValue="revision" />
                                     <f:selectItem itemLabel="Reparado" itemValue="reparado" />
-                                    <f:selectItem itemLabel="NoReparado" itemValue="noreparado" />
-                                    <f:selectItem itemLabel="Anulado" itemValue="anulado" />
-
-
+                                    <f:selectItem itemLabel="NoReparado" itemValue="no reparado" />
+                                    <f:selectItem itemLabel="Parcial" itemValue="parcial" />
                                 </p:selectOneMenu>
                             </f:facet>
                             <p:outputLabel value="#{orden.estado}"/>
                         </p:column>
+                        
+                        <p:column headerText="Observaciones">
+                            <p:outputLabel value="#{orden.observacion}"/>
+                        </p:column>
 
                         <p:column headerText="Detalle Equipos">
                             <p:outputLabel value="#{orden.toStringDetalle()}"/>
+                        </p:column>
+
+                        <p:column width="5%">
+                            <div style="text-align: center">
+                                <p:commandButton
+                                    style="padding: 0px"
+                                    styleClass="ui-botonCeleste"
+                                    icon="ui-icon-search"
+                                    title="Detallle"
+                                    update=":frmDetallesOrdenTrabajo"
+                                    action="#{gestionarOrdenTrabajoMB.devolverDetalleOrdenTrabajo(orden)}"/>
+                            </div>
                         </p:column>
 
                         <p:column headerText="Total" style="width: 40px">
@@ -87,7 +104,7 @@ and open the template in the editor.
                                 title="Imprimir"
                                 action="#{gestionarOrdenTrabajoMB.imprimir(orden)}" 
                                 ajax="false" />
-                                                           
+
                             <p:commandButton
                                 style="padding: 0px"
                                 title="Anular"
@@ -119,6 +136,52 @@ and open the template in the editor.
                 </p:panel>
 
             </h:form>
+
+            <!--dialogo para detalles orden de trabajo-->
+            <p:dialog widgetVar="dlgDetallesOrdenTrabajo" modal="true" width="850px" showEffect="explode" hideEffect="explode">
+                <h:form id="frmDetallesOrdenTrabajo">
+                    <p:panel header="Detalles Orden Trabajo Equipos" >
+                        <p:dataTable  value="#{gestionarOrdenTrabajoMB.detalleOrdenTrabajo}"
+                                      var="detalleOrden"
+                                      rowStyleClass="#{detalleOrden.estado eq 'reparado'?'filaAzul':detalleOrden.estado eq 'devolver'?'filaNaranja':detalleOrden.estado eq 'facturado'?'filaVerde':'null'}"
+                                      emptyMessage="No existen datos disponibles">
+
+                            <p:column filterBy="#{detalleOrden.equipo}" headerText="Equipo">
+                                <p:outputLabel value="#{detalleOrden.equipo}"/>
+                            </p:column>
+                            <p:column  headerText="Problema">
+                                <p:outputLabel value="#{detalleOrden.problema}"/>
+                            </p:column>
+                            <p:column  headerText="Trabajo a Realizar">
+                                <p:outputLabel value="#{detalleOrden.trabajoRealizar}"/>
+                            </p:column>
+                            <p:column  headerText="Diagnostico">
+                                <p:outputLabel value="#{detalleOrden.diagnostico}"/>
+                            </p:column>
+                            <p:column  headerText="Estado">
+                                <p:outputLabel value="#{detalleOrden.estado}"/>
+                            </p:column>
+                            
+                            <p:column  headerText="Precio">
+                                <p:outputLabel value="#{detalleOrden.precio}"/>
+                            </p:column>
+
+
+                        </p:dataTable>
+
+                        <f:facet name="footer">
+                            <div style="text-align: center">
+                                <p:commandButton onclick="PF('dlgDetallesOrdenTrabajo').hide();" value="Aceptar"
+                                                 styleClass="ui-botonCeleste"/>
+                            </div>
+                        </f:facet> 
+
+                    </p:panel>
+
+                </h:form>
+            </p:dialog>
+
+
         </div>
     </ui:define>
 

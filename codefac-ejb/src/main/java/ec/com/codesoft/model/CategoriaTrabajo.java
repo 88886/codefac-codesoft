@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,12 +61,12 @@ public class CategoriaTrabajo implements Serializable {
     private String trabajoRealizar;
     
     
-    @OneToMany(mappedBy = "idCategoriaTrabajo")
+    @OneToMany(mappedBy = "idCategoriaTrabajo", cascade = CascadeType.ALL)
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
     @JoinColumn(name = "CODIGO_SERVICIO", referencedColumnName = "CODIGO_SERVICIO")
     @ManyToOne
     private Servicios codigoServicio;
-    @OneToMany(mappedBy = "idCategoriaTrabajo")
+    @OneToMany(mappedBy = "idCategoriaTrabajo", cascade = CascadeType.ALL)
     private List<DetallesServicio> detallesServicioList;
 
     public CategoriaTrabajo() {

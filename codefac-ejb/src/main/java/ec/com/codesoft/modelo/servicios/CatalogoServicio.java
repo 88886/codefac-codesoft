@@ -8,9 +8,11 @@ package ec.com.codesoft.modelo.servicios;
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.ProductoGeneralCompra;
 import ec.com.codesoft.model.ProductoGeneralVenta;
+import ec.com.codesoft.model.Servicios;
 import ec.com.codesoft.modelo.facade.CatalagoProductoFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralCompraFacade;
 import ec.com.codesoft.modelo.facade.ProductoGeneralVentaFacade;
+import ec.com.codesoft.modelo.facade.ServiciosFacade;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -34,6 +36,9 @@ public class CatalogoServicio {
 
     @EJB
     private ProductoGeneralVentaFacade productoGeneralFacade;
+    
+    @EJB
+    private ServiciosFacade serviciosFacade;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void insertar(CatalagoProducto catalogo) {
@@ -111,5 +116,13 @@ public class CatalogoServicio {
     public ProductoGeneralCompra obtenerUltimoProductoDistribuidor(String codPRoducto,String ruc) {
         return productoGCFacade.getUltimoProductoByDistribuidor(codPRoducto,ruc);
 
+    }
+    
+    /**
+     * Obtener el listado de los servicios
+     * @return List
+     */
+    public List<Servicios> obtenerServicios(){
+        return serviciosFacade.findAll();
     }
 }

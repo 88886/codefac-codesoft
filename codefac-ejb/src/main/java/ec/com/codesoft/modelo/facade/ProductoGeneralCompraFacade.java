@@ -44,7 +44,11 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
 //            System.out.println(queryString);
             query.setParameter(1, codP);
             List<ProductoGeneralVenta> producto = (List<ProductoGeneralVenta>) query.getResultList();
-            return producto.get(0);//cambiar solo x la Julie
+            //return producto.get(0);//cambiar solo x la Julie
+            if (producto.size() == 0) {
+                return null;
+            }
+            return producto.get(0);
         } catch (NoResultException e) {
             return null;
         }
@@ -74,8 +78,8 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             return null;
         }
     }
-    
-    public List<CatalagoProducto> obtenerProductosDistribuidor(String codigo){
+
+    public List<CatalagoProducto> obtenerProductosDistribuidor(String codigo) {
         try {
             //String queryString = "SELECT p FROM ProductoGeneralVenta p where p.codigoProducto='"+codP+"'";
             String queryString = "SELECT c FROM CatalagoProducto c WHERE c.codigoDistribuidor=?1";
@@ -88,8 +92,8 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             return null;
         }
     }
-    
-    public List<String> obtenerProductos(String codigoDistribuidor){
+
+    public List<String> obtenerProductos(String codigoDistribuidor) {
         try {
             //String queryString = "SELECT p FROM ProductoGeneralVenta p where p.codigoProducto='"+codP+"'";
             String queryString = "SELECT DISTINCT(c.codigoProducto.codigoProducto) FROM ProductoGeneralCompra c WHERE c.codigoCompra.ruc.ruc=?1";
@@ -197,7 +201,7 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
         }
 
     }
-    
+
     //obtner Ultimoproducto
     public ProductoGeneralCompra getUltimoProductoByDistribuidor(String idProducto, String rucDistribuidor) {
 
@@ -211,7 +215,7 @@ public class ProductoGeneralCompraFacade extends AbstractFacade<ProductoGeneralC
             query.setParameter(1, idProducto);
 
             List<ProductoGeneralCompra> lista = (List<ProductoGeneralCompra>) query.getResultList();
-     
+
             if (lista.size() == 0) {
                 return null;
             }

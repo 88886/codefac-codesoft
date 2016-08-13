@@ -70,6 +70,11 @@ public class Configuracion implements Serializable {
     @Column(name = "DB_PASSWORD")
     private String dbPassword;
     
+    @Column(name = "STOCK_MINIMO")
+    private Integer stockMinimo;
+    
+    
+    
     public Configuracion() {
     }
 
@@ -156,6 +161,15 @@ public class Configuracion implements Serializable {
     public void setDbPassword(String dbPassword) {
         this.dbPassword = dbPassword;
     }
+
+    public Integer getStockMinimo() {
+        return stockMinimo;
+    }
+
+    public void setStockMinimo(Integer stockMinimo) {
+        this.stockMinimo = stockMinimo;
+    }
+    
 
     
     

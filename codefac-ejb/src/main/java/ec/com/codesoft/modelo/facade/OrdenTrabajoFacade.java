@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.modelo.facade;
 
-import ec.com.codesoft.model.Distribuidor;
+import ec.com.codesoft.model.CategoriaTrabajo;
 import ec.com.codesoft.model.OrdenTrabajo;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -35,13 +35,35 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo> {
 
     public List<OrdenTrabajo> getByDateEntry(String orden,String estado) {
         try {
-            String queryString = "SELECT o FROM OrdenTrabajo o where o.estado=?1 order by o.fechaEmision "+orden;
+            String queryString = "SELECT o FROM OrdenTrabajo o where o.estado=?1 or o.estado='parcial' order by o.fechaEmision "+orden;
             Query query = em.createQuery(queryString);
             query.setParameter(1,estado);
            
             List<OrdenTrabajo> ordenTrabajoList = (List<OrdenTrabajo>) query.getResultList();
             //System.out.println(orden);
             return ordenTrabajoList;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+    
+    /**
+     * obtiene una lista con las categorias de orden de trabajo a base del codigo de servicio
+     * @param codServicio
+     * @return 
+     */
+    
+     public List<CategoriaTrabajo> getCategoriaOrdenServicio(Integer codServicio) {
+        try {
+            //codigoServicio
+            String queryString = "SELECT o FROM CategoriaTrabajo o where o.codigoServicio.codigoServicio=?1";
+            Query query = em.createQuery(queryString);
+            query.setParameter(1,codServicio);
+           
+            List<CategoriaTrabajo> categoriaTrabajoList = (List<CategoriaTrabajo>) query.getResultList();
+            //System.out.println(orden);
+            return categoriaTrabajoList;
         } catch (NoResultException e) {
             return null;
         }
@@ -91,7 +113,7 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo> {
     public List<OrdenTrabajo> findAllDesc()
     {
          try {
-                String queryString = "SELECT o FROM OrdenTrabajo o where o.estado='revision' order by o.idOrdenTrabajo DESC ";
+            String queryString = "SELECT o FROM OrdenTrabajo o where o.estado='lista' or o.estado='parcial'  order by o.idOrdenTrabajo DESC ";
             Query query = em.createQuery(queryString);
             //query.setParameter(1,estado);
            

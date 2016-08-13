@@ -68,6 +68,7 @@ public class GestionarVentaMB implements Serializable {
     
     public void cargarDetalles()
     {
+        System.out.println("Cargando Detalles");
         detallesVenta = new ArrayList<DetallesVenta>();
         List<DetalleProductoGeneral> listaGeneral = venta.getDetalleProductoGeneralList();
 
@@ -91,14 +92,15 @@ public class GestionarVentaMB implements Serializable {
         }
         
          List<DetalleVentaOrdenTrabajo> listaDetallesOrden =venta.getDetalleVentaOrdenTrabajoList();
-//        for (DetalleVentaOrdenTrabajo detalle : listaDetallesOrden) {
-//            detallesVenta.add(new DetallesVenta(
-//                    1,
-//                    detalle.getIdOrdenTrabajo().getIdOrdenTrabajo().toString(),
-//                    detalle.getIdOrdenTrabajo().getEstado(),
-//                    detalle.getIdOrdenTrabajo().getTotal(),
-//                    detalle.getIdOrdenTrabajo().getTotal()));
-//        }
+        for (DetalleVentaOrdenTrabajo detalle : listaDetallesOrden) {
+            System.out.println("DetalleOrden"+ detalle.getIdDetalleOrdenTrabajo().getEquipo());
+            detallesVenta.add(new DetallesVenta(
+                    1,
+                    detalle.getIdDetalleOrdenTrabajo().getIdOrdenTrabajo().getIdOrdenTrabajo().toString(),
+                    detalle.getIdDetalleOrdenTrabajo().getEquipo()+" -> "+detalle.getIdDetalleOrdenTrabajo().getEstado(),
+                    detalle.getIdDetalleOrdenTrabajo().getPrecio(),
+                    detalle.getIdDetalleOrdenTrabajo().getPrecio()));
+        }
     }
 
     public String getColor(Venta venta) {

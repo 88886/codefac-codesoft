@@ -53,8 +53,13 @@ and open the template in the editor.
                         </p:panel>
                         <p:spacer style="background-image: none;background-color: #009966"/>
                         <p:separator/>
-                        <p:outputLabel  value="Codigo Documento: " style="color: #0087ca;font-weight: bold"/>
-                        <p:inputText value="#{facturaMB.codigoDocumento}" style="width:10%"  />
+                        <h:panelGrid styleClass="panelNoBorder" columns="8" style="margin: 0 auto">
+                            <p:outputLabel  value="Codigo Documento: " style="color: #0087ca;font-weight: bold"/>
+                            <p:inputText value="#{facturaMB.codigoDocumento}" style="width:10%"  />
+                            <p:spacer/>
+                            <p:outputLabel value="Fecha: " style="font-weight: bold" />
+                            <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="dd/MM/yyyy HH:mm:ss" value="#{facturaMB.fechaActual}" title="Fecha de la factura" />
+                        </h:panelGrid>
                         <p:separator/>
                         <p:panel style="width: 100%" styleClass="panelNoBorder">
                             <p:panelGrid columns="4" styleClass="panelNoBorder" id="panelGridDistr" style="width:100%;text-align: left" >
@@ -104,31 +109,31 @@ and open the template in the editor.
             <h:form id="frmDeudasCliente">
                 <p:accordionPanel id="acorDeudas" widgetVar="acordionDeudas" rendered="#{facturaMB.mostrarDeudas}">
                     <p:tab title="Deudas Cliente" titleStyle="titleBarVerde" >
-                            <p:dataTable var="deudas" value="#{facturaMB.creditoFacturaObtenidos}"
-                                         id="tableDeudas">
-                                <p:column headerText="Factura N "  >
-                                    <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
-                                </p:column>
-                                <p:column headerText="Fecha Inicio">
-                                    <h:outputText value="#{deudas.fechaInicio}" >
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column headerText="Fecha Max Pago "  >
-                                    <h:outputText value="#{deudas.fechaFin}" >
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column headerText="Abono"  >
-                                    <h:outputText value="#{deudas.toStringAbonos()}" />
-                                </p:column>
-                                <p:column headerText="Total"  >
-                                    <h:outputText value="#{deudas.codigoFactura.total}" />
-                                </p:column>
-                                <p:column headerText="Deuda"  >
-                                    <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
-                                </p:column>
-                            </p:dataTable>
+                        <p:dataTable var="deudas" value="#{facturaMB.creditoFacturaObtenidos}"
+                                     id="tableDeudas">
+                            <p:column headerText="Factura N "  >
+                                <h:outputText value="#{deudas.codigoFactura.codigoDocumento}" />
+                            </p:column>
+                            <p:column headerText="Fecha Inicio">
+                                <h:outputText value="#{deudas.fechaInicio}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Fecha Max Pago "  >
+                                <h:outputText value="#{deudas.fechaFin}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Abono"  >
+                                <h:outputText value="#{deudas.toStringAbonos()}" />
+                            </p:column>
+                            <p:column headerText="Total"  >
+                                <h:outputText value="#{deudas.codigoFactura.total}" />
+                            </p:column>
+                            <p:column headerText="Deuda"  >
+                                <h:outputText style="color: #ff0000" value="#{deudas.codigoFactura.total-deudas.toStringAbonos()}" />
+                            </p:column>
+                        </p:dataTable>
                     </p:tab>
                 </p:accordionPanel>
             </h:form>
@@ -263,8 +268,7 @@ and open the template in the editor.
                                      scrollHeight="200"  
                                      rowKey="#{ordenes.idOrdenTrabajo}"
                                      selection="#{facturaMB.ordenTrabajoSeleccionada}">
-                            <p:ajax event="rowSelect" listener="#{facturaMB.mostrarDialogoDetallesOrden(event)}" update="  :formDetalles:tablaDetallesFactura,
-                                    :formDetalles:panelTotales,frmDetallesOrden:tablaDetallesOrden" />  
+                            <p:ajax event="rowSelect" listener="#{facturaMB.mostrarDialogoDetallesOrden(event)}" update=":frmDetallesOrdenes"/>
                             <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectOrden}"/>
 
                             <p:column headerText="Código" filterBy="#{ordenes.idOrdenTrabajo}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
@@ -472,8 +476,7 @@ and open the template in the editor.
     <p:dialog header="Agregar Cliente" widgetVar="confirmarCliente" modal="true">
         <h:form>
             <h2>El Cliente no existe</h2>
-            <p:commandButton onclick="PF('c
-                            onfirmarCliente').hide();" value="Aceptar"/>
+            <p:commandButton onclick="PF('confirmarCliente').hide();" value="Aceptar"/>
             <p:commandButton actionListener="#{facturaMB.crearCliente()}"  style="background-image: none;background-color: forestgreen" value="Crear Cliente">
                 <p:ajax event="dialogReturn" listener="#{facturaMB.recibirDatos}" update=":form" />
             </p:commandButton>                        
@@ -539,7 +542,7 @@ and open the template in the editor.
               minHeight="30" 
               width="70%"
               id="dlgDetallesOrden">
-        <h:form id="frmDetallesOrden">
+        <h:form id="frmDetallesOrdenes">
             <p:dataTable rows="10"                     
                          id="tablaDetallesOrden"
                          var="detallesOrden"
@@ -566,6 +569,12 @@ and open the template in the editor.
                 </p:column>
                 <p:column headerText="Tbj. Realizar" >
                     <h:outputText value="#{detallesOrden.trabajoRealizar}" />
+                </p:column>
+                <p:column headerText="Diagnóstico" >
+                    <h:outputText value="#{detallesOrden.diagnostico}" />
+                </p:column>
+                <p:column headerText="Estado" styleClass="#{detallesOrden.estado eq 'devolver'?'filaRoja':detallesOrden.estado eq 'reparado'?'filaAzul':null}">
+                    <h:outputText value="#{detallesOrden.estado}" />
                 </p:column>
                 <f:facet name="footer">
                     <p:commandButton update=":formDetalles:tablaDetallesFactura,

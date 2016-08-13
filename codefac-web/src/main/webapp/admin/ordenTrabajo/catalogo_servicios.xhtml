@@ -167,7 +167,7 @@ and open the template in the editor.
                             <div style="text-align: center">
                                 <p:commandButton 
                                     actionListener="#{catalogoServiciosMB.guardarServicio}"
-                                    update=":formPrincipal:tablaServicios,msgNuevoServicio"                                    
+                                    update=":formPrincipal,msgNuevoServicio"                                    
                                     validateClient="true"
                                     icon="fa fa-floppy-o"
                                     styleClass="btn_azul"                                    
@@ -301,13 +301,15 @@ and open the template in the editor.
             <p:panel>
                 <f:facet name="footer" class="ui-panelgrid">
                     <div style="text-align: center">
-                        <p:outputLabel value="Proceso Ejecutado Correctamente" />
-                        <p:commandButton
-                            onclick="PF('widgetMensaje').hide();"
-                            immediate="true"
-                            icon="fa fa-ban"
-                            styleClass="btn_mint"
-                            value="Aceptar"/>
+                        <h:panelGrid columns="1" styleClass="panelNoBorder"> 
+                            <p:outputLabel value="Proceso Ejecutado Correctamente" />
+                            <p:commandButton
+                                onclick="PF('widgetMensaje').hide();"
+                                immediate="true"
+                                icon="fa fa-ban"
+                                styleClass="btn_mint"
+                                value="Aceptar"/>
+                        </h:panelGrid>
                     </div>
                 </f:facet>
 

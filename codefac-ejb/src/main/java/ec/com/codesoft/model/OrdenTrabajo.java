@@ -74,26 +74,25 @@ public class OrdenTrabajo implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
     @Size(max = 256)
-    
+
     @Column(name = "DIAGNOSTICO")
     private String diagnostico;
-    
+
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
-    
+
     @Column(name = "SALDO_AFAVOR")
     private BigDecimal saldoAfavor;
-    
+
     @OneToMany(mappedBy = "idOrdenTrabajo", cascade = CascadeType.ALL)
     private List<DetalleOrdenTrabajo> detalleOrdenTrabajoList;
-    
+
     @JoinColumn(name = "NICK", referencedColumnName = "NICK")
     @ManyToOne
     private Usuario nick;
     @JoinColumn(name = "CEDULA_RUC", referencedColumnName = "CEDULA_RUC")
     @ManyToOne
     private Cliente cedulaRuc;
-
 
     public OrdenTrabajo() {
     }
@@ -105,9 +104,9 @@ public class OrdenTrabajo implements Serializable {
     ///////////////METODOS AGREGADOS////////////////////////////////////
     public String toStringDetalle() {
         String texto = "";
-        
+
         for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) {
-            texto += detalle.getEquipo()+ ":" +detalle.getDiagnostico()+ ",";
+            texto += detalle.getEquipo() + ":" + detalle.getDiagnostico() + ",";
         }
         return texto;
     }
@@ -115,7 +114,7 @@ public class OrdenTrabajo implements Serializable {
     public String toStringEquipos() {
         String texto = "";
         for (DetalleOrdenTrabajo detalle : detalleOrdenTrabajoList) {
-            texto += detalle.getEquipo()+ ",";
+            texto += detalle.getEquipo() + ",";
         }
         return texto;
     }
@@ -183,6 +182,9 @@ public class OrdenTrabajo implements Serializable {
     }
 
     public String getObservacion() {
+        if (observacion == null || observacion == "") {
+            observacion = "S/N";
+        }
         return observacion;
     }
 
@@ -262,9 +264,6 @@ public class OrdenTrabajo implements Serializable {
     public void setSaldoAfavor(BigDecimal saldoAfavor) {
         this.saldoAfavor = saldoAfavor;
     }
-    
-    
-
 
     @Override
     public int hashCode() {

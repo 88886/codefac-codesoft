@@ -7,12 +7,16 @@ package ec.com.codesoft.web.operador;
 
 import ec.com.codesoft.model.CatalagoProducto;
 import ec.com.codesoft.model.ProductoGeneralCompra;
+import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
+import ec.com.codesoft.modelo.servicios.FacturaServicio;
 import ec.com.codesoft.modelo.servicios.SistemaServicio;
+import ec.com.codesoft.web.seguridad.SistemaMB;
 import ec.com.codesoft.web.util.CalculosMB;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
@@ -22,7 +26,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import static org.castor.util.Messages.message;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -37,6 +40,9 @@ public class GestionProductoMB implements Serializable {
      * Lista para obtener y mostrar la lista de productos
      */
     private List<CatalagoProducto> catalagoProductos;
+    private List<CatalagoProducto> catalagoProductosStock;
+    private List<CatalagoProducto> catalagoProductosOrdenar;
+    private Integer stock;
     /**
      * Propiedad para seleccionar en la tabla
      */
@@ -77,6 +83,12 @@ public class GestionProductoMB implements Serializable {
     @EJB
     private SistemaServicio sistemaServicio;
 
+    @EJB
+    FacturaServicio facturaServicio;
+
+    @ManagedProperty(value = "#{sistemaMB}")
+    private SistemaMB sistemaMB;
+
     @ManagedProperty("#{calculosMB}")
     private CalculosMB calculosMB;
     //private gestionarCompraMB gestionarCompra;
@@ -87,12 +99,38 @@ public class GestionProductoMB implements Serializable {
     public void postCostruct() {
         catalagoProductos = catalogoServicio.obtenerTodos();
         catalagoProducto = new CatalagoProducto();
+        catalagoProductosStock = new ArrayList<>();
         dialogoAbierto = false;
         this.dialogoEditAbierto = false;
         //iva obtenido de la base de datos
         ivaMostrar = sistemaServicio.getConfiguracion().getIva();
         ivaSubTotal = (sistemaServicio.getConfiguracion().getIva()).divide(new BigDecimal("100"));
         ivaTotal = ivaSubTotal.add(new BigDecimal("1"));
+
+        for (CatalagoProducto catalagoProducto1 : catalagoProductos) {
+            if (devolverStock(catalagoProducto1) <= sistemaMB.getConfiguracion().getStockMinimo()) {
+                catalagoProductosStock.add(catalagoProducto1);
+            }
+        }
+
+    }
+
+    public Integer devolverStock(CatalagoProducto catalogoEnviado) {
+
+        if ((catalogoEnviado.getTipoProducto()) == 'G' || (catalogoEnviado.getTipoProducto()) == 'g') {
+            ProductoGeneralVenta productoGeneral = new ProductoGeneralVenta();
+            productoGeneral = facturaServicio.devolverStockGeneral(catalogoEnviado.getCodigoProducto());
+            if (productoGeneral == null) {
+                stock = 0;
+            } else {
+                stock = productoGeneral.getCantidadDisponible();
+            }
+            return stock;
+        } else {
+            stock = facturaServicio.devolverStockIndividual(catalogoEnviado.getCodigoProducto());
+            return stock;
+        }
+
     }
 
     ///////////////////////////METODOS/////////////////////////
@@ -239,9 +277,8 @@ public class GestionProductoMB implements Serializable {
         }
 
     }
-    
-    public void eliminarDetalle(CatalagoProducto catalogo) 
-    {
+
+    public void eliminarDetalle(CatalagoProducto catalogo) {
         System.out.println("eliminando producto...");
         catalagoProductos.remove(catalogo);
 
@@ -361,6 +398,22 @@ public class GestionProductoMB implements Serializable {
 
     public void setIvaMostrar(BigDecimal ivaMostrar) {
         this.ivaMostrar = ivaMostrar;
+    }
+
+    public SistemaMB getSistemaMB() {
+        return sistemaMB;
+    }
+
+    public void setSistemaMB(SistemaMB sistemaMB) {
+        this.sistemaMB = sistemaMB;
+    }
+
+    public List<CatalagoProducto> getCatalagoProductosStock() {
+        return catalagoProductosStock;
+    }
+
+    public void setCatalagoProductosStock(List<CatalagoProducto> catalagoProductosStock) {
+        this.catalagoProductosStock = catalagoProductosStock;
     }
 
 }

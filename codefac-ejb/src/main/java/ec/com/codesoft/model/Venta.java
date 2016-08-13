@@ -77,7 +77,7 @@ public class Venta implements Serializable {
 
     @Column(name = "CHEQUE")
     private String cheque;
-    
+
     @Column(name = "IVA")
     private BigDecimal iva;
 
@@ -306,26 +306,31 @@ public class Venta implements Serializable {
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
-    
-    
 
     public String toStringDetalle() {
         String cadena = "";
         List<DetalleProductoGeneral> listaGeneral = detalleProductoGeneralList;
-        for (DetalleProductoGeneral detalle : listaGeneral) {
-            cadena = cadena + detalle.getCodigoProducto().getNombre() + ",";
+        if (listaGeneral != null) {
+            for (DetalleProductoGeneral detalle : listaGeneral) {
+                cadena = cadena + detalle.getCodigoProducto().getNombre() + ",";
+            }
         }
+        
+//        if (detalleProductoIndividualList != null) {
+//            for (DetalleProductoIndividual detalle : detalleProductoIndividualList) {
+//                if (detalle.getProductoIndividualCompra().getCodigoProducto().getNombre() == null) {
+//
+//                } else {
+//                    cadena = cadena + detalle.getProductoIndividualCompra().getCodigoProducto().getNombre() + ",";
+//                }
+//            }
+//        }
 
-        List<DetalleProductoIndividual> listaIndividual = detalleProductoIndividualList;
-        for (DetalleProductoIndividual detalle : listaIndividual) {
-            cadena = cadena + detalle.getProductoIndividualCompra().getCodigoProducto().getNombre() + ",";
-        }
-
-        if (detalleVentaOrdenTrabajoList!=null) {
+        if (detalleVentaOrdenTrabajoList != null) {
             List<DetalleVentaOrdenTrabajo> listaOrden = detalleVentaOrdenTrabajoList;
             for (DetalleVentaOrdenTrabajo detalle : listaOrden) {
                 //Cambiar la forma como se guardan las ordenes de trabajo
-                //cadena = cadena + detalle.getEstado().toStringDetalle()+ ",";
+                cadena = cadena + detalle.getIdDetalleOrdenTrabajo().getEquipo()+" -> "+ detalle.getIdDetalleOrdenTrabajo().getEstado()+ ",";
             }
         }
 

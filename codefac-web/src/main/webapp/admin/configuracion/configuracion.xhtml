@@ -112,6 +112,13 @@ and open the template in the editor.
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="cclave" display="icon" /> 
+                        
+                        
+                        <p:outputLabel for="cstockmin" style="font-weight: bold" value="Avisar Stock Mínimo "/>
+                        <p:inputText id="cstockmin" value="#{sistemaMB.configuracionEnviar.stockMinimo}" required="true" requiredMessage="Valor requerido" placeholder="0">
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="cstockmin" display="icon" /> 
 
                     </p:panelGrid>
                     <p:separator/>
