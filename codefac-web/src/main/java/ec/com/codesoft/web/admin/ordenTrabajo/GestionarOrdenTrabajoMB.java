@@ -85,6 +85,7 @@ public class GestionarOrdenTrabajoMB implements Serializable
         orden.setOrdenTrabajo(ordenTrabajo.getIdOrdenTrabajo().toString());
         orden.setSaldo(ordenTrabajo.getTotal().subtract(ordenTrabajo.getAdelanto()).toString());
         orden.setTelefono(ordenTrabajo.getCedulaRuc().getTelefono());
+        orden.setNotasOrden(sistemaServicio.getConfiguracion().getNotasOrden());
 
         List<DetalleOrdenTrabajo> lista = ordenTrabajo.getDetalleOrdenTrabajoList();
         for (DetalleOrdenTrabajo detalle : lista) {

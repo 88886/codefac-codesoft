@@ -21,6 +21,7 @@ import ec.com.codesoft.model.OrdenTrabajo;
 import ec.com.codesoft.model.PeriodoContable;
 import ec.com.codesoft.model.ProductoGeneralVenta;
 import ec.com.codesoft.model.ProductoIndividualCompra;
+import ec.com.codesoft.model.Servicios;
 import ec.com.codesoft.model.Venta;
 import ec.com.codesoft.modelo.servicios.BancoServicio;
 import ec.com.codesoft.modelo.servicios.CatalogoServicio;
@@ -181,9 +182,13 @@ public class FacturaMB {
 
     //imagen para agrandar en la Ayuda
     private String rutaImagenAgrandar;
-    
+
     //fecha actual
     private Date fechaActual;
+
+    private List<Servicios> servicioLista; //lista de servicios disponibles
+    private Servicios servicioSeleccionado;
+    private BigDecimal precioServicio;
 
     @EJB
     ClienteServicio clienteServicio;
@@ -228,6 +233,9 @@ public class FacturaMB {
         cantidadComprar = 1;
         mostrarInformacion = false;
         catalogosLista = catalogoServicio.obtenerTodos();
+        servicioLista = new ArrayList<>();
+        servicioLista = catalogoServicio.obtenerServicios();//obtener los servicios
+        servicioSeleccionado = new Servicios();
         catalogoSeleccionado = new CatalagoProducto();
         msjStock = "";
         todoPanel = false;
@@ -320,22 +328,21 @@ public class FacturaMB {
         abono = new BigDecimal("0.0");
         creditoFacturaObtenidos = new ArrayList<CreditoFactura>();
         mostrarDeudas = false;
-        
-        fechaActual=new Date();
+
+        fechaActual = new Date();
 
     }
 
     /**
      * **************************************************PostConstuct**********************************************************************
      */
-    
     //obtener la fecha actual
     public String obtenerFechaActual() {
         Date ahora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
         return formateador.format(ahora);
     }
-    
+
     public String verificarUsuario() {
         //habilitarDEescuento Manual
         //System.out.println("Sesion" + sesion);
@@ -487,8 +494,6 @@ public class FacturaMB {
             correo.EnviarCorreoSinArchivoAdjunto(clienteEncontrado.getCorreo(), "Codesoft", cabecera);
         }
     }
-
-   
 
     public void devolverBancoNombre() {
 
@@ -843,9 +848,9 @@ public class FacturaMB {
         detallesOrdenMostrar = new ArrayList<>();
         System.out.println("ordenesCargar" + ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList());
         for (int i = 0; i < ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().size(); i++) {
-            if (ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("reparado")||ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("devolver")||ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("facturado")) {
-                System.out.println("Entro a FIltrar "+ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).devolverDetalles());
-                
+            if (ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("reparado") || ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("devolver") || ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).getEstado().equals("facturado")) {
+                System.out.println("Entro a FIltrar " + ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i).devolverDetalles());
+
                 detallesOrdenMostrar.add(ordenTrabajoSeleccionada.getDetalleOrdenTrabajoList().get(i));
             }
 
@@ -912,14 +917,14 @@ public class FacturaMB {
 //                DetallesVenta detalles = new DetallesVenta(1, ordenTrabajoSeleccionada.getIdOrdenTrabajo().toString(),
 //                        ordenTrabajoSeleccionada.toStringDetalle(),
 //                        ordenTrabajoSeleccionada.getTotal(), totalRegistro);
-                    String estadoDetalle="";
-                    if(detallesOrdenSeleccionadas.get(i).getEstado().equals("devolver")){
-                        estadoDetalle="Devuelto";
-                    }else{
-                        estadoDetalle=detallesOrdenSeleccionadas.get(i).getEstado();
+                    String estadoDetalle = "";
+                    if (detallesOrdenSeleccionadas.get(i).getEstado().equals("devolver")) {
+                        estadoDetalle = "Devuelto";
+                    } else {
+                        estadoDetalle = detallesOrdenSeleccionadas.get(i).getEstado();
                     }
                     DetallesVenta detalles = new DetallesVenta(1, detallesOrdenSeleccionadas.get(i).getIdDetalleOrdenTrabajo().toString(),
-                            detallesOrdenSeleccionadas.get(i).devolverDetalles()+" --> Estado: "+estadoDetalle,
+                            detallesOrdenSeleccionadas.get(i).devolverDetalles() + " --> Estado: " + estadoDetalle,
                             totalRegistro, totalRegistro);
 
                     //descomentar para que coja el descuento con el precio sin iva
@@ -987,7 +992,7 @@ public class FacturaMB {
                 estadoDialogoGeneral = true;
 
                 //mostrarPanel = false;
-            } else if((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e')  {
+            } else if ((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e') {
                 System.out.println("Espe");
                 int numDetalles = 0;
                 for (int i = 0; i < detallesVenta.size(); i++) {
@@ -1003,7 +1008,7 @@ public class FacturaMB {
                 System.out.println(stock + "individual");
                 //mostrarPanel = false;
 
-            }else{
+            } else {
                 System.out.println("Servicio");
             }
             // msjDistri = "Encontrado";
@@ -1137,7 +1142,7 @@ public class FacturaMB {
             detalle.setCodigoDetallGeneral(0);
             detallesGeneralVenta.add(detalle);
 
-        } else if((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e') {
+        } else if ((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e') {
             System.out.println("Especifico");
             detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
             // System.err.println(detalleIndividual);
@@ -1183,7 +1188,7 @@ public class FacturaMB {
                 }
 
             }
-        }else{
+        } else {
             System.out.println("Servicio");
         }
 
@@ -1294,7 +1299,7 @@ public class FacturaMB {
 
                         detallesGeneralVenta.add(detalle); //guardo los detalles 
 
-                    } else if((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e')  {
+                    } else if ((catalogoSeleccionado.getTipoProducto()) == 'E' || (catalogoSeleccionado.getTipoProducto()) == 'e') {
                         System.out.println("Especifico");
                         detalleIndividual = facturaServicio.devolverIndividualCod(codPEspe, catalogoSeleccionado.getCodigoProducto());
                         //System.err.println(detalleIndividual);
@@ -1380,8 +1385,8 @@ public class FacturaMB {
                             //det
 
                         }
-                    }else{
-                    
+                    } else {
+
                         System.out.println("Servicio");
                     }
 
@@ -1617,6 +1622,16 @@ public class FacturaMB {
                 ordenTrabajoServicio.editar(ordenesTrabajo.get(i));
             }
         }
+    }
+
+    public void onRowUnSelectService(SelectEvent event) {
+
+    }
+
+    public void onRowSelectService(SelectEvent event) {
+        //infEscojerServicioV
+        precioServicio = new BigDecimal("0.0");
+        RequestContext.getCurrentInstance().execute("PF('infEscojerServicioF').show()");
     }
 
     public void imprimirFactura() {
@@ -2510,12 +2525,29 @@ public class FacturaMB {
     public void setFechaActual(Date fechaActual) {
         this.fechaActual = fechaActual;
     }
-    
-    
-     
-    
-    
-    
-    
+
+    public List<Servicios> getServicioLista() {
+        return servicioLista;
+    }
+
+    public void setServicioLista(List<Servicios> servicioLista) {
+        this.servicioLista = servicioLista;
+    }
+
+    public Servicios getServicioSeleccionado() {
+        return servicioSeleccionado;
+    }
+
+    public void setServicioSeleccionado(Servicios servicioSeleccionado) {
+        this.servicioSeleccionado = servicioSeleccionado;
+    }
+
+    public BigDecimal getPrecioServicio() {
+        return precioServicio;
+    }
+
+    public void setPrecioServicio(BigDecimal precioServicio) {
+        this.precioServicio = precioServicio;
+    }
 
 }

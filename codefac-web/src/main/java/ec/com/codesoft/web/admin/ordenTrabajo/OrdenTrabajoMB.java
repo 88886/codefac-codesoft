@@ -170,6 +170,9 @@ public class OrdenTrabajoMB implements Serializable {
         orden.setOrdenTrabajo(ordenTrabajo.getIdOrdenTrabajo().toString());
         orden.setSaldo(ordenTrabajo.getTotal().subtract(ordenTrabajo.getAdelanto()).toString());
         orden.setTelefono(ordenTrabajo.getCedulaRuc().getTelefono());
+        System.out.println("notas "+ sistemaServicio.getConfiguracion().getNotasOrden());
+        orden.setNotasOrden(sistemaServicio.getConfiguracion().getNotasOrden());
+        
 
         List<DetalleOrdenTrabajo> lista = ordenTrabajo.getDetalleOrdenTrabajoList();
         for (DetalleOrdenTrabajo detalle : lista) {
