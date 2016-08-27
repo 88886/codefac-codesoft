@@ -31,6 +31,8 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     private String abono;
     private String saldo;
     private Empresa empresa;
+    
+    private String notasOrden;
 
     
     //@EJB
@@ -38,7 +40,7 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     
     private List<OrdenTrabajoDetalleReporte> detalles;
 
-    public OrdenTrabajoReporte(String cedula, String telefono, String nombre, String fechaRecepcion, String observacion, String ordenTrabajo, String monto, String abono, String saldo, String raiz) {
+    public OrdenTrabajoReporte(String cedula, String telefono, String nombre, String fechaRecepcion, String observacion, String ordenTrabajo, String monto, String abono, String saldo, String raiz, String notasOrden) {
         super(raiz);
         this.cedula = cedula;
         this.telefono = telefono;
@@ -49,6 +51,7 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
         this.monto = monto;
         this.abono = abono;
         this.saldo = saldo;
+        this.notasOrden=notasOrden;
         this.detalles = new ArrayList<OrdenTrabajoDetalleReporte>();
         
         //empresa=sistemaServicio.getEmpresa();
@@ -113,6 +116,12 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
             lista.put("observaciones", this.observacion);
         } else {
             lista.put("observaciones", "");
+        }
+        
+        if (this.notasOrden != null) {
+            lista.put("var_nota", this.notasOrden);
+        } else {
+            lista.put("var_nota", "");
         }
         
         lista.put("numeroOrden",this.ordenTrabajo);
@@ -216,6 +225,16 @@ public class OrdenTrabajoReporte extends ReporteJasper<OrdenTrabajoDetalleReport
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    public String getNotasOrden() {
+        return notasOrden;
+    }
+
+    public void setNotasOrden(String notasOrden) {
+        this.notasOrden = notasOrden;
+    }
+    
+    
     
     
 

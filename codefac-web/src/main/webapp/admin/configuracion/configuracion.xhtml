@@ -112,15 +112,23 @@ and open the template in the editor.
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="cclave" display="icon" /> 
-                        
-                        
+
+
                         <p:outputLabel for="cstockmin" style="font-weight: bold" value="Avisar Stock Mínimo "/>
                         <p:inputText id="cstockmin" value="#{sistemaMB.configuracionEnviar.stockMinimo}" required="true" requiredMessage="Valor requerido" placeholder="0">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="cstockmin" display="icon" /> 
 
+                        <f:facet name="footer">
+                            <p:outputLabel for="cnotasOrden" style="font-weight: bold" value="Notas Orden Trabajo"/>    
+                            <p:inputTextarea cols="100" rows="8" id="cnotasOrden" value="#{sistemaMB.configuracionEnviar.notasOrden}" required="true" requiredMessage="Valor requerido" placeholder="Ingrese la nota sobre su orden">
+                                <p:clientValidator event="keyup"/>
+                            </p:inputTextarea>
+                            <p:message for="cnotasOrden" display="icon" /> 
+                        </f:facet>
                     </p:panelGrid>
+
                     <p:separator/>
                     <div style="text-align: center">
                         <p:commandButton value="Guardar"

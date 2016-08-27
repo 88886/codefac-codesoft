@@ -73,6 +73,9 @@ public class Configuracion implements Serializable {
     @Column(name = "STOCK_MINIMO")
     private Integer stockMinimo;
     
+    @Column(name = "NOTAS_ORDEN")
+    private String notasOrden;
+    
     
     
     public Configuracion() {
@@ -169,6 +172,15 @@ public class Configuracion implements Serializable {
     public void setStockMinimo(Integer stockMinimo) {
         this.stockMinimo = stockMinimo;
     }
+
+    public String getNotasOrden() {
+        return notasOrden;
+    }
+
+    public void setNotasOrden(String notasOrden) {
+        this.notasOrden = notasOrden;
+    }
+    
     
 
     

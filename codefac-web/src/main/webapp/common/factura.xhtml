@@ -236,29 +236,7 @@ and open the template in the editor.
                     </p:overlayPanel>
 
                     <p:commandButton id="btnAgregarOrden" value="Servicios"  title="Agregar Servicio a la Factura"  icon="fa fa-truck" styleClass="btn_mint"/>  
-                    <p:overlayPanel id="movieAgregarO" for="btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
-                        <p:dataTable var="catalogo" value="#{facturaMB.catalogosLista}"
-                                     rows="10"
-                                     selectionMode="single" 
-                                     scrollable="true" 
-                                     scrollHeight="200"  
-                                     rowKey="#{catalogo.codigoProducto}"
-                                     selection="#{facturaMB.catalogoSeleccionado}">
-                            <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelect(event)}" update=":form:msgs,:formGeneral:dlgInformacion,:formEspecifico:dlgInformacionE"/>
-                            <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelect(event)}"/>
-
-                            <p:column headerText="Código" filterBy="#{catalogo.codigoProducto}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
-                                <h:outputText value="#{catalogo.codigoProducto}" />
-                            </p:column>
-                            <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
-                                <h:outputText value="#{catalogo.nombre}" />
-                            </p:column>
-                            <p:column headerText="Precio">
-                                <h:outputText value="#{catalogo.precio}" />
-                            </p:column>
-                        </p:dataTable>
-                    </p:overlayPanel>
-
+                    
                     <p:commandButton id="btnAgregarServicio" value="O.Trabajo"  title="Agregar Ordenes de Trabajo a la Factura" icon="fa fa-suitcase" styleClass="btn_mint" />  
                     <p:overlayPanel id="movieAgregarS" for="btnAgregarServicio" hideEffect="fade" dynamic="true" style="width:600px">
                         <p:dataTable var="ordenes" value="#{facturaMB.ordenesTrabajo}"
@@ -584,6 +562,52 @@ and open the template in the editor.
                                      action="#{facturaMB.onRowSelectOrden()}"/>
                 </f:facet>
             </p:dataTable>
+        </h:form>
+    </p:dialog>
+
+
+
+    <p:overlayPanel id="overlayServicios" for=":formCompra:btnAgregarOrden" hideEffect="fade" dynamic="true" style="width:600px">
+        <h:form id="formServiciosF">
+
+            <p:dataTable var="servicio" value="#{facturaMB.servicioLista}"
+                         rows="10"
+                         selectionMode="single" 
+                         scrollable="true" 
+                         scrollHeight="200"  
+                         rowKey="#{servicio.codigoServicio}"
+                         selection="#{facturaMB.servicioSeleccionado}">
+                <p:ajax event="rowSelect" listener="#{facturaMB.onRowSelectService(event)}" update=":formEscojerServicioF"/>
+                <p:ajax event="rowUnselect" listener="#{facturaMB.onRowUnSelectService(event)}"/>
+
+                <p:column headerText="Código" filterBy="#{servicio.codigoServicio}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains" >
+                    <h:outputText value="#{servicio.codigoServicio}" />
+                </p:column>
+                <p:column headerText="Nombre" filterBy="#{servicio.nombre}" filterFunction="#{filtroMB.filterByName}" filterMatchMode="contains">
+                    <h:outputText value="#{servicio.nombre}" />
+                </p:column>
+                <p:column headerText="Descripción">
+                    <h:outputText value="#{servicio.descripcion}" />
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </p:overlayPanel>
+
+    <p:dialog  id="dlgEscojerServicioF" header="Ingrese el precio" widgetVar="infEscojerServicioF" height="auto"
+               resizable="false">
+        <h:form id="formEscojerServicioF">
+            <p:messages id="msgServicioF" />
+            <h:panelGrid columns="6" styleClass="panelNoBorder" >
+                <p:outputLabel  value="Precio : "/>
+                <p:inputText id="codEscojerServicioF" value="#{facturaMB.precioServicio}" required="true"/>
+                <p:commandButton  icon="fa fa-plus-square"
+                                  styleClass="btn_azul" 
+                                  actionListener="#" ajax="true" 
+                                  update=""/>
+                <p:message for="codEscojerServicioF" />
+                <p:commandButton icon="fa fa-times" styleClass="btn_tomate" onclick="PF('infEscojerServicioF').hide()" />
+            </h:panelGrid>
         </h:form>
     </p:dialog>
 
