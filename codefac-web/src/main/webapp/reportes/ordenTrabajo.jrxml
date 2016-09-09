@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c1d8f73f-70d5-4282-a73d-902047d3a59b">
-	<property name="ireport.zoom" value="1.948717100000064"/>
+	<property name="ireport.zoom" value="1.464100000000048"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="208"/>
 	<parameter name="cedula" class="java.lang.String"/>
 	<parameter name="nombre" class="java.lang.String"/>
 	<parameter name="direccion" class="java.lang.String"/>
@@ -195,7 +195,7 @@
 		<band height="2" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="45" splitType="Stretch">
+		<band height="61" splitType="Stretch">
 			<textField>
 				<reportElement x="78" y="5" width="96" height="14" uuid="7b73f42f-a3b0-4f52-b0cb-cff0d5276eb4"/>
 				<textElement>
@@ -337,7 +337,7 @@
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="435" splitType="Stretch">
+		<band height="525" splitType="Stretch">
 			<staticText>
 				<reportElement x="12" y="2" width="22" height="10" uuid="019ae3ae-dade-4771-a3cb-662d84224e42"/>
 				<textElement>
@@ -346,7 +346,7 @@
 				<text><![CDATA[Nota:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="12" y="20" width="298" height="10" forecolor="#CC0000" uuid="56e7b0a6-3485-4083-9728-1c0cd8e6f4f1"/>
+				<reportElement x="12" y="62" width="298" height="10" forecolor="#CC0000" uuid="56e7b0a6-3485-4083-9728-1c0cd8e6f4f1"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -395,7 +395,7 @@
 				<textFieldExpression><![CDATA[$P{var_paginaOficial}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="36" y="2" width="352" height="18" uuid="0cff1627-accb-43fc-ab04-38ca3c37cc8e"/>
+				<reportElement x="36" y="2" width="352" height="60" uuid="0cff1627-accb-43fc-ab04-38ca3c37cc8e"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
