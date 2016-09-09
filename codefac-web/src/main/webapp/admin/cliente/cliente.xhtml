@@ -55,6 +55,11 @@ and open the template in the editor.
                     <p:column headerText="Telefono" style="width: 150px" >
                         <h:outputText value="#{cliente.telefono}" />
                     </p:column>
+                    
+                    <p:column headerText="Celular" style="width: 150px" >
+                        <h:outputText value="#{cliente.celular}" />
+                    </p:column>
+                    
                     <p:column headerText="Correo" >
                         <h:outputText value="#{cliente.correo}" />
                     </p:column>
@@ -166,13 +171,21 @@ and open the template in the editor.
                         style="width: 250px;" 
                         readonly="#{pruebaBean.enDetalles}"/>
                     <p:message for="notas" display="icon" />
+                    
+                    <p:outputLabel for="cliCelular" value="Celular:" />
+                    <p:inputText 
+                        id="cliCelular" 
+                        onkeypress="return noProcesar(event);"
+                        value="#{clienteMB.cliente.celular}" />
+                    <p:message for="cliCelular" display="icon" />
+                                  
                 </p:panelGrid>
 
                 <f:facet name="footer">
                     <div style="text-align: center">
                         <p:commandButton
                             styleClass="ui-botonAzul"
-                            process="@this,cliCedula,cliNombre,cliTelefono,cliDireccion,cliCorreo,tipoCliente,notas"
+                            process="@this,cliCedula,cliNombre,cliTelefono,cliDireccion,cliCorreo,tipoCliente,notas,cliCelular"
                             validateClient="true"
                             value="Aceptar" 
                             icon="ui-icon-disk"
@@ -237,12 +250,17 @@ and open the template in the editor.
                     <p:outputLabel for="notas2" value="Notas" />
                     <p:inputTextarea id="notas2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
                     <p:message for="notas2" />
+                    
+                    <p:outputLabel for="cliCelular2" value="Celular:" />
+                    <p:inputText id="cliCelular2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.celular}" />
+                    <p:message for="cliCelular2" />  
+
                 </p:panelGrid>
 
                 <f:facet name="footer">
                     <div style="text-align: center">
                         <p:commandButton
-                            process="@this,cliCedula2,cliNombre2,cliTelefono2,cliDireccion2,cliCorreo2,cliCorreo2"
+                            process="@this,cliCedula2,cliNombre2,cliTelefono2,cliDireccion2,cliCorreo2,cliCorreo2,cliCelular2"
                             validateClient="true"
                             styleClass="ui-botonAzul"
                             value="Aceptar" 

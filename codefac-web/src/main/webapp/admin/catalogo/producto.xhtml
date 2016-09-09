@@ -46,11 +46,11 @@ and open the template in the editor.
                 </p:column>
 
 
-                <p:column headerText="Nombre" filterBy="#{catalogo.nombre}" filterFunction="#{gestionProductoMB.filterByName}" filterMatchMode="contains">
+                <p:column headerText="Descripción" filterBy="#{catalogo.nombre}" filterFunction="#{gestionProductoMB.filterByName}" filterMatchMode="contains">
                     <p:outputLabel value="#{catalogo.nombre}"/>
                 </p:column>
 
-                <p:column headerText="Descripcion">
+                <p:column headerText="Categoria">
                     <p:outputLabel value="#{catalogo.descripcion}"/>
                 </p:column>
 
@@ -58,7 +58,7 @@ and open the template in the editor.
                     <p:outputLabel value="#{catalogo.marca}"/>
                 </p:column>
 
-                <p:column headerText="Costo" style="width: 100px">
+                <p:column headerText="Precio Referencia" style="width: 100px">
                     <p:outputLabel value="#{catalogo.costo}"/>
 
                 </p:column>
@@ -140,13 +140,13 @@ and open the template in the editor.
                         <p:inputText id="txtCodigoDistribuidor" value="#{gestionProductoMB.catalagoProducto.codigoDistribuidor}"/>
                         <p:message for="txtCodigoDistribuidor" display="icon" />
 
-                        <p:outputLabel value="Nombre: "/>
+                        <p:outputLabel value="Descripción: "/>
                         <p:inputText id="txtNombre" value="#{gestionProductoMB.catalagoProducto.nombre}" required="true">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="txtNombre" display="icon" />
 
-                        <p:outputLabel value="Descripcion: "/>
+                        <p:outputLabel value="Categoria: "/>
                         <p:inputText id="txtDescripcion" value="#{gestionProductoMB.catalagoProducto.descripcion}"/>
                         <p:message for="txtDescripcion" display="icon" />
 
@@ -154,7 +154,7 @@ and open the template in the editor.
                         <p:inputText id="txtMarca" value="#{gestionProductoMB.catalagoProducto.marca}"/>
                         <p:message for="txtMarca" display="icon" />
 
-                        <p:outputLabel value="PVP: "/>
+                        <p:outputLabel value="Precio Venta Público: "/>
 
                         <p:panelGrid columns="2" style="width: 100%">
                             <p:inputText id="txtPrecio" value="#{gestionProductoMB.catalagoProducto.precio}" style="width: 50px" />
@@ -192,7 +192,7 @@ and open the template in the editor.
                         </p:inputText>
                         <p:message for="txtDecuentoMayorista" display="icon" />
 
-                        <p:outputLabel value="Costo Referencial: "/>
+                        <p:outputLabel value="Precio Referencial: "/>
                         <p:inputText id="costoReferencial" value="#{gestionProductoMB.catalagoProducto.costo}" required="true" >
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
@@ -249,13 +249,13 @@ and open the template in the editor.
                         <p:inputText id="txtCodigoDistribuidor" value="#{gestionProductoMB.catalogoSeleccionado.codigoDistribuidor}"/>
                         <p:message for="txtCodigoDistribuidor" display="icon" />
 
-                        <p:outputLabel value="Nombre: "/>
+                        <p:outputLabel value="Descipcion: "/>
                         <p:inputText id="txtNombre" value="#{gestionProductoMB.catalogoSeleccionado.nombre}">
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
                         <p:message for="txtNombre" display="icon" />
 
-                        <p:outputLabel value="Descripcion: "/>
+                        <p:outputLabel value="Categoria: "/>
                         <p:inputText id="txtDescripcion" value="#{gestionProductoMB.catalogoSeleccionado.descripcion}"/>
                         <p:message for="txtDescripcion" display="icon" />
 
@@ -264,7 +264,7 @@ and open the template in the editor.
                         <p:message for="txtMarca" display="icon" />
 
 
-                        <p:outputLabel value="PVP: "/>
+                        <p:outputLabel value="Precio Venta Publico: "/>
 
                         <p:panelGrid columns="2" style="width: 100%">
                             <p:inputText id="txtPrecio" value="#{gestionProductoMB.catalogoSeleccionado.precio}" style="width: 50px" />
@@ -297,7 +297,7 @@ and open the template in the editor.
                         <p:inputText id="txtDescuentoMayorista" value="#{gestionProductoMB.catalogoSeleccionado.descuentoMayorista}" required="true"/>
                         <p:message for="txtDescuentoMayorista" display="icon" />
 
-                        <p:outputLabel value="Costo Referencial: "/>
+                        <p:outputLabel value="Precio Referencial: "/>
                         <p:inputText id="txtCosto" value="#{gestionProductoMB.catalogoSeleccionado.costo}" style="width: 70px" required="true" />
                         <p:message for="txtCosto" display="icon" />
 
