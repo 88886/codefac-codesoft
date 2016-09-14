@@ -333,10 +333,10 @@ and open the template in the editor.
                             <h:outputText value="#{detallesVenta.nombre}" />
                         </p:column>
                         <p:column headerText="P. Unitario" style="text-align: left;width:60px" id="descuentoIndividual">
-                            <h:outputText value="#{calculosMB.redondeoInferiorMostar(detallesVenta.costo)}" />
+                            <h:outputText value="#{calculosMB.redondeoInferior(detallesVenta.costo)}" />
                         </p:column>
                         <p:column headerText="Total" style="text-align: left;width:60px" id="totalDescuento">
-                            <h:outputText value="#{calculosMB.redondeoInferiorMostar(detallesVenta.total)}" />
+                            <h:outputText value="#{calculosMB.redondeoSuperiorMostrar(detallesVenta.total)}" />
                         </p:column>
                         <p:column headerText="Dsct %" style="width:50px">
                             <p:selectOneMenu  value="#{detallesVenta.escogerDescuento}">
@@ -364,7 +364,7 @@ and open the template in the editor.
                         <p:panelGrid  id="panelTotales" columns="2" style="margin-left: 70%;text-align: left;font-size: 11px" styleClass="panelNoBorder">
 
                             <p:outputLabel  value="Subtotal:" style="font-weight: bold"/>
-                            <p:outputLabel id="subTotal" value="#{calculosMB.redondeoInferiorMostar(facturaMB.subtotal)}" style="font-weight: bold"/>
+                            <p:outputLabel id="subTotal" value="#{calculosMB.redondeoSuperior(facturaMB.subtotal)}" style="font-weight: bold"/>
 
                             <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoDescuento}" title="Escojer el tipo de Pago">
                                 <f:selectItem itemLabel="Descuento %" itemValue="porcentaje" />
