@@ -192,12 +192,12 @@ public class GestionProductoMB implements Serializable {
 
         //verificar si el precio viene con o sin iva
         if (ivaCosto.equals("+")) {
-            System.out.println(catalagoProducto.getPrecio().setScale(3, BigDecimal.ROUND_DOWN));
+            System.out.println(catalagoProducto.getPrecio().setScale(5, BigDecimal.ROUND_DOWN));
             //BigDecimal iva=new BigDecimal("1.12");
-            BigDecimal valor = catalagoProducto.getPrecio().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
+            BigDecimal valor = catalagoProducto.getPrecio().divide(ivaTotal, 5, BigDecimal.ROUND_DOWN);
             //System.out.println("si:"+valor);
 
-            valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
+            valor = valor.setScale(5, BigDecimal.ROUND_DOWN);
             catalagoProducto.setPrecio(valor);
 
         }
@@ -227,18 +227,18 @@ public class GestionProductoMB implements Serializable {
         //verificar si el precio viene con o sin iva
         if (ivaCosto.equals("+")) {
 
-            System.out.println(catalogoSeleccionado.getPrecio().setScale(3, BigDecimal.ROUND_DOWN));
+            System.out.println(catalogoSeleccionado.getPrecio().setScale(5, BigDecimal.ROUND_DOWN));
             //BigDecimal iva=new BigDecimal("1.12");
-            BigDecimal valor = catalogoSeleccionado.getPrecio().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
+            BigDecimal valor = catalogoSeleccionado.getPrecio().divide(ivaTotal, 5, BigDecimal.ROUND_DOWN);
             //System.out.println("si:"+valor);
 
-            valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
+            valor = valor.setScale(5, BigDecimal.ROUND_DOWN);
             catalogoSeleccionado.setPrecio(valor);
 
         }
 
         if (ivaMayorista.equals("+")) {
-            BigDecimal valor = catalogoSeleccionado.getPrecioMayorista().divide(ivaTotal, 3, BigDecimal.ROUND_DOWN);
+            BigDecimal valor = catalogoSeleccionado.getPrecioMayorista().divide(ivaTotal, 5, BigDecimal.ROUND_DOWN);
             valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
             catalogoSeleccionado.setPrecioMayorista(valor);
             //catalagoProducto.setPrecioMayorista(catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12")).setScale(2,BigDecimal.ROUND_UP));

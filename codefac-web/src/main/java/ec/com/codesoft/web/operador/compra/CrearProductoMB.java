@@ -68,7 +68,7 @@ public class CrearProductoMB implements Serializable {
         if (ivaCosto.equals("+")) {
             //System.out.println(catalagoProducto.getPrecio().setScale(3,BigDecimal.ROUND_DOWN));
             //BigDecimal iva=new BigDecimal("1.12");
-            BigDecimal valor = catalogo.getPrecio().divide(new BigDecimal("1.12"), 3, BigDecimal.ROUND_DOWN);
+            BigDecimal valor = catalogo.getPrecio().divide(new BigDecimal("1.14"), 3, BigDecimal.ROUND_DOWN);
             //System.out.println("si:"+valor);
 
             valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
@@ -77,7 +77,7 @@ public class CrearProductoMB implements Serializable {
         }
 
         if (ivaMayorista.equals("+")) {
-            BigDecimal valor = catalogo.getPrecioMayorista().divide(new BigDecimal("1.12"), 3, BigDecimal.ROUND_DOWN);
+            BigDecimal valor = catalogo.getPrecioMayorista().divide(new BigDecimal("1.14"), 3, BigDecimal.ROUND_DOWN);
             valor = valor.setScale(3, BigDecimal.ROUND_DOWN);
             catalogo.setPrecioMayorista(valor);
             //catalagoProducto.setPrecioMayorista(catalagoProducto.getPrecioMayorista().divide(new BigDecimal("1.12")).setScale(2,BigDecimal.ROUND_UP));

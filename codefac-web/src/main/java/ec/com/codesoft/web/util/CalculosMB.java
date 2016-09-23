@@ -43,7 +43,7 @@ public class CalculosMB implements Serializable {
         if (valor != null) {
             BigDecimal iva = sistemaMB.getConfiguracion().getIva().divide(new BigDecimal("100"), RoundingMode.DOWN).add(new BigDecimal("1"));
             BigDecimal respuesta = valor.multiply(iva);
-            respuesta = respuesta.setScale(2, BigDecimal.ROUND_UP);
+            respuesta = respuesta.setScale(5, BigDecimal.ROUND_UP);
             return respuesta;
         } else {
             return null;
@@ -63,7 +63,22 @@ public class CalculosMB implements Serializable {
         }
         return new BigDecimal(0);
     }
-
+    
+     public BigDecimal redondeoSuperiorVista(BigDecimal valor) {
+        if (valor != null) {
+            BigDecimal respuesta = valor.setScale(5, RoundingMode.UP);
+            return respuesta;
+        }
+        return new BigDecimal(0);
+    }
+     
+    public BigDecimal redondeoSuperiorMostrar(BigDecimal valor) {
+        if (valor != null) {
+            BigDecimal respuesta = valor.setScale(2, RoundingMode.UP);
+            return respuesta;
+        }
+        return new BigDecimal(0);
+    }
    
 
     public BigDecimal redondeoInferior(BigDecimal valor) {
@@ -77,6 +92,14 @@ public class CalculosMB implements Serializable {
     public BigDecimal redondeoInferiorMostar(BigDecimal valor) {
         if (valor != null) {
             BigDecimal respuesta = valor.setScale(2, RoundingMode.DOWN);
+            return respuesta;
+        }
+        return new BigDecimal(0);
+    }
+    
+    public BigDecimal redondeoInferiorMostar2(BigDecimal valor) {
+        if (valor != null) {
+            BigDecimal respuesta = valor.setScale(5, RoundingMode.DOWN);
             return respuesta;
         }
         return new BigDecimal(0);

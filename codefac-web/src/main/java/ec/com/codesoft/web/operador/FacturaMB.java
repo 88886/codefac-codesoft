@@ -73,6 +73,9 @@ import org.primefaces.event.SelectEvent;
 
 public class FacturaMB {
 
+    //Permite inhabilitar el boton para no generar mas de dos facturas..
+    private boolean inhabilitarboton;
+    //
     private boolean estadoDialogo;
     private boolean estadoDialogoGeneral;
     private String cedCliente;
@@ -83,7 +86,7 @@ public class FacturaMB {
     private CatalagoProducto catalogoEncontrado;
     private CatalagoProducto catalogo;
     private int stock;
-
+    
     @Min(value = 1)
     private int cantidadComprar;
     private boolean mostrarInformacion;
@@ -224,6 +227,7 @@ public class FacturaMB {
      */
     @PostConstruct
     public void inicializar() {
+        inhabilitarboton=true;
         rutaImagenAgrandar = " ";
         estadoDialogo = false;
         estadoDialogoGeneral = false;
@@ -322,7 +326,7 @@ public class FacturaMB {
         verificarUsuario();
 
         //variable correo
-        estadoCorreo = true;
+        estadoCorreo = false;
 
         //abono de la factura a credito
         abono = new BigDecimal("0.0");
@@ -1044,7 +1048,7 @@ public class FacturaMB {
             ///clienteEncontrado = clienteServicio.buscarCliente(cedCliente);
 
             clienteEncontrado.setCedulaRuc("9999999999");
-            todoPanel = true;
+            //todoPanel = true;
         }
     }
 
@@ -1196,7 +1200,7 @@ public class FacturaMB {
 
     public void venta() {
         System.out.println(cantidadComprar + "--" + stock);
-        if (cantidadComprar > stock) {
+        if (cantidadComprar > stock && false) {
             //msjStock = "No existe suficiente Stock";
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error...!", "No existe suficiente Stock..!");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
@@ -1417,7 +1421,8 @@ public class FacturaMB {
                 if (detallesVenta == null) {
                     FacesMessage msg = new FacesMessage("Agregue Ventas");
                     FacesContext.getCurrentInstance().addMessage(null, msg);
-                } else {
+                } else if(inhabilitarboton){
+                    inhabilitarboton=false;
                     Venta venta = new Venta();
                     venta.setCedulaRuc(clienteEncontrado);
                     PeriodoContable periodo = new PeriodoContable();
@@ -1431,6 +1436,7 @@ public class FacturaMB {
                     } else {
                         venta.setTipoDocumento("Factura");
                     }
+                    
                     venta.setEstado("facturado");
                     venta.setFecha(fechaActual);
                     venta.setTotal(total.setScale(2, BigDecimal.ROUND_UP));
@@ -1591,7 +1597,7 @@ public class FacturaMB {
                     if (estadoCorreo) {
                         enviarCorreo(ventaImprimir);
                     }
-
+                    //imprimirFactura();
                     RequestContext.getCurrentInstance().execute("PF('dlgImprimir').show()");
 
                 }
@@ -1706,7 +1712,8 @@ public class FacturaMB {
                 //detallesFactura.setCantidad(1);
                 //factura.agregarDetalle(detallesFactura);
                 //factura.exportarPDF();
-            } catch (JRException ex) {
+            } catch (JRException ex) 
+            {
                 Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(FacturaMB.class.getName()).log(Level.SEVERE, null, ex);

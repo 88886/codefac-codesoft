@@ -62,12 +62,13 @@ public class comprarMB implements Serializable {
      * cargado
      */
     private BigDecimal cambiarCosto;
+    private BigDecimal cambiarCosto2;
 
-    @Digits(integer = 8, fraction = 3)
+    @Digits(integer = 8, fraction = 5)
     private BigDecimal costoDetalle;
 
     private boolean visibleDetalleAgregar;
-
+    private boolean inhabilitarBoton;
     /**
      * Variable para saber el valor estimado total de la compra
      */
@@ -164,6 +165,7 @@ public class comprarMB implements Serializable {
         // System.out.println("compra" + id);
         // compra = compraServicio.findCompra(Integer.parseInt(id));
         // this.catalogo=new CatalagoProducto();
+        this.inhabilitarBoton=true;
         this.visibleDetalleAgregar = false;
         this.compra = new Compra();
         this.detalleCompra = new ArrayList<DetalleCompraModelo>();
@@ -229,11 +231,11 @@ public class comprarMB implements Serializable {
         if (ivaCosto.equals("+")) 
         {
             cambiarCosto=cambiarCosto.multiply(ivaTotal);
-            cambiarCosto=cambiarCosto.setScale(3,RoundingMode.UP);
+            cambiarCosto=cambiarCosto.setScale(5,RoundingMode.UP);
         }
         else
         {
-            cambiarCosto=cambiarCosto.divide(ivaTotal,3,RoundingMode.UP);
+            cambiarCosto=cambiarCosto.divide(ivaTotal,5,RoundingMode.UP);
         }
     }
         /**
@@ -244,12 +246,17 @@ public class comprarMB implements Serializable {
         cambiarCosto = new BigDecimal(catalogo.getPrecio().toString());
         System.out.println("aumentado el iva al costo del producto");
         cambiarCosto = cambiarCosto.multiply(ivaTotal);
-        cambiarCosto=cambiarCosto.setScale(3,RoundingMode.UP);
+        cambiarCosto=cambiarCosto.setScale(5,RoundingMode.UP);
 
         RequestContext.getCurrentInstance().execute("PF('widCambiarPrecio').show()");
         //dialogEditPrecio
     }
-
+     
+    public void cambiarCostoProducto()
+    {
+        catalogo.setCosto(cambiarCosto2);
+    }
+    
     public void editarPrecio() 
     {
         System.out.println("editando el precio del producto ...");
@@ -307,9 +314,9 @@ public class comprarMB implements Serializable {
                 //ystem.out.println(cantidadDetalle+"-"+costoDetalle);
                 //detalleGeneral.setCantidad(can);
                 //detalleGeneral.setCostoIndividual(new BigDecimal(5));
-
+                
                 detalleGeneral.setCodigoProducto(catalogo);
-
+                
                 System.out.println(cantidadDetalle + "-" + costoDetalle);
 
                 detalle = new DetalleCompraModelo(detalleGeneral);
@@ -422,7 +429,8 @@ public class comprarMB implements Serializable {
         if (compra.getRuc().getRuc().equals("")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "No existen un distribuidor para realizar la compra");
             RequestContext.getCurrentInstance().showMessageInDialog(message);
-        } else {
+        } else if(inhabilitarBoton){
+            inhabilitarBoton=false;
             //validar que existan Items para comprar
             if (detalleCompra.size() > 0) {
 
@@ -492,7 +500,7 @@ public class comprarMB implements Serializable {
     /**
      * Metodo que controla al ingresar un caracter
      *
-     * @param ae
+     * @param
      */
     public void verificarProducto() {
         //validacion para saber si selecciono un distribuidor
@@ -504,14 +512,14 @@ public class comprarMB implements Serializable {
             focus="formDetalleCompra:txtCantidadDetalle";
             cantidadDetalle = 1;
             costoDetalle = new BigDecimal("0");
-            costoDetalle = costoDetalle.setScale(3, RoundingMode.DOWN);
+            costoDetalle = costoDetalle.setScale(5, RoundingMode.DOWN);
             System.out.println(compra);
             System.out.println("Total" + total);
             catalogo = catalogoServicio.buscarCatalogo(codigoDetalle);
             if (catalogo != null) {
                 System.out.println("El producto existe");
                 costoDetalle = compraServicio.obtenerUltimoCostoDistribuidor(catalogo, compra.getRuc().getRuc());
-                costoDetalle = costoDetalle.setScale(3, RoundingMode.DOWN);
+                costoDetalle = costoDetalle.setScale(5, RoundingMode.DOWN);
                 if(catalogo.getTipoProducto().equals("G"))
                 {
                     stockProductoSeleccionado=catalogo.getProductoGeneralVenta().getCantidadDisponible();
@@ -626,9 +634,7 @@ public class comprarMB implements Serializable {
     }
 
     /**
-     * Eliminar un item en el detalle
-     *
-     * @return
+     * Eliminar un item en el detall@return
      */
     public void eliminarDetalle(DetalleCompraModelo detalle) {
         detalleCompra.remove(detalle);
@@ -795,6 +801,14 @@ public class comprarMB implements Serializable {
         this.cambiarCosto = cambiarCosto;
     }
 
+     public BigDecimal getCambiarCosto2() {
+        return cambiarCosto2;
+    }
+
+    public void setCambiarCosto2(BigDecimal cambiarCosto) {
+        this.cambiarCosto2 = cambiarCosto;
+    }
+    
     public String getIvaCosto() {
         return ivaCosto;
     }

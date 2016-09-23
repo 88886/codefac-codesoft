@@ -11,7 +11,7 @@ and open the template in the editor.
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:b="http://bootsfaces.net/ui"
-                template="/template/plantilladmin.xhtml">
+                template="/template/plantillaOperador.xhtml">
 
 
     <ui:define name="contenido" >
@@ -136,7 +136,7 @@ and open the template in the editor.
                         id="cliTelefono" 
                         onkeypress="return noProcesar(event);"
                         value="#{clienteMB.cliente.telefono}" 
-                        required="false" 
+                        required="true" 
                         requiredMessage="Telefono necesario">
                         <p:clientValidator event="keyup"/>
                     </p:inputText>

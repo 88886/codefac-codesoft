@@ -56,8 +56,8 @@ and open the template in the editor.
                         <p:spacer style="background-image: none;background-color: #009966"/>
                         <p:separator/>
                         <h:panelGrid styleClass="panelNoBorder" columns="8" style="margin: 0 auto">
-                            <p:outputLabel  value="Codigo Documento: " style="color: #0087ca;font-weight: bold"/>
-                            <p:inputText value="#{facturaMB.codigoDocumento}" style="width:10%"  />
+                            <p:outputLabel  value="Codigo Factura: " style="color: #0087ca;font-weight: bold"/>
+                            <p:inputText value="#{facturaMB.codigoDocumento}" style="width:40%"  />
                             <p:spacer/>
                             <p:outputLabel value="Fecha: " style="font-weight: bold" />
                             <p:calendar   id="txtFechaIngreso" onkeypress="return noProcesar(event);"  pattern="dd/MM/yyyy HH:mm:ss" value="#{facturaMB.fechaActual}" title="Fecha de la factura" />
@@ -333,10 +333,10 @@ and open the template in the editor.
                             <h:outputText value="#{detallesVenta.nombre}" />
                         </p:column>
                         <p:column headerText="P. Unitario" style="text-align: left;width:60px" id="descuentoIndividual">
-                            <h:outputText value="#{calculosMB.redondeoInferiorMostar(detallesVenta.costo)}" />
+                            <h:outputText value="#{calculosMB.redondeoInferiorMostar2(detallesVenta.costo)}" />
                         </p:column>
                         <p:column headerText="Total" style="text-align: left;width:60px" id="totalDescuento">
-                            <h:outputText value="#{calculosMB.redondeoInferiorMostar(detallesVenta.total)}" />
+                            <h:outputText value="#{calculosMB.redondeoInferiorMostar2(detallesVenta.total)}" />
                         </p:column>
                         <p:column headerText="Dsct %" style="width:50px">
                             <p:selectOneMenu  value="#{detallesVenta.escogerDescuento}">
@@ -365,7 +365,7 @@ and open the template in the editor.
 
                             <p:outputLabel  value="Subtotal:" style="font-weight: bold"/>
                             <p:outputLabel id="subTotal" value="#{calculosMB.redondeoInferiorMostar(facturaMB.subtotal)}" style="font-weight: bold"/>
-
+                                                        
                             <p:selectOneMenu id="Categoria" value="#{facturaMB.tipoDescuento}" title="Escojer el tipo de Pago">
                                 <f:selectItem itemLabel="Descuento %" itemValue="porcentaje" />
                                 <f:selectItem itemLabel="Dsct Directo" itemValue="directo" />
@@ -381,14 +381,15 @@ and open the template in the editor.
                             <p:outputLabel id="iva" value="#{calculosMB.redondeoSuperior(facturaMB.iva)}" style="font-weight: bold"/>
 
                             <p:outputLabel  value="Total + Iva : " style="font-weight: bold"/>
-                            <p:outputLabel id="totalIva" value="#{calculosMB.redondeoSuperior(facturaMB.total)}" style="font-weight: bold"/>
+                            <p:outputLabel id="totalIva" value="#{calculosMB.redondeoInferiorMostar(facturaMB.total)}" style="font-weight: bold"/>
 
                             <p:outputLabel  value="Recargo Tarjeta : " style="font-weight: bold"/>
                             <p:outputLabel id="interes" value="#{calculosMB.redondeoInferiorMostar(facturaMB.interesTarjeta)}" style="font-weight: bold"/>
 
                             <p:outputLabel  value="Total a Pagar : " style="font-weight: bold"/>
-                            <p:outputLabel id="totalPagar" value="#{calculosMB.redondeoSuperior(facturaMB.totalPagar)}" style="font-weight: bold"/>
+                            <p:outputLabel id="totalPagar" value="#{calculosMB.redondeoInferiorMostar(facturaMB.totalPagar)}" style="font-weight: bold"/>
 
+                             <!-- Cambie de redondeoSuperior a InferiorMostrar en Total+Iva y Total a Pagar -->
                         </p:panelGrid>
                     </p:panel>
                 </p:panel>
@@ -409,13 +410,26 @@ and open the template in the editor.
                 </div>
 
             </h:form>
+            <!-- Primer boton de Facturar, para llamar a otro boton de confirmación de factura-->
             <h:form id="frmFacturar">
                 <p:growl id="msgsFactura" showDetail="true" />
-                <p:panelGrid columns="3" style="margin: 0 auto;">
+                <p:panelGrid columns="2" style="margin: 0 auto;">
 
 
-                    <p:commandButton  partialSubmit="true" process="@this,:form,:frmTipoPago" value="Facturar" icon="fa fa-money" styleClass="btn_azul" 
-                                      onclick="PF('confirmarFactura').show();" />
+                    <!--<p:commandButton  partialSubmit="true" process="@this,:form,:frmTipoPago" value="Facturar" icon="fa fa-money" styleClass="btn_azul" 
+                                      onclick="PF('confirmarFactura').show();" />-->
+                    <p:commandButton partialSubmit="true" 
+                                     value="Facturar" 
+                                     process="@this,:form,:frmTipoPago" 
+                                     icon="fa fa-floppy-o" 
+                                     styleClass="btn_azul" 
+                                     onstart="PF('statusEnvioCorreo').show()" 
+                                     onsuccess="PF('statusEnvioCorreo').hide()"
+                                     actionListener="#{facturaMB.facturar()}"
+                                     
+                                     />
+                    <!-- Hasta aqui -->
+                    
                     <p:commandButton value="Nuevo" icon="fa fa-file-o" styleClass="btn_verde" action="factura" ajax="false"/>
 
 
@@ -446,6 +460,7 @@ and open the template in the editor.
                     onstart="PF('statusEnvioCorreo').show()" 
                     onsuccess="PF('statusEnvioCorreo').hide()"
                     actionListener="#{facturaMB.facturar()}"
+                    
                     title="Facturar"> 
                 </p:commandButton>
                 <p:commandButton onclick="PF('confirmarFactura').hide();" icon="fa fa-ban" styleClass="btn_rojo"/>
@@ -463,6 +478,7 @@ and open the template in the editor.
         </h:form>
     </p:dialog>
 
+     
     <p:dialog header="Factura Completa " modal="true" widgetVar="dlgImprimir" showEffect="explode" hideEffect="bounce" height="100">
         <p:panelGrid columns="1" styleClass="panelNoBorder" style="margin: 0 auto;text-align: center">
             <h:outputText value="Que desea hacer?" />
@@ -478,7 +494,7 @@ and open the template in the editor.
             </h:form>
         </p:panelGrid>
     </p:dialog>
-
+    
 
     <p:overlayPanel widgetVar="overLayBuscarCliente"  for=":form:acorPanel:btnBuscarCli" hideEffect="fade" dynamic="true" style="width:500px;">
         <h:form>

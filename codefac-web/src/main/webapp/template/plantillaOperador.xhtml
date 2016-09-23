@@ -37,9 +37,13 @@ and open the template in the editor.
                 <p:menubar>
                     <p:submenu label="Factura" icon="ui-icon-pencil">
                         <p:menuitem value="Nuevo" outcome="factura"  icon="ui-icon-arrowreturnthick-1-w" />
+                        <p:menuitem value="Gestionar Facturas" outcome="gestionarVentaOperador" icon="fa fa-pencil-square-o"/>
 
                     </p:submenu>
-
+                     <p:submenu label="Clientes" icon="fa fa-user">
+                        <p:menuitem value="Gestionar" outcome="clienteOperador"  icon="fa fa-pencil-square-o"/>
+                        <p:menuitem value="Buscar" outcome="buscarClienteOperador" icon="fa fa-search" />
+                    </p:submenu>
 
                     <p:menuitem value="Proforma" outcome="proformaOperador"  icon="ui-icon-pencil" />
 

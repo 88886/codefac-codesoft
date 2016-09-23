@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/plantillaOperador.xhtml">
+
+
+    <ui:define name="contenido" >
+         <h4 class="titulo" style="text-align: center">Busqueda de Clientes</h4>
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" />
+            <p:panel id="panelTablaClientes" style="z-index: 0">
+                <p:dataTable
+                    style="height: 100%"
+                    id="tablaClientes"
+                    var="cliente" 
+                    value="#{clienteMB.clientes}"
+                    scrollable="true" 
+                    selectionMode="single" 
+                    rowKey="#{cliente.cedulaRuc}"
+                    widgetVar="tableCliente"
+                    selection="#{clienteMB.clienteSeleccionado}">
+
+                    <p:ajax event="rowSelect" listener="#{clienteMB.onRowSelect}" update=":form:msgs"/>
+                    <p:ajax event="rowUnselect" listener="#{clienteMB.onRowUnSelect}"/>
+                    
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar por todos los campos: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('tableCliente').filter()" style="width:150px" placeholder="Ingrese el texto:"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Cedula" filterBy="#{cliente.cedulaRuc}" filterMatchMode="contains" >
+                        <h:outputText value="#{cliente.cedulaRuc}" />
+                    </p:column>
+                    <p:column headerText="Nombres" filterBy="#{cliente.nombre}" filterFunction="#{clienteMB.filterByName}" filterMatchMode="contains" style="width:350px" >
+                        <h:outputText value="#{cliente.nombre}"   />
+                    </p:column>
+                    <p:column headerText="Telefono" >
+                        <h:outputText value="#{cliente.telefono}" />
+                    </p:column>
+                    <p:column headerText="Correo" >
+                        <h:outputText value="#{cliente.correo}" />
+                    </p:column>
+                    <!--
+                    <p:column headerText="Estado" >
+                        <h:outputText value="#{cliente.devolverEstado()}" />
+                    </p:column>-->
+
+                    <p:column headerText="Dirección" >
+                        <h:outputText value="#{cliente.direccion}" />
+                    </p:column>
+
+
+                </p:dataTable>
+
+                <p:dialog  id="dlgCliente" header="Administracion Cliente" widgetVar="nuevoCliente" modal="true" height="auto">
+                    <p:panelGrid columns="3" id="panelGrid">   
+                        <p:outputLabel for="cliCedula" value="Cédula:" />
+                        <p:inputText id="cliCedula" value="#{clienteMB.cliente.cedulaRuc}" required="true" requiredMessage="Cedula necesario"/>                                        
+                        <p:message for="cliCedula" />                  
+
+                        <p:outputLabel for="cliNombre" value="Nombre:" />
+                        <p:inputText id="cliNombre" value="#{clienteMB.cliente.nombre}" required="true" requiredMessage="Nombre necesario"/>
+                        <p:message for="cliNombre" />                                
+
+                        <p:outputLabel for="cliTelefono" value="Telefono:" />
+                        <p:inputText id="cliTelefono" value="#{clienteMB.cliente.telefono}" required="true" requiredMessage="Telefono necesario"/>
+                        <p:message for="cliTelefono" />                
+
+                        <p:outputLabel for="cliDireccion" value="Direccion:" />
+                        <p:inputText id="cliDireccion" value="#{clienteMB.cliente.direccion}" />
+                        <p:message for="cliDireccion" />    
+
+                        <p:outputLabel for="cliCorreo" value="Correo:" />
+                        <p:inputText id="cliCorreo" value="#{clienteMB.cliente.correo}" />
+                        <p:message for="cliCorreo" />  
+
+                        <p:outputLabel for="notas" value="Notas" />
+                        <p:inputTextarea id="notas" value="#{clienteMB.cliente.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
+                        <p:message for="notas" />
+
+
+
+                    </p:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton 
+                            value="Aceptar" 
+                            icon="ui-icon-disk"
+                            update="@form"
+                            actionListener="#{clienteMB.registarCliente(e)}"/>
+                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" actionListener="#{clienteMB.cancelar()}" onclick="PF('nuevoCliente').hide();" update="@form"/>                        
+                    </f:facet>
+                </p:dialog>
+
+            </p:panel>    
+
+        </h:form>    
+
+    </ui:define>
+</ui:composition>

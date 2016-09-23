@@ -97,9 +97,9 @@ public class NotaCreditoMB implements Serializable {
         } else {
             System.out.println(venta.getCedulaRuc());
             cargarDetallesVenta();
-            valorModificacion = venta.getTotal().divide(new BigDecimal("1.12"));
+            valorModificacion = venta.getTotal().divide(new BigDecimal("1.14"));
             subtotal = valorModificacion;
-            iva = valorModificacion.multiply(new BigDecimal("0.12"));
+            iva = valorModificacion.multiply(new BigDecimal("0.14"));
             total = venta.getTotal();
 
         }

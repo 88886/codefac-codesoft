@@ -69,7 +69,7 @@ public class ReporteCatalogoMB implements Serializable
                
         //resultado=cantidad.setScale(2,BigDecimal.ROUND_UP);
         
-        resultado=cantidad.multiply(new BigDecimal(1.12f));
+        resultado=cantidad.multiply(new BigDecimal(1.14f));
        
         resultado=resultado.setScale(0,BigDecimal.ROUND_UP);
         System.out.println("iva"+resultado); 
@@ -82,7 +82,7 @@ public class ReporteCatalogoMB implements Serializable
                
         //resultado=cantidad.setScale(2,BigDecimal.ROUND_UP);
         
-        resultado=cantidad.multiply(new BigDecimal(0.12f));
+        resultado=cantidad.multiply(new BigDecimal(0.14f));
        
         resultado=resultado.setScale(0,BigDecimal.ROUND_UP);
         System.out.println("iva"+resultado); 

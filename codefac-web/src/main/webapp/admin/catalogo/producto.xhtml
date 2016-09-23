@@ -73,7 +73,7 @@ and open the template in the editor.
                 </p:column>
 
                 <p:column headerText="PVP " style="width: 50px" >
-                    <p:outputLabel value="#{calculosMB.redondeoSuperior(catalogo.precio)}"/>
+                    <p:outputLabel value="#{calculosMB.redondeoSuperiorVista(catalogo.precio)}"/>
                 </p:column>
 
                 <p:column headerText="PVP + IVA" style="width: 60px">
@@ -161,8 +161,8 @@ and open the template in the editor.
 
                             <p:selectOneMenu id="cmbIVAPrecio" value="#{gestionProductoMB.ivaCosto}" style="font-weight: 11px;" >
                                 <p:ajax listener="#{gestionProductoMB.cambiarPrecioEditar()}" />
-                                <f:selectItem itemLabel="sin Iva " itemValue="-" />
                                 <f:selectItem itemLabel="con Iva" itemValue="+" />
+                                <f:selectItem itemLabel="sin Iva " itemValue="-" />
                             </p:selectOneMenu>
 
                         </p:panelGrid>
