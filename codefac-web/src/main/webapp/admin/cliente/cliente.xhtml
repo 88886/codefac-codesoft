@@ -52,14 +52,14 @@ and open the template in the editor.
                         <h:outputText value="#{cliente.nombre}"   />
                     </p:column>
 
-                    <p:column headerText="Telefono" style="width: 150px" >
-                        <h:outputText value="#{cliente.telefono}" />
+                    <p:column headerText="Telefono - Celular" style="width: 150px" >
+                        <h:outputText value="#{cliente.telefono} #{cliente.celular}" />
                     </p:column>
-                    
-                    <p:column headerText="Celular" style="width: 150px" >
+
+   <!--                 <p:column headerText="Celular" style="width: 150px" >
                         <h:outputText value="#{cliente.celular}" />
                     </p:column>
-                    
+-->
                     <p:column headerText="Correo" >
                         <h:outputText value="#{cliente.correo}" />
                     </p:column>
@@ -72,7 +72,7 @@ and open the template in the editor.
                     </p:column>
 
 
-                    <p:column headerText="" style="width: 50px">
+                    <p:column headerText="Opc." style="width: 50px">
                         <p:commandButton  
                             style="padding: 0px"
                             icon="fa fa-trash-o"
@@ -82,7 +82,7 @@ and open the template in the editor.
                             actionListener="#{clienteMB.eliminarDetalle(cliente)}" 
                             update="@form" >
 
-                            <p:confirm header="Confirmation" message="Estas segura que quiere eliminar?" icon="ui-icon-alert" />
+                            <p:confirm header="Confirmation" message="Estas segur@ que quiere eliminar?" icon="ui-icon-alert" />
                         </p:commandButton>
                     </p:column>
 
@@ -111,7 +111,7 @@ and open the template in the editor.
                         value="#{clienteMB.cliente.cedulaRuc}" 
                         required="true" 
                         requiredMessage="Cedula necesario">
-                        
+
                         <p:ajax event="blur" listener="#{clienteMB.verificarClienteExiste()}"  />
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
@@ -125,7 +125,7 @@ and open the template in the editor.
                         value="#{clienteMB.cliente.nombre}" 
                         required="true" 
                         requiredMessage="Nombre necesario">
-                        
+
                         <f:validateLength minimum="2" />
                         <p:clientValidator event="keyup"/>
                     </p:inputText>
@@ -156,7 +156,7 @@ and open the template in the editor.
                         value="#{clienteMB.cliente.correo}" />
                     <p:message for="cliCorreo" display="icon" />  
 
-                    <p:outputLabel  value="Tipo Cliente" />
+                    <p:outputLabel value="Tipo Cliente" />
                     <p:selectOneMenu id="tipoCliente" value="#{clienteMB.cliente.tipo}">
                         <f:selectItem itemLabel="Cliente Final" itemValue="PVP" />
                         <f:selectItem itemLabel="Distribuidor" itemValue="Distribuidor" />
@@ -171,14 +171,14 @@ and open the template in the editor.
                         style="width: 250px;" 
                         readonly="#{pruebaBean.enDetalles}"/>
                     <p:message for="notas" display="icon" />
-                    
+
                     <p:outputLabel for="cliCelular" value="Celular:" />
                     <p:inputText 
                         id="cliCelular" 
                         onkeypress="return noProcesar(event);"
                         value="#{clienteMB.cliente.celular}" />
                     <p:message for="cliCelular" display="icon" />
-                                  
+
                 </p:panelGrid>
 
                 <f:facet name="footer">
@@ -250,7 +250,7 @@ and open the template in the editor.
                     <p:outputLabel for="notas2" value="Notas" />
                     <p:inputTextarea id="notas2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.notas}" style="width: 250px;" readonly="#{pruebaBean.enDetalles}"/>
                     <p:message for="notas2" />
-                    
+
                     <p:outputLabel for="cliCelular2" value="Celular:" />
                     <p:inputText id="cliCelular2" onkeypress="return noProcesar(event);" value="#{clienteMB.clienteSeleccionado.celular}" />
                     <p:message for="cliCelular2" />  
